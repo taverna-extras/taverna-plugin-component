@@ -3,19 +3,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>net.sf.taverna.t2</groupId>
-		<artifactId>ui-activities</artifactId>
-		<version>1.6-SNAPSHOT</version>
+                <groupId>net.sf.taverna</groupId>
+                <artifactId>taverna-parent</artifactId>
+                <version>2.6-SNAPSHOT</version>
 	</parent>
 	<groupId>net.sf.taverna.t2.ui-activities</groupId>
 	<artifactId>component-activity-ui</artifactId>
 	<name>Taverna 2 Component activity UI bindings</name>
-
+	<version>1.6-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>net.sf.taverna.t2.component</groupId>
 			<artifactId>component-activity</artifactId>
-			<version>${project.version}</version>
+			<version>${t2.ui.components.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.taverna.t2.core</groupId>
