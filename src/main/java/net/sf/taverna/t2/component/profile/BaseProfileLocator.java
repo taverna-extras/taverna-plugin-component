@@ -3,6 +3,7 @@
  */
 package net.sf.taverna.t2.component.profile;
 
+import static net.sf.taverna.t2.component.utils.Utils.getApplicationHomeDir;
 import static org.apache.commons.httpclient.HttpStatus.SC_OK;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.apache.log4j.Logger.getLogger;
@@ -17,7 +18,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import net.sf.taverna.raven.appconfig.ApplicationRuntime;
 import net.sf.taverna.t2.component.api.RegistryException;
 
 import org.apache.commons.httpclient.Header;
@@ -133,8 +133,7 @@ public class BaseProfileLocator {
 	}
 
 	private File getBaseProfileFile() {
-		File home = ApplicationRuntime.getInstance().getApplicationHomeDir();
-		File config = new File(home, "conf");
+		File config = new File(getApplicationHomeDir(), "conf");
 		if (!config.exists())
 			config.mkdir();
 		return new File(config, BASE_PROFILE_PATH);

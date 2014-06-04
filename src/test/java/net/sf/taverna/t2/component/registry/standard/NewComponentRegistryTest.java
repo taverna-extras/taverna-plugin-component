@@ -21,7 +21,7 @@
 package net.sf.taverna.t2.component.registry.standard;
 
 import static net.sf.taverna.t2.component.registry.standard.NewComponentRegistryLocator.getComponentRegistry;
-import static net.sf.taverna.t2.component.registry.standard.Utils.getDataflowFromUri;
+import static net.sf.taverna.t2.component.utils.Utils.getDataflowFromUri;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -41,7 +41,7 @@ import org.junit.Test;
  * 
  * @author David Withers
  */
-@Ignore
+@Ignore("affects remote service")
 public class NewComponentRegistryTest extends ComponentRegistryTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

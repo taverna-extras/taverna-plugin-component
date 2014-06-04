@@ -1,10 +1,11 @@
 package net.sf.taverna.t2.component.registry.standard;
 
+import static java.lang.String.format;
 import static net.sf.taverna.t2.component.registry.standard.NewComponentRegistry.logger;
 import static net.sf.taverna.t2.component.registry.standard.Policy.getPolicy;
-import static net.sf.taverna.t2.component.registry.standard.Utils.getDataflowFromUri;
-import static net.sf.taverna.t2.component.registry.standard.Utils.getElementString;
-import static net.sf.taverna.t2.component.registry.standard.Utils.getValue;
+import static net.sf.taverna.t2.component.utils.Utils.getDataflowFromUri;
+import static net.sf.taverna.t2.component.utils.Utils.getElementString;
+import static net.sf.taverna.t2.component.utils.Utils.getValue;
 
 import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
@@ -194,14 +195,13 @@ class NewComponent extends Component {
 
 		@Override
 		public URL getHelpURL() {
-			URL result = null;
 			try {
-				String urlString = String.format(htmlPageTemplate, registry.getRegistryBaseString(), getId(), version);
-				result = new URL(urlString);
+				return new URL(format(htmlPageTemplate,
+						registry.getRegistryBaseString(), getId(), version));
 			} catch (IllegalFormatException | MalformedURLException e) {
 				logger.error(e);
+				return null;
 			}
-			return result;
 		}
 	}
 

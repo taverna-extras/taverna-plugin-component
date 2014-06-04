@@ -1,6 +1,9 @@
-package net.sf.taverna.t2.component.registry.standard;
+package net.sf.taverna.t2.component.utils;
+
+import static net.sf.taverna.t2.workflowmodel.utils.AnnotationTools.getAnnotationString;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -16,18 +19,18 @@ import net.sf.taverna.t2.workbench.file.impl.T2FlowFileType;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 import net.sf.taverna.t2.workflowmodel.utils.AnnotationTools;
 
-class Utils {
+public class Utils {
 	private static final T2FlowFileType T2_FLOW_FILE_TYPE = new T2FlowFileType();
-	private static final AnnotationTools annotationTools = new AnnotationTools();
 	private static final T2DataflowOpener opener = new T2DataflowOpener();
+	private static final FileManager filer = FileManager.getInstance();
 
 	public static String serializeDataflow(Dataflow dataflow)
 			throws RegistryException {
 		try {
 			// Ugly, but how to do it...
 			ByteArrayOutputStream dataflowStream = new ByteArrayOutputStream();
-			FileManager.getInstance().saveDataflowSilently(dataflow,
-					new T2FlowFileType(), dataflowStream, false);
+			filer.saveDataflowSilently(dataflow, new T2FlowFileType(),
+					dataflowStream, false);
 			return dataflowStream.toString("UTF-8");
 		} catch (Exception e) {
 			throw new RegistryException(
@@ -35,8 +38,7 @@ class Utils {
 		}
 	}
 
-	public static Dataflow getDataflowFromUri(String uri) throws OpenException,
-			MalformedURLException {
+	public static Dataflow getDataflowFromUri(String uri) throws Exception {
 		return opener.openDataflow(T2_FLOW_FILE_TYPE, new URL(uri))
 				.getDataflow();
 	}
@@ -44,8 +46,7 @@ class Utils {
 	public static String getAnnotation(Dataflow dataflow,
 			Class<? extends AbstractTextualValueAssertion> annotation,
 			String defaultValue) {
-		return annotationTools.getAnnotationString(dataflow, annotation,
-				defaultValue);
+		return getAnnotationString(dataflow, annotation, defaultValue);
 	}
 
 	public static JAXBElement<?> getElement(Description d, String name)
@@ -72,4 +73,8 @@ class Utils {
 		return sb.toString();
 	}
 
+	public static File getApplicationHomeDir() {
+		// FIXME Raven is gone; how to get app home dir?
+		return net.sf.taverna.raven.appconfig.ApplicationRuntime.getInstance().getApplicationHomeDir();
+	}
 }

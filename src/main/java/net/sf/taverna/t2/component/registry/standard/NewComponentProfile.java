@@ -1,6 +1,6 @@
 package net.sf.taverna.t2.component.registry.standard;
 
-import static net.sf.taverna.t2.component.registry.standard.Utils.getElementString;
+import static net.sf.taverna.t2.component.utils.Utils.getElementString;
 
 import java.net.MalformedURLException;
 import java.net.URL;

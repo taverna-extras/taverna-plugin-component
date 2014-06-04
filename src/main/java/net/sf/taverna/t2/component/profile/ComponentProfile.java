@@ -27,7 +27,6 @@ import static java.util.Collections.emptyMap;
 import static net.sf.taverna.t2.component.profile.BaseProfileLocator.getBaseProfile;
 import static net.sf.taverna.t2.workflowmodel.health.HealthCheck.NO_PROBLEM;
 import static net.sf.taverna.t2.workflowmodel.health.RemoteHealthChecker.contactEndpoint;
-import static org.apache.commons.io.IOUtils.closeQuietly;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.io.FileNotFoundException;
@@ -343,18 +342,18 @@ public class ComponentProfile implements
 		logger.info("Reading ontology for " + ontologyId + " from "
 				+ ontologyURI);
 		OntModel model = createOntologyModel();
-		InputStream in = null;
 		try {
 			URL url = new URL(ontologyURI);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			// CRITICAL: must be retrieved as correct content type
 			conn.addRequestProperty("Accept",
 					"application/rdf+xml,application/xml;q=0.9");
-			in = conn.getInputStream();
-			// TODO Consider whether the encoding is handled right
-			// ontologyModel.read(in, url.toString());
-			model.read(new StringReader(IOUtils.toString(in, "UTF-8")),
-					url.toString());
+			try (InputStream in = conn.getInputStream()) {
+				// TODO Consider whether the encoding is handled right
+				// ontologyModel.read(in, url.toString());
+				model.read(new StringReader(IOUtils.toString(in, "UTF-8")),
+						url.toString());
+			}
 		} catch (MalformedURLException e) {
 			logger.error("Problem reading ontology " + ontologyId, e);
 			return null;
@@ -365,8 +364,6 @@ public class ComponentProfile implements
 			// TODO Why is this different?
 			logger.error("Problem reading ontology " + ontologyId, e);
 			model = createOntologyModel();
-		} finally {
-			closeQuietly(in);
 		}
 		return model;
 	}

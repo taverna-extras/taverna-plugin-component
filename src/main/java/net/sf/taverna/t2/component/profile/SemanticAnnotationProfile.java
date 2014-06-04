@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -76,19 +75,16 @@ public class SemanticAnnotationProfile {
 	 */
 	public OntProperty getPredicate() {
 		OntModel ontology = getOntology();
-		if (ontology == null) {
+		if (ontology == null)
 			return null;
-		}
 		String predicate = semanticAnnotation.getPredicate();
-		if (predicate == null) {
+		if (predicate == null)
 			return null;
-		}
 		if (predicate.contains("foaf")) {
 			StringWriter sw = new StringWriter();
 			ontology.writeAll(sw, null, "RDF/XML");
 			try {
-				File f = createTempFile("foaf", null);
-				writeStringToFile(f, sw.toString());
+				writeStringToFile(createTempFile("foaf", null), sw.toString());
 			} catch (IOException e) {
 				log.info("failed to write foaf ontology to temporary file", e);
 			}
@@ -129,13 +125,11 @@ public class SemanticAnnotationProfile {
 	public List<Individual> getIndividuals() {
 		OntModel ontology = getOntology();
 		OntProperty prop = getPredicate();
-		if (ontology == null || prop == null) {
-			return new ArrayList<Individual>();
-		}
+		if (ontology == null || prop == null)
+			return new ArrayList<>();
 		OntResource range = prop.getRange();
-		if (range == null) {
-			return new ArrayList<Individual>();
-		}
+		if (range == null)
+			return new ArrayList<>();
 		return ontology.listIndividuals(range).toList();
 	}
 
@@ -164,13 +158,11 @@ public class SemanticAnnotationProfile {
 			return componentProfile.getClass(clazz);
 
 		OntProperty prop = getPredicate();
-		if (prop == null) {
+		if (prop == null)
 			return null;
-		}
 		OntResource range = prop.getRange();
-		if (range != null && range.isClass()) {
+		if (range != null && range.isClass())
 			return range.asClass();
-		}
 		return null;
 	}
 }

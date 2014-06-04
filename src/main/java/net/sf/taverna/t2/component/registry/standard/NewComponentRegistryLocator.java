@@ -9,26 +9,28 @@ import java.util.Map;
 
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
+import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
 
 public class NewComponentRegistryLocator {
-	private NewComponentRegistryLocator() {
+	private final Map<String, NewComponentRegistry> componentRegistries = new HashMap<>();
+	private CredentialManager cm;
+	public void setCredentialManager(CredentialManager cm) {
+		this.cm = cm;
 	}
 
-	private static final Map<String, NewComponentRegistry> componentRegistries = new HashMap<String, NewComponentRegistry>();
-
-	public static synchronized ComponentRegistry getComponentRegistry(
+	public synchronized ComponentRegistry getComponentRegistry(
 			URL registryBase) throws RegistryException {
 		if (!componentRegistries.containsKey(registryBase.toExternalForm())) {
 			logger.debug("constructing registry instance for " + registryBase);
 			componentRegistries.put(registryBase.toExternalForm(),
-					new NewComponentRegistry(registryBase));
+					new NewComponentRegistry(cm, registryBase));
 		}
 		return componentRegistries.get(registryBase.toExternalForm());
 	}
 
-	public static boolean verifyBase(URL registryBase) {
+	public boolean verifyBase(URL registryBase) {
 		try {
-			return new Client(jaxbContext, registryBase, false).verify();
+			return new Client(jaxbContext, registryBase, false, cm).verify();
 		} catch (Exception e) {
 			logger.info("failed to construct connection client to "
 					+ registryBase, e);

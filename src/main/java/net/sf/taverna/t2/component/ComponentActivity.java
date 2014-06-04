@@ -12,7 +12,6 @@ import net.sf.taverna.t2.invocation.InvocationContext;
 import net.sf.taverna.t2.invocation.impl.InvocationContextImpl;
 import net.sf.taverna.t2.reference.ReferenceService;
 import net.sf.taverna.t2.reference.T2Reference;
-import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 import net.sf.taverna.t2.workflowmodel.EditException;
 import net.sf.taverna.t2.workflowmodel.Edits;
@@ -20,50 +19,49 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.AbstractAsynchronousAc
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
-import net.sf.taverna.t2.workflowmodel.processor.activity.LockedNestedDataflow;
 import net.sf.taverna.t2.workflowmodel.utils.AnnotationTools;
 
 import org.apache.log4j.Logger;
 
 public class ComponentActivity extends
 		AbstractAsynchronousActivity<ComponentActivityConfigurationBean>
-		implements AsynchronousActivity<ComponentActivityConfigurationBean>,
-		LockedNestedDataflow {
+		implements AsynchronousActivity<ComponentActivityConfigurationBean> {
+	public static final String URI = "http://ns.taverna.org.uk/2010/activity/component";
 	private static final Logger logger = getLogger(ComponentActivity.class);
 	private static final AnnotationTools aTools = new AnnotationTools();
 
+	private ComponentUtil util;
 	private volatile DataflowActivity componentRealization = new DataflowActivity();
 	private ComponentActivityConfigurationBean configBean;
 	
 	private Dataflow realizingDataflow = null;
 
+	ComponentActivity(ComponentUtil util) {
+		this.util = util;
+	}
+
 	@Override
 	public void configure(ComponentActivityConfigurationBean configBean)
 			throws ActivityConfigurationException {
 		this.configBean = configBean;
-
 		try {
 			configurePorts(configBean.getPorts());
 		} catch (RegistryException e) {
 			throw new ActivityConfigurationException(
 					"failed to get component realization", e);
 		}
-
 	}
 
 	@Override
 	public void executeAsynch(final Map<String, T2Reference> inputs,
 			final AsynchronousActivityCallback callback) {
-
 		try {
 			ExceptionHandling exceptionHandling = configBean
 					.getExceptionHandling();
-			// InvocationContextImpl newContext =
-			// copyInvocationContext(callback);
+			// InvocationContextImpl newContext = copyInvocationContext(callback);
 
-			AsynchronousActivityCallback useCallback = new ProxyCallback(
-					callback, callback.getContext(), exceptionHandling);
-			getComponentRealization().executeAsynch(inputs, useCallback);
+			getComponentRealization().executeAsynch(inputs, new ProxyCallback(
+					callback, callback.getContext(), exceptionHandling));
 		} catch (ActivityConfigurationException e) {
 			callback.fail("Unable to execute component", e);
 		}
@@ -97,7 +95,8 @@ public class ComponentActivity extends
 //							"Unable to read dataflow", e);
 //				}
 				try {
-					checkRealizingDataflow();
+					if (realizingDataflow == null)
+						realizingDataflow = util.getVersion(getConfiguration()).getDataflow();
 					componentRealization.configure(realizingDataflow);
 				} catch (RegistryException e1) {
 					logger.error("Unable to read dataflow", e1);
@@ -122,24 +121,16 @@ public class ComponentActivity extends
 		}
 	}
 
-	private void checkRealizingDataflow() throws RegistryException {
-		if (realizingDataflow == null) {
-//			realizingDataflow = ComponentDataflowCache.getDataflow(getConfiguration());
-			realizingDataflow = ComponentUtil.calculateComponentVersion(getConfiguration()).getDataflow();
-		}		
-	}
-	
-	@Override
+	//@Override
 	public Dataflow getNestedDataflow() {
-
 		try {
-			checkRealizingDataflow();
+			if (realizingDataflow == null)
+				realizingDataflow = util.getVersion(getConfiguration())
+						.getDataflow();
 			return realizingDataflow;
-//			return getDataflow(configBean);
 		} catch (RegistryException e) {
 			logger.error("failed to get component realization", e);
+			return null;
 		}
-		return null;
 	}
-
 }

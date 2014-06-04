@@ -1,8 +1,8 @@
 package net.sf.taverna.t2.component.registry.standard;
 
 import static net.sf.taverna.t2.component.registry.standard.Policy.PRIVATE;
-import static net.sf.taverna.t2.component.registry.standard.Utils.getElementString;
-import static net.sf.taverna.t2.component.registry.standard.Utils.serializeDataflow;
+import static net.sf.taverna.t2.component.utils.Utils.getElementString;
+import static net.sf.taverna.t2.component.utils.Utils.serializeDataflow;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.net.URL;
@@ -26,6 +26,7 @@ import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
+import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
@@ -85,24 +86,22 @@ class NewComponentRegistry extends ComponentRegistry {
 		}
 	}
 
+	CredentialManager cm;
 	Client client;
-	private URL registryBase2;
 
-	protected NewComponentRegistry(URL registryBase) throws RegistryException {
+	protected NewComponentRegistry(CredentialManager cm, URL registryBase) throws RegistryException {
 		super(registryBase);
-
+		this.cm = cm;
 	}
 	
 	private void checkClientCreated() throws RegistryException {
-		if (client == null) {
-			try {
-				client = new Client(jaxbContext, super.getRegistryBase());
-			} catch (Exception e) {
-				throw new RegistryException("Unable to access registry", e);
-			}			
+		try {
+			if (client == null)
+				client = new Client(jaxbContext, super.getRegistryBase(), cm);
+		} catch (Exception e) {
+			throw new RegistryException("Unable to access registry", e);
 		}
 	}
-
 
 	private List<Description> listComponentFamilies(String profileUri)
 			throws RegistryException {
@@ -288,9 +287,10 @@ class NewComponentRegistry extends ComponentRegistry {
 		return comp;
 	}
 
+	private static final boolean DO_LIST_POLICIES = false;
+
 	private List<Description> listPolicies() throws RegistryException {
 		checkClientCreated();
-
 		return client.get(PolicyList.class, POLICY_LIST, "type=group")
 				.getPolicy();
 	}
@@ -299,12 +299,13 @@ class NewComponentRegistry extends ComponentRegistry {
 	protected void populatePermissionCache() {
 		permissionCache.add(Policy.PUBLIC);
 		permissionCache.add(Policy.PRIVATE);
-/*		try {
-			for (Description d : listPolicies())
-				permissionCache.add(new Policy.Group(d.getId()));
+		try {
+			if (DO_LIST_POLICIES)
+				for (Description d : listPolicies())
+					permissionCache.add(new Policy.Group(d.getId()));
 		} catch (RegistryException e) {
 			logger.warn("failed to fetch sharing policies", e);
-		}*/
+		}
 	}
 
 	private List<LicenseType> listLicenses() throws RegistryException {

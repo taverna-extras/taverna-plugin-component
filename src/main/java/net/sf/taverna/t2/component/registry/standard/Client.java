@@ -28,7 +28,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -61,13 +60,15 @@ class Client {
 	private final MyExperimentConnector http;
 	private final URL registryBase;
 	private final JAXBContext jaxbContext;
+	private final CredentialManager cm;
 
-	Client(JAXBContext context, URL repository) throws RegistryException {
-		this(context, repository, true);
+	Client(JAXBContext context, URL repository, CredentialManager cm) throws RegistryException {
+		this(context, repository, true, cm);
 	}
 
-	Client(JAXBContext context, URL repository, boolean tryLogIn)
+	Client(JAXBContext context, URL repository, boolean tryLogIn, CredentialManager cm)
 			throws RegistryException {
+		this.cm = cm;
 		this.registryBase = repository;
 		this.jaxbContext = context;
 		this.http = new MyExperimentConnector(tryLogIn);
@@ -271,17 +272,13 @@ class Client {
 					response.getCode(), response.getError());
 	}
 
-	private static CredentialManager cm() throws CMException {
-		return CredentialManager.getInstance();
-	}
-
-	private static String getCredentials(String urlString, boolean mandatory)
+	private String getCredentials(String urlString, boolean mandatory)
 			throws CMException, UnsupportedEncodingException {
 		final URI serviceURI = URI.create(urlString);
 
-		if (mandatory || cm().hasUsernamePasswordForService(serviceURI)) {
-			UsernamePassword userAndPass = cm()
-					.getUsernameAndPasswordForService(serviceURI, true, null);
+		if (mandatory || cm.hasUsernamePasswordForService(serviceURI)) {
+			UsernamePassword userAndPass = cm.getUsernameAndPasswordForService(
+					serviceURI, true, null);
 			// Check for user didn't log in...
 			if (userAndPass == null) {
 				return null;
@@ -292,14 +289,10 @@ class Client {
 		return null;
 	}
 
-	private static void clearCredentials(String baseURL) throws CMException {
-		@SuppressWarnings("deprecation")
-		List<String> serviceURIs = cm()
-				.getServiceURLsforAllUsernameAndPasswordPairs();
-		for (String uri : serviceURIs)
-			if (uri.startsWith(baseURL))
-				cm().deleteUsernameAndPasswordForService(uri);
-		// cm().resetAuthCache();
+	private void clearCredentials(String baseURL) throws CMException {
+		for (URI uri : cm.getServiceURIsForAllUsernameAndPasswordPairs())
+			if (uri.toString().startsWith(baseURL))
+				cm.deleteUsernameAndPasswordForService(uri);
 	}
 
 	private static Document getDocumentFromStream(InputStream inputStream)
