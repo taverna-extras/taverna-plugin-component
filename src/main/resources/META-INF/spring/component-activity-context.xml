@@ -20,4 +20,7 @@
 	<bean id="util" class="net.sf.taverna.t2.component.registry.ComponentUtil">
 		<property name="locator" ref="componentRegistryLocator" />
 	</bean>
+	<bean id="cache" class="net.sf.taverna.t2.component.registry.ComponentDataflowCache">
+		<property name="componentUtil" ref="util" />
+	</bean>
 </beans>

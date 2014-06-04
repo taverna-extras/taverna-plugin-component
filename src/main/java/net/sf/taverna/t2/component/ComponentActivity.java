@@ -31,13 +31,14 @@ public class ComponentActivity extends
 	private static final AnnotationTools aTools = new AnnotationTools();
 
 	private ComponentUtil util;
-	private volatile DataflowActivity componentRealization = new DataflowActivity();
+	private volatile DataflowActivity componentRealization;
 	private ComponentActivityConfigurationBean configBean;
 	
 	private Dataflow realizingDataflow = null;
 
 	ComponentActivity(ComponentUtil util) {
 		this.util = util;
+		this.componentRealization = new DataflowActivity();
 	}
 
 	@Override
@@ -53,8 +54,8 @@ public class ComponentActivity extends
 	}
 
 	@Override
-	public void executeAsynch(final Map<String, T2Reference> inputs,
-			final AsynchronousActivityCallback callback) {
+	public void executeAsynch(Map<String, T2Reference> inputs,
+			AsynchronousActivityCallback callback) {
 		try {
 			ExceptionHandling exceptionHandling = configBean
 					.getExceptionHandling();
@@ -69,7 +70,7 @@ public class ComponentActivity extends
 
 	@SuppressWarnings("unused")
 	private InvocationContextImpl copyInvocationContext(
-			final AsynchronousActivityCallback callback) {
+			AsynchronousActivityCallback callback) {
 		InvocationContext originalContext = callback.getContext();
 		ReferenceService rs = originalContext.getReferenceService();
 		InvocationContextImpl newContext = new InvocationContextImpl(rs, null);
@@ -88,49 +89,47 @@ public class ComponentActivity extends
 			throws ActivityConfigurationException {
 		synchronized (componentRealization) {
 			if (componentRealization.getConfiguration() == null) {
-//				try {
-//					d = getDataflow(configBean);
-//				} catch (RegistryException e) {
-//					throw new ActivityConfigurationException(
-//							"Unable to read dataflow", e);
-//				}
 				try {
-					if (realizingDataflow == null)
-						realizingDataflow = util.getVersion(getConfiguration()).getDataflow();
-					componentRealization.configure(realizingDataflow);
+					componentRealization.setNestedDataflow(getImplementationDataflow());
 				} catch (RegistryException e1) {
 					logger.error("Unable to read dataflow", e1);
 					throw new ActivityConfigurationException("Unable to read dataflow", e1);
 				}
 
-				for (Class<?> c : aTools.getAnnotatingClasses(this)) {
-					String annotationValue = aTools.getAnnotationString(realizingDataflow, c,
-							null);
-					if (annotationValue == null)
-						continue;
-					try {
-						aTools.setAnnotationString(this, c, annotationValue)
-								.doEdit();
-					} catch (EditException e) {
-						logger.error("failed to set annotation string", e);
-					}
-				}
-
+				copyAnnotations();
 			}
 			return componentRealization;
 		}
 	}
 
+	private void copyAnnotations() {
+		for (Class<?> c : aTools.getAnnotatingClasses(this))
+			try {
+				String annotationValue = aTools.getAnnotationString(realizingDataflow, c,
+						null);
+				if (annotationValue == null)
+					continue;
+				aTools.setAnnotationString(this, c, annotationValue)
+						.doEdit();
+			} catch (EditException e) {
+				logger.error("failed to set annotation string", e);
+			}
+	}
+
 	//@Override
 	public Dataflow getNestedDataflow() {
 		try {
-			if (realizingDataflow == null)
-				realizingDataflow = util.getVersion(getConfiguration())
-						.getDataflow();
-			return realizingDataflow;
+			return getImplementationDataflow();
 		} catch (RegistryException e) {
 			logger.error("failed to get component realization", e);
 			return null;
 		}
+	}
+
+	private Dataflow getImplementationDataflow() throws RegistryException {
+		if (realizingDataflow == null)
+			realizingDataflow = util.getVersion(getConfiguration())
+					.getDataflow();
+		return realizingDataflow;
 	}
 }

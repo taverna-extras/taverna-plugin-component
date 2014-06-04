@@ -1,6 +1,5 @@
 package net.sf.taverna.t2.component;
 
-import static net.sf.taverna.t2.component.registry.ComponentDataflowCache.getDataflow;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.io.Serializable;
@@ -11,6 +10,7 @@ import java.util.List;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.profile.ExceptionHandling;
+import net.sf.taverna.t2.component.registry.ComponentDataflowCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
@@ -37,9 +37,12 @@ public class ComponentActivityConfigurationBean extends
 	private transient ActivityPortsDefinitionBean ports = null;
 	private transient ExceptionHandling eh;
 	private transient ComponentUtil util;// FIXME
+	private transient ComponentDataflowCache cache; // FIXME
 
-	public ComponentActivityConfigurationBean(Version.ID toBeCopied) {
+	public ComponentActivityConfigurationBean(Version.ID toBeCopied, ComponentUtil util, ComponentDataflowCache cache) {
 		super(toBeCopied);
+		this.util = util;
+		this.cache = cache;
 		try {
 			getPorts();
 		} catch (RegistryException e) {
@@ -98,7 +101,7 @@ public class ComponentActivityConfigurationBean extends
 	 */
 	public ActivityPortsDefinitionBean getPorts() throws RegistryException{
 		if (ports == null)
-			ports = getPortsDefinition(getDataflow(this));
+			ports = getPortsDefinition(cache.getDataflow(this));
 		return ports;
 	}
 

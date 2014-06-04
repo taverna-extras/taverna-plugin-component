@@ -13,9 +13,7 @@ import java.net.URL;
 
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.registry.ComponentVersion;
-import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
-import net.sf.taverna.t2.workbench.file.impl.T2DataflowOpener;
-import net.sf.taverna.t2.workbench.file.impl.T2FlowFileType;
+import net.sf.taverna.t2.component.utils.Utils;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
@@ -26,8 +24,6 @@ import org.apache.log4j.Logger;
  */
 class LocalComponentVersion extends ComponentVersion {
 	private static Logger logger = getLogger(LocalComponentVersion.class);
-
-	private static final T2FlowFileType T2_FLOW_FILE_TYPE = new T2FlowFileType();
 
 	private final File componentVersionDir;
 
@@ -56,18 +52,14 @@ class LocalComponentVersion extends ComponentVersion {
 
 	@Override
 	protected final Dataflow internalGetDataflow() throws RegistryException {
-		T2DataflowOpener opener = new T2DataflowOpener();
-
 		File filename = new File(componentVersionDir, "dataflow.t2flow");
 		try {
-			return opener.openDataflow(T2_FLOW_FILE_TYPE, filename)
-					.getDataflow();
-		} catch (OpenException e) {
+			return Utils.getDataflow(filename);
+		} catch (Exception e) {
 			logger.error(
 					"failed to get component realization from " + filename, e);
 			throw new RegistryException("Unable to open dataflow", e);
 		}
-
 	}
 
 	@Override
