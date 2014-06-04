@@ -14,7 +14,6 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
 import net.sf.taverna.t2.component.registry.local.LocalComponentRegistryLocator;
-import net.sf.taverna.t2.component.registry.myexperiment.OldComponentRegistryLocator;
 import net.sf.taverna.t2.component.registry.standard.NewComponentRegistryLocator;
 
 import org.apache.log4j.Logger;
@@ -38,13 +37,11 @@ public class ComponentUtil {
 			return registry;
 
 		if (registryBase.getProtocol().startsWith("http")) {
-			if (NewComponentRegistryLocator.verifyBase(registryBase))
-				registry = NewComponentRegistryLocator
-						.getComponentRegistry(registryBase);
-			else
-				throw new RegistryException("Unable to establish credentials for " + registryBase.toString());
-//				registry = OldComponentRegistryLocator
-//						.getComponentRegistry(registryBase);
+			if (!NewComponentRegistryLocator.verifyBase(registryBase))
+				throw new RegistryException(
+						"Unable to establish credentials for " + registryBase);
+			registry = NewComponentRegistryLocator
+					.getComponentRegistry(registryBase);
 		} else {
 			registry = LocalComponentRegistryLocator
 					.getComponentRegistry(registryBase);

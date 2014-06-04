@@ -74,7 +74,7 @@ public class ComponentActivityConfigurationBean extends
 			DataflowInputPort dip) {
 		ActivityInputPortDefinitionBean activityInputPortDefinitionBean = new ActivityInputPortDefinitionBean();
 		activityInputPortDefinitionBean.setHandledReferenceSchemes(null);
-		activityInputPortDefinitionBean.setMimeTypes(null);
+		activityInputPortDefinitionBean.setMimeTypes((List<String>) null);
 		activityInputPortDefinitionBean.setTranslatedElementType(String.class);
 		activityInputPortDefinitionBean.setAllowsLiteralValues(true);
 		activityInputPortDefinitionBean.setDepth(dip.getDepth());
