@@ -16,6 +16,13 @@
 		<jena.core.version>2.11.1</jena.core.version>
 	</properties>
 
+	<scm>
+		<connection>scm:git:https://github.com/taverna/taverna-component-activity.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/taverna/taverna-component-activity.git</developerConnection>
+		<url>https://github.com/taverna/taverna-component-activity/</url>
+		<tag>HEAD</tag>
+	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>net.sf.taverna.t2.core</groupId>
@@ -61,6 +68,7 @@
 		<dependency>
 			<groupId>org.apache.log4j</groupId>
 			<artifactId>com.springsource.org.apache.log4j</artifactId>
+			<version>${log4j.version}</version>
 		</dependency>
 
 		<!-- Is there a fixed version? -->
@@ -97,6 +105,7 @@
 			<version>${t2.ui.impl.version}</version>
 		</dependency>
  -->
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
