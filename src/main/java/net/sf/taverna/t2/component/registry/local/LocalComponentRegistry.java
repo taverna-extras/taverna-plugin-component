@@ -67,12 +67,13 @@ class LocalComponentRegistry extends ComponentRegistry {
 	@Override
 	protected void populateFamilyCache() throws RegistryException {
 		File familiesDir = getComponentFamiliesDir();
-		for (File subFile : familiesDir.listFiles())
-			if (subFile.isDirectory()) {
-				LocalComponentFamily newFamily = new LocalComponentFamily(this,
-						subFile);
-				familyCache.put(newFamily.getName(), newFamily);
-			}
+		for (File subFile : familiesDir.listFiles()) {
+			if (!subFile.isDirectory())
+				continue;
+			LocalComponentFamily newFamily = new LocalComponentFamily(this,
+					subFile);
+			familyCache.put(newFamily.getName(), newFamily);
+		}
 	}
 
 	@Override
@@ -82,9 +83,8 @@ class LocalComponentRegistry extends ComponentRegistry {
 			if (subFile.isFile() && (!subFile.isHidden())
 					&& subFile.getName().endsWith(".xml"))
 				try {
-					Profile newProfile = new ComponentProfile(this,
-							subFile.toURI());
-					profileCache.add(newProfile);
+					profileCache.add(new ComponentProfile(this,
+							subFile.toURI()));
 				} catch (MalformedURLException e) {
 					logger.error("Unable to read profile", e);
 				}
@@ -93,10 +93,9 @@ class LocalComponentRegistry extends ComponentRegistry {
 	@Override
 	protected void internalRemoveComponentFamily(Family componentFamily)
 			throws RegistryException {
-		File componentFamilyDir = new File(getComponentFamiliesDir(),
-				componentFamily.getName());
 		try {
-			deleteDirectory(componentFamilyDir);
+			deleteDirectory(new File(getComponentFamiliesDir(),
+					componentFamily.getName()));
 		} catch (IOException e) {
 			throw new RegistryException("Unable to delete component family", e);
 		}
@@ -134,8 +133,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 		}
 
 		try {
-			Profile newProfile = new ComponentProfile(this, outputFile.toURI());
-			return newProfile;
+			return new ComponentProfile(this, outputFile.toURI());
 		} catch (MalformedURLException e) {
 			throw new RegistryException("Unable to create profile", e);
 		}
@@ -144,10 +142,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((baseDir == null) ? 0 : baseDir.hashCode());
-		return result;
+		return 31 + ((baseDir == null) ? 0 : baseDir.hashCode());
 	}
 
 	@Override
@@ -159,12 +154,9 @@ class LocalComponentRegistry extends ComponentRegistry {
 		if (getClass() != obj.getClass())
 			return false;
 		LocalComponentRegistry other = (LocalComponentRegistry) obj;
-		if (baseDir == null) {
-			if (other.baseDir != null)
-				return false;
-		} else if (!baseDir.equals(other.baseDir))
-			return false;
-		return true;
+		if (baseDir == null)
+			return (other.baseDir == null);
+		return baseDir.equals(other.baseDir);
 	}
 
 	@Override

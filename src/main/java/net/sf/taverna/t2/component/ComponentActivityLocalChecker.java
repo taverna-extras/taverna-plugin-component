@@ -41,7 +41,7 @@ public class ComponentActivityLocalChecker implements
 
 	@Override
 	public VisitReport visit(ComponentActivity activity, List<Object> ancestry) {
-		if (!activity.getConfiguration().getRegistryBase().getProtocol()
+		if (!activity.getConfigBean().getRegistryBase().getProtocol()
 				.startsWith("http"))
 			return new VisitReport(visitKind, activity,
 					"Local component makes workflow non-shareable",

@@ -64,13 +64,8 @@ class LocalComponentVersion extends ComponentVersion {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime
-				* result
-				+ ((componentVersionDir == null) ? 0 : componentVersionDir
-						.hashCode());
-		return result;
+		return 31 + ((componentVersionDir == null) ? 0 : componentVersionDir
+				.hashCode());
 	}
 
 	@Override
@@ -82,17 +77,13 @@ class LocalComponentVersion extends ComponentVersion {
 		if (getClass() != obj.getClass())
 			return false;
 		LocalComponentVersion other = (LocalComponentVersion) obj;
-		if (componentVersionDir == null) {
-			if (other.componentVersionDir != null)
-				return false;
-		} else if (!componentVersionDir.equals(other.componentVersionDir))
-			return false;
-		return true;
+		if (componentVersionDir == null)
+			return (other.componentVersionDir == null);
+		return componentVersionDir.equals(other.componentVersionDir);
 	}
 
 	@Override
 	public URL getHelpURL() {
 		return null;
 	}
-
 }

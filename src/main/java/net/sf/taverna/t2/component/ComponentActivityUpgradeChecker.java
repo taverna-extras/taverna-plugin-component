@@ -47,7 +47,7 @@ public class ComponentActivityUpgradeChecker implements
 
 	@Override
 	public VisitReport visit(ComponentActivity activity, List<Object> ancestry) {
-		ComponentActivityConfigurationBean config = activity.getConfiguration();
+		ComponentActivityConfigurationBean config = activity.getConfigBean();
 		int versionNumber = config.getComponentVersion();
 		int latestVersion = 0;
 

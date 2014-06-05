@@ -1,12 +1,17 @@
 package net.sf.taverna.t2.component;
 
+import static net.sf.taverna.t2.workflowmodel.utils.AnnotationTools.getAnnotationString;
+import static net.sf.taverna.t2.workflowmodel.utils.AnnotationTools.setAnnotationString;
 import static org.apache.log4j.Logger.getLogger;
 
+import java.net.MalformedURLException;
 import java.util.Map;
 
 import net.sf.taverna.t2.activities.dataflow.DataflowActivity;
+import net.sf.taverna.t2.annotation.annotationbeans.SemanticAnnotation;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.profile.ExceptionHandling;
+import net.sf.taverna.t2.component.registry.ComponentDataflowCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.invocation.InvocationContext;
 import net.sf.taverna.t2.invocation.impl.InvocationContextImpl;
@@ -17,36 +22,43 @@ import net.sf.taverna.t2.workflowmodel.EditException;
 import net.sf.taverna.t2.workflowmodel.Edits;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AbstractAsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
-import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
-import net.sf.taverna.t2.workflowmodel.utils.AnnotationTools;
 
 import org.apache.log4j.Logger;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class ComponentActivity extends
-		AbstractAsynchronousActivity<ComponentActivityConfigurationBean>
-		implements AsynchronousActivity<ComponentActivityConfigurationBean> {
+		AbstractAsynchronousActivity<JsonNode> {
 	public static final String URI = "http://ns.taverna.org.uk/2010/activity/component";
-	private static final Logger logger = getLogger(ComponentActivity.class);
-	private static final AnnotationTools aTools = new AnnotationTools();
+	private Logger logger = getLogger(ComponentActivity.class);
 
 	private ComponentUtil util;
+	private ComponentDataflowCache cache;
 	private volatile DataflowActivity componentRealization;
-	private ComponentActivityConfigurationBean configBean;
+	private JsonNode json;
+	private ComponentActivityConfigurationBean bean;
 	
 	private Dataflow realizingDataflow = null;
 
-	ComponentActivity(ComponentUtil util) {
+	ComponentActivity(ComponentUtil util, ComponentDataflowCache cache, Edits edits) {
 		this.util = util;
+		this.cache = cache;
+		setEdits(edits);
 		this.componentRealization = new DataflowActivity();
 	}
 
 	@Override
-	public void configure(ComponentActivityConfigurationBean configBean)
-			throws ActivityConfigurationException {
-		this.configBean = configBean;
+	public void configure(JsonNode json) throws ActivityConfigurationException {
+		this.json = json;
 		try {
-			configurePorts(configBean.getPorts());
+			bean = new ComponentActivityConfigurationBean(json, util, cache);
+		} catch (MalformedURLException e) {
+			throw new ActivityConfigurationException(
+					"failed to understand configuration", e);
+		}
+		try {
+			configurePorts(bean.getPorts());
 		} catch (RegistryException e) {
 			throw new ActivityConfigurationException(
 					"failed to get component realization", e);
@@ -57,8 +69,7 @@ public class ComponentActivity extends
 	public void executeAsynch(Map<String, T2Reference> inputs,
 			AsynchronousActivityCallback callback) {
 		try {
-			ExceptionHandling exceptionHandling = configBean
-					.getExceptionHandling();
+			ExceptionHandling exceptionHandling = bean.getExceptionHandling();
 			// InvocationContextImpl newContext = copyInvocationContext(callback);
 
 			getComponentRealization().executeAsynch(inputs, new ProxyCallback(
@@ -81,8 +92,12 @@ public class ComponentActivity extends
 	}
 
 	@Override
-	public ComponentActivityConfigurationBean getConfiguration() {
-		return configBean;
+	public JsonNode getConfiguration() {
+		return json;
+	}
+
+	ComponentActivityConfigurationBean getConfigBean() {
+		return bean;
 	}
 
 	public DataflowActivity getComponentRealization()
@@ -103,17 +118,16 @@ public class ComponentActivity extends
 	}
 
 	private void copyAnnotations() {
-		for (Class<?> c : aTools.getAnnotatingClasses(this))
-			try {
-				String annotationValue = aTools.getAnnotationString(realizingDataflow, c,
-						null);
-				if (annotationValue == null)
-					continue;
-				aTools.setAnnotationString(this, c, annotationValue)
-						.doEdit();
-			} catch (EditException e) {
-				logger.error("failed to set annotation string", e);
-			}
+		// FIXME Only copies a SemanticAnnotation itself
+		try {
+			String annotationValue = getAnnotationString(realizingDataflow,
+					SemanticAnnotation.class, null);
+			if (annotationValue != null)
+				setAnnotationString(this, SemanticAnnotation.class,
+						annotationValue, edits).doEdit();
+		} catch (EditException e) {
+			logger.error("failed to set annotation string", e);
+		}
 	}
 
 	//@Override
@@ -128,8 +142,7 @@ public class ComponentActivity extends
 
 	private Dataflow getImplementationDataflow() throws RegistryException {
 		if (realizingDataflow == null)
-			realizingDataflow = util.getVersion(getConfiguration())
-					.getDataflow();
+			realizingDataflow = util.getVersion(bean).getDataflow();
 		return realizingDataflow;
 	}
 }

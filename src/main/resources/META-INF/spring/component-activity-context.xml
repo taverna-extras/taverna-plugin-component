@@ -12,6 +12,8 @@
 	</bean>
 	<bean id="componentActivityFactory" class="net.sf.taverna.t2.component.ComponentActivityFactory">
 		<property name="componentUtil" ref="util" />
+		<property name="dataflowCache" ref="cache" />
+		<property name="edits" ref="edits" />
 	</bean>
 	<bean id="componentRegistryLocator"
 		class="net.sf.taverna.t2.component.registry.standard.NewComponentRegistryLocator">

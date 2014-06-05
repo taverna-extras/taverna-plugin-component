@@ -3,6 +3,8 @@ package net.sf.taverna.t2.component;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,8 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityPortsDe
 
 import org.apache.log4j.Logger;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 /**
  * Component activity configuration bean.
  * 
@@ -36,10 +40,11 @@ public class ComponentActivityConfigurationBean extends
 
 	private transient ActivityPortsDefinitionBean ports = null;
 	private transient ExceptionHandling eh;
-	private transient ComponentUtil util;// FIXME
-	private transient ComponentDataflowCache cache; // FIXME
+	private transient ComponentUtil util;
+	private transient ComponentDataflowCache cache;
 
-	public ComponentActivityConfigurationBean(Version.ID toBeCopied, ComponentUtil util, ComponentDataflowCache cache) {
+	public ComponentActivityConfigurationBean(Version.ID toBeCopied,
+			ComponentUtil util, ComponentDataflowCache cache) {
 		super(toBeCopied);
 		this.util = util;
 		this.cache = cache;
@@ -48,6 +53,33 @@ public class ComponentActivityConfigurationBean extends
 		} catch (RegistryException e) {
 			logger.error("failed to get component realization", e);
 		}
+	}
+
+	public ComponentActivityConfigurationBean(JsonNode json,
+			ComponentUtil util, ComponentDataflowCache cache) throws MalformedURLException {
+		super(getUrl(json), getFamily(json), getComponent(json),
+				getVersion(json));
+		this.util = util;
+		this.cache = cache;
+	}
+
+	private static URL getUrl(JsonNode json) throws MalformedURLException {
+		return new URL(json.get("registryBase").textValue());
+	}
+
+	private static String getFamily(JsonNode json) {
+		return json.get("familyName").textValue();
+	}
+
+	private static String getComponent(JsonNode json) {
+		return json.get("componentName").textValue();
+	}
+
+	private static Integer getVersion(JsonNode json) {
+		JsonNode node = json.get("componentVersion");
+		if (node == null || !node.isInt())
+			return null;
+		return node.intValue();
 	}
 
 	private ActivityPortsDefinitionBean getPortsDefinition(Dataflow d) {

@@ -22,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -62,12 +63,13 @@ class Client {
 	private final JAXBContext jaxbContext;
 	private final CredentialManager cm;
 
-	Client(JAXBContext context, URL repository, CredentialManager cm) throws RegistryException {
+	Client(JAXBContext context, URL repository, CredentialManager cm)
+			throws RegistryException {
 		this(context, repository, true, cm);
 	}
 
-	Client(JAXBContext context, URL repository, boolean tryLogIn, CredentialManager cm)
-			throws RegistryException {
+	Client(JAXBContext context, URL repository, boolean tryLogIn,
+			CredentialManager cm) throws RegistryException {
 		this.cm = cm;
 		this.registryBase = repository;
 		this.jaxbContext = context;
@@ -175,7 +177,7 @@ class Client {
 			getMarshaller().marshal(elem, sw);
 			if (logger.isDebugEnabled())
 				logger.info("About to post XML document:\n" + sw);
-			ServerResponse response = http.POST(url, sw.toString());
+			ServerResponse response = http.POST(url, sw);
 			if (response.isFailure())
 				throw new RegistryException(
 						"Unable to perform request (%d): %s",
@@ -223,7 +225,7 @@ class Client {
 			getMarshaller().marshal(elem, sw);
 			if (logger.isDebugEnabled())
 				logger.info("About to put XML document:\n" + sw);
-			ServerResponse response = http.PUT(url, sw.toString());
+			ServerResponse response = http.PUT(url, sw);
 			if (response.isFailure())
 				throw new RegistryException(
 						"Unable to perform request (%d): %s",
@@ -280,11 +282,10 @@ class Client {
 			UsernamePassword userAndPass = cm.getUsernameAndPasswordForService(
 					serviceURI, true, null);
 			// Check for user didn't log in...
-			if (userAndPass == null) {
+			if (userAndPass == null)
 				return null;
-			}
-			return printBase64Binary((userAndPass.getUsername() + ":" + userAndPass
-					.getPasswordAsString()).getBytes("UTF-8"));
+			return printBase64Binary(format("%s:%s", userAndPass.getUsername(),
+					userAndPass.getPasswordAsString()).getBytes("UTF-8"));
 		}
 		return null;
 	}
@@ -300,19 +301,18 @@ class Client {
 		DocumentBuilder db = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder();
 		Document doc;
-		InputStream is = new BufferedInputStream(inputStream);
-		if (!logger.isDebugEnabled()) {
-			doc = db.parse(is);
-			is.close();
-		} else {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			copy(is, baos);
-			is.close();
-			String response = baos.toString("UTF-8");
-			logger.info("response message follows\n"
-					+ response.substring(0,
-							min(MESSAGE_TRIM_LENGTH, response.length())));
-			doc = db.parse(new ByteArrayInputStream(baos.toByteArray()));
+		try (InputStream is = new BufferedInputStream(inputStream)) {
+			if (!logger.isDebugEnabled())
+				doc = db.parse(is);
+			else {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				copy(is, baos);
+				String response = baos.toString("UTF-8");
+				logger.info("response message follows\n"
+						+ response.substring(0,
+								min(MESSAGE_TRIM_LENGTH, response.length())));
+				doc = db.parse(new ByteArrayInputStream(baos.toByteArray()));
+			}
 		}
 		return doc;
 	}
@@ -344,8 +344,6 @@ class Client {
 					if (response != null)
 						throw new RegistryException("failed to log in: "
 								+ response.getError());
-					// else
-					// throw new RegistryException("unauthorized");
 				} finally {
 					try {
 						authString = null;
@@ -433,19 +431,13 @@ class Client {
 		 *         perform a certain action. Response code will always be set.
 		 * @throws Exception
 		 */
-		public ServerResponse POST(String url, String xmlDataBody)
+		public ServerResponse POST(String url, Object xmlDataBody)
 				throws Exception {
 			if (!isLoggedIn() && !elevate())
 				return null;
 
 			HttpURLConnection conn = connect("POST", url);
-
-			conn.setRequestProperty("Content-Type", "application/xml");
-			OutputStreamWriter out = new OutputStreamWriter(
-					conn.getOutputStream());
-			out.write(xmlDataBody);
-			out.close();
-
+			sendXmlBody(xmlDataBody, conn);
 			return receiveServerResponse(conn, url, false, false);
 		}
 
@@ -469,20 +461,47 @@ class Client {
 		}
 
 		@Unused
-		public ServerResponse PUT(String url, String xmlDataBody)
+		public ServerResponse PUT(String url, Object xmlDataBody)
 				throws Exception {
 			if (!isLoggedIn() && !elevate())
 				return null;
 
 			HttpURLConnection conn = connect("PUT", url);
-			conn.setRequestProperty("Content-Type", "application/xml");
-
-			OutputStreamWriter out = new OutputStreamWriter(
-					conn.getOutputStream());
-			out.write(xmlDataBody);
-			out.close();
-
+			sendXmlBody(xmlDataBody, conn);
 			return receiveServerResponse(conn, url, false, false);
+		}
+
+		/**
+		 * Factoring out of how to write a body.
+		 * 
+		 * @param xmlDataBody
+		 *            What to write (an {@link InputStream}, a {@link Reader} or
+		 *            an object that will have it's {@link Object#toString()
+		 *            toString()} method called.
+		 * @param conn
+		 *            Where to write it to.
+		 * @throws IOException
+		 *             If anything goes wrong. The <code>conn</code> will be
+		 *             disconnected in the case of a failure.
+		 */
+		private void sendXmlBody(Object xmlDataBody, HttpURLConnection conn)
+				throws IOException {
+			try {
+				conn.setRequestProperty("Content-Type", "application/xml");
+				if (xmlDataBody instanceof InputStream)
+					copy((InputStream) xmlDataBody, conn.getOutputStream());
+				else
+					try (OutputStreamWriter out = new OutputStreamWriter(
+							conn.getOutputStream())) {
+						if (xmlDataBody instanceof Reader)
+							copy((Reader) xmlDataBody, out);
+						else
+							out.write(xmlDataBody.toString());
+					}
+			} catch (IOException e) {
+				conn.disconnect();
+				throw e;
+			}
 		}
 
 		/**
@@ -507,58 +526,64 @@ class Client {
 		private ServerResponse receiveServerResponse(HttpURLConnection conn,
 				String url, boolean isGETrequest, boolean isHEADrequest)
 				throws Exception {
-			switch (conn.getResponseCode()) {
-			case HTTP_OK:
-				/*
-				 * data retrieval was successful - parse the response XML and
-				 * return it along with response code
-				 */
-				if (isHEADrequest)
+			try {
+				switch (conn.getResponseCode()) {
+				case HTTP_OK:
+					/*
+					 * data retrieval was successful - parse the response XML
+					 * and return it along with response code
+					 */
+					if (isHEADrequest)
+						return new ServerResponse(conn.getResponseCode(), null,
+								null);
+					return new ServerResponse(conn.getResponseCode(), null,
+							getDocumentFromStream(conn.getInputStream()));
+				case HTTP_NO_CONTENT:
+					return new ServerResponse(HTTP_OK, null, null);
+
+				case HttpURLConnection.HTTP_CREATED:
+				case HttpURLConnection.HTTP_MOVED_PERM:
+				case HttpURLConnection.HTTP_MOVED_TEMP:
+				case HttpURLConnection.HTTP_SEE_OTHER:
+				case HttpURLConnection.HTTP_USE_PROXY:
+					return new ServerResponse(conn.getResponseCode(),
+							conn.getHeaderField("Location"), null);
+
+				case HTTP_BAD_REQUEST:
+				case HTTP_FORBIDDEN:
+					/*
+					 * this was a bad XML request - need full XML response to
+					 * retrieve the error message from it; Java throws
+					 * IOException if getInputStream() is used when non HTTP_OK
+					 * response code was received - hence can use
+					 * getErrorStream() straight away to fetch the error
+					 * document
+					 */
+					return new ServerResponse(conn.getResponseCode(), null,
+							getDocumentFromStream(conn.getErrorStream()));
+
+				case HTTP_UNAUTHORIZED:
+					// this content is not authorised for current user
+					logger.warn("non-authorised request to " + url + "\n"
+							+ IOUtils.toString(conn.getErrorStream()));
 					return new ServerResponse(conn.getResponseCode(), null,
 							null);
-				return new ServerResponse(conn.getResponseCode(), null,
-						getDocumentFromStream(conn.getInputStream()));
-			case HTTP_NO_CONTENT:
-				return new ServerResponse(HTTP_OK, null, null);
 
-			case HttpURLConnection.HTTP_CREATED:
-			case HttpURLConnection.HTTP_MOVED_PERM:
-			case HttpURLConnection.HTTP_MOVED_TEMP:
-			case HttpURLConnection.HTTP_SEE_OTHER:
-			case HttpURLConnection.HTTP_USE_PROXY:
-				return new ServerResponse(conn.getResponseCode(),
-						conn.getHeaderField("Location"), null);
-
-			case HTTP_BAD_REQUEST:
-			case HTTP_FORBIDDEN:
-				/*
-				 * this was a bad XML request - need full XML response to
-				 * retrieve the error message from it; Java throws IOException
-				 * if getInputStream() is used when non HTTP_OK response code
-				 * was received - hence can use getErrorStream() straight away
-				 * to fetch the error document
-				 */
-				return new ServerResponse(conn.getResponseCode(), null,
-						getDocumentFromStream(conn.getErrorStream()));
-
-			case HTTP_UNAUTHORIZED:
-				// this content is not authorised for current user
-				logger.warn("non-authorised request to " + url + "\n"
-						+ IOUtils.toString(conn.getErrorStream()));
-				return new ServerResponse(conn.getResponseCode(), null, null);
-
-			case HTTP_NOT_FOUND:
-				if (isHEADrequest)
-					return new ServerResponse(conn.getResponseCode(), null,
-							null);
-				throw new FileNotFoundException("no such resource: " + url);
-			default:
-				// unexpected response code - raise an exception
-				throw new IOException(
-						format("Received unexpected HTTP response code (%d) while %s %s",
-								conn.getResponseCode(),
-								(isGETrequest ? "fetching data at"
-										: "posting data to"), url));
+				case HTTP_NOT_FOUND:
+					if (isHEADrequest)
+						return new ServerResponse(conn.getResponseCode(), null,
+								null);
+					throw new FileNotFoundException("no such resource: " + url);
+				default:
+					// unexpected response code - raise an exception
+					throw new IOException(
+							format("Received unexpected HTTP response code (%d) while %s %s",
+									conn.getResponseCode(),
+									(isGETrequest ? "fetching data at"
+											: "posting data to"), url));
+				}
+			} finally {
+				conn.disconnect();
 			}
 		}
 

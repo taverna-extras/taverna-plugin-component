@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Required;
  */
 public class ComponentUtil {
 	private NewComponentRegistryLocator locator;
+	private static LocalComponentRegistryLocator local = new LocalComponentRegistryLocator();
 
 	private final Map<String, Registry> cache = new HashMap<>();
 
@@ -41,8 +42,7 @@ public class ComponentUtil {
 						"Unable to establish credentials for " + registryBase);
 			registry = locator.getComponentRegistry(registryBase);
 		} else {
-			registry = LocalComponentRegistryLocator
-					.getComponentRegistry(registryBase);
+			registry = local.getComponentRegistry(registryBase);
 		}
 		cache.put(registryBase.toString(), registry);
 		return registry;

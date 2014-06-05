@@ -10,12 +10,9 @@ import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.RegistryException;
 
 public class LocalComponentRegistryLocator {
-	private LocalComponentRegistryLocator() {
-	}
+	private final Map<File, Registry> registries = new HashMap<>();
 
-	private static final Map<File, Registry> registries = new HashMap<File, Registry>();
-
-	public static synchronized Registry getComponentRegistry(File registryDir)
+	public synchronized Registry getComponentRegistry(File registryDir)
 			throws RegistryException {
 		if (!registries.containsKey(registryDir))
 			registries
@@ -23,11 +20,10 @@ public class LocalComponentRegistryLocator {
 		return registries.get(registryDir);
 	}
 
-	public static Registry getComponentRegistry(URL componentRegistryBase)
+	public Registry getComponentRegistry(URL componentRegistryBase)
 			throws RegistryException {
-		String path = componentRegistryBase.getPath();
 		@SuppressWarnings("deprecation")
-		String hackedPath = URLDecoder.decode(path);
+		String hackedPath = URLDecoder.decode(componentRegistryBase.getPath());
 		return getComponentRegistry(new File(hackedPath));
 	}
 }

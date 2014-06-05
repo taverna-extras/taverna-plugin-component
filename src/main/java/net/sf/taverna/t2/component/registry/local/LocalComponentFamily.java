@@ -40,9 +40,7 @@ class LocalComponentFamily extends ComponentFamily {
 	@Override
 	protected final Profile internalGetComponentProfile()
 			throws RegistryException {
-		Profile result = null;
-		LocalComponentRegistry parentRegistry = (LocalComponentRegistry) this
-				.getComponentRegistry();
+		LocalComponentRegistry parentRegistry = (LocalComponentRegistry) getComponentRegistry();
 		File profileFile = new File(componentFamilyDir, PROFILE);
 		String profileName;
 		try {
@@ -51,22 +49,20 @@ class LocalComponentFamily extends ComponentFamily {
 			throw new RegistryException("Unable to read profile name", e);
 		}
 		for (Profile p : parentRegistry.getComponentProfiles())
-			if (p.getName().equals(profileName)) {
-				result = p;
-				break;
-			}
-		return result;
+			if (p.getName().equals(profileName))
+				return p;
+		return null;
 	}
 
 	@Override
 	protected void populateComponentCache() throws RegistryException {
-		for (File subFile : componentFamilyDir.listFiles())
-			if (subFile.isDirectory()) {
-				LocalComponent newComponent = new LocalComponent(subFile,
-						(LocalComponentRegistry) this.getComponentRegistry(),
-						this);
-				componentCache.put(newComponent.getName(), newComponent);
-			}
+		for (File subFile : componentFamilyDir.listFiles()) {
+			if (!subFile.isDirectory())
+				continue;
+			LocalComponent newComponent = new LocalComponent(subFile,
+					(LocalComponentRegistry) getComponentRegistry(), this);
+			componentCache.put(newComponent.getName(), newComponent);
+		}
 	}
 
 	@Override
@@ -90,20 +86,15 @@ class LocalComponentFamily extends ComponentFamily {
 			throw new RegistryException("Could not write out description", e);
 		}
 		LocalComponent newComponent = new LocalComponent(newSubFile,
-				(LocalComponentRegistry) this.getComponentRegistry(), this);
+				(LocalComponentRegistry) getComponentRegistry(), this);
 
 		return newComponent.addVersionBasedOn(dataflow, "Initial version");
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime
-				* result
-				+ ((componentFamilyDir == null) ? 0 : componentFamilyDir
-						.hashCode());
-		return result;
+		return 31 + ((componentFamilyDir == null) ? 0 : componentFamilyDir
+				.hashCode());
 	}
 
 	@Override
@@ -115,12 +106,9 @@ class LocalComponentFamily extends ComponentFamily {
 		if (getClass() != obj.getClass())
 			return false;
 		LocalComponentFamily other = (LocalComponentFamily) obj;
-		if (componentFamilyDir == null) {
-			if (other.componentFamilyDir != null)
-				return false;
-		} else if (!componentFamilyDir.equals(other.componentFamilyDir))
-			return false;
-		return true;
+		if (componentFamilyDir == null)
+			return (other.componentFamilyDir == null);
+		return componentFamilyDir.equals(other.componentFamilyDir);
 	}
 
 	@Override

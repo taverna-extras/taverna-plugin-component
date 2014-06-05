@@ -89,7 +89,8 @@ class NewComponentRegistry extends ComponentRegistry {
 	CredentialManager cm;
 	Client client;
 
-	protected NewComponentRegistry(CredentialManager cm, URL registryBase) throws RegistryException {
+	protected NewComponentRegistry(CredentialManager cm, URL registryBase)
+			throws RegistryException {
 		super(registryBase);
 		this.cm = cm;
 	}
@@ -191,7 +192,7 @@ class NewComponentRegistry extends ComponentRegistry {
 			License license, SharingPolicy sharingPolicy)
 			throws RegistryException {
 		if (componentProfile == null)
-			throw new RegistryException(("Component profile must not be null"));
+			throw new RegistryException("component profile must not be null");
 		try {
 			if (componentProfile instanceof NewComponentProfile) {
 				NewComponentProfile profile = (NewComponentProfile) componentProfile;
@@ -350,7 +351,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	@Override
 	public Set<ID> searchForComponents(String prefixes, String text)
 			throws RegistryException {
-		HashSet<ID> versions = new HashSet<ID>();
+		HashSet<ID> versions = new HashSet<>();
 		for (Description cd : listComponents(text, prefixes)) {
 			NewComponent nc = null;
 			for (Family f : getComponentFamilies()) {
@@ -380,7 +381,7 @@ class NewComponentRegistry extends ComponentRegistry {
 
 	protected List<Component> listComponents(NewComponentFamily family)
 			throws RegistryException {
-		List<Component> result = new ArrayList<Component>();
+		List<Component> result = new ArrayList<>();
 		for (Description cd : listComponents(family.getResourceLocation()))
 			result.add(new NewComponent(this, family, cd));
 		return result;

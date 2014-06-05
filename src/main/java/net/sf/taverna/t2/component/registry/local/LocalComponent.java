@@ -27,13 +27,9 @@ import org.apache.log4j.Logger;
  * 
  */
 class LocalComponent extends Component {
-
 	private final File componentDir;
-
 	private final LocalComponentRegistry registry;
-
 	private final LocalComponentFamily family;
-
 	private static Logger logger = getLogger(LocalComponent.class);
 
 	public LocalComponent(File componentDir, LocalComponentRegistry registry,
@@ -104,12 +100,9 @@ class LocalComponent extends Component {
 		if (getClass() != obj.getClass())
 			return false;
 		LocalComponent other = (LocalComponent) obj;
-		if (componentDir == null) {
-			if (other.componentDir != null)
-				return false;
-		} else if (!componentDir.equals(other.componentDir))
-			return false;
-		return true;
+		if (componentDir == null)
+			return (other.componentDir == null);
+		return componentDir.equals(other.componentDir);
 	}
 
 	@Override
