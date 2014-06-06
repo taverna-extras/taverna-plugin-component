@@ -20,8 +20,8 @@
  ******************************************************************************/
 package net.sf.taverna.t2.component.registry.standard;
 
-import static net.sf.taverna.t2.component.registry.standard.NewComponentRegistryLocator.getComponentRegistry;
-import static net.sf.taverna.t2.component.utils.Utils.getDataflowFromUri;
+import static net.sf.taverna.t2.component.registry.standard.NewComponentRegistryFactory.getComponentRegistry;
+import static net.sf.taverna.t2.component.utils.SystemUtils.getDataflowFromUri;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 

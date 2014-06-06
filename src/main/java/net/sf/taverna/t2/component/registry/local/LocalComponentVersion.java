@@ -14,7 +14,7 @@ import java.net.URL;
 
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.registry.ComponentVersion;
-import net.sf.taverna.t2.component.utils.Utils;
+import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
@@ -27,12 +27,13 @@ class LocalComponentVersion extends ComponentVersion {
 	private static Logger logger = getLogger(LocalComponentVersion.class);
 
 	private final File componentVersionDir;
-	private Utils loader;//FIXME
+	private SystemUtils system;
 
 	protected LocalComponentVersion(LocalComponent component,
-			File componentVersionDir) {
+			File componentVersionDir, SystemUtils system) {
 		super(component);
 		this.componentVersionDir = componentVersionDir;
+		this.system = system;
 	}
 
 	@Override
@@ -56,7 +57,7 @@ class LocalComponentVersion extends ComponentVersion {
 	protected final Dataflow internalGetDataflow() throws RegistryException {
 		File filename = new File(componentVersionDir, COMPONENT_FILENAME);
 		try {
-			return loader.getDataflow(filename);
+			return system.getDataflow(filename);
 		} catch (Exception e) {
 			logger.error(
 					"failed to get component realization from " + filename, e);

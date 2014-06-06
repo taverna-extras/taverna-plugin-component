@@ -2,7 +2,7 @@ package net.sf.taverna.t2.component.registry.standard;
 
 import static net.sf.taverna.t2.component.registry.Harness.componentRegistry;
 import static net.sf.taverna.t2.component.registry.Harness.componentRegistryUrl;
-import static net.sf.taverna.t2.component.registry.standard.NewComponentRegistryLocator.getComponentRegistry;
+import static net.sf.taverna.t2.component.registry.standard.NewComponentRegistryFactory.getComponentRegistry;
 
 import java.net.Authenticator;
 import java.net.URL;

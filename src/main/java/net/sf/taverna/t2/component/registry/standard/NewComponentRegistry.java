@@ -1,7 +1,7 @@
 package net.sf.taverna.t2.component.registry.standard;
 
 import static net.sf.taverna.t2.component.registry.standard.Policy.PRIVATE;
-import static net.sf.taverna.t2.component.utils.Utils.getElementString;
+import static net.sf.taverna.t2.component.utils.SystemUtils.getElementString;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.net.URL;
@@ -26,7 +26,7 @@ import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
-import net.sf.taverna.t2.component.utils.Utils;
+import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
@@ -87,16 +87,17 @@ class NewComponentRegistry extends ComponentRegistry {
 		}
 	}
 
-	private CredentialManager cm;
 	private Client client;
-	private ComponentUtil util;
-	private Utils loader; //FIXME
+	private final CredentialManager cm;
+	private final ComponentUtil util;
+	private final SystemUtils system;
 
 	protected NewComponentRegistry(CredentialManager cm, URL registryBase,
-			ComponentUtil util) throws RegistryException {
+			ComponentUtil util, SystemUtils system) throws RegistryException {
 		super(registryBase);
 		this.cm = cm;
 		this.util = util;
+		this.system = system;
 	}
 
 	private void checkClientCreated() throws RegistryException {
@@ -284,7 +285,7 @@ class NewComponentRegistry extends ComponentRegistry {
 		comp.setContent(new Content());
 		comp.getContent().setEncoding("base64");
 		comp.getContent().setType("binary");
-		comp.getContent().setValue(loader.serializeDataflow(content));
+		comp.getContent().setValue(system.serializeDataflow(content));
 		if (license == null)
 			license = getPreferredLicense();
 		if (license != null) {
@@ -391,7 +392,7 @@ class NewComponentRegistry extends ComponentRegistry {
 			throws RegistryException {
 		List<Component> result = new ArrayList<>();
 		for (Description cd : listComponents(family.getResourceLocation()))
-			result.add(new NewComponent(this, family, cd));
+			result.add(new NewComponent(this, family, cd, system));
 		return result;
 	}
 
@@ -413,7 +414,7 @@ class NewComponentRegistry extends ComponentRegistry {
 						componentName, description, dataflow, family, license,
 						sharingPolicy)), COMPONENT_SERVICE, "elements="
 				+ NewComponent.ELEMENTS);
-		NewComponent nc = new NewComponent(this, family, ct);
+		NewComponent nc = new NewComponent(this, family, ct, system);
 		return nc.new Version(ct.getVersion(), description, dataflow);
 	}
 

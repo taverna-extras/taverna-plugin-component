@@ -13,10 +13,9 @@ import uk.org.taverna.configuration.app.ApplicationConfiguration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
 
-public class Utils {
+public class SystemUtils {
 	private static final String T2FLOW_TYPE = "application/vnd.taverna.t2flow+xml";
-	private static final String SCUFL2_TYPE = "application/vnd.taverna.scufl2.workflow-bundle";// TODO
-																								// check
+	private static final String SCUFL2_TYPE = "application/vnd.taverna.scufl2.workflow-bundle";// TODO check
 	private ApplicationConfiguration appConfig;
 	private WorkflowBundleIO workflowBundleIO;
 

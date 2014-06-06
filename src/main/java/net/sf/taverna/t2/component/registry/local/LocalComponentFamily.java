@@ -18,6 +18,7 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.ComponentFamily;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
+import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
@@ -31,11 +32,13 @@ class LocalComponentFamily extends ComponentFamily {
 	private static final String PROFILE = "profile";
 
 	private final File componentFamilyDir;
+	private SystemUtils system;
 
 	public LocalComponentFamily(LocalComponentRegistry parentRegistry,
-			File componentFamilyDir, ComponentUtil util) {
+			File componentFamilyDir, ComponentUtil util, SystemUtils system) {
 		super(parentRegistry, util);
 		this.componentFamilyDir = componentFamilyDir;
+		this.system = system;
 	}
 
 	@Override
@@ -61,7 +64,8 @@ class LocalComponentFamily extends ComponentFamily {
 			if (!subFile.isDirectory())
 				continue;
 			LocalComponent newComponent = new LocalComponent(subFile,
-					(LocalComponentRegistry) getComponentRegistry(), this);
+					(LocalComponentRegistry) getComponentRegistry(), this,
+					system);
 			componentCache.put(newComponent.getName(), newComponent);
 		}
 	}
@@ -87,7 +91,7 @@ class LocalComponentFamily extends ComponentFamily {
 			throw new RegistryException("Could not write out description", e);
 		}
 		LocalComponent newComponent = new LocalComponent(newSubFile,
-				(LocalComponentRegistry) getComponentRegistry(), this);
+				(LocalComponentRegistry) getComponentRegistry(), this, system);
 
 		return newComponent.addVersionBasedOn(dataflow, "Initial version");
 	}

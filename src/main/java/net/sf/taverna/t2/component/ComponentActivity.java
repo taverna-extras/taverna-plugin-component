@@ -118,7 +118,7 @@ public class ComponentActivity extends
 	}
 
 	private void copyAnnotations() {
-		// FIXME Only copies a SemanticAnnotation itself
+		// TODO Only copies a SemanticAnnotation itself
 		try {
 			String annotationValue = getAnnotationString(realizingDataflow,
 					SemanticAnnotation.class, null);

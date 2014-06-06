@@ -12,8 +12,8 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.profile.BaseProfileLocator;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
-import net.sf.taverna.t2.component.registry.local.LocalComponentRegistryLocator;
-import net.sf.taverna.t2.component.registry.standard.NewComponentRegistryLocator;
+import net.sf.taverna.t2.component.registry.local.LocalComponentRegistryFactory;
+import net.sf.taverna.t2.component.registry.standard.NewComponentRegistryFactory;
 
 import org.springframework.beans.factory.annotation.Required;
 
@@ -22,19 +22,19 @@ import org.springframework.beans.factory.annotation.Required;
  * @author dkf
  */
 public class ComponentUtil {
-	private NewComponentRegistryLocator netLocator;
+	private NewComponentRegistryFactory netLocator;
 	private BaseProfileLocator base;
-	private LocalComponentRegistryLocator fileLocator;
+	private LocalComponentRegistryFactory fileLocator;
 
 	private final Map<String, Registry> cache = new HashMap<>();
 
 	@Required
-	public void setNetworkLocator(NewComponentRegistryLocator locator) {
+	public void setNetworkLocator(NewComponentRegistryFactory locator) {
 		this.netLocator = locator;
 	}
 
 	@Required
-	public void setFileLocator(LocalComponentRegistryLocator fileLocator) {
+	public void setFileLocator(LocalComponentRegistryFactory fileLocator) {
 		this.fileLocator = fileLocator;
 	}
 

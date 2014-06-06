@@ -3,7 +3,7 @@ package net.sf.taverna.t2.component.registry.local;
 import static java.lang.System.getProperty;
 import static net.sf.taverna.t2.component.registry.Harness.componentRegistry;
 import static net.sf.taverna.t2.component.registry.Harness.componentRegistryUrl;
-import static net.sf.taverna.t2.component.registry.local.LocalComponentRegistryLocator.getComponentRegistry;
+import static net.sf.taverna.t2.component.registry.local.LocalComponentRegistryFactory.getComponentRegistry;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 
 import java.io.File;

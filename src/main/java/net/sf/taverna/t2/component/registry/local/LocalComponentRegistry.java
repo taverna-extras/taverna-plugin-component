@@ -21,6 +21,7 @@ import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
+import net.sf.taverna.t2.component.utils.SystemUtils;
 
 import org.apache.log4j.Logger;
 
@@ -32,6 +33,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 	private static final Logger logger = getLogger(LocalComponentRegistry.class);
 	static final String ENC = "utf-8";
 	private ComponentUtil util;
+	private SystemUtils system;
 	private File baseDir;
 
 	@SuppressWarnings("unused")
@@ -39,11 +41,12 @@ class LocalComponentRegistry extends ComponentRegistry {
 	@SuppressWarnings("unused")
 	private static final String BASE_PROFILE_FILENAME = "BaseProfile.xml";
 
-	public LocalComponentRegistry(File registryDir, ComponentUtil util)
+	public LocalComponentRegistry(File registryDir, ComponentUtil util, SystemUtils system)
 			throws RegistryException {
 		super(registryDir);
 		baseDir = registryDir;
 		this.util = util;
+		this.system = system;
 	}
 
 	@Override
@@ -64,7 +67,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 		} catch (IOException e) {
 			throw new RegistryException("Could not write out description", e);
 		}
-		return new LocalComponentFamily(this, newFamilyDir, util);
+		return new LocalComponentFamily(this, newFamilyDir, util, system);
 	}
 
 	@Override
@@ -74,7 +77,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 			if (!subFile.isDirectory())
 				continue;
 			LocalComponentFamily newFamily = new LocalComponentFamily(this,
-					subFile, util);
+					subFile, util, system);
 			familyCache.put(newFamily.getName(), newFamily);
 		}
 	}

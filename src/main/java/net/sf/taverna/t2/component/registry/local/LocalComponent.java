@@ -17,7 +17,7 @@ import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.Component;
-import net.sf.taverna.t2.component.utils.Utils;
+import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
@@ -32,11 +32,12 @@ class LocalComponent extends Component {
 	private final LocalComponentRegistry registry;
 	private final LocalComponentFamily family;
 	private static Logger logger = getLogger(LocalComponent.class);
-	private Utils loader; // FIXME
+	private SystemUtils system;
 
 	public LocalComponent(File componentDir, LocalComponentRegistry registry,
-			LocalComponentFamily family) {
+			LocalComponentFamily family, SystemUtils system) {
 		super(componentDir);
+		this.system = system;
 		this.componentDir = componentDir;
 		this.registry = registry;
 		this.family = family;
@@ -55,9 +56,9 @@ class LocalComponent extends Component {
 				nextVersionNumber.toString());
 		newVersionDir.mkdirs();
 		LocalComponentVersion newComponentVersion = new LocalComponentVersion(
-				this, newVersionDir);
+				this, newVersionDir, system);
 		try {
-			loader.saveDataflow(dataflow, new File(newVersionDir,
+			system.saveDataflow(dataflow, new File(newVersionDir,
 					COMPONENT_FILENAME));
 		} catch (Exception e) {
 			throw new RegistryException("Unable to save component version", e);
@@ -80,22 +81,18 @@ class LocalComponent extends Component {
 	@Override
 	protected final void populateComponentVersionMap() {
 		for (File subFile : componentDir.listFiles())
-			if (subFile.isDirectory())
-				try {
-					Integer i = Integer.valueOf(subFile.getName());
-					versionMap.put(i, new LocalComponentVersion(this, subFile));
-				} catch (NumberFormatException e) {
-					// Ignore
-				}
+			try {
+				if (subFile.isDirectory())
+					versionMap.put(Integer.valueOf(subFile.getName()),
+							new LocalComponentVersion(this, subFile, system));
+			} catch (NumberFormatException e) {
+				// Ignore
+			}
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((componentDir == null) ? 0 : componentDir.hashCode());
-		return result;
+		return 31 + ((componentDir == null) ? 0 : componentDir.hashCode());
 	}
 
 	@Override

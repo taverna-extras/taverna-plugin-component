@@ -3,8 +3,8 @@ package net.sf.taverna.t2.component.registry.standard;
 import static java.lang.String.format;
 import static net.sf.taverna.t2.component.registry.standard.NewComponentRegistry.logger;
 import static net.sf.taverna.t2.component.registry.standard.Policy.getPolicy;
-import static net.sf.taverna.t2.component.utils.Utils.getElementString;
-import static net.sf.taverna.t2.component.utils.Utils.getValue;
+import static net.sf.taverna.t2.component.utils.SystemUtils.getElementString;
+import static net.sf.taverna.t2.component.utils.SystemUtils.getValue;
 
 import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
@@ -18,7 +18,7 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.registry.Component;
 import net.sf.taverna.t2.component.registry.ComponentVersion;
-import net.sf.taverna.t2.component.utils.Utils;
+import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 import uk.org.taverna.component.api.ComponentType;
 import uk.org.taverna.component.api.Description;
@@ -27,7 +27,7 @@ class NewComponent extends Component {
 	static final String ELEMENTS = "title,description";
 	static final String EXTRA = "license-type,permissions";
 
-	private Utils loader;// FIXME
+	private final SystemUtils system;
 	final NewComponentRegistry registry;
 	final NewComponentFamily family;
 	private final String id;
@@ -36,8 +36,9 @@ class NewComponent extends Component {
 	private final String resource;
 
 	NewComponent(NewComponentRegistry registry, NewComponentFamily family,
-			Description cd) throws RegistryException {
+			Description cd, SystemUtils system) throws RegistryException {
 		super(cd.getUri());
+		this.system = system;
 		this.registry = registry;
 		this.family = family;
 		id = cd.getId().trim();
@@ -47,8 +48,9 @@ class NewComponent extends Component {
 	}
 
 	NewComponent(NewComponentRegistry registry, NewComponentFamily family,
-			ComponentType ct) {
+			ComponentType ct, SystemUtils system) {
 		super(ct.getUri());
+		this.system = system;
 		this.registry = registry;
 		this.family = family;
 		id = ct.getId().trim();
@@ -183,7 +185,7 @@ class NewComponent extends Component {
 			if (dataflowRef == null || dataflowRef.get() == null) {
 				String contentUri = getDataflowUri();
 				try {
-					Dataflow result = loader.getDataflowFromUri(contentUri
+					Dataflow result = system.getDataflowFromUri(contentUri
 							+ "?version=" + version);
 					dataflowRef = new SoftReference<Dataflow>(result);
 					return result;
