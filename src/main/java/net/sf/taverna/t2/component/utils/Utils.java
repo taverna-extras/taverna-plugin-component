@@ -1,67 +1,67 @@
 package net.sf.taverna.t2.component.utils;
 
-import static net.sf.taverna.t2.workflowmodel.utils.AnnotationTools.getAnnotationString;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.bind.JAXBElement;
 
+import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.workflowmodel.Dataflow;
 import uk.org.taverna.component.api.Description;
 import uk.org.taverna.configuration.app.ApplicationConfiguration;
-import net.sf.taverna.t2.annotation.annotationbeans.AbstractTextualValueAssertion;
-import net.sf.taverna.t2.component.api.RegistryException;
-import net.sf.taverna.t2.component.registry.local.Constants;
-import net.sf.taverna.t2.component.registry.local.T2DataflowSaver;
-import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
-import net.sf.taverna.t2.workbench.file.impl.T2DataflowOpener;
-import net.sf.taverna.t2.workbench.file.impl.T2FlowFileType;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.utils.AnnotationTools;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
 
 public class Utils {
+	private static final String T2FLOW_TYPE = "application/vnd.taverna.t2flow+xml";
+	private static final String SCUFL2_TYPE = "application/vnd.taverna.scufl2.workflow-bundle";// TODO
+																								// check
 	private ApplicationConfiguration appConfig;
-	private static final T2FlowFileType T2_FLOW_FILE_TYPE = new T2FlowFileType();
-	private static final T2DataflowOpener opener = new T2DataflowOpener();
-	private static final FileManager filer = FileManager.getInstance();
-	private static final T2DataflowSaver saver = new T2DataflowSaver();
+	private WorkflowBundleIO workflowBundleIO;
 
-	public static String serializeDataflow(Dataflow dataflow)
-			throws RegistryException {
+	public byte[] serializeDataflow(Dataflow dataflow) throws RegistryException {
 		try {
-			// Ugly, but how to do it...
 			ByteArrayOutputStream dataflowStream = new ByteArrayOutputStream();
-			filer.saveDataflowSilently(dataflow, T2_FLOW_FILE_TYPE,
-					dataflowStream, false);
-			return dataflowStream.toString("UTF-8");
+			workflowBundleIO.writeBundle(getBundleForDataflow(dataflow),
+					dataflowStream, SCUFL2_TYPE);
+			return dataflowStream.toByteArray();
 		} catch (Exception e) {
 			throw new RegistryException(
 					"failed to serialize component implementation", e);
 		}
 	}
 
-	public static void saveDataflow(Dataflow dataflow, File file) {
-		try {
-			saver.saveDataflow(dataflow, T2_FLOW_FILE_TYPE, file);
-		} catch (Exception e) {
-			throw new RegistryException("Unable to save component version", e);
-		}
-	}
-	public static Dataflow getDataflowFromUri(String uri) throws Exception {
-		return opener.openDataflow(T2_FLOW_FILE_TYPE, new URL(uri))
-				.getDataflow();
-	}
-	public static Dataflow getDataflow(File file) throws Exception {
-		return opener.openDataflow(T2_FLOW_FILE_TYPE, file).getDataflow();
+	private WorkflowBundle getBundleForDataflow(Dataflow dataflow) {
+		return null; // FIXME how to get scufl2 bundle from t2flow dataflow?
 	}
 
-	public static String getAnnotation(Dataflow dataflow,
-			Class<? extends AbstractTextualValueAssertion> annotation,
-			String defaultValue) {
-		return getAnnotationString(dataflow, annotation, defaultValue);
+	private Dataflow getDataflowForBundle(WorkflowBundle bundle) {
+		return null; // FIXME how to get t2flow dataflow from scufl2 bundle?
+	}
+
+	private String determineMediaTypeForFilename(File file) {
+		String[] pieces = file.getName().split("\\.");
+		switch (pieces[pieces.length - 1]) {
+		case "t2flow":
+			return T2FLOW_TYPE;
+		default:
+			return SCUFL2_TYPE;
+		}
+	}
+
+	public void saveDataflow(Dataflow dataflow, File file) throws Exception {
+		workflowBundleIO.writeBundle(getBundleForDataflow(dataflow), file,
+				determineMediaTypeForFilename(file));
+	}
+
+	public Dataflow getDataflowFromUri(String uri) throws Exception {
+		return getDataflowForBundle(workflowBundleIO.readBundle(new URL(uri),
+				null));
+	}
+
+	public Dataflow getDataflow(File file) throws Exception {
+		return getDataflowForBundle(workflowBundleIO.readBundle(file, null));
 	}
 
 	public static JAXBElement<?> getElement(Description d, String name)
@@ -94,5 +94,9 @@ public class Utils {
 
 	public void setAppConfig(ApplicationConfiguration appConfig) {
 		this.appConfig = appConfig;
+	}
+
+	public void setWorkflowBundler(WorkflowBundleIO workflowBundler) {
+		this.workflowBundleIO = workflowBundler;
 	}
 }

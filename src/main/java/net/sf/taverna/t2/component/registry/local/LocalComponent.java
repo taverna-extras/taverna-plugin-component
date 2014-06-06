@@ -4,7 +4,6 @@
 package net.sf.taverna.t2.component.registry.local;
 
 import static net.sf.taverna.t2.component.registry.local.LocalComponentRegistry.ENC;
-import static net.sf.taverna.t2.component.utils.Utils.saveDataflow;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.apache.log4j.Logger.getLogger;
@@ -18,6 +17,7 @@ import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.Component;
+import net.sf.taverna.t2.component.utils.Utils;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
@@ -27,10 +27,12 @@ import org.apache.log4j.Logger;
  * 
  */
 class LocalComponent extends Component {
+	static final String COMPONENT_FILENAME = "dataflow.t2flow";
 	private final File componentDir;
 	private final LocalComponentRegistry registry;
 	private final LocalComponentFamily family;
 	private static Logger logger = getLogger(LocalComponent.class);
+	private Utils loader; // FIXME
 
 	public LocalComponent(File componentDir, LocalComponentRegistry registry,
 			LocalComponentFamily family) {
@@ -54,7 +56,12 @@ class LocalComponent extends Component {
 		newVersionDir.mkdirs();
 		LocalComponentVersion newComponentVersion = new LocalComponentVersion(
 				this, newVersionDir);
-		saveDataflow(dataflow, new File(newVersionDir, "dataflow.t2flow"));
+		try {
+			loader.saveDataflow(dataflow, new File(newVersionDir,
+					COMPONENT_FILENAME));
+		} catch (Exception e) {
+			throw new RegistryException("Unable to save component version", e);
+		}
 		File revisionCommentFile = new File(newVersionDir, "description");
 		try {
 			writeStringToFile(revisionCommentFile, revisionComment, ENC);

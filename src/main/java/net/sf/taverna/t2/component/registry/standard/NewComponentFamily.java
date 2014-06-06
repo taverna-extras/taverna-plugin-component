@@ -1,7 +1,7 @@
 package net.sf.taverna.t2.component.registry.standard;
 
-import static net.sf.taverna.t2.component.utils.Utils.getAnnotation;
 import static net.sf.taverna.t2.component.utils.Utils.getElementString;
+import static net.sf.taverna.t2.workflowmodel.utils.AnnotationTools.getAnnotationString;
 
 import java.util.List;
 
@@ -90,11 +90,11 @@ class NewComponentFamily extends ComponentFamily {
 	protected Version internalCreateComponentBasedOn(String componentName,
 			String description, Dataflow dataflow) throws RegistryException {
 		if (componentName == null)
-			componentName = getAnnotation(dataflow, DescriptiveTitle.class,
-					"Untitled");
+			componentName = getAnnotationString(dataflow,
+					DescriptiveTitle.class, "Untitled");
 		if (description == null)
-			description = getAnnotation(dataflow, FreeTextDescription.class,
-					"Undescribed");
+			description = getAnnotationString(dataflow,
+					FreeTextDescription.class, "Undescribed");
 		return registry.createComponentFrom(this, componentName, description,
 				dataflow, registry.getPreferredLicense(),
 				registry.getDefaultSharingPolicy());

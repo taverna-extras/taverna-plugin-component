@@ -4,6 +4,7 @@
 package net.sf.taverna.t2.component.registry.local;
 
 import static java.lang.Integer.parseInt;
+import static net.sf.taverna.t2.component.registry.local.LocalComponent.COMPONENT_FILENAME;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.log4j.Logger.getLogger;
 
@@ -26,6 +27,7 @@ class LocalComponentVersion extends ComponentVersion {
 	private static Logger logger = getLogger(LocalComponentVersion.class);
 
 	private final File componentVersionDir;
+	private Utils loader;//FIXME
 
 	protected LocalComponentVersion(LocalComponent component,
 			File componentVersionDir) {
@@ -52,9 +54,9 @@ class LocalComponentVersion extends ComponentVersion {
 
 	@Override
 	protected final Dataflow internalGetDataflow() throws RegistryException {
-		File filename = new File(componentVersionDir, "dataflow.t2flow");
+		File filename = new File(componentVersionDir, COMPONENT_FILENAME);
 		try {
-			return Utils.getDataflow(filename);
+			return loader.getDataflow(filename);
 		} catch (Exception e) {
 			logger.error(
 					"failed to get component realization from " + filename, e);

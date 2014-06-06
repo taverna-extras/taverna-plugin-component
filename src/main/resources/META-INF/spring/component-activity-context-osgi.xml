@@ -18,4 +18,5 @@
 	<reference id="credentialManager"
 		interface="net.sf.taverna.t2.security.credentialmanager.CredentialManager" />
 	<reference id="edits" interface="net.sf.taverna.t2.workflowmodel.Edits" />
+	<reference id="workflowBundleIO" interface="uk.org.taverna.scufl2.api.io.WorkflowBundleIO" />
 </beans:beans>

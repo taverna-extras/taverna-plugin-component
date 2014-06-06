@@ -37,5 +37,6 @@
 	</bean>
 	<bean id="systemUtil" class="net.sf.taverna.t2.component.utils.Utils">
 		<property name="appConfig" ref="app-config" />
+		<property name="workflowBundler" ref="workflowBundleIO" />
 	</bean>
 </beans>

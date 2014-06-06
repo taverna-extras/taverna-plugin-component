@@ -2,7 +2,6 @@ package net.sf.taverna.t2.component.registry.standard;
 
 import static net.sf.taverna.t2.component.registry.standard.Policy.PRIVATE;
 import static net.sf.taverna.t2.component.utils.Utils.getElementString;
-import static net.sf.taverna.t2.component.utils.Utils.serializeDataflow;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.net.URL;
@@ -27,6 +26,7 @@ import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
+import net.sf.taverna.t2.component.utils.Utils;
 import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
@@ -90,6 +90,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	private CredentialManager cm;
 	private Client client;
 	private ComponentUtil util;
+	private Utils loader; //FIXME
 
 	protected NewComponentRegistry(CredentialManager cm, URL registryBase,
 			ComponentUtil util) throws RegistryException {
@@ -283,7 +284,7 @@ class NewComponentRegistry extends ComponentRegistry {
 		comp.setContent(new Content());
 		comp.getContent().setEncoding("base64");
 		comp.getContent().setType("binary");
-		comp.getContent().setValue(serializeDataflow(content).getBytes(utf8));
+		comp.getContent().setValue(loader.serializeDataflow(content));
 		if (license == null)
 			license = getPreferredLicense();
 		if (license != null) {
