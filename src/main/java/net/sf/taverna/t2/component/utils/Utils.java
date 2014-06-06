@@ -10,7 +10,7 @@ import java.net.URL;
 import javax.xml.bind.JAXBElement;
 
 import uk.org.taverna.component.api.Description;
-import net.sf.taverna.raven.appconfig.ApplicationRuntime;
+import uk.org.taverna.configuration.app.ApplicationConfiguration;
 import net.sf.taverna.t2.annotation.annotationbeans.AbstractTextualValueAssertion;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.registry.local.Constants;
@@ -23,6 +23,7 @@ import net.sf.taverna.t2.workflowmodel.Dataflow;
 import net.sf.taverna.t2.workflowmodel.utils.AnnotationTools;
 
 public class Utils {
+	private ApplicationConfiguration appConfig;
 	private static final T2FlowFileType T2_FLOW_FILE_TYPE = new T2FlowFileType();
 	private static final T2DataflowOpener opener = new T2DataflowOpener();
 	private static final FileManager filer = FileManager.getInstance();
@@ -87,8 +88,11 @@ public class Utils {
 		return sb.toString();
 	}
 
-	public static File getApplicationHomeDir() {
-		// FIXME Raven is gone; how to get app home dir?
-		return ApplicationRuntime.getInstance().getApplicationHomeDir();
+	public File getApplicationHomeDir() {
+		return appConfig.getApplicationHomeDir();
+	}
+
+	public void setAppConfig(ApplicationConfiguration appConfig) {
+		this.appConfig = appConfig;
 	}
 }

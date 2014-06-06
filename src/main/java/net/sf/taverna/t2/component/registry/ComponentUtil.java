@@ -10,6 +10,7 @@ import net.sf.taverna.t2.component.api.Profile;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.profile.BaseProfileLocator;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
 import net.sf.taverna.t2.component.registry.local.LocalComponentRegistryLocator;
 import net.sf.taverna.t2.component.registry.standard.NewComponentRegistryLocator;
@@ -21,14 +22,25 @@ import org.springframework.beans.factory.annotation.Required;
  * @author dkf
  */
 public class ComponentUtil {
-	private NewComponentRegistryLocator locator;
-	private static LocalComponentRegistryLocator local = new LocalComponentRegistryLocator();
+	private NewComponentRegistryLocator netLocator;
+	private BaseProfileLocator base;
+	private LocalComponentRegistryLocator fileLocator;
 
 	private final Map<String, Registry> cache = new HashMap<>();
 
 	@Required
-	public void setLocator(NewComponentRegistryLocator locator) {
-		this.locator = locator;
+	public void setNetworkLocator(NewComponentRegistryLocator locator) {
+		this.netLocator = locator;
+	}
+
+	@Required
+	public void setFileLocator(LocalComponentRegistryLocator fileLocator) {
+		this.fileLocator = fileLocator;
+	}
+
+	@Required
+	public void setBaseLocator(BaseProfileLocator base) {
+		this.base = base;
 	}
 
 	public Registry getRegistry(URL registryBase) throws RegistryException {
@@ -37,13 +49,12 @@ public class ComponentUtil {
 			return registry;
 
 		if (registryBase.getProtocol().startsWith("http")) {
-			if (!locator.verifyBase(registryBase))
+			if (!netLocator.verifyBase(registryBase))
 				throw new RegistryException(
 						"Unable to establish credentials for " + registryBase);
-			registry = locator.getComponentRegistry(registryBase);
-		} else {
-			registry = local.getComponentRegistry(registryBase);
-		}
+			registry = netLocator.getComponentRegistry(registryBase);
+		} else
+			registry = fileLocator.getComponentRegistry(registryBase);
 		cache.put(registryBase.toString(), registry);
 		return registry;
 	}
@@ -78,8 +89,16 @@ public class ComponentUtil {
 	}
 
 	public Profile getProfile(URL url) throws RegistryException {
-		Profile p = new ComponentProfile(url);
+		Profile p = new ComponentProfile(url, base);
 		p.getProfileDocument(); // force immediate loading
 		return p;
+	}
+
+	public Profile getBaseProfile() throws RegistryException {
+		return base.getProfile();
+	}
+
+	public BaseProfileLocator getBaseProfileLocator() {
+		return base;
 	}
 }

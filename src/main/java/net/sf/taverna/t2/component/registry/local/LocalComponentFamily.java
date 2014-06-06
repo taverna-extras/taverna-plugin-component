@@ -17,6 +17,7 @@ import net.sf.taverna.t2.component.api.Profile;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.ComponentFamily;
+import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
@@ -32,8 +33,8 @@ class LocalComponentFamily extends ComponentFamily {
 	private final File componentFamilyDir;
 
 	public LocalComponentFamily(LocalComponentRegistry parentRegistry,
-			File componentFamilyDir) {
-		super(parentRegistry);
+			File componentFamilyDir, ComponentUtil util) {
+		super(parentRegistry, util);
 		this.componentFamilyDir = componentFamilyDir;
 	}
 

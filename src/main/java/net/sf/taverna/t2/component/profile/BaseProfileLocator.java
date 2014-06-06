@@ -3,7 +3,7 @@
  */
 package net.sf.taverna.t2.component.profile;
 
-import static net.sf.taverna.t2.component.utils.Utils.getApplicationHomeDir;
+import static java.util.Locale.UK;
 import static org.apache.commons.httpclient.HttpStatus.SC_OK;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.apache.log4j.Logger.getLogger;
@@ -16,7 +16,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 import net.sf.taverna.t2.component.api.RegistryException;
 
@@ -28,33 +27,25 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.configuration.app.ApplicationConfiguration;
+
 /**
  * @author alanrw
  * 
  */
 public class BaseProfileLocator {
-	private static final Logger logger = getLogger(BaseProfileLocator.class);
 	private static final String BASE_PROFILE_PATH = "BaseProfile.xml";
 	private static final String BASE_PROFILE_URI = "http://build.mygrid.org.uk/taverna/BaseProfile.xml";
 	private static final int TIMEOUT = 5000;
 	private static final String pattern = "EEE, dd MMM yyyy HH:mm:ss z";
-	private static final SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.UK);
+	private static final SimpleDateFormat format = new SimpleDateFormat(
+			pattern, UK);
 
-	private static BaseProfileLocator instance = null;
+	private Logger logger = getLogger(BaseProfileLocator.class);
+	private ApplicationConfiguration appConfig;
+	private ComponentProfile profile;
 
-	private ComponentProfile profile = null;
-
-	public static synchronized BaseProfileLocator getInstance() {
-		if (instance == null)
-			instance = new BaseProfileLocator();
-		return instance;
-	}
-
-	public static ComponentProfile getBaseProfile() {
-		return getInstance().getProfile();
-	}
-
-	private BaseProfileLocator() {
+	private void locateBaseProfile() {
 		File baseProfileFile = getBaseProfileFile();
 		@SuppressWarnings("unused")
 		boolean load = false;
@@ -80,8 +71,10 @@ public class BaseProfileLocator {
 			localBaseProfileTime = baseProfileFile.lastModified();
 
 		try {
-			if ((remoteBaseProfileTime != -1) && (remoteBaseProfileTime > localBaseProfileTime)) {
-				profile = new ComponentProfile(null, new URL(BASE_PROFILE_URI));
+			if ((remoteBaseProfileTime != -1)
+					&& (remoteBaseProfileTime > localBaseProfileTime)) {
+				profile = new ComponentProfile(null, new URL(BASE_PROFILE_URI),
+						null);
 				writeStringToFile(baseProfileFile, profile.getXML());
 			}
 		} catch (MalformedURLException e) {
@@ -97,7 +90,8 @@ public class BaseProfileLocator {
 
 		try {
 			if ((profile == null) && baseProfileFile.exists())
-				profile = new ComponentProfile(null, baseProfileFile.toURI().toURL());
+				profile = new ComponentProfile(null, baseProfileFile.toURI()
+						.toURL(), null);
 		} catch (Exception e) {
 			logger.error("URI problem", e);
 			profile = null;
@@ -133,13 +127,19 @@ public class BaseProfileLocator {
 	}
 
 	private File getBaseProfileFile() {
-		File config = new File(getApplicationHomeDir(), "conf");
+		File config = new File(appConfig.getApplicationHomeDir(), "conf");
 		if (!config.exists())
 			config.mkdir();
 		return new File(config, BASE_PROFILE_PATH);
 	}
 
-	public ComponentProfile getProfile() {
+	public synchronized ComponentProfile getProfile() {
+		if (profile == null)
+			locateBaseProfile();
 		return profile;
+	}
+
+	public void setAppConfig(ApplicationConfiguration appConfig) {
+		this.appConfig = appConfig;
 	}
 }

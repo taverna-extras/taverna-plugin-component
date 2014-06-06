@@ -20,8 +20,6 @@
  ******************************************************************************/
 package net.sf.taverna.t2.component.registry;
 
-import static net.sf.taverna.t2.component.profile.BaseProfileLocator.getBaseProfile;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,11 +44,13 @@ public abstract class ComponentFamily implements
 	private String name;
 	private String description;
 	private Profile componentProfile;
+	private ComponentUtil util;
 
-	protected Map<String, Component> componentCache = new HashMap<String, Component>();
+	protected Map<String, Component> componentCache = new HashMap<>();
 
-	public ComponentFamily(Registry componentRegistry) {
+	public ComponentFamily(Registry componentRegistry, ComponentUtil util) {
 		this.parentRegistry = componentRegistry;
+		this.util = util;
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public abstract class ComponentFamily implements
 		if (componentProfile == null)
 			componentProfile = internalGetComponentProfile();
 		if (componentProfile == null) {
-			Profile baseProfile = getBaseProfile();
+			Profile baseProfile = util.getBaseProfile();
 			if (baseProfile != null) {
 				return baseProfile;
 			}
@@ -98,7 +98,7 @@ public abstract class ComponentFamily implements
 	@Override
 	public final List<Component> getComponents() throws RegistryException {
 		checkComponentCache();
-		return new ArrayList<Component>(componentCache.values());
+		return new ArrayList<>(componentCache.values());
 	}
 
 	private void checkComponentCache() throws RegistryException {

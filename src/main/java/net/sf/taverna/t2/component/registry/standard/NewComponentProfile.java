@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.profile.BaseProfileLocator;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
 import uk.org.taverna.component.api.ComponentProfileType;
 import uk.org.taverna.component.api.Description;
@@ -43,8 +44,9 @@ class NewComponentProfile extends ComponentProfile {
 	}
 
 	NewComponentProfile(NewComponentRegistry registry,
-			ComponentProfileType profile) throws RegistryException {
-		super(registry, contentUrl(profile));
+			ComponentProfileType profile, BaseProfileLocator base)
+			throws RegistryException {
+		super(registry, contentUrl(profile), base);
 		this.registry = registry;
 		uri = profile.getUri();
 		id = profile.getId();
@@ -52,9 +54,9 @@ class NewComponentProfile extends ComponentProfile {
 		resource = profile.getResource();
 	}
 
-	NewComponentProfile(NewComponentRegistry registry, Description cpd)
-			throws RegistryException {
-		super(registry, getLocationURL(cpd));
+	NewComponentProfile(NewComponentRegistry registry, Description cpd,
+			BaseProfileLocator base) throws RegistryException {
+		super(registry, getLocationURL(cpd), base);
 		this.registry = registry;
 		uri = cpd.getUri();
 		id = cpd.getId();

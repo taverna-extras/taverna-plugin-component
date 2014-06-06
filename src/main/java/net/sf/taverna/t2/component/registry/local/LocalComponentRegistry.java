@@ -20,6 +20,7 @@ import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
+import net.sf.taverna.t2.component.registry.ComponentUtil;
 
 import org.apache.log4j.Logger;
 
@@ -30,7 +31,7 @@ import org.apache.log4j.Logger;
 class LocalComponentRegistry extends ComponentRegistry {
 	private static final Logger logger = getLogger(LocalComponentRegistry.class);
 	static final String ENC = "utf-8";
-
+	private ComponentUtil util;
 	private File baseDir;
 
 	@SuppressWarnings("unused")
@@ -38,9 +39,11 @@ class LocalComponentRegistry extends ComponentRegistry {
 	@SuppressWarnings("unused")
 	private static final String BASE_PROFILE_FILENAME = "BaseProfile.xml";
 
-	public LocalComponentRegistry(File registryDir) throws RegistryException {
+	public LocalComponentRegistry(File registryDir, ComponentUtil util)
+			throws RegistryException {
 		super(registryDir);
 		baseDir = registryDir;
+		this.util = util;
 	}
 
 	@Override
@@ -61,7 +64,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 		} catch (IOException e) {
 			throw new RegistryException("Could not write out description", e);
 		}
-		return new LocalComponentFamily(this, newFamilyDir);
+		return new LocalComponentFamily(this, newFamilyDir, util);
 	}
 
 	@Override
@@ -71,7 +74,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 			if (!subFile.isDirectory())
 				continue;
 			LocalComponentFamily newFamily = new LocalComponentFamily(this,
-					subFile);
+					subFile, util);
 			familyCache.put(newFamily.getName(), newFamily);
 		}
 	}
@@ -84,7 +87,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 					&& subFile.getName().endsWith(".xml"))
 				try {
 					profileCache.add(new ComponentProfile(this,
-							subFile.toURI()));
+							subFile.toURI(), util.getBaseProfileLocator()));
 				} catch (MalformedURLException e) {
 					logger.error("Unable to read profile", e);
 				}
@@ -133,7 +136,8 @@ class LocalComponentRegistry extends ComponentRegistry {
 		}
 
 		try {
-			return new ComponentProfile(this, outputFile.toURI());
+			return new ComponentProfile(this, outputFile.toURI(),
+					util.getBaseProfileLocator());
 		} catch (MalformedURLException e) {
 			throw new RegistryException("Unable to create profile", e);
 		}

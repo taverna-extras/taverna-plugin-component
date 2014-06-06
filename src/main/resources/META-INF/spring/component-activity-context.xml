@@ -8,21 +8,34 @@
 		class="net.sf.taverna.t2.component.ComponentActivityLocalChecker" />
 	<bean id="ComponentUpgradeHealthChecker"
 		class="net.sf.taverna.t2.component.ComponentActivityUpgradeChecker">
-		<property name="componentUtil" ref="util" />
+		<property name="componentUtil" ref="componentUtil" />
+	</bean>
+	<bean id="baseProfileLocator" class="net.sf.taverna.t2.component.profile.BaseProfileLocator">
+		<property name="" ref="app-config" />
 	</bean>
 	<bean id="componentActivityFactory" class="net.sf.taverna.t2.component.ComponentActivityFactory">
-		<property name="componentUtil" ref="util" />
+		<property name="componentUtil" ref="componentUtil" />
 		<property name="dataflowCache" ref="cache" />
 		<property name="edits" ref="edits" />
 	</bean>
-	<bean id="componentRegistryLocator"
+	<bean id="networkRegistryLocator"
 		class="net.sf.taverna.t2.component.registry.standard.NewComponentRegistryLocator">
 		<property name="credentialManager" ref="credentialManager" />
+		<property name="componentUtil" ref="componentUtil" />
 	</bean>
-	<bean id="util" class="net.sf.taverna.t2.component.registry.ComponentUtil">
-		<property name="locator" ref="componentRegistryLocator" />
+	<bean id="fileRegistryLocator"
+		class="net.sf.taverna.t2.component.registry.local.LocalComponentRegistryLocator">
+		<property name="componentUtil" ref="componentUtil" />
+	</bean>
+	<bean id="componentUtil" class="net.sf.taverna.t2.component.registry.ComponentUtil">
+		<property name="networkLocator" ref="networkRegistryLocator" />
+		<property name="fileLocator" ref="fileRegistryLocator" />
+		<property name="baseLocator" ref="baseProfileLocator" />
 	</bean>
 	<bean id="cache" class="net.sf.taverna.t2.component.registry.ComponentDataflowCache">
-		<property name="componentUtil" ref="util" />
+		<property name="componentUtil" ref="componentUtil" />
+	</bean>
+	<bean id="systemUtil" class="net.sf.taverna.t2.component.utils.Utils">
+		<property name="appConfig" ref="app-config" />
 	</bean>
 </beans>

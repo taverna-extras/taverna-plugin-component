@@ -12,6 +12,7 @@ import net.sf.taverna.t2.component.api.Profile;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.ComponentFamily;
+import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 import uk.org.taverna.component.api.ComponentFamilyType;
 import uk.org.taverna.component.api.Description;
@@ -33,9 +34,9 @@ class NewComponentFamily extends ComponentFamily {
 	private final String resource;
 
 	NewComponentFamily(NewComponentRegistry componentRegistry,
-			NewComponentProfile profile, Description familyDesc)
-			throws RegistryException {
-		super(componentRegistry);
+			NewComponentProfile profile, Description familyDesc,
+			ComponentUtil util) throws RegistryException {
+		super(componentRegistry, util);
 		uri = familyDesc.getUri();
 		registry = componentRegistry;
 		this.profile = profile;
@@ -46,8 +47,9 @@ class NewComponentFamily extends ComponentFamily {
 	}
 
 	public NewComponentFamily(NewComponentRegistry componentRegistry,
-			NewComponentProfile profile, ComponentFamilyType cft) {
-		super(componentRegistry);
+			NewComponentProfile profile, ComponentFamilyType cft,
+			ComponentUtil util) {
+		super(componentRegistry, util);
 		uri = cft.getUri();
 		registry = componentRegistry;
 		this.profile = profile;

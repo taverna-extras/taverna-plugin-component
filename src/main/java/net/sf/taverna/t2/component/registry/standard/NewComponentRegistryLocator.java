@@ -7,19 +7,26 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Required;
-
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
+import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
+
+import org.springframework.beans.factory.annotation.Required;
 
 public class NewComponentRegistryLocator {
 	private final Map<String, NewComponentRegistry> componentRegistries = new HashMap<>();
 	private CredentialManager cm;
+	private ComponentUtil util;
 
 	@Required
 	public void setCredentialManager(CredentialManager cm) {
 		this.cm = cm;
+	}
+
+	@Required
+	public void setComponentUtil(ComponentUtil util) {
+		this.util = util;
 	}
 
 	public synchronized ComponentRegistry getComponentRegistry(URL registryBase)
@@ -27,7 +34,7 @@ public class NewComponentRegistryLocator {
 		if (!componentRegistries.containsKey(registryBase.toExternalForm())) {
 			logger.debug("constructing registry instance for " + registryBase);
 			componentRegistries.put(registryBase.toExternalForm(),
-					new NewComponentRegistry(cm, registryBase));
+					new NewComponentRegistry(cm, registryBase, util));
 		}
 		return componentRegistries.get(registryBase.toExternalForm());
 	}

@@ -25,6 +25,7 @@ import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
+import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
 import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
@@ -86,15 +87,17 @@ class NewComponentRegistry extends ComponentRegistry {
 		}
 	}
 
-	CredentialManager cm;
-	Client client;
+	private CredentialManager cm;
+	private Client client;
+	private ComponentUtil util;
 
-	protected NewComponentRegistry(CredentialManager cm, URL registryBase)
-			throws RegistryException {
+	protected NewComponentRegistry(CredentialManager cm, URL registryBase,
+			ComponentUtil util) throws RegistryException {
 		super(registryBase);
 		this.cm = cm;
+		this.util = util;
 	}
-	
+
 	private void checkClientCreated() throws RegistryException {
 		try {
 			if (client == null)
@@ -145,9 +148,10 @@ class NewComponentRegistry extends ComponentRegistry {
 	protected void populateFamilyCache() throws RegistryException {
 		for (Profile pr : getComponentProfiles()) {
 			NewComponentProfile p = (NewComponentProfile) pr;
-			for (Description cfd : listComponentFamilies(p.getResourceLocation()))
+			for (Description cfd : listComponentFamilies(p
+					.getResourceLocation()))
 				familyCache.put(getElementString(cfd, "title"),
-						new NewComponentFamily(this, p, cfd));
+						new NewComponentFamily(this, p, cfd, util));
 		}
 	}
 
@@ -164,7 +168,7 @@ class NewComponentRegistry extends ComponentRegistry {
 				objectFactory.createPack(makeComponentFamilyCreateRequest(
 						profile, familyName, description, license,
 						sharingPolicy)), COMPONENT_FAMILY_SERVICE, "elements="
-						+ NewComponentFamily.ELEMENTS));
+						+ NewComponentFamily.ELEMENTS), util);
 	}
 
 	@Override
@@ -184,7 +188,8 @@ class NewComponentRegistry extends ComponentRegistry {
 				COMPONENT_PROFILE_LIST,
 				"elements=" + NewComponentProfile.ELEMENTS).getFile())
 			if (cpd.getUri() != null && !cpd.getUri().isEmpty())
-				profileCache.add(new NewComponentProfile(this, cpd));
+				profileCache.add(new NewComponentProfile(this, cpd, util
+						.getBaseProfileLocator()));
 	}
 
 	@Override
@@ -199,7 +204,8 @@ class NewComponentRegistry extends ComponentRegistry {
 				if (profile.getComponentRegistry().equals(this))
 					return new NewComponentProfile(this,
 							getComponentProfileById(profile.getId(),
-									NewComponentProfile.ELEMENTS));
+									NewComponentProfile.ELEMENTS),
+							util.getBaseProfileLocator());
 			}
 		} catch (RegistryException e) {
 			// Do nothing but fall through
@@ -213,7 +219,8 @@ class NewComponentRegistry extends ComponentRegistry {
 								componentProfile.getDescription(),
 								componentProfile.getXML(), license,
 								sharingPolicy)), COMPONENT_PROFILE_SERVICE,
-				"elements=" + NewComponentProfile.ELEMENTS));
+				"elements=" + NewComponentProfile.ELEMENTS),
+				util.getBaseProfileLocator());
 	}
 
 	public Permissions getPermissions(SharingPolicy userSharingPolicy) {

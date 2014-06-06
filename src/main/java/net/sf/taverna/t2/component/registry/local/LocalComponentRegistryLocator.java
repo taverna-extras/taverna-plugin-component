@@ -8,15 +8,24 @@ import java.util.Map;
 
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.registry.ComponentUtil;
+
+import org.springframework.beans.factory.annotation.Required;
 
 public class LocalComponentRegistryLocator {
 	private final Map<File, Registry> registries = new HashMap<>();
+	private ComponentUtil util;
+
+	@Required
+	public void setComponentUtil(ComponentUtil util) {
+		this.util = util;
+	}
 
 	public synchronized Registry getComponentRegistry(File registryDir)
 			throws RegistryException {
 		if (!registries.containsKey(registryDir))
-			registries
-					.put(registryDir, new LocalComponentRegistry(registryDir));
+			registries.put(registryDir, new LocalComponentRegistry(registryDir,
+					util));
 		return registries.get(registryDir);
 	}
 
