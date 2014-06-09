@@ -10,6 +10,7 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
+import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.workflowmodel.Edits;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
@@ -28,10 +29,11 @@ public class ComponentActivityFactory implements ActivityFactory {
 	private ComponentUtil util;
 	private ComponentImplementationCache cache;
 	private Edits edits;
+	private SystemUtils system;
 
 	@Override
 	public Activity<?> createActivity() {
-		return new ComponentActivity(util, cache, edits);
+		return new ComponentActivity(util, cache, edits, system);
 	}
 
 	@Override
@@ -43,7 +45,8 @@ public class ComponentActivityFactory implements ActivityFactory {
 	public JsonNode getActivityConfigurationSchema() {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
- 			return objectMapper.readTree(getClass().getResource("/schema.json"));
+			return objectMapper
+					.readTree(getClass().getResource("/schema.json"));
 		} catch (IOException e) {
 			return objectMapper.createObjectNode();
 		}
@@ -97,12 +100,19 @@ public class ComponentActivityFactory implements ActivityFactory {
 	public void setComponentUtil(ComponentUtil util) {
 		this.util = util;
 	}
+
 	@Required
 	public void setDataflowCache(ComponentImplementationCache cache) {
 		this.cache = cache;
 	}
+
 	@Required
 	public void setEdits(Edits edits) {
 		this.edits = edits;
+	}
+
+	@Required
+	public void setSystemUtil(SystemUtils system) {
+		this.system = system;
 	}
 }

@@ -13,6 +13,7 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.profile.ExceptionHandling;
 import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
+import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.invocation.InvocationContext;
 import net.sf.taverna.t2.invocation.impl.InvocationContextImpl;
 import net.sf.taverna.t2.reference.ReferenceService;
@@ -26,6 +27,8 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCa
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.platform.execution.api.InvalidWorkflowException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ComponentActivity extends
@@ -38,12 +41,15 @@ public class ComponentActivity extends
 	private volatile DataflowActivity componentRealization;
 	private JsonNode json;
 	private ComponentActivityConfigurationBean bean;
+	private SystemUtils system;
 	
 	private Dataflow realizingDataflow = null;
 
-	ComponentActivity(ComponentUtil util, ComponentImplementationCache cache, Edits edits) {
+	ComponentActivity(ComponentUtil util, ComponentImplementationCache cache,
+			Edits edits, SystemUtils system) {
 		this.util = util;
 		this.cache = cache;
+		this.system = system;
 		setEdits(edits);
 		this.componentRealization = new DataflowActivity();
 	}
@@ -100,21 +106,29 @@ public class ComponentActivity extends
 		return bean;
 	}
 
-	public DataflowActivity getComponentRealization()
+	private DataflowActivity getComponentRealization()
 			throws ActivityConfigurationException {
 		synchronized (componentRealization) {
-			if (componentRealization.getConfiguration() == null) {
-				try {
-					componentRealization.setNestedDataflow(getImplementationDataflow());
-				} catch (RegistryException e1) {
-					logger.error("Unable to read dataflow", e1);
-					throw new ActivityConfigurationException("Unable to read dataflow", e1);
+			try {
+				if (componentRealization.getNestedDataflow() == null) {
+					if (realizingDataflow == null)
+						realizingDataflow = system.compile(util
+								.getVersion(bean).getImplementation());
+					componentRealization.setNestedDataflow(realizingDataflow);
+					copyAnnotations();
 				}
-
-				copyAnnotations();
+			} catch (RegistryException e) {
+				logger.error("unable to read workflow", e);
+				throw new ActivityConfigurationException(
+						"unable to read workflow", e);
+			} catch (InvalidWorkflowException e) {
+				logger.error("unable to compile workflow", e);
+				throw new ActivityConfigurationException(
+						"unable to compile workflow", e);
 			}
-			return componentRealization;
 		}
+		
+		return componentRealization;
 	}
 
 	private void copyAnnotations() {
@@ -128,21 +142,5 @@ public class ComponentActivity extends
 		} catch (EditException e) {
 			logger.error("failed to set annotation string", e);
 		}
-	}
-
-	//@Override
-	public Dataflow getNestedDataflow() {
-		try {
-			return getImplementationDataflow();
-		} catch (RegistryException e) {
-			logger.error("failed to get component realization", e);
-			return null;
-		}
-	}
-
-	private Dataflow getImplementationDataflow() throws RegistryException {
-		if (realizingDataflow == null)
-			realizingDataflow = util.getVersion(bean).getImplementation();
-		return realizingDataflow;
 	}
 }

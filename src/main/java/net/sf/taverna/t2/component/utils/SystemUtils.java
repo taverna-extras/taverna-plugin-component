@@ -3,12 +3,17 @@ package net.sf.taverna.t2.component.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
 import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.workflowmodel.Dataflow;
 import uk.org.taverna.component.api.Description;
 import uk.org.taverna.configuration.app.ApplicationConfiguration;
+import uk.org.taverna.platform.execution.api.InvalidWorkflowException;
+import uk.org.taverna.platform.execution.api.WorkflowCompiler;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
 
@@ -17,6 +22,7 @@ public class SystemUtils {
 	private static final String SCUFL2_TYPE = "application/vnd.taverna.scufl2.workflow-bundle";// TODO check
 	private ApplicationConfiguration appConfig;
 	private WorkflowBundleIO workflowBundleIO;
+	private List<WorkflowCompiler> compilers;
 
 	public byte[] serializeBundle(WorkflowBundle bundle) throws RegistryException {
 		try {
@@ -86,5 +92,26 @@ public class SystemUtils {
 
 	public void setWorkflowBundler(WorkflowBundleIO workflowBundler) {
 		this.workflowBundleIO = workflowBundler;
+	}
+
+	public void setCompilers(List<WorkflowCompiler> compilers) {
+		this.compilers = compilers;
+	}
+
+	public Dataflow compile(WorkflowBundle implementation)
+			throws InvalidWorkflowException {
+		InvalidWorkflowException exn = null;
+		if (compilers != null)
+			for (WorkflowCompiler c : new ArrayList<>(compilers))
+				try {
+					return c.getDataflow(implementation);
+				} catch (InvalidWorkflowException e) {
+					if (exn == null)
+						exn = e;
+					continue;
+				}
+		if (exn != null)
+			throw exn;
+		throw new InvalidWorkflowException("no compiler available");
 	}
 }
