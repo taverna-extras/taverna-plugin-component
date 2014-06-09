@@ -7,7 +7,6 @@ import java.net.URL;
 import javax.xml.bind.JAXBElement;
 
 import net.sf.taverna.t2.component.api.RegistryException;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 import uk.org.taverna.component.api.Description;
 import uk.org.taverna.configuration.app.ApplicationConfiguration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
@@ -19,24 +18,15 @@ public class SystemUtils {
 	private ApplicationConfiguration appConfig;
 	private WorkflowBundleIO workflowBundleIO;
 
-	public byte[] serializeDataflow(Dataflow dataflow) throws RegistryException {
+	public byte[] serializeBundle(WorkflowBundle bundle) throws RegistryException {
 		try {
 			ByteArrayOutputStream dataflowStream = new ByteArrayOutputStream();
-			workflowBundleIO.writeBundle(getBundleForDataflow(dataflow),
-					dataflowStream, SCUFL2_TYPE);
+			workflowBundleIO.writeBundle(bundle, dataflowStream, SCUFL2_TYPE);
 			return dataflowStream.toByteArray();
 		} catch (Exception e) {
 			throw new RegistryException(
 					"failed to serialize component implementation", e);
 		}
-	}
-
-	private WorkflowBundle getBundleForDataflow(Dataflow dataflow) {
-		return null; // FIXME how to get scufl2 bundle from t2flow dataflow?
-	}
-
-	private Dataflow getDataflowForBundle(WorkflowBundle bundle) {
-		return null; // FIXME how to get t2flow dataflow from scufl2 bundle?
 	}
 
 	private String determineMediaTypeForFilename(File file) {
@@ -49,18 +39,17 @@ public class SystemUtils {
 		}
 	}
 
-	public void saveDataflow(Dataflow dataflow, File file) throws Exception {
-		workflowBundleIO.writeBundle(getBundleForDataflow(dataflow), file,
+	public void saveBundle(WorkflowBundle bundle, File file) throws Exception {
+		workflowBundleIO.writeBundle(bundle, file,
 				determineMediaTypeForFilename(file));
 	}
 
-	public Dataflow getDataflowFromUri(String uri) throws Exception {
-		return getDataflowForBundle(workflowBundleIO.readBundle(new URL(uri),
-				null));
+	public WorkflowBundle getBundleFromUri(String uri) throws Exception {
+		return workflowBundleIO.readBundle(new URL(uri), null);
 	}
 
-	public Dataflow getDataflow(File file) throws Exception {
-		return getDataflowForBundle(workflowBundleIO.readBundle(file, null));
+	public WorkflowBundle getBundle(File file) throws Exception {
+		return workflowBundleIO.readBundle(file, null);
 	}
 
 	public static JAXBElement<?> getElement(Description d, String name)

@@ -18,9 +18,10 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.Component;
 import net.sf.taverna.t2.component.utils.SystemUtils;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
@@ -44,7 +45,7 @@ class LocalComponent extends Component {
 	}
 
 	@Override
-	protected final Version internalAddVersionBasedOn(Dataflow dataflow,
+	protected final Version internalAddVersionBasedOn(WorkflowBundle bundle,
 			String revisionComment) throws RegistryException {
 		Integer nextVersionNumber = 1;
 		try {
@@ -58,7 +59,7 @@ class LocalComponent extends Component {
 		LocalComponentVersion newComponentVersion = new LocalComponentVersion(
 				this, newVersionDir, system);
 		try {
-			system.saveDataflow(dataflow, new File(newVersionDir,
+			system.saveBundle(bundle, new File(newVersionDir,
 					COMPONENT_FILENAME));
 		} catch (Exception e) {
 			throw new RegistryException("Unable to save component version", e);

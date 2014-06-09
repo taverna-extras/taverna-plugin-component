@@ -2,7 +2,7 @@ package net.sf.taverna.t2.component.api;
 
 import java.util.List;
 
-import net.sf.taverna.t2.workflowmodel.Dataflow;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 public interface Family extends NamedItem {
 	/**
@@ -10,8 +10,8 @@ public interface Family extends NamedItem {
 	 * 
 	 * @param componentName
 	 *            the name of the Component to create. Must not be null.
-	 * @param dataflow
-	 *            the Dataflow for the Component. Must not be null.
+	 * @param bundle
+	 *            the workflow for the Component. Must not be null.
 	 * @return the new Component.
 	 * @throws RegistryException
 	 *             <ul>
@@ -22,7 +22,7 @@ public interface Family extends NamedItem {
 	 *             </ul>
 	 */
 	Version createComponentBasedOn(String componentName, String description,
-			Dataflow dataflow) throws RegistryException;
+			WorkflowBundle bundle) throws RegistryException;
 
 	/**
 	 * Returns the Component with the specified name.

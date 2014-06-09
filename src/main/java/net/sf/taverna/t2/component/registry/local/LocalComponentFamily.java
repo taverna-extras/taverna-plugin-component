@@ -19,9 +19,10 @@ import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.ComponentFamily;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.SystemUtils;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
@@ -77,12 +78,11 @@ class LocalComponentFamily extends ComponentFamily {
 
 	@Override
 	protected final Version internalCreateComponentBasedOn(
-			String componentName, String description, Dataflow dataflow)
+			String componentName, String description, WorkflowBundle bundle)
 			throws RegistryException {
 		File newSubFile = new File(componentFamilyDir, componentName);
-		if (newSubFile.exists()) {
+		if (newSubFile.exists())
 			throw new RegistryException("Component already exists");
-		}
 		newSubFile.mkdirs();
 		File descriptionFile = new File(newSubFile, "description");
 		try {
@@ -93,7 +93,7 @@ class LocalComponentFamily extends ComponentFamily {
 		LocalComponent newComponent = new LocalComponent(newSubFile,
 				(LocalComponentRegistry) getComponentRegistry(), this, system);
 
-		return newComponent.addVersionBasedOn(dataflow, "Initial version");
+		return newComponent.addVersionBasedOn(bundle, "Initial version");
 	}
 
 	@Override

@@ -19,9 +19,9 @@ import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.registry.Component;
 import net.sf.taverna.t2.component.registry.ComponentVersion;
 import net.sf.taverna.t2.component.utils.SystemUtils;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 import uk.org.taverna.component.api.ComponentType;
 import uk.org.taverna.component.api.Description;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 class NewComponent extends Component {
 	static final String ELEMENTS = "title,description";
@@ -86,7 +86,7 @@ class NewComponent extends Component {
 	}
 
 	@Override
-	protected Version internalAddVersionBasedOn(Dataflow dataflow,
+	protected Version internalAddVersionBasedOn(WorkflowBundle bundle,
 			String revisionComment) throws RegistryException {
 		/*
 		 * Only fetch the license and sharing policy now; user might have
@@ -98,7 +98,7 @@ class NewComponent extends Component {
 		SharingPolicy sharingPolicy = getPolicy(ct.getPermissions());
 
 		return (Version) registry.createComponentVersionFrom(this, title,
-				revisionComment, dataflow, license, sharingPolicy);
+				revisionComment, bundle, license, sharingPolicy);
 	}
 
 	public String getId() {
@@ -128,16 +128,16 @@ class NewComponent extends Component {
 	class Version extends ComponentVersion {
 		private int version;
 		private String description;
-		private String dataflowUri;
-		private SoftReference<Dataflow> dataflowRef;
+		private String location;
+		private SoftReference<WorkflowBundle> bundleRef;
 
 		private static final String htmlPageTemplate = "%1$s/workflows/%2$s/versions/%3$s.html";
 
-		protected Version(Integer version, String description, Dataflow dataflow) {
+		protected Version(Integer version, String description, WorkflowBundle bundle) {
 			super(NewComponent.this);
 			this.version = version;
 			this.description = description;
-			this.dataflowRef = new SoftReference<Dataflow>(dataflow);
+			this.bundleRef = new SoftReference<>(bundle);
 		}
 
 		protected Version(Integer version, String description) {
@@ -172,28 +172,28 @@ class NewComponent extends Component {
 			return description;
 		}
 
-		private String getDataflowUri() throws RegistryException {
-			if (dataflowUri == null)
-				dataflowUri = registry.getComponentById(id, version,
+		private String getLocationUri() throws RegistryException {
+			if (location == null)
+				location = registry.getComponentById(id, version,
 						"content-uri").getContentUri();
-			return dataflowUri;
+			return location;
 		}
 
 		@Override
-		protected synchronized Dataflow internalGetDataflow()
+		protected synchronized WorkflowBundle internalGetImplementation()
 				throws RegistryException {
-			if (dataflowRef == null || dataflowRef.get() == null) {
-				String contentUri = getDataflowUri();
+			if (bundleRef == null || bundleRef.get() == null) {
+				String contentUri = getLocationUri();
 				try {
-					Dataflow result = system.getDataflowFromUri(contentUri
+					WorkflowBundle result = system.getBundleFromUri(contentUri
 							+ "?version=" + version);
-					dataflowRef = new SoftReference<Dataflow>(result);
+					bundleRef = new SoftReference<>(result);
 					return result;
 				} catch (Exception e) {
 					throw new RegistryException("Unable to open dataflow", e);
 				}
 			}
-			return dataflowRef.get();
+			return bundleRef.get();
 		}
 
 		@Override

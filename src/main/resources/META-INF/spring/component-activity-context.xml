@@ -37,7 +37,7 @@
 		<property name="baseLocator" ref="baseProfileLocator" />
 	</bean>
 
-	<bean id="cache" class="net.sf.taverna.t2.component.registry.ComponentDataflowCache">
+	<bean id="cache" class="net.sf.taverna.t2.component.registry.ComponentImplementationCache">
 		<property name="componentUtil" ref="componentUtil" />
 	</bean>
 	<bean id="systemUtil" class="net.sf.taverna.t2.component.utils.SystemUtils">

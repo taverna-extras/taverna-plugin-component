@@ -13,9 +13,10 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.ComponentFamily;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 import uk.org.taverna.component.api.ComponentFamilyType;
 import uk.org.taverna.component.api.Description;
+import uk.org.taverna.scufl2.api.annotation.Annotation;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * A family of components in the new-interface registry.
@@ -88,15 +89,16 @@ class NewComponentFamily extends ComponentFamily {
 
 	@Override
 	protected Version internalCreateComponentBasedOn(String componentName,
-			String description, Dataflow dataflow) throws RegistryException {
+			String description, WorkflowBundle bundle) throws RegistryException {
+		bundle.getAnnotations();//FIXME
 		if (componentName == null)
-			componentName = getAnnotationString(dataflow,
+			componentName = getAnnotationString(bundle,
 					DescriptiveTitle.class, "Untitled");
 		if (description == null)
-			description = getAnnotationString(dataflow,
+			description = getAnnotationString(bundle,
 					FreeTextDescription.class, "Undescribed");
 		return registry.createComponentFrom(this, componentName, description,
-				dataflow, registry.getPreferredLicense(),
+				bundle, registry.getPreferredLicense(),
 				registry.getDefaultSharingPolicy());
 	}
 

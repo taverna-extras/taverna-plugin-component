@@ -28,7 +28,6 @@ import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
 
@@ -45,6 +44,7 @@ import uk.org.taverna.component.api.LicenseType;
 import uk.org.taverna.component.api.ObjectFactory;
 import uk.org.taverna.component.api.Permissions;
 import uk.org.taverna.component.api.PolicyList;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 class NewComponentRegistry extends ComponentRegistry {
 	private static final String PROFILE_MIME_TYPE = "application/vnd.taverna.component-profile+xml";
@@ -272,7 +272,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	private ComponentType makeComponentVersionCreateRequest(String title,
-			String description, Dataflow content, NewComponentFamily family,
+			String description, WorkflowBundle content, NewComponentFamily family,
 			License license, SharingPolicy sharingPolicy)
 			throws RegistryException {
 		ComponentType comp = new ComponentType();
@@ -285,7 +285,7 @@ class NewComponentRegistry extends ComponentRegistry {
 		comp.setContent(new Content());
 		comp.getContent().setEncoding("base64");
 		comp.getContent().setType("binary");
-		comp.getContent().setValue(system.serializeDataflow(content));
+		comp.getContent().setValue(system.serializeBundle(content));
 		if (license == null)
 			license = getPreferredLicense();
 		if (license != null) {
@@ -404,32 +404,34 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	protected Version createComponentFrom(NewComponentFamily family,
-			String componentName, String description, Dataflow dataflow,
-			License license, SharingPolicy sharingPolicy)
-			throws RegistryException {
+			String componentName, String description,
+			WorkflowBundle implementation, License license,
+			SharingPolicy sharingPolicy) throws RegistryException {
 		checkClientCreated();
 
 		ComponentType ct = client.post(ComponentType.class, objectFactory
 				.createWorkflow(makeComponentVersionCreateRequest(
-						componentName, description, dataflow, family, license,
-						sharingPolicy)), COMPONENT_SERVICE, "elements="
-				+ NewComponent.ELEMENTS);
+						componentName, description, implementation, family,
+						license, sharingPolicy)), COMPONENT_SERVICE,
+				"elements=" + NewComponent.ELEMENTS);
 		NewComponent nc = new NewComponent(this, family, ct, system);
-		return nc.new Version(ct.getVersion(), description, dataflow);
+		return nc.new Version(ct.getVersion(), description, implementation);
 	}
 
 	protected Version createComponentVersionFrom(NewComponent component,
-			String componentName, String description, Dataflow dataflow,
-			License license, SharingPolicy sharingPolicy)
-			throws RegistryException {
+			String componentName, String description,
+			WorkflowBundle implementation, License license,
+			SharingPolicy sharingPolicy) throws RegistryException {
 		checkClientCreated();
 
 		ComponentType ct = client.post(ComponentType.class, objectFactory
 				.createWorkflow(makeComponentVersionCreateRequest(
-						componentName, description, dataflow, component.family,
-						license, sharingPolicy)), COMPONENT_SERVICE, "id="
-				+ component.getId(), "elements=" + NewComponent.ELEMENTS);
-		return component.new Version(ct.getVersion(), description, dataflow);
+						componentName, description, implementation,
+						component.family, license, sharingPolicy)),
+				COMPONENT_SERVICE, "id=" + component.getId(), "elements="
+						+ NewComponent.ELEMENTS);
+		return component.new Version(ct.getVersion(), description,
+				implementation);
 	}
 
 	public License getLicense(String name) throws RegistryException {

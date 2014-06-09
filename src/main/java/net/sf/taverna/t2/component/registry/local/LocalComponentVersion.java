@@ -15,9 +15,10 @@ import java.net.URL;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.registry.ComponentVersion;
 import net.sf.taverna.t2.component.utils.SystemUtils;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
@@ -54,10 +55,11 @@ class LocalComponentVersion extends ComponentVersion {
 	}
 
 	@Override
-	protected final Dataflow internalGetDataflow() throws RegistryException {
+	protected final WorkflowBundle internalGetImplementation()
+			throws RegistryException {
 		File filename = new File(componentVersionDir, COMPONENT_FILENAME);
 		try {
-			return system.getDataflow(filename);
+			return system.getBundle(filename);
 		} catch (Exception e) {
 			logger.error(
 					"failed to get component realization from " + filename, e);

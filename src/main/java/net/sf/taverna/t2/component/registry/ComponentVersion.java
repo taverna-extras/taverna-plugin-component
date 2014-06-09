@@ -5,7 +5,7 @@ package net.sf.taverna.t2.component.registry;
 
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.RegistryException;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
@@ -41,12 +41,14 @@ public abstract class ComponentVersion implements
 	protected abstract String internalGetDescription();
 
 	@Override
-	public final synchronized Dataflow getDataflow() throws RegistryException {
+	public final synchronized WorkflowBundle getImplementation()
+			throws RegistryException {
 		// Cached in dataflow cache
-		return internalGetDataflow();
+		return internalGetImplementation();
 	}
 
-	protected abstract Dataflow internalGetDataflow() throws RegistryException;
+	protected abstract WorkflowBundle internalGetImplementation()
+			throws RegistryException;
 
 	@Override
 	public final Component getComponent() {

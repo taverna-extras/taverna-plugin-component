@@ -63,7 +63,7 @@ public class NewComponentRegistryTest extends ComponentRegistryTest {
 	public void testUploadWorkflow() throws Exception {
 		URL dataflowUrl = getClass().getClassLoader().getResource(
 				"beanshell_test.t2flow");
-		Dataflow dataflow = getDataflowFromUri(dataflowUrl.toString());
+		Dataflow dataflow = getBundleFromUri(dataflowUrl.toString());
 
 		NewComponentRegistry registry = (NewComponentRegistry) getComponentRegistry(componentRegistryUrl);
 		Version v = registry.createComponentFrom(null, "Test Workflow",

@@ -30,7 +30,7 @@ import java.util.TreeMap;
 
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * A Component is a building block for creating Taverna workflows. Components
@@ -46,7 +46,7 @@ public abstract class Component implements
 	/**
 	 * Mapping from version numbers to version implementations.
 	 */
-	protected SortedMap<Integer, Version> versionMap = new TreeMap<Integer, Version>();
+	protected SortedMap<Integer, Version> versionMap = new TreeMap<>();
 
 	protected Component(URL url) {
 		this.url = url;
@@ -125,9 +125,9 @@ public abstract class Component implements
 	}
 
 	@Override
-	public final Version addVersionBasedOn(Dataflow dataflow,
+	public final Version addVersionBasedOn(WorkflowBundle bundle,
 			String revisionComment) throws RegistryException {
-		Version result = internalAddVersionBasedOn(dataflow, revisionComment);
+		Version result = internalAddVersionBasedOn(bundle, revisionComment);
 		synchronized (versionMap) {
 			checkComponentVersionMap();
 			versionMap.put(result.getVersionNumber(), result);
@@ -139,14 +139,14 @@ public abstract class Component implements
 	 * Manufacture a new version of a component. Does not add to the overall
 	 * version map.
 	 * 
-	 * @param dataflow
+	 * @param bundle
 	 *            The definition of the component.
 	 * @param revisionComment
 	 *            The description of the version.
 	 * @return The new version of the component.
 	 * @throws RegistryException
 	 */
-	protected abstract Version internalAddVersionBasedOn(Dataflow dataflow,
+	protected abstract Version internalAddVersionBasedOn(WorkflowBundle bundle,
 			String revisionComment) throws RegistryException;
 
 	@Override

@@ -16,17 +16,19 @@ import net.sf.taverna.t2.workflowmodel.DataflowValidationReport;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+
 /**
  * @author alanrw
  * 
  */
-public class ComponentDataflowCache {
+public class ComponentImplementationCache {
 	private class Entry {
-		Dataflow dataflow;
+		WorkflowBundle implementation;
 		long timestamp;
 	}
 	private final long VALIDITY = 15 * 60 * 1000;
-	private final Logger logger = getLogger(ComponentDataflowCache.class);
+	private final Logger logger = getLogger(ComponentImplementationCache.class);
 	private final Map<Version.ID, Entry> cache = new WeakHashMap<>();
 	private ComponentUtil utils;
 
@@ -34,30 +36,32 @@ public class ComponentDataflowCache {
 		this.utils = utils;
 	}
 
-	public Dataflow getDataflow(Version.ID id) throws RegistryException {
+	public WorkflowBundle getImplementation(Version.ID id) throws RegistryException {
 		long now = currentTimeMillis();
 		synchronized (id) {
 			Entry entry = cache.get(id);
 			if (entry != null && entry.timestamp >= now)
-				return entry.dataflow;
+				return entry.implementation;
 			logger.info("before calculate component version for " + id);
 			Version componentVersion;
 			try {
 				componentVersion = utils.getVersion(id);
 			} catch (RuntimeException e) {
+				if (entry != null)
+					return entry.implementation;
 				throw new RegistryException(e.getMessage(), e);
 			}
 			logger.info("calculated component version for " + id + " as "
 					+ componentVersion.getVersionNumber() + "; retrieving dataflow");
-			Dataflow dataflow = componentVersion.getDataflow();
-			DataflowValidationReport report = dataflow.checkValidity();
-			logger.info("component version " + id + " incomplete:"
-					+ report.isWorkflowIncomplete() + " valid:"
-					+ report.isValid());
+			WorkflowBundle implementation = componentVersion.getImplementation();
+			//DataflowValidationReport report = implementation.checkValidity();
+			//logger.info("component version " + id + " incomplete:"
+			//		+ report.isWorkflowIncomplete() + " valid:"
+			//		+ report.isValid());
 			entry = new Entry();
-			entry.dataflow = dataflow;
+			entry.implementation = implementation;
 			entry.timestamp = now + VALIDITY;
-			return cache.put(id, entry).dataflow;
+			return cache.put(id, entry).implementation;
 		}
 	}
 }

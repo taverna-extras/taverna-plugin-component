@@ -61,7 +61,7 @@ public class ComponentFamilyTest extends Harness {
 				"beanshell_test.t2flow");
 		assertNotNull(dataflowUrl);
 		dataflow = new FileManagerImpl().openDataflowSilently(
-				new T2FlowFileType(), dataflowUrl).getDataflow();
+				new T2FlowFileType(), dataflowUrl).getImplementation();
 		componentFamily = componentRegistry.createComponentFamily(
 				"Test Component Family", componentProfile, "Some description",
 				null, null);

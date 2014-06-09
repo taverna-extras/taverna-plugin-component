@@ -3,7 +3,7 @@ package net.sf.taverna.t2.component.api;
 import java.io.Serializable;
 import java.net.URL;
 
-import net.sf.taverna.t2.workflowmodel.Dataflow;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 public interface Version {
 	/** @return The version number of this version */
@@ -13,7 +13,7 @@ public interface Version {
 	String getDescription();
 
 	/** @return The implementation for this version */
-	Dataflow getDataflow() throws RegistryException;
+	WorkflowBundle getImplementation() throws RegistryException;
 
 	/** @return The component of which this is a version */
 	Component getComponent();

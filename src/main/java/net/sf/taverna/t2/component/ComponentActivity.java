@@ -11,7 +11,7 @@ import net.sf.taverna.t2.activities.dataflow.DataflowActivity;
 import net.sf.taverna.t2.annotation.annotationbeans.SemanticAnnotation;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.profile.ExceptionHandling;
-import net.sf.taverna.t2.component.registry.ComponentDataflowCache;
+import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.invocation.InvocationContext;
 import net.sf.taverna.t2.invocation.impl.InvocationContextImpl;
@@ -34,14 +34,14 @@ public class ComponentActivity extends
 	private Logger logger = getLogger(ComponentActivity.class);
 
 	private ComponentUtil util;
-	private ComponentDataflowCache cache;
+	private ComponentImplementationCache cache;
 	private volatile DataflowActivity componentRealization;
 	private JsonNode json;
 	private ComponentActivityConfigurationBean bean;
 	
 	private Dataflow realizingDataflow = null;
 
-	ComponentActivity(ComponentUtil util, ComponentDataflowCache cache, Edits edits) {
+	ComponentActivity(ComponentUtil util, ComponentImplementationCache cache, Edits edits) {
 		this.util = util;
 		this.cache = cache;
 		setEdits(edits);
@@ -142,7 +142,7 @@ public class ComponentActivity extends
 
 	private Dataflow getImplementationDataflow() throws RegistryException {
 		if (realizingDataflow == null)
-			realizingDataflow = util.getVersion(bean).getDataflow();
+			realizingDataflow = util.getVersion(bean).getImplementation();
 		return realizingDataflow;
 	}
 }

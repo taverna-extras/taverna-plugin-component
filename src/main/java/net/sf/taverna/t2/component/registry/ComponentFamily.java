@@ -30,7 +30,7 @@ import net.sf.taverna.t2.component.api.Profile;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * A ComponentFamily is a collection of Components that share the same
@@ -119,16 +119,16 @@ public abstract class ComponentFamily implements
 
 	@Override
 	public final Version createComponentBasedOn(String componentName,
-			String description, Dataflow dataflow) throws RegistryException {
+			String description, WorkflowBundle bundle) throws RegistryException {
 		if (componentName == null)
 			throw new RegistryException("Component name must not be null");
-		if (dataflow == null)
-			throw new RegistryException("Dataflow must not be null");
+		if (bundle == null)
+			throw new RegistryException("workflow must not be null");
 		checkComponentCache();
 		if (componentCache.containsKey(componentName))
 			throw new RegistryException("Component name already used");
 		Version version = internalCreateComponentBasedOn(componentName,
-				description, dataflow);
+				description, bundle);
 		synchronized (componentCache) {
 			Component c = version.getComponent();
 			componentCache.put(componentName, c);
@@ -137,7 +137,7 @@ public abstract class ComponentFamily implements
 	}
 
 	protected abstract Version internalCreateComponentBasedOn(
-			String componentName, String description, Dataflow dataflow)
+			String componentName, String description, WorkflowBundle bundle)
 			throws RegistryException;
 
 	@Override

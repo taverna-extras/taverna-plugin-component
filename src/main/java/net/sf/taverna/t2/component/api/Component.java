@@ -3,7 +3,7 @@ package net.sf.taverna.t2.component.api;
 import java.net.URL;
 import java.util.SortedMap;
 
-import net.sf.taverna.t2.workflowmodel.Dataflow;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * The abstract interface supported by a component.
@@ -28,13 +28,13 @@ public interface Component extends NamedItem {
 	/**
 	 * Creates a new version of this Component.
 	 * 
-	 * @param dataflow
-	 *            the Dataflow that the new ComponentVersion will use.
+	 * @param bundle
+	 *            the workflow that the new ComponentVersion will use.
 	 * @return a new version of this Component.
 	 * @throws RegistryException
 	 *             if there is a problem accessing the ComponentRegistry.
 	 */
-	Version addVersionBasedOn(Dataflow dataflow, String revisionComment)
+	Version addVersionBasedOn(WorkflowBundle bundle, String revisionComment)
 			throws RegistryException;
 
 	/**

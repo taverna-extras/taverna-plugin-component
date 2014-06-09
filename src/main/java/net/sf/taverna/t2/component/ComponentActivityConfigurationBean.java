@@ -12,17 +12,18 @@ import java.util.List;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.profile.ExceptionHandling;
-import net.sf.taverna.t2.component.registry.ComponentDataflowCache;
+import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.DataflowInputPort;
-import net.sf.taverna.t2.workflowmodel.DataflowOutputPort;
 import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityInputPortDefinitionBean;
 import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityOutputPortDefinitionBean;
 import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityPortsDefinitionBean;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.port.InputWorkflowPort;
+import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -41,10 +42,10 @@ public class ComponentActivityConfigurationBean extends
 	private transient ActivityPortsDefinitionBean ports = null;
 	private transient ExceptionHandling eh;
 	private transient ComponentUtil util;
-	private transient ComponentDataflowCache cache;
+	private transient ComponentImplementationCache cache;
 
 	public ComponentActivityConfigurationBean(Version.ID toBeCopied,
-			ComponentUtil util, ComponentDataflowCache cache) {
+			ComponentUtil util, ComponentImplementationCache cache) {
 		super(toBeCopied);
 		this.util = util;
 		this.cache = cache;
@@ -56,7 +57,7 @@ public class ComponentActivityConfigurationBean extends
 	}
 
 	public ComponentActivityConfigurationBean(JsonNode json,
-			ComponentUtil util, ComponentDataflowCache cache) throws MalformedURLException {
+			ComponentUtil util, ComponentImplementationCache cache) throws MalformedURLException {
 		super(getUrl(json), getFamily(json), getComponent(json),
 				getVersion(json));
 		this.util = util;
@@ -82,18 +83,17 @@ public class ComponentActivityConfigurationBean extends
 		return node.intValue();
 	}
 
-	private ActivityPortsDefinitionBean getPortsDefinition(Dataflow d) {
+	private ActivityPortsDefinitionBean getPortsDefinition(WorkflowBundle w) {
 		ActivityPortsDefinitionBean result = new ActivityPortsDefinitionBean();
 		List<ActivityInputPortDefinitionBean> inputs = result
 				.getInputPortDefinitions();
 		List<ActivityOutputPortDefinitionBean> outputs = result
 				.getOutputPortDefinitions();
 
-		for (DataflowInputPort dip : d.getInputPorts())
-			inputs.add(makeInputDefinition(dip));
-
-		for (DataflowOutputPort dop : d.getOutputPorts())
-			outputs.add(makeOutputDefinition(dop.getDepth(), dop.getName()));
+		for (InputWorkflowPort iwp : w.getMainWorkflow().getInputPorts())
+			inputs.add(makeInputDefinition(iwp));
+		for (OutputWorkflowPort owp : w.getMainWorkflow().getOutputPorts())
+			outputs.add(makeOutputDefinition(0, owp.getName()));//FIXME
 
 		try {
 			eh = util.getFamily(getRegistryBase(), getFamilyName())
@@ -107,7 +107,7 @@ public class ComponentActivityConfigurationBean extends
 	}
 
 	private ActivityInputPortDefinitionBean makeInputDefinition(
-			DataflowInputPort dip) {
+			InputWorkflowPort dip) {
 		ActivityInputPortDefinitionBean activityInputPortDefinitionBean = new ActivityInputPortDefinitionBean();
 		activityInputPortDefinitionBean.setHandledReferenceSchemes(null);
 		activityInputPortDefinitionBean.setMimeTypes((List<String>) null);
@@ -133,7 +133,7 @@ public class ComponentActivityConfigurationBean extends
 	 */
 	public ActivityPortsDefinitionBean getPorts() throws RegistryException{
 		if (ports == null)
-			ports = getPortsDefinition(cache.getDataflow(this));
+			ports = getPortsDefinition(cache.getImplementation(this));
 		return ports;
 	}
 

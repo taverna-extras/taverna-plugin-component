@@ -8,7 +8,7 @@ import java.util.Set;
 
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version.ID;
-import net.sf.taverna.t2.component.registry.ComponentDataflowCache;
+import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.workflowmodel.Edits;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ComponentActivityFactory implements ActivityFactory {
 	private ComponentUtil util;
-	private ComponentDataflowCache cache;
+	private ComponentImplementationCache cache;
 	private Edits edits;
 
 	@Override
@@ -98,7 +98,7 @@ public class ComponentActivityFactory implements ActivityFactory {
 		this.util = util;
 	}
 	@Required
-	public void setDataflowCache(ComponentDataflowCache cache) {
+	public void setDataflowCache(ComponentImplementationCache cache) {
 		this.cache = cache;
 	}
 	@Required

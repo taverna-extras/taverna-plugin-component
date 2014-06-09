@@ -55,7 +55,7 @@ public class ComponentVersionTest extends Harness {
 		assertNotNull(dataflowUrl);
 		dataflow = FileManager.getInstance()
 				.openDataflowSilently(new T2FlowFileType(), dataflowUrl)
-				.getDataflow();
+				.getImplementation();
 		URL componentProfileUrl = getClass().getClassLoader().getResource(
 				"ValidationComponent.xml");
 		assertNotNull(componentProfileUrl);
@@ -87,8 +87,8 @@ public class ComponentVersionTest extends Harness {
 
 	@Test
 	public void testGetDataflow() throws Exception {
-		assertNotNull(componentVersion.getDataflow());
-		assertEquals(dataflow.getIdentifier(), componentVersion.getDataflow()
+		assertNotNull(componentVersion.getImplementation());
+		assertEquals(dataflow.getIdentifier(), componentVersion.getImplementation()
 				.getIdentifier());
 	}
 
