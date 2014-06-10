@@ -26,6 +26,7 @@ import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
+import net.sf.taverna.t2.component.utils.AnnotationUtils;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
 
@@ -91,13 +92,15 @@ class NewComponentRegistry extends ComponentRegistry {
 	private final CredentialManager cm;
 	private final ComponentUtil util;
 	private final SystemUtils system;
+	final AnnotationUtils annUtils;
 
 	protected NewComponentRegistry(CredentialManager cm, URL registryBase,
-			ComponentUtil util, SystemUtils system) throws RegistryException {
+			ComponentUtil util, SystemUtils system, AnnotationUtils annUtils) throws RegistryException {
 		super(registryBase);
 		this.cm = cm;
 		this.util = util;
 		this.system = system;
+		this.annUtils = annUtils;
 	}
 
 	private void checkClientCreated() throws RegistryException {

@@ -1,12 +1,9 @@
 package net.sf.taverna.t2.component.registry.standard;
 
 import static net.sf.taverna.t2.component.utils.SystemUtils.getElementString;
-import static net.sf.taverna.t2.workflowmodel.utils.AnnotationTools.getAnnotationString;
 
 import java.util.List;
 
-import net.sf.taverna.t2.annotation.annotationbeans.DescriptiveTitle;
-import net.sf.taverna.t2.annotation.annotationbeans.FreeTextDescription;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Profile;
 import net.sf.taverna.t2.component.api.RegistryException;
@@ -15,7 +12,6 @@ import net.sf.taverna.t2.component.registry.ComponentFamily;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import uk.org.taverna.component.api.ComponentFamilyType;
 import uk.org.taverna.component.api.Description;
-import uk.org.taverna.scufl2.api.annotation.Annotation;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
@@ -90,13 +86,11 @@ class NewComponentFamily extends ComponentFamily {
 	@Override
 	protected Version internalCreateComponentBasedOn(String componentName,
 			String description, WorkflowBundle bundle) throws RegistryException {
-		bundle.getAnnotations();//FIXME
 		if (componentName == null)
-			componentName = getAnnotationString(bundle,
-					DescriptiveTitle.class, "Untitled");
+			componentName = registry.annUtils.getTitle(bundle, "Untitled");
 		if (description == null)
-			description = getAnnotationString(bundle,
-					FreeTextDescription.class, "Undescribed");
+			componentName = registry.annUtils.getDescription(bundle,
+					"Undescribed");
 		return registry.createComponentFrom(this, componentName, description,
 				bundle, registry.getPreferredLicense(),
 				registry.getDefaultSharingPolicy());

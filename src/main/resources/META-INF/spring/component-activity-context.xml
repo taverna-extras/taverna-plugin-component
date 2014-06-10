@@ -25,6 +25,7 @@
 		<property name="credentialManager" ref="credentialManager" />
 		<property name="componentUtil" ref="componentUtil" />
 		<property name="systemUtils" ref="systemUtil" />
+		<property name="annotationUtils" ref="annotationUtil" />
 	</bean>
 	<bean id="fileRegistry"
 		class="net.sf.taverna.t2.component.registry.local.LocalComponentRegistryFactory">
@@ -45,4 +46,5 @@
 		<property name="workflowBundler" ref="workflowBundleIO" />
 		<property name="compilers" ref="compilers" />
 	</bean>
+	<bean id="annotationUtil" class="net.sf.taverna.t2.component.utils.AnnotationUtils" />
 </beans>

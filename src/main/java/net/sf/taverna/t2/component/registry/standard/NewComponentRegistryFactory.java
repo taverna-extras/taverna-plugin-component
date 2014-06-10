@@ -10,6 +10,7 @@ import java.util.Map;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
+import net.sf.taverna.t2.component.utils.AnnotationUtils;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
 
@@ -20,6 +21,7 @@ public class NewComponentRegistryFactory {
 	private CredentialManager cm;
 	private ComponentUtil util;
 	private SystemUtils system;
+	private AnnotationUtils annUtils;
 
 	@Required
 	public void setCredentialManager(CredentialManager cm) {
@@ -36,12 +38,18 @@ public class NewComponentRegistryFactory {
 		this.system = system;
 	}
 
+	@Required
+	public void setAnnotationUtils(AnnotationUtils annUtils) {
+		this.annUtils = annUtils;
+	}
+
 	public synchronized ComponentRegistry getComponentRegistry(URL registryBase)
 			throws RegistryException {
 		if (!componentRegistries.containsKey(registryBase.toExternalForm())) {
 			logger.debug("constructing registry instance for " + registryBase);
 			componentRegistries.put(registryBase.toExternalForm(),
-					new NewComponentRegistry(cm, registryBase, util, system));
+					new NewComponentRegistry(cm, registryBase, util, system,
+							annUtils));
 		}
 		return componentRegistries.get(registryBase.toExternalForm());
 	}
