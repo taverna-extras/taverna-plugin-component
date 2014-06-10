@@ -21,8 +21,7 @@ public class AnnotationUtils {
 	private URITools uris = new URITools();
 
 	private WeakHashMap<Child<?>, Model> cache = new WeakHashMap<>();
-	public Statement getAnnotation(Child<WorkflowBundle> subject,
-			String uriForAnnotation) throws IOException {
+	public Model getAnnotationModel(Child<WorkflowBundle> subject) throws IOException {
 		WorkflowBundle bundle = subject.getParent();
 		Model m = cache.get(subject);
 		if (m == null) {
@@ -37,6 +36,12 @@ public class AnnotationUtils {
 			}
 			cache.put(subject, m);
 		}
+		return m;
+	}
+
+	public Statement getAnnotation(Child<WorkflowBundle> subject,
+			String uriForAnnotation) throws IOException {
+		Model m = getAnnotationModel(subject);
 		return m.getResource(uris.uriForBean(subject).toString()).getProperty(
 				m.getProperty(uriForAnnotation));
 	}
