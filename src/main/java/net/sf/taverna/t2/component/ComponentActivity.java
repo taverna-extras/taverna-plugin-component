@@ -13,6 +13,7 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.profile.ExceptionHandling;
 import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
+import net.sf.taverna.t2.component.utils.AnnotationUtils;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.invocation.InvocationContext;
 import net.sf.taverna.t2.invocation.impl.InvocationContextImpl;
@@ -42,14 +43,16 @@ public class ComponentActivity extends
 	private JsonNode json;
 	private ComponentActivityConfigurationBean bean;
 	private SystemUtils system;
+	private AnnotationUtils annUtils;
 	
 	private Dataflow realizingDataflow = null;
 
 	ComponentActivity(ComponentUtil util, ComponentImplementationCache cache,
-			Edits edits, SystemUtils system) {
+			Edits edits, SystemUtils system, AnnotationUtils annUtils) {
 		this.util = util;
 		this.cache = cache;
 		this.system = system;
+		this.annUtils = annUtils;
 		setEdits(edits);
 		this.componentRealization = new DataflowActivity();
 	}
@@ -132,8 +135,9 @@ public class ComponentActivity extends
 	}
 
 	private void copyAnnotations() {
-		// TODO Only copies a SemanticAnnotation itself
+		// FIXME Completely wrong way of doing this!
 		try {
+			//annUtils.getAnnotation(subject, uriForAnnotation)
 			String annotationValue = getAnnotationString(realizingDataflow,
 					SemanticAnnotation.class, null);
 			if (annotationValue != null)

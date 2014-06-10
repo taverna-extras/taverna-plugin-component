@@ -10,6 +10,7 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
+import net.sf.taverna.t2.component.utils.AnnotationUtils;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.workflowmodel.Edits;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
@@ -30,10 +31,11 @@ public class ComponentActivityFactory implements ActivityFactory {
 	private ComponentImplementationCache cache;
 	private Edits edits;
 	private SystemUtils system;
+	private AnnotationUtils annUtils;
 
 	@Override
 	public Activity<?> createActivity() {
-		return new ComponentActivity(util, cache, edits, system);
+		return new ComponentActivity(util, cache, edits, system, annUtils);
 	}
 
 	@Override
@@ -114,5 +116,10 @@ public class ComponentActivityFactory implements ActivityFactory {
 	@Required
 	public void setSystemUtil(SystemUtils system) {
 		this.system = system;
+	}
+
+	@Required
+	public void setAnnotationUtils(AnnotationUtils annUtils) {
+		this.annUtils = annUtils;
 	}
 }

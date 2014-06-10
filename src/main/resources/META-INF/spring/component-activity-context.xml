@@ -18,6 +18,7 @@
 		<property name="componentUtil" ref="componentUtil" />
 		<property name="dataflowCache" ref="cache" />
 		<property name="edits" ref="edits" />
+		<property name="annotationUtils" ref="annotationUtil" />
 	</bean>
 
 	<bean id="networkRegistry"
