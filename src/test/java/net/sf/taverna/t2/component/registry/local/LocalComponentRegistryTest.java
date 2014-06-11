@@ -47,7 +47,7 @@ public class LocalComponentRegistryTest extends ComponentRegistryTest {
 
 	@Test
 	public void testGetComponentRegistry() throws Exception {
-		Registry getAgain = LocalComponentRegistryFactory
+		Registry getAgain = RegistrySupport.factory
 				.getComponentRegistry(componentRegistryUrl);
 		assertSame(componentRegistry, getAgain);
 	}
@@ -56,6 +56,6 @@ public class LocalComponentRegistryTest extends ComponentRegistryTest {
 	@Ignore("broken")
 	@Override
 	public void testAddComponentProfile() throws Exception {
-	super.testAddComponentProfile();
+		super.testAddComponentProfile();
 	}
 }
