@@ -20,8 +20,6 @@
  ******************************************************************************/
 package net.sf.taverna.t2.component.registry.standard;
 
-import static net.sf.taverna.t2.component.registry.standard.NewComponentRegistryFactory.getComponentRegistry;
-import static net.sf.taverna.t2.component.utils.SystemUtils.getDataflowFromUri;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -29,12 +27,14 @@ import java.net.URL;
 
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.ComponentRegistryTest;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
 
 /**
  * 
@@ -56,18 +56,18 @@ public class NewComponentRegistryTest extends ComponentRegistryTest {
 	@Test
 	public void testGetComponentRegistry() throws Exception {
 		assertSame(componentRegistry,
-				getComponentRegistry(componentRegistryUrl));
+				RegistrySupport.factory.getComponentRegistry(componentRegistryUrl));
 	}
 
 	@Test
 	public void testUploadWorkflow() throws Exception {
 		URL dataflowUrl = getClass().getClassLoader().getResource(
 				"beanshell_test.t2flow");
-		Dataflow dataflow = getBundleFromUri(dataflowUrl.toString());
+		WorkflowBundle bundle = new WorkflowBundleIO().readBundle(dataflowUrl, null);
 
-		NewComponentRegistry registry = (NewComponentRegistry) getComponentRegistry(componentRegistryUrl);
+		NewComponentRegistry registry = (NewComponentRegistry) RegistrySupport.factory.getComponentRegistry(componentRegistryUrl);
 		Version v = registry.createComponentFrom(null, "Test Workflow",
-				"test description", dataflow, null, Policy.PRIVATE);
+				"test description", bundle, null, Policy.PRIVATE);
 		assertEquals("test description", v.getDescription());
 		registry.deleteComponent((NewComponent) v.getComponent());
 	}

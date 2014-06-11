@@ -88,7 +88,7 @@ class NewComponentRegistry extends ComponentRegistry {
 		}
 	}
 
-	private Client client;
+	Client client;
 	private final CredentialManager cm;
 	private final ComponentUtil util;
 	private final SystemUtils system;
