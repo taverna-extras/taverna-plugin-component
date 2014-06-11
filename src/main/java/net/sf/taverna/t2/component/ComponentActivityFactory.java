@@ -34,7 +34,7 @@ public class ComponentActivityFactory implements ActivityFactory {
 	private AnnotationUtils annUtils;
 
 	@Override
-	public Activity<?> createActivity() {
+	public ComponentActivity createActivity() {
 		return new ComponentActivity(util, cache, edits, system, annUtils);
 	}
 

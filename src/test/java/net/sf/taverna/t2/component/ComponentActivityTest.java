@@ -7,7 +7,7 @@ public class ComponentActivityTest {
 	private ComponentActivityConfigurationBean configBean;
 
 	@SuppressWarnings("unused")
-	private ComponentActivity activity = new ComponentActivity();
+	private ComponentActivity activity = new ComponentActivityFactory().createActivity(); // FIXME
 
 /*	@Before
 	public void makeConfigBean() throws Exception {
