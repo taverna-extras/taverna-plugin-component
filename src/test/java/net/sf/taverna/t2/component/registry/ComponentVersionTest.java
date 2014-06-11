@@ -28,14 +28,14 @@ import java.net.URL;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Profile;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workbench.file.impl.T2FlowFileType;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
 
 /**
  * 
@@ -45,7 +45,7 @@ import org.junit.Test;
 @Ignore
 public class ComponentVersionTest extends Harness {
 	private Family componentFamily;
-	private Dataflow dataflow;
+	private WorkflowBundle bundle;
 	private Version componentVersion;
 
 	@Before
@@ -53,19 +53,16 @@ public class ComponentVersionTest extends Harness {
 		URL dataflowUrl = getClass().getClassLoader().getResource(
 				"beanshell_test.t2flow");
 		assertNotNull(dataflowUrl);
-		dataflow = FileManager.getInstance()
-				.openDataflowSilently(new T2FlowFileType(), dataflowUrl)
-				.getImplementation();
+		bundle = new WorkflowBundleIO().readBundle(dataflowUrl, null);
 		URL componentProfileUrl = getClass().getClassLoader().getResource(
 				"ValidationComponent.xml");
 		assertNotNull(componentProfileUrl);
-		Profile componentProfile = ComponentUtil
-				.makeProfile(componentProfileUrl);
+		Profile componentProfile = util.getProfile(componentProfileUrl);
 		componentFamily = componentRegistry.createComponentFamily(
 				"Test Component Family", componentProfile, "Some description",
 				null, null);
 		componentVersion = componentFamily.createComponentBasedOn(
-				"Test Component", "Some description", dataflow);
+				"Test Component", "Some description", bundle);
 	}
 
 	@After
@@ -88,7 +85,7 @@ public class ComponentVersionTest extends Harness {
 	@Test
 	public void testGetDataflow() throws Exception {
 		assertNotNull(componentVersion.getImplementation());
-		assertEquals(dataflow.getIdentifier(), componentVersion.getImplementation()
+		assertEquals(bundle.getIdentifier(), componentVersion.getImplementation()
 				.getIdentifier());
 	}
 

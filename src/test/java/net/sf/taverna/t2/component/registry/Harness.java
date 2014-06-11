@@ -7,4 +7,5 @@ import net.sf.taverna.t2.component.api.Registry;
 public class Harness {
 	public static URL componentRegistryUrl;
 	public static Registry componentRegistry;
+	public static ComponentUtil util;
 }

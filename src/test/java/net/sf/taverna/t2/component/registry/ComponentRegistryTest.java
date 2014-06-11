@@ -52,7 +52,7 @@ public abstract class ComponentRegistryTest extends Harness {
 		URL componentProfileUrl = getClass().getClassLoader().getResource(
 				"ValidationComponent.xml");
 		assertNotNull(componentProfileUrl);
-		componentProfile = ComponentUtil.makeProfile(componentProfileUrl);
+		componentProfile = util.getProfile(componentProfileUrl);
 	}
 
 	@After

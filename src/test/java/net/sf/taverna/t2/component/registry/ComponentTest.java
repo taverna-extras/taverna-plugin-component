@@ -30,14 +30,14 @@ import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Profile;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workbench.file.impl.T2FlowFileType;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
 
 /**
  * 
@@ -48,26 +48,24 @@ import org.junit.Test;
 public class ComponentTest extends Harness {
 	private Family componentFamily;
 	private Component component;
-	private Dataflow dataflow;
+	private WorkflowBundle bundle;
 
 	@Before
 	public void setUp() throws Exception {
 		URL dataflowUrl = getClass().getClassLoader().getResource(
 				"beanshell_test.t2flow");
 		assertNotNull(dataflowUrl);
-		dataflow = FileManager.getInstance()
-				.openDataflowSilently(new T2FlowFileType(), dataflowUrl)
-				.getImplementation();
+		bundle = new WorkflowBundleIO().readBundle(dataflowUrl, null);
 		URL componentProfileUrl = getClass().getClassLoader().getResource(
 				"ValidationComponent.xml");
 		assertNotNull(componentProfileUrl);
-		Profile componentProfile = ComponentUtil
-				.makeProfile(componentProfileUrl);
+		Profile componentProfile = util
+				.getProfile(componentProfileUrl);
 		componentFamily = componentRegistry.createComponentFamily(
 				"Test Component Family", componentProfile, "Some description",
 				null, null);
 		component = componentFamily.createComponentBasedOn("Test Component",
-				"Some description", dataflow).getComponent();
+				"Some description", bundle).getComponent();
 	}
 
 	@After
@@ -99,12 +97,12 @@ public class ComponentTest extends Harness {
 	public void testAddVersionBasedOn() throws Exception {
 		assertNotNull(component.getComponentVersion(1));
 		assertNull(component.getComponentVersion(2));
-		Version componentVersion = component.addVersionBasedOn(dataflow,
+		Version componentVersion = component.addVersionBasedOn(bundle,
 				"Some description");
 		assertNotNull(componentVersion);
 		assertEquals(component, componentVersion.getComponent());
 		assertEquals(2, componentVersion.getVersionNumber().intValue());
-		assertEquals(dataflow.getIdentifier(), componentVersion.getImplementation()
+		assertEquals(bundle.getIdentifier(), componentVersion.getImplementation()
 				.getIdentifier());
 	}
 
