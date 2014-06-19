@@ -3,13 +3,11 @@ package net.sf.taverna.t2.component.registry.standard;
 import static net.sf.taverna.t2.component.registry.Harness.componentRegistry;
 import static net.sf.taverna.t2.component.registry.Harness.componentRegistryUrl;
 
-import java.net.Authenticator;
 import java.net.URL;
 
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Profile;
-import net.sf.taverna.t2.security.credentialmanager.CredentialManagerAuthenticator;
 
 class RegistrySupport {
 	static final String DEPLOYMENT = "http://aeon.cs.man.ac.uk:3006";
@@ -17,7 +15,6 @@ class RegistrySupport {
 
 	public static void pre() throws Exception {
 		componentRegistryUrl = new URL(DEPLOYMENT);
-		Authenticator.setDefault(new CredentialManagerAuthenticator());
 		componentRegistry = factory.getComponentRegistry(componentRegistryUrl);
 	}
 

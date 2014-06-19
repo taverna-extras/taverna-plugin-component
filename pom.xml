@@ -93,40 +93,16 @@
 			<version>${log4j.version}</version>
 		</dependency>
 
-		<!-- Is there a fixed version? -->
 		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-core</artifactId>
-			<version>${jena.core.version}</version>
+			<groupId>org.apache.clerezza.ext</groupId>
+			<artifactId>com.hp.hpl.jena</artifactId>
+			<version>0.6-incubating</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.taverna.t2.security</groupId>
 			<artifactId>credential-manager</artifactId>
 			<version>${t2.security.version}</version>
 		</dependency>
-
-<!-- 
-		<dependency>
-			<groupId>net.sf.taverna.t2.core</groupId>
-			<artifactId>workflowmodel-impl</artifactId>
-			<version>${t2.core.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-api</groupId>
-			<artifactId>file-api</artifactId>
-			<version>${t2.ui.api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-impl</groupId>
-			<artifactId>file-impl</artifactId>
-			<version>${t2.ui.impl.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-impl</groupId>
-			<artifactId>edits-impl</artifactId>
-			<version>${t2.ui.impl.version}</version>
-		</dependency>
- -->
 
 		<dependency>
 			<groupId>junit</groupId>
