@@ -57,7 +57,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Import-Package>org.jaxen,*</Import-Package>
+						<Export-Package>net.sf.taverna.t2.component.api,net.sf.taverna.t2.component.api.profile,uk.org.taverna.ns._2012.component.profile</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
