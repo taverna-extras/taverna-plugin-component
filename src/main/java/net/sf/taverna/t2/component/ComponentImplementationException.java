@@ -7,9 +7,8 @@ package net.sf.taverna.t2.component;
  * @author alanrw
  * 
  */
-public class ComponentException extends Exception {
-
-	public ComponentException(String string) {
+public class ComponentImplementationException extends Exception {
+	public ComponentImplementationException(String string) {
 		super(string);
 		this.setStackTrace(new StackTraceElement[] {});
 	}
@@ -24,5 +23,4 @@ public class ComponentException extends Exception {
 	public String getExceptionId() {
 		return exceptionId;
 	}
-
 }

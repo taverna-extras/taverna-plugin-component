@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.xml.ws.Holder;
+
 import net.sf.taverna.t2.component.api.profile.ExceptionHandling;
 import net.sf.taverna.t2.component.api.profile.ExceptionReplacement;
 import net.sf.taverna.t2.component.api.profile.HandleException;
@@ -39,30 +41,29 @@ public class ProxyCallback implements AsynchronousActivityCallback {
 	private static final Logger logger = getLogger(ProxyCallback.class);
 
 	private final ComponentExceptionFactory cef;
-	private AsynchronousActivityCallback originalCallback;
-	private final ReferenceService referenceService;
+	private final AsynchronousActivityCallback proxiedCallback;
+	private final ReferenceService references;
 	private final InvocationContext context;
 	private final ExceptionHandling exceptionHandling;
-	private ListService listService;
-	private ErrorDocumentService errorService;
+	private final ListService lists;
+	private final ErrorDocumentService errors;
 
 	/**
-	 * @param originalCallback
+	 * @param proxiedCallback
 	 * @param invocationContext
 	 * @param exceptionHandling
 	 * @param exnFactory
 	 */
-	ProxyCallback(AsynchronousActivityCallback originalCallback,
+	ProxyCallback(AsynchronousActivityCallback proxiedCallback,
 			InvocationContext invocationContext,
 			ExceptionHandling exceptionHandling,
 			ComponentExceptionFactory exnFactory) {
-		super();
-		this.originalCallback = originalCallback;
+		this.proxiedCallback = proxiedCallback;
 		this.exceptionHandling = exceptionHandling;
 		context = invocationContext;
-		referenceService = context.getReferenceService();
-		listService = referenceService.getListService();
-		errorService = referenceService.getErrorDocumentService();
+		references = context.getReferenceService();
+		lists = references.getListService();
+		errors = references.getErrorDocumentService();
 		cef = exnFactory;
 	}
 
@@ -73,59 +74,45 @@ public class ProxyCallback implements AsynchronousActivityCallback {
 
 	@Override
 	public void requestRun(Runnable runMe) {
-		originalCallback.requestRun(runMe);
+		proxiedCallback.requestRun(runMe);
 	}
 
 	@Override
 	public void receiveResult(Map<String, T2Reference> data, int[] index) {
 		if (exceptionHandling == null) {
-			originalCallback.receiveResult(data, index);
-		} else {
-			Map<String, T2Reference> errorReplacedData = replaceErrors(data);
-			originalCallback.receiveResult(errorReplacedData, index);
+			proxiedCallback.receiveResult(data, index);
+			return;
 		}
-	}
 
-	private Map<String, T2Reference> replaceErrors(Map<String, T2Reference> data) {
-		List<T2Reference> exceptions = new ArrayList<T2Reference>();
-		Map<String, T2Reference> replacement = new HashMap<String, T2Reference>();
-		for (Entry<String, T2Reference> entry : data.entrySet()) {
-			String key = entry.getKey();
-			T2Reference value = entry.getValue();
-			T2Reference replacementReference = considerReference(value,
-					exceptions);
-			replacement.put(key, replacementReference);
-		}
-		T2Reference exceptionsReference = referenceService.register(exceptions,
-				1, true, context);
-		replacement.put("error_channel", exceptionsReference);
-		return replacement;
+		List<T2Reference> exceptions = new ArrayList<>();
+		Map<String, T2Reference> replacement = new HashMap<>();
+		for (Entry<String, T2Reference> entry : data.entrySet())
+			replacement.put(entry.getKey(),
+					considerReference(entry.getValue(), exceptions));
+		replacement.put("error_channel",
+				references.register(exceptions, 1, true, context));
+		proxiedCallback.receiveResult(replacement, index);
 	}
 
 	private T2Reference considerReference(T2Reference value,
 			List<T2Reference> exceptions) {
-		if (!value.containsErrors()) {
+		if (!value.containsErrors())
 			return value;
-		} else if (!value.getReferenceType().equals(IdentifiedList)) {
-			return replaceErrors(value, exceptions);
-		} else if (exceptionHandling.failLists()) {
-			T2Reference failure = findFirstFailure(value);
-			T2Reference replacement = replaceErrors(failure, value.getDepth(),
+		else if (!value.getReferenceType().equals(IdentifiedList))
+			return replaceErrors(value, value.getDepth(), exceptions);
+		else if (exceptionHandling.failLists())
+			return replaceErrors(findFirstFailure(value), value.getDepth(),
 					exceptions);
-			return replacement;
-		} else {
-			IdentifiedList<T2Reference> originalList = listService
-					.getList(value);
-			List<T2Reference> replacementList = new ArrayList<T2Reference>();
-			for (T2Reference subValue : originalList)
-				replacementList.add(considerReference(subValue, exceptions));
-			return referenceService.register(replacementList, value.getDepth(),
-					true, context);
-		}
+
+		List<T2Reference> replacementList = new ArrayList<>();
+		for (T2Reference subValue : lists.getList(value))
+			replacementList.add(considerReference(subValue, exceptions));
+		return references.register(replacementList, value.getDepth(), true,
+				context);
 	}
 
 	private T2Reference findFirstFailure(T2Reference value) {
-		IdentifiedList<T2Reference> originalList = listService.getList(value);
+		IdentifiedList<T2Reference> originalList = lists.getList(value);
 		for (T2Reference subValue : originalList) {
 			if (subValue.getReferenceType().equals(ErrorDocument))
 				return subValue;
@@ -137,128 +124,127 @@ public class ProxyCallback implements AsynchronousActivityCallback {
 		return null;
 	}
 
-	private T2Reference replaceErrors(T2Reference value,
-			List<T2Reference> exceptions) {
-		return replaceErrors(value, value.getDepth(), exceptions);
-	}
-
 	private T2Reference replaceErrors(T2Reference value, int depth,
 			List<T2Reference> exceptions) {
-		ErrorDocument doc = errorService.getError(value);
-		HandleException matchingHandleException = null;
+		ErrorDocument doc = errors.getError(value);
 
-		ErrorDocument matchingDoc = doc;
-
-		Set<ErrorDocument> toConsider = new HashSet<ErrorDocument>();
-		Set<ErrorDocument> considered = new HashSet<ErrorDocument>();
+		Holder<HandleException> handleException = new Holder<>();
+		Set<ErrorDocument> toConsider = new HashSet<>();
+		Set<ErrorDocument> considered = new HashSet<>();
 		toConsider.add(doc);
 
-		boolean found = false;
-		while (!toConsider.isEmpty() && !found) {
+		while (!toConsider.isEmpty())
 			try {
-				ErrorDocument errorDoc = toConsider.iterator().next();
-
-				considered.add(errorDoc);
-				toConsider.remove(errorDoc);
-				String exceptionMessage = errorDoc.getExceptionMessage();
-				for (HandleException he : exceptionHandling
-						.getHandleExceptions())
-					if (he.matches(exceptionMessage)) {
-						found = true;
-						matchingHandleException = he;
-						matchingDoc = errorDoc;
-					}
-				if (!errorDoc.getErrorReferences().isEmpty())
-					for (T2Reference subRef : errorDoc.getErrorReferences())
-						for (T2Reference newErrorRef : getErrors(subRef)) {
-							ErrorDocument subDoc = errorService
-									.getError(newErrorRef);
-							if (subDoc == null)
-								logger.error("Error document contains references to non-existent sub-errors");
-							else if (!considered.contains(subDoc))
-								toConsider.add(subDoc);
-						}
+				ErrorDocument nudoc = remapException(toConsider, considered,
+						handleException);
+				if (nudoc != null) {
+					doc = nudoc;
+					break;
+				}
 			} catch (Exception e) {
 				logger.error("failed to locate exception mapping", e);
 			}
-		}
 
-		String exceptionMessage = matchingDoc.getExceptionMessage();
+		String exceptionMessage = doc.getExceptionMessage();
 		// An exception that is not mentioned
-		if (matchingHandleException == null) {
-			ComponentException newException = cef
+		if (handleException.value == null) {
+			ComponentImplementationException newException = cef
 					.createUnexpectedComponentException(exceptionMessage);
-			T2Reference replacement = errorService.registerError(
-					exceptionMessage, newException, depth, context).getId();
-			exceptions.add(errorService.registerError(exceptionMessage,
-					newException, 0, context).getId());
+			T2Reference replacement = errors.registerError(exceptionMessage,
+					newException, depth, context).getId();
+			exceptions.add(errors.registerError(exceptionMessage, newException,
+					0, context).getId());
 			return replacement;
 		}
 
-		if (matchingHandleException.pruneStack()) {
-			matchingDoc.getStackTraceStrings().clear();
-		}
-		ExceptionReplacement exceptionReplacement = matchingHandleException
+		if (handleException.value.pruneStack())
+			doc.getStackTraceStrings().clear();
+
+		ExceptionReplacement exnReplacement = handleException.value
 				.getReplacement();
-		if (exceptionReplacement == null) {
-			T2Reference replacement = referenceService.register(matchingDoc,
-					depth, true, context);
-			exceptions.add(referenceService.register(matchingDoc, 0, true,
-					context));
+		if (exnReplacement == null) {
+			T2Reference replacement = references.register(doc, depth, true,
+					context);
+			exceptions.add(references.register(doc, 0, true, context));
 			return replacement;
 		}
 
-		ComponentException newException = cef.createComponentException(
-				exceptionReplacement.getReplacementId(),
-				exceptionReplacement.getReplacementMessage());
-		T2Reference replacement = errorService.registerError(
-				exceptionReplacement.getReplacementMessage(), newException,
-				depth, context).getId();
-		exceptions.add(errorService.registerError(
-				exceptionReplacement.getReplacementMessage(), newException, 0,
+		ComponentImplementationException newException = cef
+				.createComponentException(exnReplacement.getReplacementId(),
+						exnReplacement.getReplacementMessage());
+		T2Reference replacement = errors.registerError(
+				exnReplacement.getReplacementMessage(), newException, depth,
+				context).getId();
+		exceptions.add(errors.registerError(
+				exnReplacement.getReplacementMessage(), newException, 0,
 				context).getId());
 		return replacement;
 	}
 
+	private ErrorDocument remapException(Set<ErrorDocument> toConsider,
+			Set<ErrorDocument> considered,
+			Holder<HandleException> handleException) {
+		ErrorDocument found = null;
+		ErrorDocument errorDoc = toConsider.iterator().next();
+
+		considered.add(errorDoc);
+		toConsider.remove(errorDoc);
+		String exceptionMessage = errorDoc.getExceptionMessage();
+		for (HandleException he : exceptionHandling.getHandleExceptions()) {
+			if (!he.matches(exceptionMessage))
+				continue;
+			handleException.value = he;
+			found = errorDoc;
+		}
+		if (!errorDoc.getErrorReferences().isEmpty())
+			for (T2Reference subRef : errorDoc.getErrorReferences())
+				for (T2Reference newErrorRef : getErrors(subRef)) {
+					ErrorDocument subDoc = errors.getError(newErrorRef);
+					if (subDoc == null)
+						logger.error("Error document contains references to non-existent sub-errors");
+					else if (!considered.contains(subDoc))
+						toConsider.add(subDoc);
+				}
+		return found;
+	}
+
 	private Set<T2Reference> getErrors(T2Reference ref) {
-		Set<T2Reference> result = new HashSet<T2Reference>();
+		Set<T2Reference> result = new HashSet<>();
 		if (ref.getReferenceType().equals(ReferenceSet)) {
 			// nothing
 		} else if (ref.getReferenceType().equals(IdentifiedList)) {
-			IdentifiedList<T2Reference> originalList = listService.getList(ref);
+			IdentifiedList<T2Reference> originalList = lists.getList(ref);
 			for (T2Reference subValue : originalList)
 				if (subValue.containsErrors())
 					result.addAll(getErrors(subValue));
-		} else {
+		} else
 			result.add(ref);
-		}
 		return result;
 	}
 
 	@Override
 	public void receiveCompletion(int[] completionIndex) {
-		originalCallback.receiveCompletion(completionIndex);
+		proxiedCallback.receiveCompletion(completionIndex);
 	}
 
 	@Override
 	public void fail(String message, Throwable t, DispatchErrorType errorType) {
-		originalCallback.fail(message, t, errorType);
+		proxiedCallback.fail(message, t, errorType);
 	}
 
 	@Override
 	public void fail(String message, Throwable t) {
-		originalCallback.fail(message, t);
+		proxiedCallback.fail(message, t);
 	}
 
 	@Override
 	public void fail(String message) {
-		originalCallback.fail(message);
+		proxiedCallback.fail(message);
 	}
 
 	@Override
 	public String getParentProcessIdentifier() {
 		// return "";
-		return originalCallback.getParentProcessIdentifier();
+		return proxiedCallback.getParentProcessIdentifier();
 	}
-
 }
