@@ -1,11 +1,11 @@
 package net.sf.taverna.t2.component.registry.standard;
 
 import static java.lang.System.identityHashCode;
-import static uk.org.taverna.component.api.Privilege.DOWNLOAD;
-import static uk.org.taverna.component.api.Privilege.VIEW;
+import static net.sf.taverna.t2.component.registry.api.Privilege.DOWNLOAD;
+import static net.sf.taverna.t2.component.registry.api.Privilege.VIEW;
 import net.sf.taverna.t2.component.api.SharingPolicy;
-import uk.org.taverna.component.api.Permissions;
-import uk.org.taverna.component.api.Permissions.Permission;
+import net.sf.taverna.t2.component.registry.api.Permissions;
+import net.sf.taverna.t2.component.registry.api.Permissions.Permission;
 
 abstract class Policy implements SharingPolicy {
 	public static final SharingPolicy PUBLIC = new Public();

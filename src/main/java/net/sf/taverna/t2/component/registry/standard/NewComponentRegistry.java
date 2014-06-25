@@ -16,35 +16,35 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import net.sf.taverna.t2.component.api.Component;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.Profile;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.api.Version.ID;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
+import net.sf.taverna.t2.component.registry.api.ComponentDescriptionList;
+import net.sf.taverna.t2.component.registry.api.ComponentFamilyList;
+import net.sf.taverna.t2.component.registry.api.ComponentFamilyType;
+import net.sf.taverna.t2.component.registry.api.ComponentProfileList;
+import net.sf.taverna.t2.component.registry.api.ComponentProfileType;
+import net.sf.taverna.t2.component.registry.api.ComponentType;
+import net.sf.taverna.t2.component.registry.api.Content;
+import net.sf.taverna.t2.component.registry.api.Description;
+import net.sf.taverna.t2.component.registry.api.LicenseList;
+import net.sf.taverna.t2.component.registry.api.LicenseType;
+import net.sf.taverna.t2.component.registry.api.ObjectFactory;
+import net.sf.taverna.t2.component.registry.api.Permissions;
+import net.sf.taverna.t2.component.registry.api.PolicyList;
 import net.sf.taverna.t2.component.utils.AnnotationUtils;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
 
 import org.apache.log4j.Logger;
 
-import uk.org.taverna.component.api.ComponentDescriptionList;
-import uk.org.taverna.component.api.ComponentFamilyList;
-import uk.org.taverna.component.api.ComponentFamilyType;
-import uk.org.taverna.component.api.ComponentProfileList;
-import uk.org.taverna.component.api.ComponentProfileType;
-import uk.org.taverna.component.api.ComponentType;
-import uk.org.taverna.component.api.Content;
-import uk.org.taverna.component.api.Description;
-import uk.org.taverna.component.api.LicenseList;
-import uk.org.taverna.component.api.LicenseType;
-import uk.org.taverna.component.api.ObjectFactory;
-import uk.org.taverna.component.api.Permissions;
-import uk.org.taverna.component.api.PolicyList;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 class NewComponentRegistry extends ComponentRegistry {
@@ -95,7 +95,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	final AnnotationUtils annUtils;
 
 	protected NewComponentRegistry(CredentialManager cm, URL registryBase,
-			ComponentUtil util, SystemUtils system, AnnotationUtils annUtils) throws RegistryException {
+			ComponentUtil util, SystemUtils system, AnnotationUtils annUtils) throws ComponentException {
 		super(registryBase);
 		this.cm = cm;
 		this.util = util;
@@ -103,17 +103,17 @@ class NewComponentRegistry extends ComponentRegistry {
 		this.annUtils = annUtils;
 	}
 
-	private void checkClientCreated() throws RegistryException {
+	private void checkClientCreated() throws ComponentException {
 		try {
 			if (client == null)
 				client = new Client(jaxbContext, super.getRegistryBase(), cm);
 		} catch (Exception e) {
-			throw new RegistryException("Unable to access registry", e);
+			throw new ComponentException("Unable to access registry", e);
 		}
 	}
 
 	private List<Description> listComponentFamilies(String profileUri)
-			throws RegistryException {
+			throws ComponentException {
 		checkClientCreated();
 		return client.get(ComponentFamilyList.class, COMPONENT_FAMILY_LIST,
 				"component-profile=" + profileUri,
@@ -121,7 +121,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	ComponentType getComponentById(String id, Integer version, String elements)
-			throws RegistryException {
+			throws ComponentException {
 		checkClientCreated();
 
 		if (version != null) {
@@ -134,7 +134,7 @@ class NewComponentRegistry extends ComponentRegistry {
 
 	@SuppressWarnings("unused")
 	private ComponentFamilyType getComponentFamilyById(String id,
-			String elements) throws RegistryException {
+			String elements) throws ComponentException {
 		checkClientCreated();
 
 		return client.get(ComponentFamilyType.class, PACK_SERVICE, "id=" + id,
@@ -142,7 +142,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	private ComponentProfileType getComponentProfileById(String id,
-			String elements) throws RegistryException {
+			String elements) throws ComponentException {
 		checkClientCreated();
 
 		return client.get(ComponentProfileType.class, FILE_SERVICE, "id=" + id,
@@ -150,7 +150,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	@Override
-	protected void populateFamilyCache() throws RegistryException {
+	protected void populateFamilyCache() throws ComponentException {
 		for (Profile pr : getComponentProfiles()) {
 			NewComponentProfile p = (NewComponentProfile) pr;
 			for (Description cfd : listComponentFamilies(p
@@ -163,7 +163,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	@Override
 	protected Family internalCreateComponentFamily(String familyName,
 			Profile componentProfile, String description, License license,
-			SharingPolicy sharingPolicy) throws RegistryException {
+			SharingPolicy sharingPolicy) throws ComponentException {
 		NewComponentProfile profile = (NewComponentProfile) componentProfile;
 
 		checkClientCreated();
@@ -178,7 +178,7 @@ class NewComponentRegistry extends ComponentRegistry {
 
 	@Override
 	protected void internalRemoveComponentFamily(Family componentFamily)
-			throws RegistryException {
+			throws ComponentException {
 		NewComponentFamily ncf = (NewComponentFamily) componentFamily;
 		checkClientCreated();
 
@@ -186,7 +186,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	@Override
-	protected void populateProfileCache() throws RegistryException {
+	protected void populateProfileCache() throws ComponentException {
 		checkClientCreated();
 
 		for (Description cpd : client.get(ComponentProfileList.class,
@@ -200,9 +200,9 @@ class NewComponentRegistry extends ComponentRegistry {
 	@Override
 	protected Profile internalAddComponentProfile(Profile componentProfile,
 			License license, SharingPolicy sharingPolicy)
-			throws RegistryException {
+			throws ComponentException {
 		if (componentProfile == null)
-			throw new RegistryException("component profile must not be null");
+			throw new ComponentException("component profile must not be null");
 		try {
 			if (componentProfile instanceof NewComponentProfile) {
 				NewComponentProfile profile = (NewComponentProfile) componentProfile;
@@ -212,7 +212,7 @@ class NewComponentRegistry extends ComponentRegistry {
 									NewComponentProfile.ELEMENTS),
 							util.getBaseProfileLocator());
 			}
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			// Do nothing but fall through
 		}
 		checkClientCreated();
@@ -236,7 +236,7 @@ class NewComponentRegistry extends ComponentRegistry {
 
 	private ComponentProfileType makeComponentProfileCreateRequest(
 			String title, String description, String content, License license,
-			SharingPolicy sharingPolicy) throws RegistryException {
+			SharingPolicy sharingPolicy) throws ComponentException {
 		ComponentProfileType profile = new ComponentProfileType();
 
 		profile.setFilename(title + ".xml");
@@ -259,7 +259,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	private ComponentFamilyType makeComponentFamilyCreateRequest(
 			NewComponentProfile profile, String familyName, String description,
 			License license, SharingPolicy sharingPolicy)
-			throws RegistryException {
+			throws ComponentException {
 		ComponentFamilyType familyDoc = new ComponentFamilyType();
 
 		familyDoc.setComponentProfile(profile.getResourceLocation());
@@ -277,7 +277,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	private ComponentType makeComponentVersionCreateRequest(String title,
 			String description, WorkflowBundle content, NewComponentFamily family,
 			License license, SharingPolicy sharingPolicy)
-			throws RegistryException {
+			throws ComponentException {
 		ComponentType comp = new ComponentType();
 
 		comp.setTitle(title);
@@ -302,7 +302,7 @@ class NewComponentRegistry extends ComponentRegistry {
 
 	private static final boolean DO_LIST_POLICIES = false;
 
-	private List<Description> listPolicies() throws RegistryException {
+	private List<Description> listPolicies() throws ComponentException {
 		checkClientCreated();
 		return client.get(PolicyList.class, POLICY_LIST, "type=group")
 				.getPolicy();
@@ -316,12 +316,12 @@ class NewComponentRegistry extends ComponentRegistry {
 			if (DO_LIST_POLICIES)
 				for (Description d : listPolicies())
 					permissionCache.add(new Policy.Group(d.getId()));
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.warn("failed to fetch sharing policies", e);
 		}
 	}
 
-	private List<LicenseType> listLicenses() throws RegistryException {
+	private List<LicenseType> listLicenses() throws ComponentException {
 		checkClientCreated();
 
 		return client.get(LicenseList.class, LICENSE_LIST,
@@ -333,13 +333,13 @@ class NewComponentRegistry extends ComponentRegistry {
 		try {
 			for (LicenseType lt : listLicenses())
 				licenseCache.add(new NewComponentLicense(this, lt));
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.warn("failed to fetch licenses", e);
 		}
 	}
 
 	@Override
-	public License getPreferredLicense() throws RegistryException {
+	public License getPreferredLicense() throws ComponentException {
 		return getLicenseByAbbreviation(getNameOfPreferredLicense());
 	}
 
@@ -352,7 +352,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	private List<Description> listComponents(String query, String prefixes)
-			throws RegistryException {
+			throws ComponentException {
 		checkClientCreated();
 
 		return client.get(ComponentDescriptionList.class, COMPONENT_LIST,
@@ -362,7 +362,7 @@ class NewComponentRegistry extends ComponentRegistry {
 
 	@Override
 	public Set<ID> searchForComponents(String prefixes, String text)
-			throws RegistryException {
+			throws ComponentException {
 		HashSet<ID> versions = new HashSet<>();
 		for (Description cd : listComponents(text, prefixes)) {
 			NewComponent nc = null;
@@ -383,7 +383,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	private List<Description> listComponents(String familyUri)
-			throws RegistryException {
+			throws ComponentException {
 		checkClientCreated();
 
 		return client.get(ComponentDescriptionList.class, COMPONENT_LIST,
@@ -392,7 +392,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	protected List<Component> listComponents(NewComponentFamily family)
-			throws RegistryException {
+			throws ComponentException {
 		List<Component> result = new ArrayList<>();
 		for (Description cd : listComponents(family.getResourceLocation()))
 			result.add(new NewComponent(this, family, cd, system));
@@ -400,7 +400,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	protected void deleteComponent(NewComponent component)
-			throws RegistryException {
+			throws ComponentException {
 		checkClientCreated();
 
 		client.delete(WORKFLOW_SERVICE, "id=" + component.getId());
@@ -409,7 +409,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	protected Version createComponentFrom(NewComponentFamily family,
 			String componentName, String description,
 			WorkflowBundle implementation, License license,
-			SharingPolicy sharingPolicy) throws RegistryException {
+			SharingPolicy sharingPolicy) throws ComponentException {
 		checkClientCreated();
 
 		ComponentType ct = client.post(ComponentType.class, objectFactory
@@ -424,7 +424,7 @@ class NewComponentRegistry extends ComponentRegistry {
 	protected Version createComponentVersionFrom(NewComponent component,
 			String componentName, String description,
 			WorkflowBundle implementation, License license,
-			SharingPolicy sharingPolicy) throws RegistryException {
+			SharingPolicy sharingPolicy) throws ComponentException {
 		checkClientCreated();
 
 		ComponentType ct = client.post(ComponentType.class, objectFactory
@@ -437,7 +437,7 @@ class NewComponentRegistry extends ComponentRegistry {
 				implementation);
 	}
 
-	public License getLicense(String name) throws RegistryException {
+	public License getLicense(String name) throws ComponentException {
 		for (License l : getLicenses())
 			if (l.getAbbreviation().equals(name))
 				return l;

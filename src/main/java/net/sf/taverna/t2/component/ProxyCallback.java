@@ -3,8 +3,6 @@
  */
 package net.sf.taverna.t2.component;
 
-import static net.sf.taverna.t2.component.ComponentExceptionFactory.createComponentException;
-import static net.sf.taverna.t2.component.ComponentExceptionFactory.createUnexpectedComponentException;
 import static net.sf.taverna.t2.reference.T2ReferenceType.ErrorDocument;
 import static net.sf.taverna.t2.reference.T2ReferenceType.IdentifiedList;
 import static net.sf.taverna.t2.reference.T2ReferenceType.ReferenceSet;
@@ -18,9 +16,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import net.sf.taverna.t2.component.profile.ExceptionHandling;
-import net.sf.taverna.t2.component.profile.ExceptionReplacement;
-import net.sf.taverna.t2.component.profile.HandleException;
+import net.sf.taverna.t2.component.api.profile.ExceptionHandling;
+import net.sf.taverna.t2.component.api.profile.ExceptionReplacement;
+import net.sf.taverna.t2.component.api.profile.HandleException;
 import net.sf.taverna.t2.invocation.InvocationContext;
 import net.sf.taverna.t2.reference.ErrorDocument;
 import net.sf.taverna.t2.reference.ErrorDocumentService;
@@ -40,6 +38,7 @@ import org.apache.log4j.Logger;
 public class ProxyCallback implements AsynchronousActivityCallback {
 	private static final Logger logger = getLogger(ProxyCallback.class);
 
+	private final ComponentExceptionFactory cef;
 	private AsynchronousActivityCallback originalCallback;
 	private final ReferenceService referenceService;
 	private final InvocationContext context;
@@ -50,18 +49,21 @@ public class ProxyCallback implements AsynchronousActivityCallback {
 	/**
 	 * @param originalCallback
 	 * @param invocationContext
-	 * @param exceptionHandling2
+	 * @param exceptionHandling
+	 * @param exnFactory
 	 */
-	public ProxyCallback(AsynchronousActivityCallback originalCallback,
+	ProxyCallback(AsynchronousActivityCallback originalCallback,
 			InvocationContext invocationContext,
-			ExceptionHandling exceptionHandling2) {
+			ExceptionHandling exceptionHandling,
+			ComponentExceptionFactory exnFactory) {
 		super();
 		this.originalCallback = originalCallback;
-		this.exceptionHandling = exceptionHandling2;
+		this.exceptionHandling = exceptionHandling;
 		context = invocationContext;
 		referenceService = context.getReferenceService();
 		listService = referenceService.getListService();
 		errorService = referenceService.getErrorDocumentService();
+		cef = exnFactory;
 	}
 
 	@Override
@@ -184,7 +186,8 @@ public class ProxyCallback implements AsynchronousActivityCallback {
 		String exceptionMessage = matchingDoc.getExceptionMessage();
 		// An exception that is not mentioned
 		if (matchingHandleException == null) {
-			ComponentException newException = createUnexpectedComponentException(exceptionMessage);
+			ComponentException newException = cef
+					.createUnexpectedComponentException(exceptionMessage);
 			T2Reference replacement = errorService.registerError(
 					exceptionMessage, newException, depth, context).getId();
 			exceptions.add(errorService.registerError(exceptionMessage,
@@ -205,7 +208,7 @@ public class ProxyCallback implements AsynchronousActivityCallback {
 			return replacement;
 		}
 
-		ComponentException newException = createComponentException(
+		ComponentException newException = cef.createComponentException(
 				exceptionReplacement.getReplacementId(),
 				exceptionReplacement.getReplacementMessage());
 		T2Reference replacement = errorService.registerError(

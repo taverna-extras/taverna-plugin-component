@@ -9,7 +9,7 @@ import static org.apache.log4j.Logger.getLogger;
 
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.visit.VisitKind;
 import net.sf.taverna.t2.visit.VisitReport;
@@ -56,7 +56,7 @@ public class ComponentActivityUpgradeChecker implements
 					.getComponent(config.getRegistryBase(),
 							config.getFamilyName(), config.getComponentName())
 					.getComponentVersionMap().lastKey();
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("failed to get component description", e);
 		}
 

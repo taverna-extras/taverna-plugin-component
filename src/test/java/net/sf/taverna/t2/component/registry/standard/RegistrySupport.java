@@ -11,7 +11,7 @@ import net.sf.taverna.t2.component.api.Profile;
 
 class RegistrySupport {
 	static final String DEPLOYMENT = "http://aeon.cs.man.ac.uk:3006";
-	static final NewComponentRegistryFactory factory = new NewComponentRegistryFactory();//FIXME
+	static final NewComponentRegistryFactory factory = new NewComponentRegistryFactory();// FIXME
 
 	public static void pre() throws Exception {
 		componentRegistryUrl = new URL(DEPLOYMENT);
@@ -19,7 +19,8 @@ class RegistrySupport {
 	}
 
 	public static void post() throws Exception {
-		NewComponentRegistry registry = (NewComponentRegistry) factory.getComponentRegistry(componentRegistryUrl);
+		NewComponentRegistry registry = (NewComponentRegistry) factory
+				.getComponentRegistry(componentRegistryUrl);
 		for (Profile p : registry.getComponentProfiles())
 			registry.client.delete("/file.xml", "id=" + p.getId());
 		for (Family f : registry.getComponentFamilies()) {

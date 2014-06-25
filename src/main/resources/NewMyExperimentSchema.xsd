@@ -7,7 +7,7 @@
 	<xs:annotation>
 		<xs:appinfo>
 			<jxb:schemaBindings>
-				<jxb:package name="uk.org.taverna.component.api" />
+				<jxb:package name="net.sf.taverna.t2.component.registry.api" />
 			</jxb:schemaBindings>
 		</xs:appinfo>
 	</xs:annotation>

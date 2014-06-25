@@ -5,13 +5,13 @@ import static net.sf.taverna.t2.component.utils.SystemUtils.getElementString;
 import java.util.List;
 
 import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.Profile;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.registry.ComponentFamily;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
-import uk.org.taverna.component.api.ComponentFamilyType;
-import uk.org.taverna.component.api.Description;
+import net.sf.taverna.t2.component.registry.api.ComponentFamilyType;
+import net.sf.taverna.t2.component.registry.api.Description;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
@@ -32,7 +32,7 @@ class NewComponentFamily extends ComponentFamily {
 
 	NewComponentFamily(NewComponentRegistry componentRegistry,
 			NewComponentProfile profile, Description familyDesc,
-			ComponentUtil util) throws RegistryException {
+			ComponentUtil util) throws ComponentException {
 		super(componentRegistry, util);
 		uri = familyDesc.getUri();
 		registry = componentRegistry;
@@ -67,16 +67,16 @@ class NewComponentFamily extends ComponentFamily {
 	}
 
 	@Override
-	protected Profile internalGetComponentProfile() throws RegistryException {
+	protected Profile internalGetComponentProfile() throws ComponentException {
 		return profile;
 	}
 
-	public List<Component> getMemberComponents() throws RegistryException {
+	public List<Component> getMemberComponents() throws ComponentException {
 		return registry.listComponents(this);
 	}
 
 	@Override
-	protected void populateComponentCache() throws RegistryException {
+	protected void populateComponentCache() throws ComponentException {
 		for (Component c : getMemberComponents()) {
 			NewComponent component = (NewComponent) c;
 			componentCache.put(component.getName(), component);
@@ -85,7 +85,7 @@ class NewComponentFamily extends ComponentFamily {
 
 	@Override
 	protected Version internalCreateComponentBasedOn(String componentName,
-			String description, WorkflowBundle bundle) throws RegistryException {
+			String description, WorkflowBundle bundle) throws ComponentException {
 		if (componentName == null)
 			componentName = registry.annUtils.getTitle(bundle, "Untitled");
 		if (description == null)
@@ -98,7 +98,7 @@ class NewComponentFamily extends ComponentFamily {
 
 	@Override
 	protected void internalRemoveComponent(Component component)
-			throws RegistryException {
+			throws ComponentException {
 		registry.deleteComponent((NewComponent) component);
 	}
 

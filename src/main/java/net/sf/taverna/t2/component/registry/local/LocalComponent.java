@@ -12,9 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.Component;
 import net.sf.taverna.t2.component.utils.SystemUtils;
@@ -46,7 +46,7 @@ class LocalComponent extends Component {
 
 	@Override
 	protected final Version internalAddVersionBasedOn(WorkflowBundle bundle,
-			String revisionComment) throws RegistryException {
+			String revisionComment) throws ComponentException {
 		Integer nextVersionNumber = 1;
 		try {
 			nextVersionNumber = getComponentVersionMap().lastKey() + 1;
@@ -62,13 +62,13 @@ class LocalComponent extends Component {
 			system.saveBundle(bundle, new File(newVersionDir,
 					COMPONENT_FILENAME));
 		} catch (Exception e) {
-			throw new RegistryException("Unable to save component version", e);
+			throw new ComponentException("Unable to save component version", e);
 		}
 		File revisionCommentFile = new File(newVersionDir, "description");
 		try {
 			writeStringToFile(revisionCommentFile, revisionComment, ENC);
 		} catch (IOException e) {
-			throw new RegistryException("Could not write out description", e);
+			throw new ComponentException("Could not write out description", e);
 		}
 
 		return newComponentVersion;

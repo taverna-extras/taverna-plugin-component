@@ -52,17 +52,21 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.profile.ActivityProfile;
+import net.sf.taverna.t2.component.api.profile.ExceptionHandling;
+import net.sf.taverna.t2.component.api.profile.PortProfile;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import uk.org.taverna.ns._2012.component.profile.Activity;
-import uk.org.taverna.ns._2012.component.profile.Ontology;
-import uk.org.taverna.ns._2012.component.profile.Port;
-import uk.org.taverna.ns._2012.component.profile.Profile;
-import uk.org.taverna.ns._2012.component.profile.SemanticAnnotation;
+import net.sf.taverna.t2.component.api.profile.doc.Activity;
+import net.sf.taverna.t2.component.api.profile.doc.Ontology;
+import net.sf.taverna.t2.component.api.profile.doc.Port;
+import net.sf.taverna.t2.component.api.profile.doc.Profile;
+import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -75,7 +79,7 @@ import com.hp.hpl.jena.ontology.OntProperty;
  * @author David Withers
  */
 public class ComponentProfile implements
-		net.sf.taverna.t2.component.api.Profile {
+		net.sf.taverna.t2.component.api.profile.Profile {
 	private static final Logger logger = getLogger(ComponentProfile.class);
 	private static final Map<String, OntModel> ontologyModels = new HashMap<>();
 	private static final JAXBContext jaxbContext;
@@ -89,7 +93,7 @@ public class ComponentProfile implements
 					"Failed to initialize profile deserialization engine", e);
 		}
 	}
-	private net.sf.taverna.t2.component.api.Profile parent;
+	private net.sf.taverna.t2.component.api.profile.Profile parent;
 	private Profile profileDoc;
 	private ExceptionHandling exceptionHandling;
 	private Registry parentRegistry = null;
@@ -97,21 +101,24 @@ public class ComponentProfile implements
 	private Exception loaderException = null;
 	protected volatile boolean loaded = false;
 
-	public ComponentProfile(URL profileURL, BaseProfileLocator base) throws RegistryException {
+	public ComponentProfile(URL profileURL, BaseProfileLocator base)
+			throws ComponentException {
 		this(null, profileURL, base);
 	}
 
-	public ComponentProfile(String profileString, BaseProfileLocator base) throws RegistryException {
+	public ComponentProfile(String profileString, BaseProfileLocator base)
+			throws ComponentException {
 		this(null, profileString, base);
 	}
 
-	public ComponentProfile(Registry registry, URI profileURI, BaseProfileLocator base)
-			throws RegistryException, MalformedURLException {
+	public ComponentProfile(Registry registry, URI profileURI,
+			BaseProfileLocator base) throws ComponentException,
+			MalformedURLException {
 		this(registry, profileURI.toURL(), base);
 	}
 
-	public ComponentProfile(Registry registry, URL profileURL, BaseProfileLocator base)
-			throws RegistryException {
+	public ComponentProfile(Registry registry, URL profileURL,
+			BaseProfileLocator base) throws ComponentException {
 		logger.info("Loading profile in " + identityHashCode(this) + " from "
 				+ profileURL);
 		this.base = base;
@@ -129,8 +136,8 @@ public class ComponentProfile implements
 		parentRegistry = registry;
 	}
 
-	public ComponentProfile(Registry registry, String profileString, BaseProfileLocator base)
-			throws RegistryException {
+	public ComponentProfile(Registry registry, String profileString,
+			BaseProfileLocator base) throws ComponentException {
 		logger.info("Loading profile in " + identityHashCode(this)
 				+ " from string");
 		this.base = base;
@@ -164,8 +171,7 @@ public class ComponentProfile implements
 			new Thread(r).start();
 	}
 
-	private static void loadProfileFromURL(ComponentProfile profile,
-			URL source) {
+	private static void loadProfileFromURL(ComponentProfile profile, URL source) {
 		try {
 			URLConnection conn = source.openConnection();
 			try {
@@ -213,30 +219,30 @@ public class ComponentProfile implements
 	}
 
 	@Override
-	public String getXML() throws RegistryException {
+	public String getXML() throws ComponentException {
 		try {
 			StringWriter stringWriter = new StringWriter();
 			jaxbContext.createMarshaller().marshal(getProfileDocument(),
 					stringWriter);
 			return stringWriter.toString();
 		} catch (JAXBException e) {
-			throw new RegistryException("Unable to serialize profile.", e);
+			throw new ComponentException("Unable to serialize profile.", e);
 		}
 	}
 
 	@Override
-	public Profile getProfileDocument() throws RegistryException {
+	public Profile getProfileDocument() throws ComponentException {
 		try {
 			synchronized (lock) {
 				while (!loaded)
 					lock.wait();
 				if (loaderException != null) {
 					if (loaderException instanceof FileNotFoundException)
-						throw new RegistryException(
+						throw new ComponentException(
 								"Profile not found/readable: "
 										+ loaderException.getMessage(),
 								loaderException);
-					throw new RegistryException(
+					throw new ComponentException(
 							"Problem loading profile definition: "
 									+ loaderException.getMessage(),
 							loaderException);
@@ -253,7 +259,7 @@ public class ComponentProfile implements
 	public String getId() {
 		try {
 			return getProfileDocument().getId();
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			return null;
 		}
 	}
@@ -262,7 +268,7 @@ public class ComponentProfile implements
 	public String getName() {
 		try {
 			return getProfileDocument().getName();
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			return null;
 		}
 	}
@@ -271,7 +277,7 @@ public class ComponentProfile implements
 	public String getDescription() {
 		try {
 			return getProfileDocument().getDescription();
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			return null;
 		}
 	}
@@ -286,8 +292,8 @@ public class ComponentProfile implements
 		return o == null || o == this;
 	}
 
-	private synchronized net.sf.taverna.t2.component.api.Profile parent()
-			throws RegistryException {
+	private synchronized net.sf.taverna.t2.component.api.profile.Profile parent()
+			throws ComponentException {
 		if (parent == null) {
 			try {
 				if (!isBase() && getProfileDocument().getExtends() != null
@@ -298,7 +304,7 @@ public class ComponentProfile implements
 					if (parent != null)
 						return parent;
 				}
-			} catch (RegistryException e) {
+			} catch (ComponentException e) {
 			}
 			parent = new EmptyProfile();
 		}
@@ -312,26 +318,27 @@ public class ComponentProfile implements
 			for (Ontology ontology : getProfileDocument().getOntology())
 				if (ontology.getId().equals(ontologyId))
 					ontologyURI = ontology.getValue();
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 		}
 		if ((ontologyURI == null) && !isBase())
 			ontologyURI = base.getProfile().getOntologyLocation(ontologyId);
 		return ontologyURI;
 	}
 
-	private Map<String, String> internalGetPrefixMap() throws RegistryException {
+	private Map<String, String> internalGetPrefixMap()
+			throws ComponentException {
 		Map<String, String> result = new TreeMap<>();
 		try {
 			for (Ontology ontology : getProfileDocument().getOntology())
 				result.put(ontology.getId(), ontology.getValue());
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 		}
 		result.putAll(parent().getPrefixMap());
 		return result;
 	}
 
 	@Override
-	public Map<String, String> getPrefixMap() throws RegistryException {
+	public Map<String, String> getPrefixMap() throws ComponentException {
 		Map<String, String> result = internalGetPrefixMap();
 		if (!isBase())
 			result.putAll(base.getProfile().getPrefixMap());
@@ -404,8 +411,8 @@ public class ComponentProfile implements
 		List<PortProfile> portProfiles = new ArrayList<>();
 		try {
 			for (Port port : getProfileDocument().getComponent().getInputPort())
-				portProfiles.add(new PortProfile(this, port));
-		} catch (RegistryException e) {
+				portProfiles.add(new PortProfileImpl(this, port));
+		} catch (ComponentException e) {
 		}
 		if (!isBase())
 			portProfiles.addAll(base.getProfile().getInputPortProfiles());
@@ -414,14 +421,15 @@ public class ComponentProfile implements
 
 	@Override
 	public List<SemanticAnnotationProfile> getInputSemanticAnnotationProfiles()
-			throws RegistryException {
+			throws ComponentException {
 		List<SemanticAnnotationProfile> saProfiles = new ArrayList<>();
 		List<PortProfile> portProfiles = getInputPortProfiles();
 		portProfiles.addAll(parent().getInputPortProfiles());
 		for (PortProfile portProfile : portProfiles)
 			saProfiles.addAll(portProfile.getSemanticAnnotations());
 		if (!isBase())
-			saProfiles.addAll(base.getProfile().getInputSemanticAnnotationProfiles());
+			saProfiles.addAll(base.getProfile()
+					.getInputSemanticAnnotationProfiles());
 		return getUniqueSemanticAnnotationProfiles(saProfiles);
 	}
 
@@ -431,8 +439,8 @@ public class ComponentProfile implements
 		try {
 			for (Port port : getProfileDocument().getComponent()
 					.getOutputPort())
-				portProfiles.add(new PortProfile(this, port));
-		} catch (RegistryException e) {
+				portProfiles.add(new PortProfileImpl(this, port));
+		} catch (ComponentException e) {
 		}
 		if (!isBase())
 			portProfiles.addAll(base.getProfile().getOutputPortProfiles());
@@ -441,33 +449,33 @@ public class ComponentProfile implements
 
 	@Override
 	public List<SemanticAnnotationProfile> getOutputSemanticAnnotationProfiles()
-			throws RegistryException {
+			throws ComponentException {
 		List<SemanticAnnotationProfile> saProfiles = new ArrayList<>();
 		List<PortProfile> portProfiles = getOutputPortProfiles();
 		portProfiles.addAll(parent().getOutputPortProfiles());
 		for (PortProfile portProfile : portProfiles)
 			saProfiles.addAll(portProfile.getSemanticAnnotations());
 		if (!isBase())
-			saProfiles
-					.addAll(base.getProfile().getOutputSemanticAnnotationProfiles());
+			saProfiles.addAll(base.getProfile()
+					.getOutputSemanticAnnotationProfiles());
 		return getUniqueSemanticAnnotationProfiles(saProfiles);
 	}
 
 	@Override
-	public List<ActivityProfile> getActivityProfiles() {
-		List<ActivityProfile> activityProfiles = new ArrayList<>();
+	public List<net.sf.taverna.t2.component.api.profile.ActivityProfile> getActivityProfiles() {
+		List<net.sf.taverna.t2.component.api.profile.ActivityProfile> activityProfiles = new ArrayList<>();
 		try {
 			for (Activity activity : getProfileDocument().getComponent()
 					.getActivity())
-				activityProfiles.add(new ActivityProfile(this, activity));
-		} catch (RegistryException e) {
+				activityProfiles.add(new ActivityProfileImpl(this, activity));
+		} catch (ComponentException e) {
 		}
 		return activityProfiles;
 	}
 
 	@Override
 	public List<SemanticAnnotationProfile> getActivitySemanticAnnotationProfiles()
-			throws RegistryException {
+			throws ComponentException {
 		List<SemanticAnnotationProfile> saProfiles = new ArrayList<>();
 		List<ActivityProfile> activityProfiles = getActivityProfiles();
 		activityProfiles.addAll(parent().getActivityProfiles());
@@ -480,12 +488,12 @@ public class ComponentProfile implements
 	}
 
 	@Override
-	public List<SemanticAnnotationProfile> getSemanticAnnotationProfiles()
-			throws RegistryException {
+	public List<SemanticAnnotationProfile> getSemanticAnnotations()
+			throws ComponentException {
 		List<SemanticAnnotationProfile> saProfiles = getComponentProfiles();
-		saProfiles.addAll(parent().getSemanticAnnotationProfiles());
+		saProfiles.addAll(parent().getSemanticAnnotations());
 		if (!isBase())
-			saProfiles.addAll(base.getProfile().getSemanticAnnotationProfiles());
+			saProfiles.addAll(base.getProfile().getSemanticAnnotations());
 		return saProfiles;
 	}
 
@@ -494,9 +502,9 @@ public class ComponentProfile implements
 		try {
 			for (SemanticAnnotation semanticAnnotation : getProfileDocument()
 					.getComponent().getSemanticAnnotation())
-				saProfiles.add(new SemanticAnnotationProfile(this,
+				saProfiles.add(new SemanticAnnotationProfileImpl(this,
 						semanticAnnotation));
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 		}
 		return saProfiles;
 	}
@@ -523,7 +531,7 @@ public class ComponentProfile implements
 							.getExceptionHandling() != null)
 				exceptionHandling = new ExceptionHandling(getProfileDocument()
 						.getComponent().getExceptionHandling());
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 		}
 		return exceptionHandling;
 	}
@@ -567,14 +575,14 @@ public class ComponentProfile implements
 						return result;
 				}
 			}
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 		}
 		return null;
 	}
 
 	@Override
-	public void delete() throws RegistryException {
-		throw new RegistryException("Deletion not supported.");
+	public void delete() throws ComponentException {
+		throw new ComponentException("Deletion not supported.");
 	}
 }
 
@@ -584,7 +592,8 @@ public class ComponentProfile implements
  * 
  * @author Donal Fellows
  */
-final class EmptyProfile implements net.sf.taverna.t2.component.api.Profile {
+final class EmptyProfile implements
+		net.sf.taverna.t2.component.api.profile.Profile {
 	@Override
 	public String getName() {
 		return "";
@@ -601,8 +610,8 @@ final class EmptyProfile implements net.sf.taverna.t2.component.api.Profile {
 	}
 
 	@Override
-	public String getXML() throws RegistryException {
-		throw new RegistryException("No document.");
+	public String getXML() throws ComponentException {
+		throw new ComponentException("No document.");
 	}
 
 	@Override
@@ -651,7 +660,7 @@ final class EmptyProfile implements net.sf.taverna.t2.component.api.Profile {
 	}
 
 	@Override
-	public List<ActivityProfile> getActivityProfiles() {
+	public List<net.sf.taverna.t2.component.api.profile.ActivityProfile> getActivityProfiles() {
 		return emptyList();
 	}
 
@@ -661,7 +670,7 @@ final class EmptyProfile implements net.sf.taverna.t2.component.api.Profile {
 	}
 
 	@Override
-	public List<SemanticAnnotationProfile> getSemanticAnnotationProfiles() {
+	public List<SemanticAnnotationProfile> getSemanticAnnotations() {
 		return emptyList();
 	}
 
@@ -671,7 +680,7 @@ final class EmptyProfile implements net.sf.taverna.t2.component.api.Profile {
 	}
 
 	@Override
-	public void delete() throws RegistryException {
-		throw new RegistryException("Deletion forbidden.");
+	public void delete() throws ComponentException {
+		throw new ComponentException("Deletion forbidden.");
 	}
 }

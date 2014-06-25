@@ -5,11 +5,11 @@ import static net.sf.taverna.t2.component.utils.SystemUtils.getElementString;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.profile.BaseProfileLocator;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
-import uk.org.taverna.component.api.ComponentProfileType;
-import uk.org.taverna.component.api.Description;
+import net.sf.taverna.t2.component.registry.api.ComponentProfileType;
+import net.sf.taverna.t2.component.registry.api.Description;
 
 /**
  * Profiles managed by the new-interface component registry.
@@ -27,25 +27,25 @@ class NewComponentProfile extends ComponentProfile {
 	private final String uri;
 
 	private static URL contentUrl(ComponentProfileType cpt)
-			throws RegistryException {
+			throws ComponentException {
 		try {
 			return new URL(cpt.getContentUri());
 		} catch (MalformedURLException e) {
-			throw new RegistryException("bad profile location", e);
+			throw new ComponentException("bad profile location", e);
 		}
 	}
 
-	private static URL getLocationURL(Description cpd) throws RegistryException {
+	private static URL getLocationURL(Description cpd) throws ComponentException {
 		try {
 			return new URL(getElementString(cpd, LOCATION));
 		} catch (MalformedURLException e) {
-			throw new RegistryException("bad profile location", e);
+			throw new ComponentException("bad profile location", e);
 		}
 	}
 
 	NewComponentProfile(NewComponentRegistry registry,
 			ComponentProfileType profile, BaseProfileLocator base)
-			throws RegistryException {
+			throws ComponentException {
 		super(registry, contentUrl(profile), base);
 		this.registry = registry;
 		uri = profile.getUri();
@@ -55,7 +55,7 @@ class NewComponentProfile extends ComponentProfile {
 	}
 
 	NewComponentProfile(NewComponentRegistry registry, Description cpd,
-			BaseProfileLocator base) throws RegistryException {
+			BaseProfileLocator base) throws ComponentException {
 		super(registry, getLocationURL(cpd), base);
 		this.registry = registry;
 		uri = cpd.getUri();

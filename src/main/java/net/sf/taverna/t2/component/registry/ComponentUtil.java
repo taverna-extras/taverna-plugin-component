@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.taverna.t2.component.api.Component;
+import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.profile.BaseProfileLocator;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
@@ -21,7 +22,7 @@ import org.springframework.beans.factory.annotation.Required;
  * @author alanrw
  * @author dkf
  */
-public class ComponentUtil {
+public class ComponentUtil implements ComponentFactory {
 	private NewComponentRegistryFactory netLocator;
 	private BaseProfileLocator base;
 	private LocalComponentRegistryFactory fileLocator;
@@ -43,14 +44,15 @@ public class ComponentUtil {
 		this.base = base;
 	}
 
-	public Registry getRegistry(URL registryBase) throws RegistryException {
+	@Override
+	public Registry getRegistry(URL registryBase) throws ComponentException {
 		Registry registry = cache.get(registryBase.toString());
 		if (registry != null)
 			return registry;
 
 		if (registryBase.getProtocol().startsWith("http")) {
 			if (!netLocator.verifyBase(registryBase))
-				throw new RegistryException(
+				throw new ComponentException(
 						"Unable to establish credentials for " + registryBase);
 			registry = netLocator.getComponentRegistry(registryBase);
 		} else
@@ -59,42 +61,49 @@ public class ComponentUtil {
 		return registry;
 	}
 
+	@Override
 	public Family getFamily(URL registryBase, String familyName)
-			throws RegistryException {
+			throws ComponentException {
 		return getRegistry(registryBase).getComponentFamily(familyName);
 	}
 
+	@Override
 	public Component getComponent(URL registryBase, String familyName,
-			String componentName) throws RegistryException {
+			String componentName) throws ComponentException {
 		return getRegistry(registryBase).getComponentFamily(familyName)
 				.getComponent(componentName);
 	}
 
+	@Override
 	public Version getVersion(URL registryBase, String familyName,
 			String componentName, Integer componentVersion)
-			throws RegistryException {
+			throws ComponentException {
 		return getRegistry(registryBase).getComponentFamily(familyName)
 				.getComponent(componentName)
 				.getComponentVersion(componentVersion);
 	}
 
-	public Version getVersion(Version.ID ident) throws RegistryException {
+	@Override
+	public Version getVersion(Version.ID ident) throws ComponentException {
 		return getVersion(ident.getRegistryBase(), ident.getFamilyName(),
 				ident.getComponentName(), ident.getComponentVersion());
 	}
 
-	public Component getComponent(Version.ID ident) throws RegistryException {
+	@Override
+	public Component getComponent(Version.ID ident) throws ComponentException {
 		return getComponent(ident.getRegistryBase(), ident.getFamilyName(),
 				ident.getComponentName());
 	}
 
-	public Profile getProfile(URL url) throws RegistryException {
+	@Override
+	public Profile getProfile(URL url) throws ComponentException {
 		Profile p = new ComponentProfile(url, base);
 		p.getProfileDocument(); // force immediate loading
 		return p;
 	}
 
-	public Profile getBaseProfile() throws RegistryException {
+	@Override
+	public Profile getBaseProfile() throws ComponentException {
 		return base.getProfile();
 	}
 

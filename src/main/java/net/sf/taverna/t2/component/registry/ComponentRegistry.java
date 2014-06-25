@@ -29,12 +29,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.Profile;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.api.profile.Profile;
 
 /**
  * A ComponentRegistry contains ComponentFamilies and ComponentProfiles.
@@ -43,43 +43,43 @@ import net.sf.taverna.t2.component.api.Version;
  */
 public abstract class ComponentRegistry implements
 		net.sf.taverna.t2.component.api.Registry {
-	protected Map<String, Family> familyCache = new HashMap<String, Family>();
-	protected List<Profile> profileCache = new ArrayList<Profile>();
-	protected List<SharingPolicy> permissionCache = new ArrayList<SharingPolicy>();
-	protected List<License> licenseCache = new ArrayList<License>();
+	protected Map<String, Family> familyCache = new HashMap<>();
+	protected List<Profile> profileCache = new ArrayList<>();
+	protected List<SharingPolicy> permissionCache = new ArrayList<>();
+	protected List<License> licenseCache = new ArrayList<>();
 
 	private URL registryBase;
 
-	protected ComponentRegistry(URL registryBase) throws RegistryException {
+	protected ComponentRegistry(URL registryBase) throws ComponentException {
 		this.registryBase = registryBase;
 	}
 
-	protected ComponentRegistry(File fileDir) throws RegistryException {
+	protected ComponentRegistry(File fileDir) throws ComponentException {
 		try {
 			this.registryBase = fileDir.toURI().toURL();
 		} catch (MalformedURLException e) {
-			throw new RegistryException(e);
+			throw new ComponentException(e);
 		}
 	}
 
 	@Override
-	public final List<Family> getComponentFamilies() throws RegistryException {
+	public final List<Family> getComponentFamilies() throws ComponentException {
 		checkFamilyCache();
 		return new ArrayList<Family>(familyCache.values());
 	}
 
-	private void checkFamilyCache() throws RegistryException {
+	private void checkFamilyCache() throws ComponentException {
 		synchronized (familyCache) {
 			if (familyCache.isEmpty())
 				populateFamilyCache();
 		}
 	}
 
-	protected abstract void populateFamilyCache() throws RegistryException;
+	protected abstract void populateFamilyCache() throws ComponentException;
 
 	@Override
 	public final Family getComponentFamily(String familyName)
-			throws RegistryException {
+			throws ComponentException {
 		checkFamilyCache();
 		return familyCache.get(familyName);
 	}
@@ -87,14 +87,14 @@ public abstract class ComponentRegistry implements
 	@Override
 	public final Family createComponentFamily(String familyName,
 			Profile componentProfile, String description, License license,
-			SharingPolicy sharingPolicy) throws RegistryException {
+			SharingPolicy sharingPolicy) throws ComponentException {
 		if (familyName == null)
-			throw new RegistryException(
-					("Component family name must not be null"));
+			throw new ComponentException(
+					"Component family name must not be null");
 		if (componentProfile == null)
-			throw new RegistryException(("Component profile must not be null"));
+			throw new ComponentException("Component profile must not be null");
 		if (getComponentFamily(familyName) != null)
-			throw new RegistryException(("Component family already exists"));
+			throw new ComponentException("Component family already exists");
 
 		Family result = internalCreateComponentFamily(familyName,
 				componentProfile, description, license, sharingPolicy);
@@ -107,11 +107,11 @@ public abstract class ComponentRegistry implements
 
 	protected abstract Family internalCreateComponentFamily(String familyName,
 			Profile componentProfile, String description, License license,
-			SharingPolicy sharingPolicy) throws RegistryException;
+			SharingPolicy sharingPolicy) throws ComponentException;
 
 	@Override
 	public final void removeComponentFamily(Family componentFamily)
-			throws RegistryException {
+			throws ComponentException {
 		if (componentFamily != null) {
 			checkFamilyCache();
 			synchronized (familyCache) {
@@ -122,7 +122,7 @@ public abstract class ComponentRegistry implements
 	}
 
 	protected abstract void internalRemoveComponentFamily(Family componentFamily)
-			throws RegistryException;
+			throws ComponentException;
 
 	@Override
 	public final URL getRegistryBase() {
@@ -137,24 +137,24 @@ public abstract class ComponentRegistry implements
 		return urlString;
 	}
 
-	private void checkProfileCache() throws RegistryException {
+	private void checkProfileCache() throws ComponentException {
 		synchronized (profileCache) {
 			if (profileCache.isEmpty())
 				populateProfileCache();
 		}
 	}
 
-	protected abstract void populateProfileCache() throws RegistryException;
+	protected abstract void populateProfileCache() throws ComponentException;
 
 	@Override
-	public final List<Profile> getComponentProfiles() throws RegistryException {
+	public final List<Profile> getComponentProfiles() throws ComponentException {
 		checkProfileCache();
 		return profileCache;
 	}
 
 	@Override
 	public final Profile getComponentProfile(String id)
-			throws RegistryException {
+			throws ComponentException {
 		// TODO use a map instead of a *linear search*...
 		for (Profile p : getComponentProfiles())
 			if (p.getId().equals(id))
@@ -165,9 +165,9 @@ public abstract class ComponentRegistry implements
 	@Override
 	public final Profile addComponentProfile(Profile componentProfile,
 			License license, SharingPolicy sharingPolicy)
-			throws RegistryException {
+			throws ComponentException {
 		if (componentProfile == null) {
-			throw new RegistryException("componentProfile is null");
+			throw new ComponentException("componentProfile is null");
 		}
 		Profile result = null;
 		checkProfileCache();
@@ -189,7 +189,7 @@ public abstract class ComponentRegistry implements
 
 	protected abstract Profile internalAddComponentProfile(
 			Profile componentProfile, License license,
-			SharingPolicy sharingPolicy) throws RegistryException;
+			SharingPolicy sharingPolicy) throws ComponentException;
 
 	private void checkPermissionCache() {
 		synchronized (permissionCache) {
@@ -201,7 +201,7 @@ public abstract class ComponentRegistry implements
 	protected abstract void populatePermissionCache();
 
 	@Override
-	public final List<SharingPolicy> getPermissions() throws RegistryException {
+	public final List<SharingPolicy> getPermissions() throws ComponentException {
 		checkPermissionCache();
 		return permissionCache;
 	}
@@ -216,13 +216,13 @@ public abstract class ComponentRegistry implements
 	protected abstract void populateLicenseCache();
 
 	@Override
-	public final List<License> getLicenses() throws RegistryException {
+	public final List<License> getLicenses() throws ComponentException {
 		checkLicenseCache();
 		return licenseCache;
 	}
 
 	protected License getLicenseByAbbreviation(String licenseString)
-			throws RegistryException {
+			throws ComponentException {
 		checkLicenseCache();
 		for (License l : getLicenses())
 			if (l.getAbbreviation().equals(licenseString))
@@ -231,11 +231,11 @@ public abstract class ComponentRegistry implements
 	}
 
 	@Override
-	public abstract License getPreferredLicense() throws RegistryException;
+	public abstract License getPreferredLicense() throws ComponentException;
 
 	@Override
 	public abstract Set<Version.ID> searchForComponents(String prefixString,
-			String text) throws RegistryException;
+			String text) throws ComponentException;
 
 	@Override
 	public String toString() {

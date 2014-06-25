@@ -23,27 +23,30 @@ package net.sf.taverna.t2.component.profile;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.org.taverna.ns._2012.component.profile.Port;
-import uk.org.taverna.ns._2012.component.profile.SemanticAnnotation;
+import net.sf.taverna.t2.component.api.profile.PortProfile;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.doc.Port;
+import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
 
 /**
  * Specifies the semantic annotations that a port must have.
  * 
  * @author David Withers
  */
-public class PortProfile {
+public class PortProfileImpl implements PortProfile {
 	private final ComponentProfile componentProfile;
 	private final Port port;
 
-	public PortProfile(ComponentProfile componentProfile, Port port) {
+	public PortProfileImpl(ComponentProfile componentProfile, Port port) {
 		this.componentProfile = componentProfile;
 		this.port = port;
 	}
 
+	@Override
 	public List<SemanticAnnotationProfile> getSemanticAnnotations() {
-		List<SemanticAnnotationProfile> saProfiles = new ArrayList<SemanticAnnotationProfile>();
+		List<SemanticAnnotationProfile> saProfiles = new ArrayList<>();
 		for (SemanticAnnotation annotation : port.getSemanticAnnotation())
-			saProfiles.add(new SemanticAnnotationProfile(componentProfile,
+			saProfiles.add(new SemanticAnnotationProfileImpl(componentProfile,
 					annotation));
 		return saProfiles;
 	}

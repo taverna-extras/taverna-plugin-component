@@ -23,27 +23,31 @@ package net.sf.taverna.t2.component.profile;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.org.taverna.ns._2012.component.profile.Activity;
-import uk.org.taverna.ns._2012.component.profile.SemanticAnnotation;
+import net.sf.taverna.t2.component.api.profile.ActivityProfile;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.doc.Activity;
+import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
 
 /**
  * Specifies the semantic annotations that an activity must have.
  * 
  * @author David Withers
  */
-public class ActivityProfile {
+public class ActivityProfileImpl implements ActivityProfile {
 	private final ComponentProfile componentProfile;
 	private final Activity activity;
 
-	public ActivityProfile(ComponentProfile componentProfile, Activity activity) {
+	public ActivityProfileImpl(ComponentProfile componentProfile,
+			Activity activity) {
 		this.componentProfile = componentProfile;
 		this.activity = activity;
 	}
 
+	@Override
 	public List<SemanticAnnotationProfile> getSemanticAnnotations() {
-		List<SemanticAnnotationProfile> saProfiles = new ArrayList<SemanticAnnotationProfile>();
+		List<SemanticAnnotationProfile> saProfiles = new ArrayList<>();
 		for (SemanticAnnotation annotation : activity.getSemanticAnnotation())
-			saProfiles.add(new SemanticAnnotationProfile(componentProfile,
+			saProfiles.add(new SemanticAnnotationProfileImpl(componentProfile,
 					annotation));
 		return saProfiles;
 	}

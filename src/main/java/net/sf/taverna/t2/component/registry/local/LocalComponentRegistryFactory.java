@@ -6,8 +6,8 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 
@@ -29,7 +29,7 @@ public class LocalComponentRegistryFactory {
 	}
 
 	public synchronized Registry getComponentRegistry(File registryDir)
-			throws RegistryException {
+			throws ComponentException {
 		if (!registries.containsKey(registryDir))
 			registries.put(registryDir, new LocalComponentRegistry(registryDir,
 					util, system));
@@ -37,7 +37,7 @@ public class LocalComponentRegistryFactory {
 	}
 
 	public Registry getComponentRegistry(URL componentRegistryBase)
-			throws RegistryException {
+			throws ComponentException {
 		@SuppressWarnings("deprecation")
 		String hackedPath = URLDecoder.decode(componentRegistryBase.getPath());
 		return getComponentRegistry(new File(hackedPath));

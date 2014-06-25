@@ -17,7 +17,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
@@ -49,7 +49,7 @@ public class BaseProfileLocator {
 		File baseProfileFile = getBaseProfileFile();
 		@SuppressWarnings("unused")
 		boolean load = false;
-		long remoteBaseProfileTime = -1;
+		Long remoteBaseProfileTime = null;
 		long localBaseProfileTime = -1;
 
 		HttpClientParams params = new HttpClientParams();
@@ -71,7 +71,7 @@ public class BaseProfileLocator {
 			localBaseProfileTime = baseProfileFile.lastModified();
 
 		try {
-			if ((remoteBaseProfileTime != -1)
+			if ((remoteBaseProfileTime != null)
 					&& (remoteBaseProfileTime > localBaseProfileTime)) {
 				profile = new ComponentProfile(null, new URL(BASE_PROFILE_URI),
 						null);
@@ -80,7 +80,7 @@ public class BaseProfileLocator {
 		} catch (MalformedURLException e) {
 			logger.error("URI problem", e);
 			profile = null;
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("Component Registry problem", e);
 			profile = null;
 		} catch (IOException e) {

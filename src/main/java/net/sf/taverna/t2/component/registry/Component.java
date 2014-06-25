@@ -28,7 +28,7 @@ import java.net.URL;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
@@ -117,7 +117,7 @@ public abstract class Component implements
 
 	@Override
 	public final Version getComponentVersion(Integer version)
-			throws RegistryException {
+			throws ComponentException {
 		synchronized (versionMap) {
 			checkComponentVersionMap();
 			return versionMap.get(version);
@@ -126,7 +126,7 @@ public abstract class Component implements
 
 	@Override
 	public final Version addVersionBasedOn(WorkflowBundle bundle,
-			String revisionComment) throws RegistryException {
+			String revisionComment) throws ComponentException {
 		Version result = internalAddVersionBasedOn(bundle, revisionComment);
 		synchronized (versionMap) {
 			checkComponentVersionMap();
@@ -147,7 +147,7 @@ public abstract class Component implements
 	 * @throws RegistryException
 	 */
 	protected abstract Version internalAddVersionBasedOn(WorkflowBundle bundle,
-			String revisionComment) throws RegistryException;
+			String revisionComment) throws ComponentException;
 
 	@Override
 	public final URL getComponentURL() {
@@ -155,7 +155,7 @@ public abstract class Component implements
 	}
 
 	@Override
-	public void delete() throws RegistryException {
+	public void delete() throws ComponentException {
 		getFamily().removeComponent(this);
 	}
 }

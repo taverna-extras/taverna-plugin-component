@@ -38,7 +38,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.registry.standard.Client.MyExperimentConnector.ServerResponse;
 import net.sf.taverna.t2.component.registry.standard.annotations.Unused;
 import net.sf.taverna.t2.security.credentialmanager.CMException;
@@ -64,12 +64,12 @@ class Client {
 	private final CredentialManager cm;
 
 	Client(JAXBContext context, URL repository, CredentialManager cm)
-			throws RegistryException {
+			throws ComponentException {
 		this(context, repository, true, cm);
 	}
 
 	Client(JAXBContext context, URL repository, boolean tryLogIn,
-			CredentialManager cm) throws RegistryException {
+			CredentialManager cm) throws ComponentException {
 		this.cm = cm;
 		this.registryBase = repository;
 		this.jaxbContext = context;
@@ -116,11 +116,11 @@ class Client {
 	 *            The strings to put into the query part. Each should be in
 	 *            <tt>key=value</tt> form.
 	 * @return The deserialized response object.
-	 * @throws RegistryException
+	 * @throws ComponentException
 	 *             If anything goes wrong.
 	 */
 	public <T> T get(Class<T> clazz, String uri, String... query)
-			throws RegistryException {
+			throws ComponentException {
 		try {
 			int redirectCounter = 0;
 
@@ -128,25 +128,25 @@ class Client {
 			ServerResponse response;
 			do {
 				if (redirectCounter++ > 5)
-					throw new RegistryException("too many redirects!");
+					throw new ComponentException("too many redirects!");
 				logger.info("GET of " + url);
 				response = http.GET(url);
 				if (response.isFailure())
-					throw new RegistryException(
+					throw new ComponentException(
 							"Unable to perform request (%d): %s",
 							response.getCode(), response.getError());
 			} while ((url = response.getLocation()) != null);
 			return response.getResponse(clazz);
 
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			throw e;
 		} catch (MalformedURLException e) {
-			throw new RegistryException("Problem constructing resource URL", e);
+			throw new ComponentException("Problem constructing resource URL", e);
 		} catch (JAXBException e) {
-			throw new RegistryException("Problem when unmarshalling response",
+			throw new ComponentException("Problem when unmarshalling response",
 					e);
 		} catch (Exception e) {
-			throw new RegistryException("Problem when sending request", e);
+			throw new ComponentException("Problem when sending request", e);
 		}
 	}
 
@@ -164,11 +164,11 @@ class Client {
 	 *            The strings to put into the query part. Each should be in
 	 *            <tt>key=value</tt> form.
 	 * @return The deserialized response object.
-	 * @throws RegistryException
+	 * @throws ComponentException
 	 *             If anything goes wrong.
 	 */
 	public <T> T post(Class<T> clazz, JAXBElement<?> elem, String uri,
-			String... query) throws RegistryException {
+			String... query) throws ComponentException {
 		try {
 
 			String url = url(uri, query);
@@ -179,21 +179,21 @@ class Client {
 				logger.info("About to post XML document:\n" + sw);
 			ServerResponse response = http.POST(url, sw);
 			if (response.isFailure())
-				throw new RegistryException(
+				throw new ComponentException(
 						"Unable to perform request (%d): %s",
 						response.getCode(), response.getError());
 			if (response.getLocation() != null)
 				return get(clazz, response.getLocation());
 			return response.getResponse(clazz);
 
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			throw e;
 		} catch (MalformedURLException e) {
-			throw new RegistryException("Problem constructing resource URL", e);
+			throw new ComponentException("Problem constructing resource URL", e);
 		} catch (JAXBException e) {
-			throw new RegistryException("Problem when marshalling request", e);
+			throw new ComponentException("Problem when marshalling request", e);
 		} catch (Exception e) {
-			throw new RegistryException("Problem when sending request", e);
+			throw new ComponentException("Problem when sending request", e);
 		}
 	}
 
@@ -211,12 +211,12 @@ class Client {
 	 *            The strings to put into the query part. Each should be in
 	 *            <tt>key=value</tt> form.
 	 * @return The deserialized response object.
-	 * @throws RegistryException
+	 * @throws ComponentException
 	 *             If anything goes wrong.
 	 */
 	@Unused
 	public <T> T put(Class<T> clazz, JAXBElement<?> elem, String uri,
-			String... query) throws RegistryException {
+			String... query) throws ComponentException {
 		try {
 
 			String url = url(uri, query);
@@ -227,21 +227,21 @@ class Client {
 				logger.info("About to put XML document:\n" + sw);
 			ServerResponse response = http.PUT(url, sw);
 			if (response.isFailure())
-				throw new RegistryException(
+				throw new ComponentException(
 						"Unable to perform request (%d): %s",
 						response.getCode(), response.getError());
 			if (response.getLocation() != null)
 				return get(clazz, response.getLocation());
 			return response.getResponse(clazz);
 
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			throw e;
 		} catch (MalformedURLException e) {
-			throw new RegistryException("Problem constructing resource URL", e);
+			throw new ComponentException("Problem constructing resource URL", e);
 		} catch (JAXBException e) {
-			throw new RegistryException("Problem when marshalling request", e);
+			throw new ComponentException("Problem when marshalling request", e);
 		} catch (Exception e) {
-			throw new RegistryException("Problem when sending request", e);
+			throw new ComponentException("Problem when sending request", e);
 		}
 	}
 
@@ -253,10 +253,10 @@ class Client {
 	 * @param query
 	 *            The strings to put into the query part. Each should be in
 	 *            <tt>key=value</tt> form.
-	 * @throws RegistryException
+	 * @throws ComponentException
 	 *             If anything goes wrong.
 	 */
-	public void delete(String uri, String... query) throws RegistryException {
+	public void delete(String uri, String... query) throws ComponentException {
 		ServerResponse response;
 		try {
 
@@ -265,12 +265,12 @@ class Client {
 			response = http.DELETE(url);
 
 		} catch (MalformedURLException e) {
-			throw new RegistryException("Problem constructing resource URL", e);
+			throw new ComponentException("Problem constructing resource URL", e);
 		} catch (Exception e) {
-			throw new RegistryException("Unable to perform request", e);
+			throw new ComponentException("Unable to perform request", e);
 		}
 		if (response.isFailure())
-			throw new RegistryException("Unable to perform request (%d): %s",
+			throw new ComponentException("Unable to perform request (%d): %s",
 					response.getCode(), response.getError());
 	}
 
@@ -321,7 +321,7 @@ class Client {
 		// authentication settings (and the current user)
 		private String authString = null;
 
-		private void tryLogIn(boolean mandatory) throws RegistryException {
+		private void tryLogIn(boolean mandatory) throws ComponentException {
 			// check if the stored credentials are valid
 			ServerResponse response = null;
 			try {
@@ -342,7 +342,7 @@ class Client {
 			if (response == null || response.getCode() != HTTP_OK)
 				try {
 					if (response != null)
-						throw new RegistryException("failed to log in: "
+						throw new ComponentException("failed to log in: "
 								+ response.getError());
 				} finally {
 					try {
@@ -356,7 +356,7 @@ class Client {
 				logger.debug("logged in to repository successfully");
 		}
 
-		MyExperimentConnector(boolean tryLogIn) throws RegistryException {
+		MyExperimentConnector(boolean tryLogIn) throws ComponentException {
 			if (tryLogIn)
 				tryLogIn(false);
 		}
@@ -379,7 +379,7 @@ class Client {
 			return conn;
 		}
 
-		private boolean elevate() throws RegistryException {
+		private boolean elevate() throws ComponentException {
 			tryLogIn(true);
 			return isLoggedIn();
 		}

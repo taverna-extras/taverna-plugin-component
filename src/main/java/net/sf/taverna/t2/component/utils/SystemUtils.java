@@ -8,9 +8,9 @@ import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.registry.api.Description;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
-import uk.org.taverna.component.api.Description;
 import uk.org.taverna.configuration.app.ApplicationConfiguration;
 import uk.org.taverna.platform.execution.api.InvalidWorkflowException;
 import uk.org.taverna.platform.execution.api.WorkflowCompiler;
@@ -24,13 +24,13 @@ public class SystemUtils {
 	private WorkflowBundleIO workflowBundleIO;
 	private List<WorkflowCompiler> compilers;
 
-	public byte[] serializeBundle(WorkflowBundle bundle) throws RegistryException {
+	public byte[] serializeBundle(WorkflowBundle bundle) throws ComponentException {
 		try {
 			ByteArrayOutputStream dataflowStream = new ByteArrayOutputStream();
 			workflowBundleIO.writeBundle(bundle, dataflowStream, SCUFL2_TYPE);
 			return dataflowStream.toByteArray();
 		} catch (Exception e) {
-			throw new RegistryException(
+			throw new ComponentException(
 					"failed to serialize component implementation", e);
 		}
 	}
@@ -59,18 +59,18 @@ public class SystemUtils {
 	}
 
 	public static JAXBElement<?> getElement(Description d, String name)
-			throws RegistryException {
+			throws ComponentException {
 		for (Object o : d.getContent())
 			if (o instanceof JAXBElement) {
 				JAXBElement<?> el = (JAXBElement<?>) o;
 				if (el.getName().getLocalPart().equals(name))
 					return el;
 			}
-		throw new RegistryException("no " + name + " element");
+		throw new ComponentException("no " + name + " element");
 	}
 
 	public static String getElementString(Description d, String name)
-			throws RegistryException {
+			throws ComponentException {
 		return getElement(d, name).getValue().toString().trim();
 	}
 

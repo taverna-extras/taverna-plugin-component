@@ -11,16 +11,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.IllegalFormatException;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.License;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.registry.Component;
 import net.sf.taverna.t2.component.registry.ComponentVersion;
+import net.sf.taverna.t2.component.registry.api.ComponentType;
+import net.sf.taverna.t2.component.registry.api.Description;
 import net.sf.taverna.t2.component.utils.SystemUtils;
-import uk.org.taverna.component.api.ComponentType;
-import uk.org.taverna.component.api.Description;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 class NewComponent extends Component {
@@ -36,7 +36,7 @@ class NewComponent extends Component {
 	private final String resource;
 
 	NewComponent(NewComponentRegistry registry, NewComponentFamily family,
-			Description cd, SystemUtils system) throws RegistryException {
+			Description cd, SystemUtils system) throws ComponentException {
 		super(cd.getUri());
 		this.system = system;
 		this.registry = registry;
@@ -59,7 +59,7 @@ class NewComponent extends Component {
 		resource = ct.getResource();
 	}
 
-	public ComponentType getCurrent(String elements) throws RegistryException {
+	public ComponentType getCurrent(String elements) throws ComponentException {
 		return registry.getComponentById(id, null, elements);
 	}
 
@@ -80,14 +80,14 @@ class NewComponent extends Component {
 					.getWorkflow())
 				versionMap.put(d.getVersion(), new Version(d.getVersion(),
 						getValue(d)));
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.warn("failed to retrieve version list: " + e.getMessage());
 		}
 	}
 
 	@Override
 	protected Version internalAddVersionBasedOn(WorkflowBundle bundle,
-			String revisionComment) throws RegistryException {
+			String revisionComment) throws ComponentException {
 		/*
 		 * Only fetch the license and sharing policy now; user might have
 		 * updated them on the site and we want to duplicate.
@@ -172,7 +172,7 @@ class NewComponent extends Component {
 			return description;
 		}
 
-		private String getLocationUri() throws RegistryException {
+		private String getLocationUri() throws ComponentException {
 			if (location == null)
 				location = registry.getComponentById(id, version,
 						"content-uri").getContentUri();
@@ -181,7 +181,7 @@ class NewComponent extends Component {
 
 		@Override
 		protected synchronized WorkflowBundle internalGetImplementation()
-				throws RegistryException {
+				throws ComponentException {
 			if (bundleRef == null || bundleRef.get() == null) {
 				String contentUri = getLocationUri();
 				try {
@@ -190,7 +190,7 @@ class NewComponent extends Component {
 					bundleRef = new SoftReference<>(result);
 					return result;
 				} catch (Exception e) {
-					throw new RegistryException("Unable to open dataflow", e);
+					throw new ComponentException("Unable to open dataflow", e);
 				}
 			}
 			return bundleRef.get();

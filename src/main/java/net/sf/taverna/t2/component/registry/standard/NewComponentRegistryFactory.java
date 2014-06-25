@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.AnnotationUtils;
@@ -44,7 +44,7 @@ public class NewComponentRegistryFactory {
 	}
 
 	public synchronized ComponentRegistry getComponentRegistry(URL registryBase)
-			throws RegistryException {
+			throws ComponentException {
 		if (!componentRegistries.containsKey(registryBase.toExternalForm())) {
 			logger.debug("constructing registry instance for " + registryBase);
 			componentRegistries.put(registryBase.toExternalForm(),

@@ -6,14 +6,13 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.AnnotationUtils;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.workflowmodel.Edits;
-import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityFactory;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
@@ -26,7 +25,8 @@ import org.springframework.beans.factory.annotation.Required;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ComponentActivityFactory implements ActivityFactory {
+public class ComponentActivityFactory extends ComponentExceptionFactory
+		implements ActivityFactory {
 	private ComponentUtil util;
 	private ComponentImplementationCache cache;
 	private Edits edits;
@@ -35,7 +35,7 @@ public class ComponentActivityFactory implements ActivityFactory {
 
 	@Override
 	public ComponentActivity createActivity() {
-		return new ComponentActivity(util, cache, edits, system, annUtils);
+		return new ComponentActivity(util, cache, edits, system, annUtils, this);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class ComponentActivityFactory implements ActivityFactory {
 						ipd.getName(), ipd.getDepth(), true, null,
 						ipd.getTranslatedElementType()));
 			return activityInputPorts;
-		} catch (MalformedURLException | RegistryException | RuntimeException e) {
+		} catch (MalformedURLException | ComponentException | RuntimeException e) {
 			throw new ActivityConfigurationException(
 					"failed to get implementation for configuration of inputs",
 					e);
@@ -82,7 +82,7 @@ public class ComponentActivityFactory implements ActivityFactory {
 				activityOutputPorts.add(edits.createActivityOutputPort(
 						opd.getName(), opd.getDepth(), opd.getGranularDepth()));
 			return activityOutputPorts;
-		} catch (MalformedURLException | RegistryException | RuntimeException e) {
+		} catch (MalformedURLException | ComponentException | RuntimeException e) {
 			throw new ActivityConfigurationException(
 					"failed to get implementation for configuration of outputs",
 					e);

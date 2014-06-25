@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.profile.ExceptionHandling;
+import net.sf.taverna.t2.component.api.profile.ExceptionHandling;
 import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
@@ -51,7 +50,7 @@ public class ComponentActivityConfigurationBean extends
 		this.cache = cache;
 		try {
 			getPorts();
-		} catch (RegistryException e) {
+		} catch (net.sf.taverna.t2.component.api.ComponentException e) {
 			logger.error("failed to get component realization", e);
 		}
 	}
@@ -100,7 +99,7 @@ public class ComponentActivityConfigurationBean extends
 					.getComponentProfile().getExceptionHandling();
 			if (eh != null)
 				outputs.add(makeOutputDefinition(1, ERROR_CHANNEL));
-		} catch (RegistryException e) {
+		} catch (net.sf.taverna.t2.component.api.ComponentException e) {
 			logger.error("failed to get exception handling for family", e);
 		}
 		return result;
@@ -131,7 +130,7 @@ public class ComponentActivityConfigurationBean extends
 	/**
 	 * @return the ports
 	 */
-	public ActivityPortsDefinitionBean getPorts() throws RegistryException{
+	public ActivityPortsDefinitionBean getPorts() throws net.sf.taverna.t2.component.api.ComponentException{
 		if (ports == null)
 			ports = getPortsDefinition(cache.getImplementation(this));
 		return ports;

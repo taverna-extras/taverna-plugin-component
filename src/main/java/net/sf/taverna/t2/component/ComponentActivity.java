@@ -9,8 +9,8 @@ import java.util.Map;
 
 import net.sf.taverna.t2.activities.dataflow.DataflowActivity;
 import net.sf.taverna.t2.annotation.annotationbeans.SemanticAnnotation;
-import net.sf.taverna.t2.component.api.RegistryException;
-import net.sf.taverna.t2.component.profile.ExceptionHandling;
+import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.profile.ExceptionHandling;
 import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.AnnotationUtils;
@@ -44,17 +44,19 @@ public class ComponentActivity extends
 	private ComponentActivityConfigurationBean bean;
 	private SystemUtils system;
 	private AnnotationUtils annUtils;
+	private ComponentExceptionFactory cef;
 	
 	private Dataflow realizingDataflow = null;
 
 	ComponentActivity(ComponentUtil util, ComponentImplementationCache cache,
-			Edits edits, SystemUtils system, AnnotationUtils annUtils) {
+			Edits edits, SystemUtils system, AnnotationUtils annUtils, ComponentExceptionFactory exnFactory) {
 		this.util = util;
 		this.cache = cache;
 		this.system = system;
 		this.annUtils = annUtils;
 		setEdits(edits);
 		this.componentRealization = new DataflowActivity();
+		this.cef = exnFactory;
 	}
 
 	@Override
@@ -68,7 +70,7 @@ public class ComponentActivity extends
 		}
 		try {
 			configurePorts(bean.getPorts());
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			throw new ActivityConfigurationException(
 					"failed to get component realization", e);
 		}
@@ -82,7 +84,7 @@ public class ComponentActivity extends
 			// InvocationContextImpl newContext = copyInvocationContext(callback);
 
 			getComponentRealization().executeAsynch(inputs, new ProxyCallback(
-					callback, callback.getContext(), exceptionHandling));
+					callback, callback.getContext(), exceptionHandling, cef));
 		} catch (ActivityConfigurationException e) {
 			callback.fail("Unable to execute component", e);
 		}
@@ -120,7 +122,7 @@ public class ComponentActivity extends
 					componentRealization.setNestedDataflow(realizingDataflow);
 					copyAnnotations();
 				}
-			} catch (RegistryException e) {
+			} catch (ComponentException e) {
 				logger.error("unable to read workflow", e);
 				throw new ActivityConfigurationException(
 						"unable to read workflow", e);

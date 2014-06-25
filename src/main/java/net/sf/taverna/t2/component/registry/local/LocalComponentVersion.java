@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.registry.ComponentVersion;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 
@@ -56,14 +56,14 @@ class LocalComponentVersion extends ComponentVersion {
 
 	@Override
 	protected final WorkflowBundle internalGetImplementation()
-			throws RegistryException {
+			throws ComponentException {
 		File filename = new File(componentVersionDir, COMPONENT_FILENAME);
 		try {
 			return system.getBundle(filename);
 		} catch (Exception e) {
 			logger.error(
 					"failed to get component realization from " + filename, e);
-			throw new RegistryException("Unable to open dataflow", e);
+			throw new ComponentException("Unable to open dataflow", e);
 		}
 	}
 

@@ -1,7 +1,7 @@
 package net.sf.taverna.t2.component.registry.standard;
 
-import uk.org.taverna.component.api.LicenseType;
 import net.sf.taverna.t2.component.api.License;
+import net.sf.taverna.t2.component.registry.api.LicenseType;
 
 class NewComponentLicense implements License {
 	private NewComponentRegistry registry;

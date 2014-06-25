@@ -31,7 +31,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import uk.org.taverna.ns._2012.component.profile.SemanticAnnotation;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -44,12 +45,12 @@ import com.hp.hpl.jena.ontology.OntResource;
  * 
  * @author David Withers
  */
-public class SemanticAnnotationProfile {
-	private static final Logger log = getLogger(SemanticAnnotationProfile.class);
+public class SemanticAnnotationProfileImpl implements SemanticAnnotationProfile {
+	private static final Logger log = getLogger(SemanticAnnotationProfileImpl.class);
 	private final ComponentProfile componentProfile;
 	private final SemanticAnnotation semanticAnnotation;
 
-	public SemanticAnnotationProfile(ComponentProfile componentProfile,
+	public SemanticAnnotationProfileImpl(ComponentProfile componentProfile,
 			SemanticAnnotation semanticAnnotation) {
 		this.componentProfile = componentProfile;
 		this.semanticAnnotation = semanticAnnotation;
@@ -60,6 +61,7 @@ public class SemanticAnnotationProfile {
 	 * 
 	 * @return the ontology that defines semantic annotation
 	 */
+	@Override
 	public OntModel getOntology() {
 		String ontology = semanticAnnotation.getOntology();
 		if (ontology == null)
@@ -72,6 +74,7 @@ public class SemanticAnnotationProfile {
 	 * 
 	 * @return the predicate for the semantic annotation
 	 */
+	@Override
 	public OntProperty getPredicate() {
 		OntModel ontology = getOntology();
 		if (ontology == null)
@@ -92,10 +95,12 @@ public class SemanticAnnotationProfile {
 		return ontology.getOntProperty(predicate);
 	}
 
+	@Override
 	public String getPredicateString() {
 		return semanticAnnotation.getPredicate();
 	}
 
+	@Override
 	public String getClassString() {
 		return semanticAnnotation.getClazz();
 	}
@@ -107,6 +112,7 @@ public class SemanticAnnotationProfile {
 	 * 
 	 * @return the individual that the semantic annotation must use
 	 */
+	@Override
 	public Individual getIndividual() {
 		String individual = semanticAnnotation.getValue();
 		if (individual == null || individual.isEmpty())
@@ -121,6 +127,7 @@ public class SemanticAnnotationProfile {
 	 * @return the individuals in the range of the predicate defined in the
 	 *         ontology
 	 */
+	@Override
 	public List<Individual> getIndividuals() {
 		OntModel ontology = getOntology();
 		OntProperty prop = getPredicate();
@@ -132,10 +139,12 @@ public class SemanticAnnotationProfile {
 		return ontology.listIndividuals(range).toList();
 	}
 
+	@Override
 	public Integer getMinOccurs() {
 		return semanticAnnotation.getMinOccurs().intValue();
 	}
 
+	@Override
 	public Integer getMaxOccurs() {
 		try {
 			return Integer.valueOf(semanticAnnotation.getMaxOccurs());
@@ -151,6 +160,7 @@ public class SemanticAnnotationProfile {
 				+ getIndividuals();
 	}
 
+	@Override
 	public OntClass getRangeClass() {
 		String clazz = this.getClassString();
 		if (clazz != null)

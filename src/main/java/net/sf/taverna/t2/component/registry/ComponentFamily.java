@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
@@ -80,7 +80,7 @@ public abstract class ComponentFamily implements
 
 	@Override
 	public final synchronized Profile getComponentProfile()
-			throws RegistryException {
+			throws ComponentException {
 		if (componentProfile == null)
 			componentProfile = internalGetComponentProfile();
 		if (componentProfile == null) {
@@ -93,40 +93,40 @@ public abstract class ComponentFamily implements
 	}
 
 	protected abstract Profile internalGetComponentProfile()
-			throws RegistryException;
+			throws ComponentException;
 
 	@Override
-	public final List<Component> getComponents() throws RegistryException {
+	public final List<Component> getComponents() throws ComponentException {
 		checkComponentCache();
 		return new ArrayList<>(componentCache.values());
 	}
 
-	private void checkComponentCache() throws RegistryException {
+	private void checkComponentCache() throws ComponentException {
 		synchronized (componentCache) {
 			if (componentCache.isEmpty())
 				populateComponentCache();
 		}
 	}
 
-	protected abstract void populateComponentCache() throws RegistryException;
+	protected abstract void populateComponentCache() throws ComponentException;
 
 	@Override
 	public final Component getComponent(String componentName)
-			throws RegistryException {
+			throws ComponentException {
 		checkComponentCache();
 		return componentCache.get(componentName);
 	}
 
 	@Override
 	public final Version createComponentBasedOn(String componentName,
-			String description, WorkflowBundle bundle) throws RegistryException {
+			String description, WorkflowBundle bundle) throws ComponentException {
 		if (componentName == null)
-			throw new RegistryException("Component name must not be null");
+			throw new ComponentException("Component name must not be null");
 		if (bundle == null)
-			throw new RegistryException("workflow must not be null");
+			throw new ComponentException("workflow must not be null");
 		checkComponentCache();
 		if (componentCache.containsKey(componentName))
-			throw new RegistryException("Component name already used");
+			throw new ComponentException("Component name already used");
 		Version version = internalCreateComponentBasedOn(componentName,
 				description, bundle);
 		synchronized (componentCache) {
@@ -138,11 +138,11 @@ public abstract class ComponentFamily implements
 
 	protected abstract Version internalCreateComponentBasedOn(
 			String componentName, String description, WorkflowBundle bundle)
-			throws RegistryException;
+			throws ComponentException;
 
 	@Override
 	public final void removeComponent(Component component)
-			throws RegistryException {
+			throws ComponentException {
 		if (component != null) {
 			checkComponentCache();
 			synchronized (componentCache) {
@@ -153,10 +153,10 @@ public abstract class ComponentFamily implements
 	}
 
 	protected abstract void internalRemoveComponent(Component component)
-			throws RegistryException;
+			throws ComponentException;
 
 	@Override
-	public void delete() throws RegistryException {
+	public void delete() throws ComponentException {
 		getComponentRegistry().removeComponentFamily(this);
 	}
 }

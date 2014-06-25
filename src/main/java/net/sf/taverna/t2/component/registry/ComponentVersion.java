@@ -4,7 +4,7 @@
 package net.sf.taverna.t2.component.registry;
 
 import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
@@ -42,13 +42,13 @@ public abstract class ComponentVersion implements
 
 	@Override
 	public final synchronized WorkflowBundle getImplementation()
-			throws RegistryException {
+			throws ComponentException {
 		// Cached in dataflow cache
 		return internalGetImplementation();
 	}
 
 	protected abstract WorkflowBundle internalGetImplementation()
-			throws RegistryException;
+			throws ComponentException;
 
 	@Override
 	public final Component getComponent() {

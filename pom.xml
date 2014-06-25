@@ -25,6 +25,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>net.sf.taverna.component</groupId>
+			<artifactId>component-repository</artifactId>
+			<version>3.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>net.sf.taverna.t2.core</groupId>
 			<artifactId>reference-api</artifactId>
 			<version>${t2.core.version}</version>
@@ -145,11 +150,6 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Import-Package>org.jaxen,*</Import-Package>
-					</instructions>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>

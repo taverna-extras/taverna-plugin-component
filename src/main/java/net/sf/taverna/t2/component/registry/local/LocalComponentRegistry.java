@@ -12,12 +12,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Set;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.Profile;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
@@ -42,7 +42,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 	private static final String BASE_PROFILE_FILENAME = "BaseProfile.xml";
 
 	public LocalComponentRegistry(File registryDir, ComponentUtil util, SystemUtils system)
-			throws RegistryException {
+			throws ComponentException {
 		super(registryDir);
 		baseDir = registryDir;
 		this.util = util;
@@ -52,26 +52,26 @@ class LocalComponentRegistry extends ComponentRegistry {
 	@Override
 	public Family internalCreateComponentFamily(String name,
 			Profile componentProfile, String description, License license,
-			SharingPolicy sharingPolicy) throws RegistryException {
+			SharingPolicy sharingPolicy) throws ComponentException {
 		File newFamilyDir = new File(getComponentFamiliesDir(), name);
 		newFamilyDir.mkdirs();
 		File profileFile = new File(newFamilyDir, "profile");
 		try {
 			writeStringToFile(profileFile, componentProfile.getName(), ENC);
 		} catch (IOException e) {
-			throw new RegistryException("Could not write out profile", e);
+			throw new ComponentException("Could not write out profile", e);
 		}
 		File descriptionFile = new File(newFamilyDir, "description");
 		try {
 			writeStringToFile(descriptionFile, description, ENC);
 		} catch (IOException e) {
-			throw new RegistryException("Could not write out description", e);
+			throw new ComponentException("Could not write out description", e);
 		}
 		return new LocalComponentFamily(this, newFamilyDir, util, system);
 	}
 
 	@Override
-	protected void populateFamilyCache() throws RegistryException {
+	protected void populateFamilyCache() throws ComponentException {
 		File familiesDir = getComponentFamiliesDir();
 		for (File subFile : familiesDir.listFiles()) {
 			if (!subFile.isDirectory())
@@ -83,7 +83,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 	}
 
 	@Override
-	protected void populateProfileCache() throws RegistryException {
+	protected void populateProfileCache() throws ComponentException {
 		File profilesDir = getComponentProfilesDir();
 		for (File subFile : profilesDir.listFiles())
 			if (subFile.isFile() && (!subFile.isHidden())
@@ -98,12 +98,12 @@ class LocalComponentRegistry extends ComponentRegistry {
 
 	@Override
 	protected void internalRemoveComponentFamily(Family componentFamily)
-			throws RegistryException {
+			throws ComponentException {
 		try {
 			deleteDirectory(new File(getComponentFamiliesDir(),
 					componentFamily.getName()));
 		} catch (IOException e) {
-			throw new RegistryException("Unable to delete component family", e);
+			throw new ComponentException("Unable to delete component family", e);
 		}
 	}
 
@@ -127,7 +127,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 	@Override
 	public Profile internalAddComponentProfile(Profile componentProfile,
 			License license, SharingPolicy sharingPolicy)
-			throws RegistryException {
+			throws ComponentException {
 		String name = componentProfile.getName().replaceAll("\\W+", "")
 				+ ".xml";
 		String inputString = componentProfile.getXML();
@@ -135,14 +135,14 @@ class LocalComponentRegistry extends ComponentRegistry {
 		try {
 			writeStringToFile(outputFile, inputString);
 		} catch (IOException e) {
-			throw new RegistryException("Unable to save profile", e);
+			throw new ComponentException("Unable to save profile", e);
 		}
 
 		try {
 			return new ComponentProfile(this, outputFile.toURI(),
 					util.getBaseProfileLocator());
 		} catch (MalformedURLException e) {
-			throw new RegistryException("Unable to create profile", e);
+			throw new ComponentException("Unable to create profile", e);
 		}
 
 	}
@@ -183,8 +183,8 @@ class LocalComponentRegistry extends ComponentRegistry {
 
 	@Override
 	public Set<Version.ID> searchForComponents(String prefixString, String text)
-			throws RegistryException {
-		throw new RegistryException("Local registries cannot be searched yet");
+			throws ComponentException {
+		throw new ComponentException("Local registries cannot be searched yet");
 	}
 
 	@Override

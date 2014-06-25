@@ -13,9 +13,9 @@ import java.io.File;
 import java.io.IOException;
 
 import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.Profile;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.registry.ComponentFamily;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.SystemUtils;
@@ -44,14 +44,14 @@ class LocalComponentFamily extends ComponentFamily {
 
 	@Override
 	protected final Profile internalGetComponentProfile()
-			throws RegistryException {
+			throws ComponentException {
 		LocalComponentRegistry parentRegistry = (LocalComponentRegistry) getComponentRegistry();
 		File profileFile = new File(componentFamilyDir, PROFILE);
 		String profileName;
 		try {
 			profileName = readFileToString(profileFile, ENC);
 		} catch (IOException e) {
-			throw new RegistryException("Unable to read profile name", e);
+			throw new ComponentException("Unable to read profile name", e);
 		}
 		for (Profile p : parentRegistry.getComponentProfiles())
 			if (p.getName().equals(profileName))
@@ -60,7 +60,7 @@ class LocalComponentFamily extends ComponentFamily {
 	}
 
 	@Override
-	protected void populateComponentCache() throws RegistryException {
+	protected void populateComponentCache() throws ComponentException {
 		for (File subFile : componentFamilyDir.listFiles()) {
 			if (!subFile.isDirectory())
 				continue;
@@ -79,16 +79,16 @@ class LocalComponentFamily extends ComponentFamily {
 	@Override
 	protected final Version internalCreateComponentBasedOn(
 			String componentName, String description, WorkflowBundle bundle)
-			throws RegistryException {
+			throws ComponentException {
 		File newSubFile = new File(componentFamilyDir, componentName);
 		if (newSubFile.exists())
-			throw new RegistryException("Component already exists");
+			throw new ComponentException("Component already exists");
 		newSubFile.mkdirs();
 		File descriptionFile = new File(newSubFile, "description");
 		try {
 			writeStringToFile(descriptionFile, description, ENC);
 		} catch (IOException e) {
-			throw new RegistryException("Could not write out description", e);
+			throw new ComponentException("Could not write out description", e);
 		}
 		LocalComponent newComponent = new LocalComponent(newSubFile,
 				(LocalComponentRegistry) getComponentRegistry(), this, system);
@@ -130,12 +130,12 @@ class LocalComponentFamily extends ComponentFamily {
 
 	@Override
 	protected final void internalRemoveComponent(Component component)
-			throws RegistryException {
+			throws ComponentException {
 		File componentDir = new File(componentFamilyDir, component.getName());
 		try {
 			deleteDirectory(componentDir);
 		} catch (IOException e) {
-			throw new RegistryException("Unable to delete component", e);
+			throw new ComponentException("Unable to delete component", e);
 		}
 	}
 }

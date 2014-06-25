@@ -9,10 +9,8 @@ import static org.apache.log4j.Logger.getLogger;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.DataflowValidationReport;
 
 import org.apache.log4j.Logger;
 
@@ -36,7 +34,7 @@ public class ComponentImplementationCache {
 		this.utils = utils;
 	}
 
-	public WorkflowBundle getImplementation(Version.ID id) throws RegistryException {
+	public WorkflowBundle getImplementation(Version.ID id) throws ComponentException {
 		long now = currentTimeMillis();
 		synchronized (id) {
 			Entry entry = cache.get(id);
@@ -49,7 +47,7 @@ public class ComponentImplementationCache {
 			} catch (RuntimeException e) {
 				if (entry != null)
 					return entry.implementation;
-				throw new RegistryException(e.getMessage(), e);
+				throw new ComponentException(e.getMessage(), e);
 			}
 			logger.info("calculated component version for " + id + " as "
 					+ componentVersion.getVersionNumber() + "; retrieving dataflow");
