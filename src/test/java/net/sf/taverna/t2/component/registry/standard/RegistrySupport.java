@@ -7,7 +7,7 @@ import java.net.URL;
 
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.profile.Profile;
 
 class RegistrySupport {
 	static final String DEPLOYMENT = "http://aeon.cs.man.ac.uk:3006";

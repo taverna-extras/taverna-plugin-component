@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 import java.net.URL;
 
 import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.Version;
 
 import org.junit.After;

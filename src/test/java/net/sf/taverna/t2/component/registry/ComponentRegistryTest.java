@@ -29,9 +29,9 @@ import static org.junit.Assert.assertTrue;
 import java.net.URL;
 import java.util.List;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Profile;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.profile.Profile;
 
 import org.junit.After;
 import org.junit.Before;
@@ -112,7 +112,7 @@ public abstract class ComponentRegistryTest extends Harness {
 				componentRegistry.getComponentFamily("TestComponentFamily"));
 	}
 
-	@Test(expected = RegistryException.class)
+	@Test(expected = ComponentException.class)
 	public void testCreateComponentFamilyDuplicate() throws Exception {
 		componentRegistry.createComponentFamily("TestComponentFamily",
 				componentProfile, "Some description", null, null);
@@ -120,13 +120,13 @@ public abstract class ComponentRegistryTest extends Harness {
 				componentProfile, "Some description", null, null);
 	}
 
-	@Test(expected = RegistryException.class)
+	@Test(expected = ComponentException.class)
 	public void testCreateComponentFamilyNullProfile() throws Exception {
 		componentRegistry.createComponentFamily("TestComponentFamily", null,
 				"Some description", null, null);
 	}
 
-	@Test(expected = RegistryException.class)
+	@Test(expected = ComponentException.class)
 	public void testCreateComponentFamilyNullName() throws Exception {
 		componentRegistry.createComponentFamily(null, componentProfile,
 				"Some description", null, null);
@@ -176,7 +176,7 @@ public abstract class ComponentRegistryTest extends Harness {
 		assertEquals(componentProfileCount + 1, newSize);
 	}
 
-	@Test(expected = RegistryException.class)
+	@Test(expected = ComponentException.class)
 	public void testAddComponentProfileNullProfile() throws Exception {
 		componentRegistry.addComponentProfile(null, null, null);
 	}
