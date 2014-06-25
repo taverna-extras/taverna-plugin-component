@@ -1,8 +1,17 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://ns.taverna.org.uk/2012/component/profile"
-	xmlns="http://ns.taverna.org.uk/2012/component/profile" xmlns:cp="http://ns.taverna.org.uk/2012/component/profile"
-	elementFormDefault="qualified">
+<xs:schema targetNamespace="http://ns.taverna.org.uk/2012/component/profile"
+	elementFormDefault="qualified" xmlns="http://ns.taverna.org.uk/2012/component/profile"
+	xmlns:cp="http://ns.taverna.org.uk/2012/component/profile" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
+	jxb:version="2.1">
+	<xs:annotation>
+		<xs:appinfo>
+			<jxb:schemaBindings>
+				<jxb:package name="net.sf.taverna.t2.component.api.profile.doc" />
+			</jxb:schemaBindings>
+		</xs:appinfo>
+	</xs:annotation>
 
 	<xs:import namespace="http://www.w3.org/2001/XMLSchema"
 		schemaLocation="http://www.w3.org/2001/XMLSchema.xsd" />

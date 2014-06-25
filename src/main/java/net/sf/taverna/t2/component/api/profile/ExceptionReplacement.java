@@ -3,7 +3,7 @@
  */
 package net.sf.taverna.t2.component.api.profile;
 
-import uk.org.taverna.ns._2012.component.profile.Replacement;
+import net.sf.taverna.t2.component.api.profile.doc.Replacement;
 
 /**
  * @author alanrw

@@ -57,7 +57,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Export-Package>net.sf.taverna.t2.component.api,net.sf.taverna.t2.component.api.profile,uk.org.taverna.ns._2012.component.profile</Export-Package>
+						<Export-Package>net.sf.taverna.t2.component.api,net.sf.taverna.t2.component.api.profile,net.sf.taverna.t2.component.api.profile.doc</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
