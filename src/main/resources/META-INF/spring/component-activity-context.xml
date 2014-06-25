@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
                       http://www.springframework.org/schema/beans/spring-beans.xsd
                       http://www.springframework.org/schema/osgi
@@ -58,9 +57,11 @@
 		interface="net.sf.taverna.t2.workflowmodel.health.HealthChecker" />
 	<osgi:service ref="componentActivityFactory"
 		interface="net.sf.taverna.t2.workflowmodel.processor.activity.ActivityFactory" />
-	<osgi:service ref="app-config"
-		interface="uk.org.taverna.configuration.app.ApplicationConfiguration" />
+	<osgi:service ref="componentUtil"
+		interface="net.sf.taverna.t2.component.api.ComponentFactory" />
 
+	<osgi:reference id="app-config"
+		interface="uk.org.taverna.configuration.app.ApplicationConfiguration" />
 	<osgi:reference id="credentialManager"
 		interface="net.sf.taverna.t2.security.credentialmanager.CredentialManager" />
 	<osgi:reference id="edits" interface="net.sf.taverna.t2.workflowmodel.Edits" />
