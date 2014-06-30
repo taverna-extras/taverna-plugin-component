@@ -12,7 +12,7 @@ import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.profile.BaseProfileLocator;
-import net.sf.taverna.t2.component.profile.ComponentProfile;
+import net.sf.taverna.t2.component.profile.ComponentProfileImpl;
 import net.sf.taverna.t2.component.registry.local.LocalComponentRegistryFactory;
 import net.sf.taverna.t2.component.registry.standard.NewComponentRegistryFactory;
 
@@ -97,7 +97,7 @@ public class ComponentUtil implements ComponentFactory {
 
 	@Override
 	public Profile getProfile(URL url) throws ComponentException {
-		Profile p = new ComponentProfile(url, base);
+		Profile p = new ComponentProfileImpl(url, base);
 		p.getProfileDocument(); // force immediate loading
 		return p;
 	}

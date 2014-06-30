@@ -10,6 +10,7 @@ import static org.apache.log4j.Logger.getLogger;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.Set;
 
 import net.sf.taverna.t2.component.api.ComponentException;
@@ -18,7 +19,7 @@ import net.sf.taverna.t2.component.api.License;
 import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.api.profile.Profile;
-import net.sf.taverna.t2.component.profile.ComponentProfile;
+import net.sf.taverna.t2.component.profile.ComponentProfileImpl;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.SystemUtils;
@@ -26,8 +27,10 @@ import net.sf.taverna.t2.component.utils.SystemUtils;
 import org.apache.log4j.Logger;
 
 /**
- * @author alanrw
+ * A component registry implemented using the local file system. Note that the
+ * components it contains are <i>not</i> shareable.
  * 
+ * @author alanrw
  */
 class LocalComponentRegistry extends ComponentRegistry {
 	private static final Logger logger = getLogger(LocalComponentRegistry.class);
@@ -36,13 +39,8 @@ class LocalComponentRegistry extends ComponentRegistry {
 	private SystemUtils system;
 	private File baseDir;
 
-	@SuppressWarnings("unused")
-	private static final String BASE_PROFILE_ID = "http://purl.org/wfever/workflow-base-profile";
-	@SuppressWarnings("unused")
-	private static final String BASE_PROFILE_FILENAME = "BaseProfile.xml";
-
-	public LocalComponentRegistry(File registryDir, ComponentUtil util, SystemUtils system)
-			throws ComponentException {
+	public LocalComponentRegistry(File registryDir, ComponentUtil util,
+			SystemUtils system) throws ComponentException {
 		super(registryDir);
 		baseDir = registryDir;
 		this.util = util;
@@ -89,8 +87,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 			if (subFile.isFile() && (!subFile.isHidden())
 					&& subFile.getName().endsWith(".xml"))
 				try {
-					profileCache.add(new ComponentProfile(this,
-							subFile.toURI(), util.getBaseProfileLocator()));
+					profileCache.add(new LocalComponentProfile(subFile));
 				} catch (MalformedURLException e) {
 					logger.error("Unable to read profile", e);
 				}
@@ -139,12 +136,10 @@ class LocalComponentRegistry extends ComponentRegistry {
 		}
 
 		try {
-			return new ComponentProfile(this, outputFile.toURI(),
-					util.getBaseProfileLocator());
+			return new LocalComponentProfile(outputFile);
 		} catch (MalformedURLException e) {
 			throw new ComponentException("Unable to create profile", e);
 		}
-
 	}
 
 	@Override
@@ -190,5 +185,21 @@ class LocalComponentRegistry extends ComponentRegistry {
 	@Override
 	public String getRegistryTypeName() {
 		return "File System";
+	}
+
+	class LocalComponentProfile extends ComponentProfileImpl {
+		URI uri;
+
+		LocalComponentProfile(File file) throws MalformedURLException,
+				ComponentException {
+			super(LocalComponentRegistry.this, file.toURI(), util
+					.getBaseProfileLocator());
+			uri = file.toURI();
+		}
+
+		@Override
+		public String toString() {
+			return "Local Component Profile[" + uri + "]";
+		}
 	}
 }

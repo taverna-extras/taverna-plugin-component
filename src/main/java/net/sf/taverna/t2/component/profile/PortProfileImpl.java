@@ -34,10 +34,10 @@ import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
  * @author David Withers
  */
 public class PortProfileImpl implements PortProfile {
-	private final ComponentProfile componentProfile;
+	private final ComponentProfileImpl componentProfile;
 	private final Port port;
 
-	public PortProfileImpl(ComponentProfile componentProfile, Port port) {
+	public PortProfileImpl(ComponentProfileImpl componentProfile, Port port) {
 		this.componentProfile = componentProfile;
 		this.port = port;
 	}

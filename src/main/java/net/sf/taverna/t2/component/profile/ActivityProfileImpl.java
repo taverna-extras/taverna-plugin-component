@@ -34,10 +34,10 @@ import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
  * @author David Withers
  */
 public class ActivityProfileImpl implements ActivityProfile {
-	private final ComponentProfile componentProfile;
+	private final ComponentProfileImpl componentProfile;
 	private final Activity activity;
 
-	public ActivityProfileImpl(ComponentProfile componentProfile,
+	public ActivityProfileImpl(ComponentProfileImpl componentProfile,
 			Activity activity) {
 		this.componentProfile = componentProfile;
 		this.activity = activity;

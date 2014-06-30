@@ -43,7 +43,7 @@ public class BaseProfileLocator {
 
 	private Logger logger = getLogger(BaseProfileLocator.class);
 	private ApplicationConfiguration appConfig;
-	private ComponentProfile profile;
+	private ComponentProfileImpl profile;
 
 	private void locateBaseProfile() {
 		File baseProfileFile = getBaseProfileFile();
@@ -73,7 +73,7 @@ public class BaseProfileLocator {
 		try {
 			if ((remoteBaseProfileTime != null)
 					&& (remoteBaseProfileTime > localBaseProfileTime)) {
-				profile = new ComponentProfile(null, new URL(BASE_PROFILE_URI),
+				profile = new ComponentProfileImpl(null, new URL(BASE_PROFILE_URI),
 						null);
 				writeStringToFile(baseProfileFile, profile.getXML());
 			}
@@ -90,7 +90,7 @@ public class BaseProfileLocator {
 
 		try {
 			if ((profile == null) && baseProfileFile.exists())
-				profile = new ComponentProfile(null, baseProfileFile.toURI()
+				profile = new ComponentProfileImpl(null, baseProfileFile.toURI()
 						.toURL(), null);
 		} catch (Exception e) {
 			logger.error("URI problem", e);
@@ -133,7 +133,7 @@ public class BaseProfileLocator {
 		return new File(config, BASE_PROFILE_PATH);
 	}
 
-	public synchronized ComponentProfile getProfile() {
+	public synchronized ComponentProfileImpl getProfile() {
 		if (profile == null)
 			locateBaseProfile();
 		return profile;

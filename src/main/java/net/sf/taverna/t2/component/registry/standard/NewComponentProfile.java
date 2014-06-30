@@ -7,7 +7,7 @@ import java.net.URL;
 
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.profile.BaseProfileLocator;
-import net.sf.taverna.t2.component.profile.ComponentProfile;
+import net.sf.taverna.t2.component.profile.ComponentProfileImpl;
 import net.sf.taverna.t2.component.registry.api.ComponentProfileType;
 import net.sf.taverna.t2.component.registry.api.Description;
 
@@ -16,7 +16,7 @@ import net.sf.taverna.t2.component.registry.api.Description;
  * 
  * @author Donal Fellows
  */
-class NewComponentProfile extends ComponentProfile {
+class NewComponentProfile extends ComponentProfileImpl {
 	private static final String LOCATION = "content-uri";
 	static final String ELEMENTS = LOCATION;
 
@@ -94,7 +94,7 @@ class NewComponentProfile extends ComponentProfile {
 
 	@Override
 	public String toString() {
-		return "NewComponentProfile at " + location;
+		return "Remote Component Profile[" + location + "]";
 	}
 
 	public String getResourceLocation() {

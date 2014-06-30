@@ -78,9 +78,9 @@ import com.hp.hpl.jena.ontology.OntProperty;
  * 
  * @author David Withers
  */
-public class ComponentProfile implements
+public class ComponentProfileImpl implements
 		net.sf.taverna.t2.component.api.profile.Profile {
-	private static final Logger logger = getLogger(ComponentProfile.class);
+	private static final Logger logger = getLogger(ComponentProfileImpl.class);
 	private static final Map<String, OntModel> ontologyModels = new HashMap<>();
 	private static final JAXBContext jaxbContext;
 	private BaseProfileLocator base;
@@ -101,23 +101,23 @@ public class ComponentProfile implements
 	private Exception loaderException = null;
 	protected volatile boolean loaded = false;
 
-	public ComponentProfile(URL profileURL, BaseProfileLocator base)
+	public ComponentProfileImpl(URL profileURL, BaseProfileLocator base)
 			throws ComponentException {
 		this(null, profileURL, base);
 	}
 
-	public ComponentProfile(String profileString, BaseProfileLocator base)
+	public ComponentProfileImpl(String profileString, BaseProfileLocator base)
 			throws ComponentException {
 		this(null, profileString, base);
 	}
 
-	public ComponentProfile(Registry registry, URI profileURI,
+	public ComponentProfileImpl(Registry registry, URI profileURI,
 			BaseProfileLocator base) throws ComponentException,
 			MalformedURLException {
 		this(registry, profileURI.toURL(), base);
 	}
 
-	public ComponentProfile(Registry registry, URL profileURL,
+	public ComponentProfileImpl(Registry registry, URL profileURL,
 			BaseProfileLocator base) throws ComponentException {
 		logger.info("Loading profile in " + identityHashCode(this) + " from "
 				+ profileURL);
@@ -136,7 +136,7 @@ public class ComponentProfile implements
 		parentRegistry = registry;
 	}
 
-	public ComponentProfile(Registry registry, String profileString,
+	public ComponentProfileImpl(Registry registry, String profileString,
 			BaseProfileLocator base) throws ComponentException {
 		logger.info("Loading profile in " + identityHashCode(this)
 				+ " from string");
@@ -145,7 +145,7 @@ public class ComponentProfile implements
 		this.parentRegistry = registry;
 	}
 
-	private static void loadProfile(final ComponentProfile profile,
+	private static void loadProfile(final ComponentProfileImpl profile,
 			final Object source, BaseProfileLocator base) {
 		Runnable r = new Runnable() {
 			@Override
@@ -171,7 +171,7 @@ public class ComponentProfile implements
 			new Thread(r).start();
 	}
 
-	private static void loadProfileFromURL(ComponentProfile profile, URL source) {
+	private static void loadProfileFromURL(ComponentProfileImpl profile, URL source) {
 		try {
 			URLConnection conn = source.openConnection();
 			try {
@@ -196,7 +196,7 @@ public class ComponentProfile implements
 		}
 	}
 
-	private static void loadProfileFromString(ComponentProfile profile,
+	private static void loadProfileFromString(ComponentProfileImpl profile,
 			String source) {
 		try {
 			profile.profileDoc = jaxbContext
@@ -557,7 +557,7 @@ public class ComponentProfile implements
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ComponentProfile other = (ComponentProfile) obj;
+		ComponentProfileImpl other = (ComponentProfileImpl) obj;
 		if (!loaded || !other.loaded)
 			return false;
 		if (getId() == null)

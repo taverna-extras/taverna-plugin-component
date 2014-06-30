@@ -47,10 +47,10 @@ import com.hp.hpl.jena.ontology.OntResource;
  */
 public class SemanticAnnotationProfileImpl implements SemanticAnnotationProfile {
 	private static final Logger log = getLogger(SemanticAnnotationProfileImpl.class);
-	private final ComponentProfile componentProfile;
+	private final ComponentProfileImpl componentProfile;
 	private final SemanticAnnotation semanticAnnotation;
 
-	public SemanticAnnotationProfileImpl(ComponentProfile componentProfile,
+	public SemanticAnnotationProfileImpl(ComponentProfileImpl componentProfile,
 			SemanticAnnotation semanticAnnotation) {
 		this.componentProfile = componentProfile;
 		this.semanticAnnotation = semanticAnnotation;
