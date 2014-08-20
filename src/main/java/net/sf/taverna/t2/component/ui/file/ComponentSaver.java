@@ -94,10 +94,14 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 					throw new SaveException("Saving cancelled");
 			}
 
+			JTextArea descriptionArea = new JTextArea(10, 60);
+			descriptionArea.setLineWrap(true);
+			descriptionArea.setWrapStyleWord(true);
+			final JScrollPane descriptionScrollPane = new JScrollPane(
+					descriptionArea);
 			if (ident.getComponentVersion() == 0) {
-				JTextArea descriptionArea = new JTextArea(10, 60);
-				int answer = showConfirmDialog(null, new JScrollPane(
-						descriptionArea), "Component description",
+				
+				int answer = showConfirmDialog(null, descriptionScrollPane, "Component description",
 						OK_CANCEL_OPTION);
 				if (answer == OK_OPTION) {
 					newVersion = family.createComponentBasedOn(
@@ -109,15 +113,14 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 			} else {
 				Component component = family.getComponent(ident
 						.getComponentName());
-				JTextArea descriptionArea = new JTextArea(10, 60);
-				int answer = showConfirmDialog(null, new JScrollPane(
-						descriptionArea), "Version description",
+				int answer = showConfirmDialog(null, descriptionScrollPane, "Version description",
 						OK_CANCEL_OPTION);
 				if (answer != OK_OPTION)
 					throw new SaveException("Saving cancelled");
 				newVersion = component.addVersionBasedOn(dataflow,
 						descriptionArea.getText());
 			}
+	
 		} catch (RegistryException e) {
 			logger.error("Unable to save new version of component", e);
 			throw new SaveException("Unable to save new version of component",
