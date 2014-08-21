@@ -14,7 +14,6 @@ import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
 import net.sf.taverna.t2.component.registry.local.LocalComponentRegistryLocator;
-import net.sf.taverna.t2.component.registry.myexperiment.OldComponentRegistryLocator;
 import net.sf.taverna.t2.component.registry.standard.NewComponentRegistryLocator;
 
 import org.apache.log4j.Logger;
@@ -25,7 +24,7 @@ import org.apache.log4j.Logger;
  */
 public class ComponentUtil {
 	private ComponentUtil() {
-		cache = new HashMap<String, Registry>();
+		cache = new HashMap<>();
 	}
 
 	private static Logger logger = getLogger(ComponentUtil.class);
@@ -33,7 +32,8 @@ public class ComponentUtil {
 	private final Map<String, Registry> cache;
 
 	private Registry getRegistry(URL registryBase) throws RegistryException {
-		Registry registry = cache.get(registryBase.toString());
+		String name = registryBase.toString();
+		Registry registry = cache.get(name);
 		if (registry != null)
 			return registry;
 
@@ -42,34 +42,33 @@ public class ComponentUtil {
 				registry = NewComponentRegistryLocator
 						.getComponentRegistry(registryBase);
 			else
-				throw new RegistryException("Unable to establish credentials for " + registryBase.toString());
-//				registry = OldComponentRegistryLocator
-//						.getComponentRegistry(registryBase);
+				throw new RegistryException(
+						"Unable to establish credentials for " + name);
 		} else {
 			registry = LocalComponentRegistryLocator
 					.getComponentRegistry(registryBase);
 		}
-		cache.put(registryBase.toString(), registry);
+		cache.put(name, registry);
 		return registry;
 	}
 
 	private Family getFamily(URL registryBase, String familyName)
 			throws RegistryException {
-		return getRegistry(registryBase).getComponentFamily(familyName);
+		Registry r = getRegistry(registryBase);
+		return r == null ? null : r.getComponentFamily(familyName);
 	}
 
 	private Component getComponent(URL registryBase, String familyName,
 			String componentName) throws RegistryException {
-		return getRegistry(registryBase).getComponentFamily(familyName)
-				.getComponent(componentName);
+		Family f = getFamily(registryBase, familyName);
+		return f == null ? null : f.getComponent(componentName);
 	}
 
 	private Version getVersion(URL registryBase, String familyName,
 			String componentName, Integer componentVersion)
 			throws RegistryException {
-		return getRegistry(registryBase).getComponentFamily(familyName)
-				.getComponent(componentName)
-				.getComponentVersion(componentVersion);
+		Component c = getComponent(registryBase, familyName, componentName);
+		return c == null ? null : c.getComponentVersion(componentVersion);
 	}
 
 	public static Registry calculateRegistry(URL registryBase)
