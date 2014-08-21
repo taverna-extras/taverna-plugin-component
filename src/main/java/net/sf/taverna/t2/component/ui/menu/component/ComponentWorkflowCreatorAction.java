@@ -3,6 +3,8 @@
  */
 package net.sf.taverna.t2.component.ui.menu.component;
 
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
 import static net.sf.taverna.t2.component.ui.menu.component.ComponentServiceCreatorAction.getNewComponentIdentification;
 import static net.sf.taverna.t2.component.ui.menu.component.ComponentServiceCreatorAction.saveWorkflowAsComponent;
 import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
@@ -49,7 +51,8 @@ public class ComponentWorkflowCreatorAction extends AbstractAction implements
 
 			saveWorkflowAsComponent(d, ident);
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e.getCause().getMessage(), "Component creation failure", JOptionPane.ERROR_MESSAGE);
+			showMessageDialog(null, e.getCause().getMessage(),
+					"Component creation failure", ERROR_MESSAGE);
 			logger.error("failed to save workflow as component", e);
 		}
 	}

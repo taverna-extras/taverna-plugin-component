@@ -109,6 +109,8 @@ public class ComponentMergeAction extends AbstractAction {
 							+ sourceComponent.getName());
 		} catch (RegistryException e) {
 			logger.error("failed to merge component", e);
+			showMessageDialog(null, "Failed to merge component: " + e,
+					"Component Merge Problem", ERROR_MESSAGE);
 		}
 	}
 

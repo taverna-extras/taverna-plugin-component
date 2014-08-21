@@ -81,99 +81,98 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		Version.ID ident = getNewComponentIdentification(p.getLocalName());
-
 		if (ident == null)
 			return;
 
 		Activity<?> a = p.getActivityList().get(0);
 		Dataflow current = fm.getCurrentDataflow();
-		Dataflow d = null;
-		ComponentActivity ca = new ComponentActivity();
-		ComponentActivityConfigurationBean cacb;
-		Element processorElement;
+
 		try {
-			if (a instanceof NestedDataflow) {
+			Dataflow d;
+			if (a instanceof NestedDataflow)
 				d = ((NestedDataflow) a).getNestedDataflow();
-			} else {
+			else {
 				d = edits.createDataflow();
 
-				// TODO: Keep the description
-
+				/* TODO: Keep the description */
 				// fm.setCurrentDataflow(current);
 
-				processorElement = copyProcessor(p);
+				Element processorElement = copyProcessor(p);
 
-				Processor newProcessor = null;
+				Processor newProcessor;
 				try {
 					newProcessor = pasteProcessor(processorElement, d);
 				} catch (IllegalArgumentException e) {
 					logger.error(
 							"failed to paste processor representing component",
 							e);
+					showMessageDialog(null, e.getMessage(),
+							"Component creation failure", ERROR_MESSAGE);
+					return;
 				}
 
-				List<Edit<?>> componentWorkflowEditList = new ArrayList<Edit<?>>();
-
-				for (ProcessorInputPort pip : newProcessor.getInputPorts()) {
-					DataflowInputPort dip = edits.createDataflowInputPort(
-							pip.getName(), pip.getDepth(), pip.getDepth(), d);
-					componentWorkflowEditList.add(edits
-							.getAddDataflowInputPortEdit(d, dip));
-
-					Datalink dl = edits.createDatalink(
-							dip.getInternalOutputPort(), pip);
-					componentWorkflowEditList.add(edits
-							.getConnectDatalinkEdit(dl));
-				}
-
-				for (ProcessorOutputPort pop : newProcessor.getOutputPorts()) {
-					DataflowOutputPort dop = edits.createDataflowOutputPort(
-							pop.getName(), d);
-					componentWorkflowEditList.add(edits
-							.getAddDataflowOutputPortEdit(d, dop));
-
-					Datalink dl = edits.createDatalink(pop,
-							dop.getInternalInputPort());
-					componentWorkflowEditList.add(edits
-							.getConnectDatalinkEdit(dl));
-				}
-				em.doDataflowEdit(d,
-						new CompoundEdit(componentWorkflowEditList));
+				connectNewProcessor(d, newProcessor);
 			}
 
-			cacb = saveWorkflowAsComponent(d, ident);
-
+			ComponentActivity ca = new ComponentActivity();
+			ComponentActivityConfigurationBean cacb = saveWorkflowAsComponent(
+					d, ident);
 			ca.configure(cacb);
-
-			List<Edit<?>> currentWorkflowEditList = new ArrayList<Edit<?>>();
-
-			for (ProcessorInputPort pip : p.getInputPorts()) {
-				currentWorkflowEditList.add(edits
-						.getAddActivityInputPortMappingEdit(ca, pip.getName(),
-								pip.getName()));
-			}
-
-			for (ProcessorOutputPort pop : p.getOutputPorts()) {
-				currentWorkflowEditList.add(edits
-						.getAddActivityOutputPortMappingEdit(ca, pop.getName(),
-								pop.getName()));
-			}
-
-			currentWorkflowEditList.add(edits.getRemoveActivityEdit(p, a));
-			currentWorkflowEditList.add(edits.getAddActivityEdit(p, ca));
-			em.doDataflowEdit(current,
-					new CompoundEdit(currentWorkflowEditList));
+			moveComponentActivityIntoPlace(a, current, ca);
 		} catch (Exception e) {
 			logger.error("failed to instantiate component", e);
+			showMessageDialog(null, e.getCause().getMessage(),
+					"Component creation failure", ERROR_MESSAGE);
 		}
+	}
+
+	private void moveComponentActivityIntoPlace(Activity<?> a,
+			Dataflow current, ComponentActivity ca) throws EditException {
+		List<Edit<?>> editsToDo = new ArrayList<>();
+
+		for (ProcessorInputPort pip : p.getInputPorts())
+			editsToDo.add(edits.getAddActivityInputPortMappingEdit(ca,
+					pip.getName(), pip.getName()));
+
+		for (ProcessorOutputPort pop : p.getOutputPorts())
+			editsToDo.add(edits.getAddActivityOutputPortMappingEdit(ca,
+					pop.getName(), pop.getName()));
+
+		editsToDo.add(edits.getRemoveActivityEdit(p, a));
+		editsToDo.add(edits.getAddActivityEdit(p, ca));
+		em.doDataflowEdit(current, new CompoundEdit(editsToDo));
+	}
+
+	private void connectNewProcessor(Dataflow d, Processor newProcessor)
+			throws EditException {
+		List<Edit<?>> editsToDo = new ArrayList<>();
+
+		for (ProcessorInputPort pip : newProcessor.getInputPorts()) {
+			DataflowInputPort dip = edits.createDataflowInputPort(
+					pip.getName(), pip.getDepth(), pip.getDepth(), d);
+			editsToDo.add(edits.getAddDataflowInputPortEdit(d, dip));
+
+			Datalink dl = edits
+					.createDatalink(dip.getInternalOutputPort(), pip);
+			editsToDo.add(edits.getConnectDatalinkEdit(dl));
+		}
+
+		for (ProcessorOutputPort pop : newProcessor.getOutputPorts()) {
+			DataflowOutputPort dop = edits.createDataflowOutputPort(
+					pop.getName(), d);
+			editsToDo.add(edits.getAddDataflowOutputPortEdit(d, dop));
+
+			Datalink dl = edits.createDatalink(pop, dop.getInternalInputPort());
+			editsToDo.add(edits.getConnectDatalinkEdit(dl));
+		}
+		em.doDataflowEdit(d, new CompoundEdit(editsToDo));
 	}
 
 	public static ComponentActivityConfigurationBean saveWorkflowAsComponent(
 			Dataflow d, Version.ID ident) throws SaveException, IOException,
 			ConfigurationException, RegistryException {
-		if (ident == null) {
+		if (ident == null)
 			return null;
-		}
 
 		createInitialComponent(d, ident);
 
@@ -220,9 +219,8 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 
 	public static Element copyProcessor(final Processor p) throws IOException,
 			JDOMException, SerializationException {
-		final Element result = ProcessorXMLSerializer.getInstance()
-				.processorToXML(p);
-		requiredSubworkflows = new HashMap<String, Element>();
+		Element result = ProcessorXMLSerializer.getInstance().processorToXML(p);
+		requiredSubworkflows = new HashMap<>();
 		rememberSubworkflows(p);
 		return result;
 	}
@@ -247,21 +245,17 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 			throws ActivityConfigurationException, Exception,
 			ClassNotFoundException, InstantiationException,
 			IllegalAccessException, DeserializationException {
-		final Processor result = ProcessorXMLDeserializer.getInstance()
+		Processor result = ProcessorXMLDeserializer.getInstance()
 				.deserializeProcessor(e, requiredSubworkflows);
-		if (result == null) {
+		if (result == null)
 			return null;
-		}
+
 		String newName = uniqueProcessorName(result.getLocalName(), d);
-		List<Edit<?>> editList = new ArrayList<Edit<?>>();
 
-		if (!newName.equals(result.getLocalName())) {
-			Edit<?> renameEdit = edits.getRenameProcessorEdit(result, newName);
-			editList.add(renameEdit);
-		}
-
-		Edit<?> edit = edits.getAddProcessorEdit(d, result);
-		editList.add(edit);
+		List<Edit<?>> editList = new ArrayList<>();
+		if (!newName.equals(result.getLocalName()))
+			editList.add(edits.getRenameProcessorEdit(result, newName));
+		editList.add(edits.getAddProcessorEdit(d, result));
 		em.doDataflowEdit(d, new CompoundEdit(editList));
 
 		return result;
@@ -272,9 +266,8 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 		try {
 			fm.saveDataflow(d, ComponentFileType.instance, ident, false);
 
-			Edit<?> dummyEdit = edits.getUpdateDataflowNameEdit(d,
-					d.getLocalName());
-			em.doDataflowEdit(d, dummyEdit);
+			em.doDataflowEdit(d,
+					edits.getUpdateDataflowNameEdit(d, d.getLocalName()));
 		} catch (OverwriteException e) {
 			throw new RegistryException(e);
 		} catch (SaveException e) {

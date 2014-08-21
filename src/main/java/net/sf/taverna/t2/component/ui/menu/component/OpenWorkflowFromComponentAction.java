@@ -4,6 +4,11 @@
 package net.sf.taverna.t2.component.ui.menu.component;
 
 import static java.awt.Color.RED;
+import static javax.swing.JOptionPane.CANCEL_OPTION;
+import static javax.swing.JOptionPane.OK_OPTION;
+import static javax.swing.JOptionPane.QUESTION_MESSAGE;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
+import static javax.swing.JOptionPane.showOptionDialog;
 import static javax.swing.SwingUtilities.invokeLater;
 import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static net.sf.taverna.t2.workbench.views.graph.GraphViewComponent.graphControllerMap;
@@ -54,61 +59,48 @@ public class OpenWorkflowFromComponentAction extends AbstractAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
+	public void actionPerformed(ActionEvent arg) {
 		final ComponentVersionChooserPanel panel = new ComponentVersionChooserPanel();	
 		
 		final JButton okay = new JButton("OK");
 		okay.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {	        
-                JOptionPane pane = getOptionPane((JComponent)e.getSource());
-                pane.setValue(JOptionPane.OK_OPTION);
-		        doOpen(panel.getChosenRegistry(), panel.getChosenFamily(),
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getOptionPane((JComponent) e.getSource()).setValue(OK_OPTION);
+				doOpen(panel.getChosenRegistry(), panel.getChosenFamily(),
 						panel.getChosenComponent(),
 						panel.getChosenComponentVersion());
-		    }
+			}
 		});
 		okay.setEnabled(false);
 		// Only enable the OK button of a component is not null
-		panel.getComponentChooserPanel().addObserver(new Observer<ComponentChoiceMessage>() {
-			
-			@Override
-			public void notify(Observable<ComponentChoiceMessage> sender,
-					ComponentChoiceMessage message) throws Exception {
-				if (message.getChosenComponent() != null){
-					okay.setEnabled(true);
-				}
-				else{
-					okay.setEnabled(false);
-				}				
-			}
-		});
+		panel.getComponentChooserPanel().addObserver(
+				new Observer<ComponentChoiceMessage>() {
+					@Override
+					public void notify(
+							Observable<ComponentChoiceMessage> sender,
+							ComponentChoiceMessage message) throws Exception {
+						okay.setEnabled(message.getChosenComponent() != null);
+					}
+				});
 
 		final JButton cancel = new JButton("Cancel");
 		cancel.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-                JOptionPane pane = getOptionPane((JComponent)e.getSource());
-                pane.setValue(JOptionPane.CANCEL_OPTION);
+                getOptionPane((JComponent)e.getSource()).setValue(CANCEL_OPTION);
 		    }
 		});
 
-		JOptionPane.showOptionDialog(Workbench.getInstance(), panel,
-				"Component version choice",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-				new Object[] { okay, cancel }, okay);
-				
+		showOptionDialog(Workbench.getInstance(), panel,
+				"Component version choice", YES_NO_OPTION, QUESTION_MESSAGE,
+				null, new Object[] { okay, cancel }, okay);
 	}
 	
     protected JOptionPane getOptionPane(JComponent parent) {
-        JOptionPane pane = null;
-        if (!(parent instanceof JOptionPane)) {
-            pane = getOptionPane((JComponent)parent.getParent());
-        } else {
-            pane = (JOptionPane) parent;
-        }
-        return pane;
+		if (parent instanceof JOptionPane)
+			return (JOptionPane) parent;
+		return getOptionPane((JComponent) parent.getParent());
     }
 
 	private void doOpen(Registry registry, Family family, Component component,
@@ -125,9 +117,9 @@ public class OpenWorkflowFromComponentAction extends AbstractAction {
 				@Override
 				public void run() {
 					if (gc != null) {
-					SVGGraph g = (SVGGraph) gc.getGraph();
-					g.setFillColor(RED);
-					gc.redraw();
+						SVGGraph g = (SVGGraph) gc.getGraph();
+						g.setFillColor(RED);
+						gc.redraw();
 					}
 				}
 			});
