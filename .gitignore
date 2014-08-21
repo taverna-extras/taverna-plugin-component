@@ -3,6 +3,7 @@
 .project
 .settings/
 catalog-v001.xml
+.springBeans
 
 # ignore target files #
 target/
