@@ -1,11 +1,13 @@
 package net.sf.taverna.t2.component.registry.standard;
 
+import static net.sf.taverna.t2.component.registry.standard.Policy.parsePolicy;
 import static net.sf.taverna.t2.component.registry.standard.Utils.getElementString;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.profile.ComponentProfile;
 import uk.org.taverna.component.api.ComponentProfileType;
 import uk.org.taverna.component.api.Description;
@@ -17,13 +19,14 @@ import uk.org.taverna.component.api.Description;
  */
 class NewComponentProfile extends ComponentProfile {
 	private static final String LOCATION = "content-uri";
-	static final String ELEMENTS = LOCATION;
+	static final String ELEMENTS = LOCATION + ",permissions";
 
 	private final NewComponentRegistry registry;
 	private String id;
 	private String location;
 	private String resource;
 	private final String uri;
+	private SharingPolicy permissionsPolicy;
 
 	private static URL contentUrl(ComponentProfileType cpt)
 			throws RegistryException {
@@ -50,6 +53,7 @@ class NewComponentProfile extends ComponentProfile {
 		id = profile.getId();
 		location = profile.getContentUri();
 		resource = profile.getResource();
+		permissionsPolicy = Policy.parsePolicy(profile.getPermissions());
 	}
 
 	NewComponentProfile(NewComponentRegistry registry, Description cpd)
@@ -60,6 +64,7 @@ class NewComponentProfile extends ComponentProfile {
 		id = cpd.getId();
 		location = getElementString(cpd, LOCATION);
 		resource = cpd.getResource();
+		permissionsPolicy = null;
 	}
 
 	public String getLocation() {
@@ -72,6 +77,13 @@ class NewComponentProfile extends ComponentProfile {
 
 	public String getUri() {
 		return uri;
+	}
+
+	public SharingPolicy getPolicy() throws RegistryException {
+		if (permissionsPolicy == null)
+			permissionsPolicy = parsePolicy(registry.getComponentProfileById(
+					getId(), ELEMENTS).getPermissions());
+		return permissionsPolicy;
 	}
 
 	@Override

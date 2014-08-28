@@ -1,7 +1,7 @@
 package net.sf.taverna.t2.component.registry.standard;
 
 import static net.sf.taverna.t2.component.registry.standard.NewComponentRegistry.logger;
-import static net.sf.taverna.t2.component.registry.standard.Policy.getPolicy;
+import static net.sf.taverna.t2.component.registry.standard.Policy.parsePolicy;
 import static net.sf.taverna.t2.component.registry.standard.Utils.getDataflowFromUri;
 import static net.sf.taverna.t2.component.registry.standard.Utils.getElementString;
 import static net.sf.taverna.t2.component.registry.standard.Utils.getValue;
@@ -23,8 +23,8 @@ import uk.org.taverna.component.api.ComponentType;
 import uk.org.taverna.component.api.Description;
 
 class NewComponent extends Component {
-	static final String ELEMENTS = "title,description";
-	static final String EXTRA = "license-type,permissions";
+	static final String ELEMENTS = "title,description,permissions";
+	static final String EXTRA = "license-type";
 
 	final NewComponentRegistry registry;
 	final NewComponentFamily family;
@@ -32,6 +32,7 @@ class NewComponent extends Component {
 	private final String title;
 	private final String description;
 	private final String resource;
+	private SharingPolicy permissionsPolicy;
 
 	NewComponent(NewComponentRegistry registry, NewComponentFamily family,
 			Description cd) throws RegistryException {
@@ -42,6 +43,7 @@ class NewComponent extends Component {
 		title = getElementString(cd, "title");
 		description = getElementString(cd, "description");
 		resource = cd.getResource();
+		permissionsPolicy = null;
 	}
 
 	NewComponent(NewComponentRegistry registry, NewComponentFamily family,
@@ -53,6 +55,7 @@ class NewComponent extends Component {
 		title = ct.getTitle().trim();
 		description = ct.getDescription().trim();
 		resource = ct.getResource();
+		permissionsPolicy = parsePolicy(ct.getPermissions());
 	}
 
 	public ComponentType getCurrent(String elements) throws RegistryException {
@@ -84,21 +87,22 @@ class NewComponent extends Component {
 	@Override
 	protected Version internalAddVersionBasedOn(Dataflow dataflow,
 			String revisionComment) throws RegistryException {
-		/*
-		 * Only fetch the license and sharing policy now; user might have
-		 * updated them on the site and we want to duplicate.
-		 */
-		ComponentType ct = getCurrent(EXTRA);
-		License license = registry.getLicense(getValue(ct.getLicenseType())
-				.trim());
-		SharingPolicy sharingPolicy = getPolicy(ct.getPermissions());
+		License license = registry.getLicense(getValue(
+				getCurrent(EXTRA).getLicenseType()).trim());
 
 		return (Version) registry.createComponentVersionFrom(this, title,
-				revisionComment, dataflow, license, sharingPolicy);
+				revisionComment, dataflow, license);
 	}
 
 	public String getId() {
 		return id;
+	}
+
+	public SharingPolicy getPolicy() throws RegistryException {
+		if (permissionsPolicy == null)
+			permissionsPolicy = parsePolicy(registry.getComponentById(getId(),
+					null, ELEMENTS).getPermissions());
+		return permissionsPolicy;
 	}
 
 	@Override
@@ -126,7 +130,7 @@ class NewComponent extends Component {
 		private String description;
 		private String dataflowUri;
 		private SoftReference<Dataflow> dataflowRef;
-		
+
 		private static final String htmlPageTemplate = "%1$s/workflows/%2$s/versions/%3$s.html";
 
 		protected Version(Integer version, String description, Dataflow dataflow) {
@@ -196,7 +200,8 @@ class NewComponent extends Component {
 		public URL getHelpURL() {
 			URL result = null;
 			try {
-				String urlString = String.format(htmlPageTemplate, registry.getRegistryBaseString(), getId(), version);
+				String urlString = String.format(htmlPageTemplate,
+						registry.getRegistryBaseString(), getId(), version);
 				result = new URL(urlString);
 			} catch (IllegalFormatException | MalformedURLException e) {
 				logger.error(e);

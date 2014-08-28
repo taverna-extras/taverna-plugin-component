@@ -1,5 +1,6 @@
 package net.sf.taverna.t2.component.registry.standard;
 
+import static net.sf.taverna.t2.component.registry.standard.Policy.parsePolicy;
 import static net.sf.taverna.t2.component.registry.standard.Utils.getAnnotation;
 import static net.sf.taverna.t2.component.registry.standard.Utils.getElementString;
 
@@ -10,6 +11,7 @@ import net.sf.taverna.t2.annotation.annotationbeans.FreeTextDescription;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Profile;
 import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.ComponentFamily;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
@@ -22,7 +24,7 @@ import uk.org.taverna.component.api.Description;
  * @author Donal Fellows
  */
 class NewComponentFamily extends ComponentFamily {
-	static final String ELEMENTS = "title,description";
+	static final String ELEMENTS = "title,description,permissions";
 
 	private final NewComponentRegistry registry;
 	private final NewComponentProfile profile;
@@ -31,6 +33,7 @@ class NewComponentFamily extends ComponentFamily {
 	private final String description;
 	private final String uri;
 	private final String resource;
+	private SharingPolicy permissionsPolicy;
 
 	NewComponentFamily(NewComponentRegistry componentRegistry,
 			NewComponentProfile profile, Description familyDesc)
@@ -43,6 +46,7 @@ class NewComponentFamily extends ComponentFamily {
 		name = getElementString(familyDesc, "title");
 		description = getElementString(familyDesc, "description");
 		resource = familyDesc.getResource();
+		permissionsPolicy = null;
 	}
 
 	public NewComponentFamily(NewComponentRegistry componentRegistry,
@@ -55,6 +59,7 @@ class NewComponentFamily extends ComponentFamily {
 		name = cft.getTitle();
 		description = cft.getDescription();
 		resource = cft.getResource();
+		permissionsPolicy = Policy.parsePolicy(cft.getPermissions());
 	}
 
 	@Override
@@ -70,6 +75,13 @@ class NewComponentFamily extends ComponentFamily {
 	@Override
 	protected Profile internalGetComponentProfile() throws RegistryException {
 		return profile;
+	}
+
+	public SharingPolicy getPolicy() throws RegistryException {
+		if (permissionsPolicy == null)
+			permissionsPolicy = parsePolicy(registry.getComponentFamilyById(
+					getId(), ELEMENTS).getPermissions());
+		return permissionsPolicy;
 	}
 
 	public List<Component> getMemberComponents() throws RegistryException {
@@ -94,8 +106,7 @@ class NewComponentFamily extends ComponentFamily {
 			description = getAnnotation(dataflow, FreeTextDescription.class,
 					"Undescribed");
 		return registry.createComponentFrom(this, componentName, description,
-				dataflow, registry.getPreferredLicense(),
-				registry.getDefaultSharingPolicy());
+				dataflow, registry.getPreferredLicense());
 	}
 
 	@Override

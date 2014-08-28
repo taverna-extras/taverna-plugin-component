@@ -67,7 +67,7 @@ public class NewComponentRegistryTest extends ComponentRegistryTest {
 
 		NewComponentRegistry registry = (NewComponentRegistry) getComponentRegistry(componentRegistryUrl);
 		Version v = registry.createComponentFrom(null, "Test Workflow",
-				"test description", dataflow, null, Policy.PRIVATE);
+				"test description", dataflow, null);
 		assertEquals("test description", v.getDescription());
 		registry.deleteComponent((NewComponent) v.getComponent());
 	}

@@ -26,6 +26,7 @@ import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
+import net.sf.taverna.t2.component.registry.standard.Policy.GroupPublic;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
@@ -42,6 +43,7 @@ import uk.org.taverna.component.api.LicenseList;
 import uk.org.taverna.component.api.LicenseType;
 import uk.org.taverna.component.api.ObjectFactory;
 import uk.org.taverna.component.api.Permissions;
+import uk.org.taverna.component.api.Permissions.Permission;
 import uk.org.taverna.component.api.PolicyList;
 
 class NewComponentRegistry extends ComponentRegistry {
@@ -86,23 +88,21 @@ class NewComponentRegistry extends ComponentRegistry {
 	}
 
 	Client client;
-	private URL registryBase2;
 
 	protected NewComponentRegistry(URL registryBase) throws RegistryException {
 		super(registryBase);
 
 	}
-	
+
 	private void checkClientCreated() throws RegistryException {
 		if (client == null) {
 			try {
 				client = new Client(jaxbContext, super.getRegistryBase());
 			} catch (Exception e) {
 				throw new RegistryException("Unable to access registry", e);
-			}			
+			}
 		}
 	}
-
 
 	private List<Description> listComponentFamilies(String profileUri)
 			throws RegistryException {
@@ -124,17 +124,16 @@ class NewComponentRegistry extends ComponentRegistry {
 				"elements=" + elements);
 	}
 
-	@SuppressWarnings("unused")
-	private ComponentFamilyType getComponentFamilyById(String id,
-			String elements) throws RegistryException {
+	ComponentFamilyType getComponentFamilyById(String id, String elements)
+			throws RegistryException {
 		checkClientCreated();
 
 		return client.get(ComponentFamilyType.class, PACK_SERVICE, "id=" + id,
 				"elements=" + elements);
 	}
 
-	private ComponentProfileType getComponentProfileById(String id,
-			String elements) throws RegistryException {
+	ComponentProfileType getComponentProfileById(String id, String elements)
+			throws RegistryException {
 		checkClientCreated();
 
 		return client.get(ComponentProfileType.class, FILE_SERVICE, "id=" + id,
@@ -145,7 +144,8 @@ class NewComponentRegistry extends ComponentRegistry {
 	protected void populateFamilyCache() throws RegistryException {
 		for (Profile pr : getComponentProfiles()) {
 			NewComponentProfile p = (NewComponentProfile) pr;
-			for (Description cfd : listComponentFamilies(p.getResourceLocation()))
+			for (Description cfd : listComponentFamilies(p
+					.getResourceLocation()))
 				familyCache.put(getElementString(cfd, "title"),
 						new NewComponentFamily(this, p, cfd));
 		}
@@ -159,6 +159,9 @@ class NewComponentRegistry extends ComponentRegistry {
 
 		checkClientCreated();
 
+		if (componentProfile instanceof NewComponentProfile)
+			sharingPolicy = ((NewComponentProfile) componentProfile)
+					.getPolicy();
 		return new NewComponentFamily(this, profile, client.post(
 				ComponentFamilyType.class,
 				objectFactory.createPack(makeComponentFamilyCreateRequest(
@@ -219,7 +222,13 @@ class NewComponentRegistry extends ComponentRegistry {
 	public Permissions getPermissions(SharingPolicy userSharingPolicy) {
 		if (userSharingPolicy == null)
 			userSharingPolicy = getDefaultSharingPolicy();
-		return ((Policy) userSharingPolicy).getPermissionsElement();
+		Permission p = ((Policy) userSharingPolicy).getPermission();
+		Permissions perms = new Permissions();
+		if (p != null)
+			perms.getPermission().add(p);
+		if (userSharingPolicy instanceof GroupPublic)
+			perms.getPermission().add(((Policy) Policy.PUBLIC).getPermission());
+		return perms;
 	}
 
 	private ComponentProfileType makeComponentProfileCreateRequest(
@@ -288,6 +297,7 @@ class NewComponentRegistry extends ComponentRegistry {
 		return comp;
 	}
 
+	@SuppressWarnings("unused")
 	private List<Description> listPolicies() throws RegistryException {
 		checkClientCreated();
 
@@ -299,12 +309,11 @@ class NewComponentRegistry extends ComponentRegistry {
 	protected void populatePermissionCache() {
 		permissionCache.add(Policy.PUBLIC);
 		permissionCache.add(Policy.PRIVATE);
-/*		try {
-			for (Description d : listPolicies())
-				permissionCache.add(new Policy.Group(d.getId()));
-		} catch (RegistryException e) {
-			logger.warn("failed to fetch sharing policies", e);
-		}*/
+		/*
+		 * try { for (Description d : listPolicies()) permissionCache.add(new
+		 * Policy.Group(d.getId())); } catch (RegistryException e) {
+		 * logger.warn("failed to fetch sharing policies", e); }
+		 */
 	}
 
 	private List<LicenseType> listLicenses() throws RegistryException {
@@ -394,14 +403,13 @@ class NewComponentRegistry extends ComponentRegistry {
 
 	protected Version createComponentFrom(NewComponentFamily family,
 			String componentName, String description, Dataflow dataflow,
-			License license, SharingPolicy sharingPolicy)
-			throws RegistryException {
+			License license) throws RegistryException {
 		checkClientCreated();
 
 		ComponentType ct = client.post(ComponentType.class, objectFactory
 				.createWorkflow(makeComponentVersionCreateRequest(
 						componentName, description, dataflow, family, license,
-						sharingPolicy)), COMPONENT_SERVICE, "elements="
+						family.getPolicy())), COMPONENT_SERVICE, "elements="
 				+ NewComponent.ELEMENTS);
 		NewComponent nc = new NewComponent(this, family, ct);
 		return nc.new Version(ct.getVersion(), description, dataflow);
@@ -409,15 +417,14 @@ class NewComponentRegistry extends ComponentRegistry {
 
 	protected Version createComponentVersionFrom(NewComponent component,
 			String componentName, String description, Dataflow dataflow,
-			License license, SharingPolicy sharingPolicy)
-			throws RegistryException {
+			License license) throws RegistryException {
 		checkClientCreated();
 
 		ComponentType ct = client.post(ComponentType.class, objectFactory
 				.createWorkflow(makeComponentVersionCreateRequest(
 						componentName, description, dataflow, component.family,
-						license, sharingPolicy)), COMPONENT_SERVICE, "id="
-				+ component.getId(), "elements=" + NewComponent.ELEMENTS);
+						license, component.getPolicy())), COMPONENT_SERVICE,
+				"id=" + component.getId(), "elements=" + NewComponent.ELEMENTS);
 		return component.new Version(ct.getVersion(), description, dataflow);
 	}
 
