@@ -25,13 +25,16 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
+ * @author dkf
  */
 class LocalComponentRegistry extends ComponentRegistry {
 	private static final Logger logger = getLogger(LocalComponentRegistry.class);
 	static final String ENC = "utf-8";
 
 	private File baseDir;
+
+	private static final String EMPTY_PROFILE_ID = "net.sf.taverna.t2.component.profile.empty";
+	private static final String EMPTY_PROFILE_RESOURCE = "/EmptyProfile.xml";
 
 	@SuppressWarnings("unused")
 	private static final String BASE_PROFILE_ID = "http://purl.org/wfever/workflow-base-profile";
@@ -77,6 +80,7 @@ class LocalComponentRegistry extends ComponentRegistry {
 
 	@Override
 	protected void populateProfileCache() throws RegistryException {
+		boolean haveEmpty = false;
 		File profilesDir = getComponentProfilesDir();
 		for (File subFile : profilesDir.listFiles())
 			if (subFile.isFile() && (!subFile.isHidden())
@@ -85,9 +89,13 @@ class LocalComponentRegistry extends ComponentRegistry {
 					Profile newProfile = new ComponentProfile(this,
 							subFile.toURI());
 					profileCache.add(newProfile);
+					haveEmpty |= newProfile.getId().equals(EMPTY_PROFILE_ID);
 				} catch (MalformedURLException e) {
 					logger.error("Unable to read profile", e);
 				}
+		if (!haveEmpty)
+			profileCache.add(0, new ComponentProfile(this, getClass()
+					.getResource(EMPTY_PROFILE_RESOURCE)));
 	}
 
 	@Override
@@ -134,20 +142,15 @@ class LocalComponentRegistry extends ComponentRegistry {
 		}
 
 		try {
-			Profile newProfile = new ComponentProfile(this, outputFile.toURI());
-			return newProfile;
+			return new ComponentProfile(this, outputFile.toURI());
 		} catch (MalformedURLException e) {
 			throw new RegistryException("Unable to create profile", e);
 		}
-
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((baseDir == null) ? 0 : baseDir.hashCode());
-		return result;
+		return 31 + ((baseDir == null) ? 0 : baseDir.hashCode());
 	}
 
 	@Override
