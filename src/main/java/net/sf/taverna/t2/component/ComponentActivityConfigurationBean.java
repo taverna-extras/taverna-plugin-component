@@ -1,5 +1,9 @@
 package net.sf.taverna.t2.component;
 
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.io.Serializable;
@@ -28,7 +32,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Component activity configuration bean.
- * 
  */
 public class ComponentActivityConfigurationBean extends
 		ComponentVersionIdentification implements Serializable {
@@ -64,19 +67,19 @@ public class ComponentActivityConfigurationBean extends
 	}
 
 	private static URL getUrl(JsonNode json) throws MalformedURLException {
-		return new URL(json.get("registryBase").textValue());
+		return new URL(json.get(REGISTRY_BASE).textValue());
 	}
 
 	private static String getFamily(JsonNode json) {
-		return json.get("familyName").textValue();
+		return json.get(FAMILY_NAME).textValue();
 	}
 
 	private static String getComponent(JsonNode json) {
-		return json.get("componentName").textValue();
+		return json.get(COMPONENT_NAME).textValue();
 	}
 
 	private static Integer getVersion(JsonNode json) {
-		JsonNode node = json.get("componentVersion");
+		JsonNode node = json.get(COMPONENT_VERSION);
 		if (node == null || !node.isInt())
 			return null;
 		return node.intValue();

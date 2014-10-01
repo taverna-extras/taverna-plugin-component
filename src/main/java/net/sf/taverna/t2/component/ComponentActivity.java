@@ -144,7 +144,7 @@ public class ComponentActivity extends
 					SemanticAnnotation.class, null);
 			if (annotationValue != null)
 				setAnnotationString(this, SemanticAnnotation.class,
-						annotationValue, edits).doEdit();
+						annotationValue, getEdits()).doEdit();
 		} catch (EditException e) {
 			logger.error("failed to set annotation string", e);
 		}
