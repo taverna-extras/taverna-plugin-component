@@ -54,7 +54,7 @@ public class ComponentServiceProvider extends
 			return;
 		}
 
-		List<ComponentServiceDesc> results = new ArrayList<ComponentServiceDesc>();
+		List<ComponentServiceDesc> results = new ArrayList<>();
 
 		try {
 			for (Family family : registry.getComponentFamilies()) {

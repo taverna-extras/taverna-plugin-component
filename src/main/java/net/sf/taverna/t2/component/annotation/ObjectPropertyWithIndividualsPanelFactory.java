@@ -29,17 +29,23 @@ import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.QUESTION_MESSAGE;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showInputDialog;
+import static net.sf.taverna.t2.component.annotation.SemanticAnnotationUtils.getDisplayName;
 
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Vector;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 
 import net.sf.taverna.t2.component.localworld.LocalWorld;
 import net.sf.taverna.t2.component.profile.SemanticAnnotationProfile;
@@ -68,11 +74,10 @@ public class ObjectPropertyWithIndividualsPanelFactory extends
 	public int getRatingForSemanticAnnotation(
 			SemanticAnnotationProfile semanticAnnotationProfile) {
 		OntProperty property = semanticAnnotationProfile.getPredicate();
-		if ((property != null) && property.isObjectProperty() /*
-										 * &&
-										 * !semanticAnnotationProfile.getIndividuals
-										 * ().isEmpty()
-										 */)
+		if ((property != null) && property.isObjectProperty()
+				/*
+				 * && !semanticAnnotationProfile.getIndividuals().isEmpty()
+				 */)
 			return 100;
 		return MIN_VALUE;
 	}
@@ -95,10 +100,12 @@ public class ObjectPropertyWithIndividualsPanelFactory extends
 		return null;
 	}
 
+
 	private static class ComboBoxWithAdd extends JPanel {
 		private static final long serialVersionUID = -9156213096428945270L;
+		private static DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 		OntClass rangeClass = null;
-		JComboBox resources;
+		JComboBox<Individual> resources;
 
 		public ComboBoxWithAdd(
 				SemanticAnnotationProfile semanticAnnotationProfile,
@@ -117,8 +124,17 @@ public class ObjectPropertyWithIndividualsPanelFactory extends
 				individuals
 						.addAll(localWorld.getIndividualsOfClass(rangeClass));
 
-			resources = new JComboBox(individuals.toArray());
-			resources.setRenderer(new NodeListCellRenderer());
+			resources = new JComboBox<Individual>(new Vector<>(individuals));
+			resources.setRenderer(new ListCellRenderer<Individual>() {
+				@Override
+				public Component getListCellRendererComponent(
+						JList<? extends Individual> list, Individual value,
+						int index, boolean isSelected, boolean cellHasFocus) {
+					return defaultRenderer.getListCellRendererComponent(list,
+							getDisplayName(value), index, isSelected,
+							cellHasFocus);
+				}
+			});
 			resources.setEditable(false);
 			if (statement != null) {
 				Object origResource = statement.getObject();
@@ -133,14 +149,14 @@ public class ObjectPropertyWithIndividualsPanelFactory extends
 			buttonPanel.add(new DeselectingButton("Add external",
 					new ActionListener() {
 						@Override
-						public void actionPerformed(ActionEvent arg0) {
+						public void actionPerformed(ActionEvent e) {
 							addExternal();
 						}
 					}));
 			buttonPanel.add(new DeselectingButton("Add local",
 					new ActionListener() {
 						@Override
-						public void actionPerformed(ActionEvent arg0) {
+						public void actionPerformed(ActionEvent e) {
 							addLocal();
 						}
 					}));

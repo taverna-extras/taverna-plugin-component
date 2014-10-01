@@ -1,6 +1,7 @@
 package net.sf.taverna.t2.component.ui.serviceprovider;
 
 import static java.util.Arrays.asList;
+import static net.sf.taverna.t2.component.registry.ComponentUtil.calculateComponentVersion;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.net.URL;
@@ -14,8 +15,6 @@ import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
-import net.sf.taverna.t2.component.registry.ComponentUtil;
-import net.sf.taverna.t2.component.registry.ComponentVersion;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
@@ -25,7 +24,6 @@ public class ComponentServiceDesc extends
 		ServiceDescription<ComponentActivityConfigurationBean> {
 	private static ComponentPreference preference = ComponentPreference
 			.getInstance();
-	@SuppressWarnings("unused")
 	private static Logger logger = getLogger(ComponentServiceDesc.class);
 
 	private Version.ID identification;
@@ -116,9 +114,10 @@ public class ComponentServiceDesc extends
 		this.identification = identification;
 	}
 	
+	@Override
 	public URL getHelpURL() {
 		try {
-			Version version = ComponentUtil.calculateComponentVersion(getIdentification());
+			Version version = calculateComponentVersion(getIdentification());
 			return version.getHelpURL();
 		} catch (RegistryException e) {
 			logger.error(e);
