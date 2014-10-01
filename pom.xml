@@ -9,6 +9,7 @@
 	</parent>
 	<groupId>net.sf.taverna.component</groupId>
 	<artifactId>component-repository</artifactId>
+	<version>${t2.activities.version}</version>
 	<name>Taverna Component Repository API</name>
 	<packaging>bundle</packaging>
 	<scm>
