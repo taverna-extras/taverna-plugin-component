@@ -21,18 +21,19 @@
 package net.sf.taverna.t2.component.annotation;
 
 import static java.lang.String.format;
-import static net.sf.taverna.t2.component.registry.ComponentUtil.calculateRegistry;
+import static java.util.Collections.emptyList;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import net.sf.taverna.t2.annotation.Annotated;
 import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 import net.sf.taverna.t2.workflowmodel.DataflowInputPort;
@@ -42,15 +43,13 @@ import net.sf.taverna.t2.workflowmodel.Processor;
 import org.apache.log4j.Logger;
 
 /**
- * 
- * 
  * @author David Withers
  */
 public class SemanticAnnotationContextualView extends
 		AbstractSemanticAnnotationContextualView {
 	private static final long serialVersionUID = -322165507536778154L;
 	public static final String VIEW_TITLE = "Semantic Annotations";
-	private static FileManager fileManager = FileManager.getInstance();
+	private static FileManager fileManager = FileManager.getInstance();//FIXME
 	private static Logger logger = getLogger(SemanticAnnotationContextualView.class);
 
 	private Profile componentProfile;
@@ -60,11 +59,12 @@ public class SemanticAnnotationContextualView extends
 		super.setAnnotated(selection);
 		componentProfile = getComponentProfile();
 		try {
+			//FIXME
 			if (componentProfile == null)
-				super.setSemanticAnnotationProfiles(new ArrayList<SemanticAnnotationProfile>());
+				super.setSemanticAnnotationProfiles(emptyList());
 			else if (selection instanceof Dataflow)
 				super.setSemanticAnnotationProfiles(componentProfile
-						.getSemanticAnnotationProfiles());
+						.getSemanticAnnotations());
 			else if (selection instanceof DataflowInputPort)
 				super.setSemanticAnnotationProfiles(componentProfile
 						.getInputSemanticAnnotationProfiles());
@@ -77,7 +77,7 @@ public class SemanticAnnotationContextualView extends
 			else
 				super.setSemanticAnnotationProfiles(new ArrayList<SemanticAnnotationProfile>());
 
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("failed to look up semantic annotations", e);
 		}
 

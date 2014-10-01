@@ -11,7 +11,6 @@ import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static net.sf.taverna.t2.component.ui.menu.component.ComponentServiceCreatorAction.copyProcessor;
 import static net.sf.taverna.t2.component.ui.menu.component.ComponentServiceCreatorAction.pasteProcessor;
-import static net.sf.taverna.t2.workbench.views.graph.GraphViewComponent.graphControllerMap;
 import static net.sf.taverna.t2.workflowmodel.utils.Tools.uniqueObjectName;
 import static net.sf.taverna.t2.workflowmodel.utils.Tools.uniqueProcessorName;
 import static org.apache.log4j.Logger.getLogger;
@@ -43,7 +42,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
-import net.sf.taverna.t2.activities.dataflow.DataflowActivity;
 import net.sf.taverna.t2.annotation.AnnotationBeanSPI;
 import net.sf.taverna.t2.annotation.annotationbeans.AbstractTextualValueAssertion;
 import net.sf.taverna.t2.annotation.annotationbeans.DescriptiveTitle;
@@ -70,7 +68,6 @@ import net.sf.taverna.t2.workflowmodel.Processor;
 import net.sf.taverna.t2.workflowmodel.ProcessorInputPort;
 import net.sf.taverna.t2.workflowmodel.ProcessorOutputPort;
 import net.sf.taverna.t2.workflowmodel.TokenProcessingEntity;
-import net.sf.taverna.t2.workflowmodel.impl.DataflowImpl;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
 import net.sf.taverna.t2.workflowmodel.utils.AnnotationTools;
@@ -79,13 +76,11 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	private static final long serialVersionUID = 727059218457420449L;
 	private static final Logger logger = getLogger(NestedWorkflowCreationDialog.class);
-	private static final EditManager em = EditManager.getInstance();
-	private static final Edits edits = em.getEdits();
+	private static final EditManager em = EditManager.getInstance();//FIXME
 	private static final AnnotationTools at = new AnnotationTools();
 	private final List<TokenProcessingEntity> includedProcessors = new ArrayList<TokenProcessingEntity>();
 	private List<? extends Processor> allProcessors;
@@ -107,8 +102,8 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 		}
 	};
 
-	private JList includableList = new JList();
-	private JList includedList = new JList();
+	private JList<TokenProcessingEntity> includableList = new JList();
+	private JList<TokenProcessingEntity> includedList = new JList();
 	private final Dataflow currentDataflow;
 	private JButton excludeButton;
 	private JButton includeButton;

@@ -10,11 +10,10 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.sf.taverna.t2.component.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 
 /**
  * @author alanrw
- * 
  */
 @SuppressWarnings("serial")
 public class UnresolveablePredicatePanel extends JPanel {

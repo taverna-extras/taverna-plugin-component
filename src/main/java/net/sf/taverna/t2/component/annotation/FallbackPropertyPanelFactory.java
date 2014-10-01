@@ -6,14 +6,13 @@ package net.sf.taverna.t2.component.annotation;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import net.sf.taverna.t2.component.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 /**
  * @author alanrw
- * 
  */
 public class FallbackPropertyPanelFactory extends PropertyPanelFactorySPI {
 	@Override

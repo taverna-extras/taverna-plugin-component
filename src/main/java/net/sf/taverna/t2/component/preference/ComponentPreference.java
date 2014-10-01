@@ -6,7 +6,6 @@ package net.sf.taverna.t2.component.preference;
 import static net.sf.taverna.t2.component.preference.ComponentDefaults.DEFAULT_REGISTRY_LIST;
 import static net.sf.taverna.t2.component.preference.ComponentDefaults.REGISTRY_LIST;
 import static net.sf.taverna.t2.component.preference.ComponentDefaults.getDefaultProperties;
-import static net.sf.taverna.t2.component.registry.ComponentUtil.calculateRegistry;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.io.File;
@@ -25,28 +24,26 @@ import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import net.sf.taverna.raven.appconfig.ApplicationRuntime;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
-import net.sf.taverna.t2.workbench.configuration.AbstractConfigurable;
+import net.sf.taverna.t2.component.api.ComponentException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.configuration.AbstractConfigurable;
+
 /**
  * @author alanrw
- * 
  */
 public class ComponentPreference extends AbstractConfigurable {
-	
 	public static final String DISPLAY_NAME = "Components";
-
-	private final Logger logger = getLogger(ComponentPreference.class);
-
 	private static ComponentPreference instance = null;
 
-	private final SortedMap<String, Registry> registryMap = new TreeMap<String, Registry>();
-
+	private final Logger logger = getLogger(ComponentPreference.class);
+	private final SortedMap<String, Registry> registryMap = new TreeMap<>();
+	ComponentFactory factory;// FIXME beaninject
+	
 	public static ComponentPreference getInstance() {
 		if (instance == null)
 			instance = new ComponentPreference();
@@ -65,12 +62,12 @@ public class ComponentPreference extends AbstractConfigurable {
 		for (String key : getRegistryKeys()) {
 			String value = super.getProperty(key);
 			try {
-				registryMap.put(key, calculateRegistry(new URL(
+				registryMap.put(key, factory.getRegistry(new URL(
 						value)));
 			} catch (MalformedURLException e) {
 				logger.error("bogus url (" + value
 						+ ") in configuration file", e);
-			} catch (RegistryException e) {
+			} catch (ComponentException e) {
 				logger.error("failed to construct registry handle for "
 						+ value, e);
 			}
@@ -79,17 +76,17 @@ public class ComponentPreference extends AbstractConfigurable {
 	
 	private String[] getRegistryKeys() {
 		String registryNamesConcatenated = super.getProperty(REGISTRY_LIST);
-		if (registryNamesConcatenated == null) {
-			return (String[])getDefaultPropertyMap().keySet().toArray(new String[]{});
-		} else {
-			return registryNamesConcatenated.split(",");
-		}
+		if (registryNamesConcatenated == null)
+			return getDefaultPropertyMap().keySet().toArray(new String[]{});
+		return registryNamesConcatenated.split(",");
 	}
 
+	@Override
 	public String getFilePrefix() {
 		return "Component";
 	}
 
+	@Override
 	public String getUUID() {
 		return "2317A297-2AE0-42B5-86DC-99C9B7C0524A";
 	}

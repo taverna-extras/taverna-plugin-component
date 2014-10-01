@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 @SuppressWarnings("serial")
 public class ComponentConfigurationPanel
 		extends
-		ActivityConfigurationPanel<ComponentActivity, ComponentActivityConfigurationBean> {
+		ActivityConfigurationPanel {
 	private static Logger logger = getLogger(ComponentConfigurationPanel.class);
 
 	private ComponentActivity activity;

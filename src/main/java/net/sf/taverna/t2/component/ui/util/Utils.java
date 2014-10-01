@@ -3,7 +3,7 @@
  */
 package net.sf.taverna.t2.component.ui.util;
 
-import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProvider;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionRegistry;
@@ -45,10 +45,9 @@ public class Utils {
 		registry.removeServiceDescriptionProvider(provider);
 	}
 
-	public static boolean dataflowIsComponent(Dataflow d) {
-		if (d == null) {
+	public static boolean dataflowIsComponent(WorkflowBundle d) {
+		if (d == null)
 			return false;
-		}
 		Object dataflowSource = fileManager.getDataflowSource(d);
 		return dataflowSource instanceof ComponentVersionIdentification;
 	}

@@ -1,27 +1,16 @@
 package net.sf.taverna.t2.component.ui.serviceprovider;
 
+import static net.sf.taverna.t2.component.ui.serviceprovider.Service.COMPONENT_ACTIVITY_URI;
+
+import java.net.URI;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import net.sf.taverna.t2.workbench.activityicons.ActivityIconSPI;
-import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
-import net.sf.taverna.t2.component.ComponentActivity;
 
 public class ComponentServiceIcon implements ActivityIconSPI {
-
 	private static Icon icon;
-
-	@Override
-	public int canProvideIconScore(Activity<?> activity) {
-		if (activity instanceof ComponentActivity)
-			return DEFAULT_ICON + 1;
-		return NO_ICON;
-	}
-
-	@Override
-	public Icon getIcon(Activity<?> activity) {
-		return getIcon();
-	}
 
 	public static Icon getIcon() {
 		if (icon == null)
@@ -30,4 +19,15 @@ public class ComponentServiceIcon implements ActivityIconSPI {
 		return icon;
 	}
 
+	@Override
+	public int canProvideIconScore(URI activityType) {
+		if (activityType.equals(COMPONENT_ACTIVITY_URI))
+			return DEFAULT_ICON + 1;
+		return NO_ICON;
+	}
+
+	@Override
+	public Icon getIcon(URI activityType) {
+		return getIcon();
+	}
 }

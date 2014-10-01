@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import net.sf.taverna.t2.annotation.Annotated;
-import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
+import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
 import net.sf.taverna.t2.workbench.file.FileManager;
@@ -48,7 +48,7 @@ public class AnnotateSemanticsMenuAction extends AbstractContextualMenuAction {
 		Object selection = getContextualSelection().getSelection();
 		Object dataflowSource = fileManager.getDataflowSource(fileManager
 				.getCurrentDataflow());
-		if (dataflowSource instanceof ComponentVersionIdentification)
+		if (dataflowSource instanceof Version.ID)
 			return (selection instanceof Annotated)
 					&& !(selection instanceof Activity || selection instanceof ActivityPort);
 		return false;

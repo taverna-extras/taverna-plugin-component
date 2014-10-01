@@ -1,7 +1,6 @@
 package net.sf.taverna.t2.component.ui.serviceprovider;
 
 import static java.util.Arrays.asList;
-import static net.sf.taverna.t2.component.registry.ComponentUtil.calculateComponentVersion;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.net.URL;
@@ -10,9 +9,11 @@ import java.util.List;
 
 import javax.swing.Icon;
 
-import net.sf.taverna.t2.component.ComponentActivity;
-import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
-import net.sf.taverna.t2.component.api.RegistryException;
+
+//import net.sf.taverna.t2.component.ComponentActivity;
+//import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
+import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
@@ -20,36 +21,37 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
 import org.apache.log4j.Logger;
 
-public class ComponentServiceDesc extends
-		ServiceDescription<ComponentActivityConfigurationBean> {
+import uk.org.taverna.scufl2.api.configurations.Configuration;
+
+public class ComponentServiceDesc extends ServiceDescription {
 	private static ComponentPreference preference = ComponentPreference
 			.getInstance();
 	private static Logger logger = getLogger(ComponentServiceDesc.class);
 
 	private Version.ID identification;
+	ComponentFactory factory;//FIXME beaninject
 
 	public ComponentServiceDesc(Version.ID identification) {
 		this.identification = identification;
 	}
 
-	/**
-	 * The subclass of Activity which should be instantiated when adding a
-	 * service for this description
-	 */
-	@Override
-	public Class<? extends Activity<ComponentActivityConfigurationBean>> getActivityClass() {
-		return ComponentActivity.class;
-	}
+	///**
+	// * The subclass of Activity which should be instantiated when adding a
+	// * service for this description
+	// */
+	//@Override
+	//public Class<? extends Activity<ComponentActivityConfigurationBean>> getActivityClass() {
+	//	return ComponentActivity.class;
+	//}
 
 	/**
 	 * The configuration bean which is to be used for configuring the
 	 * instantiated activity. Making this bean will typically require some of
 	 * the fields set on this service description, like an endpoint URL or
 	 * method name.
-	 * 
 	 */
 	@Override
-	public ComponentActivityConfigurationBean getActivityConfiguration() {
+	public Configuration getActivityConfiguration() {
 		return new ComponentActivityConfigurationBean(getIdentification());
 	}
 
@@ -117,9 +119,9 @@ public class ComponentServiceDesc extends
 	@Override
 	public URL getHelpURL() {
 		try {
-			Version version = calculateComponentVersion(getIdentification());
+			Version version = factory.getVersion(getIdentification());
 			return version.getHelpURL();
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error(e);
 		}
 		return null;

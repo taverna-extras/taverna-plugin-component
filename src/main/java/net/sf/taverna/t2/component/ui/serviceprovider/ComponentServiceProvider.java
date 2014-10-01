@@ -4,37 +4,61 @@ import static java.util.Arrays.asList;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
-import static net.sf.taverna.t2.component.registry.ComponentUtil.calculateRegistry;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 import static org.apache.log4j.Logger.getLogger;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
 
 import javax.swing.Icon;
 
 import net.sf.taverna.t2.component.api.Component;
+import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
 import net.sf.taverna.t2.component.ui.panel.RegistryAndFamilyChooserPanel;
 import net.sf.taverna.t2.servicedescriptions.AbstractConfigurableServiceProvider;
 import net.sf.taverna.t2.servicedescriptions.CustomizedConfigurePanelProvider;
+import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionProvider;
 
 import org.apache.log4j.Logger;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 public class ComponentServiceProvider extends
-		AbstractConfigurableServiceProvider<ComponentServiceProviderConfig>
-		implements
-		CustomizedConfigurePanelProvider<ComponentServiceProviderConfig> {
+		AbstractConfigurableServiceProvider implements
+		CustomizedConfigurePanelProvider {
 	private static final URI providerId = URI
 			.create("http://taverna.sf.net/2012/service-provider/component");
 	private static Logger logger = getLogger(ComponentServiceProvider.class);
 
+	private ComponentFactory factory;//FIXME beaninject
+
 	public ComponentServiceProvider() {
-		super(new ComponentServiceProviderConfig());
+		super(JsonNodeFactory.instance.objectNode());
+	}
+
+	ComponentServiceProvider(ComponentFactory factory) {
+		super(JsonNodeFactory.instance.objectNode());
+		this.factory = factory;
+	}
+
+	private static class Conf {
+		URL registryBase;
+		String familyName;
+
+		Conf(ObjectNode config) throws MalformedURLException  {
+			registryBase = URI.create(config.get(REGISTRY_BASE).textValue()).toURL();
+			familyName = config.get(FAMILY_NAME).textValue();
+		}
 	}
 
 	/**
@@ -43,31 +67,33 @@ public class ComponentServiceProvider extends
 	@Override
 	public void findServiceDescriptionsAsync(
 			FindServiceDescriptionsCallBack callBack) {
-		ComponentServiceProviderConfig config = getConfiguration();
+		Conf config;
 
 		Registry registry;
 		try {
-			registry = calculateRegistry(config.getRegistryBase());
-		} catch (RegistryException e) {
+			config = new Conf(getConfiguration());
+			registry = factory.getRegistry(config.registryBase);
+		} catch (ComponentException e) {
 			logger.error("failed to get registry API", e);
+			callBack.fail("Unable to read components", e);
+			return;
+		} catch (MalformedURLException e) {
+			logger.error("failed to get registry URL", e);
 			callBack.fail("Unable to read components", e);
 			return;
 		}
 
-		List<ComponentServiceDesc> results = new ArrayList<>();
-
 		try {
+			List<ComponentServiceDesc> results = new ArrayList<>();
 			for (Family family : registry.getComponentFamilies()) {
 				// TODO get check on family name in there
-				if (family.getName().equals(config.getFamilyName()))
+				if (family.getName().equals(config.familyName))
 					for (Component component : family.getComponents())
 						try {
-							Version.ID ident = new ComponentVersionIdentification(
-									config.getRegistryBase(), family.getName(),
-									component.getName(), component
-											.getComponentVersionMap().lastKey());
+							SortedMap<Integer, Version> versions = component
+									.getComponentVersionMap();
 							ComponentServiceDesc newDesc = new ComponentServiceDesc(
-									ident);
+									versions.get(versions.lastKey()).getID());
 							results.add(newDesc);
 						} catch (Exception e) {
 							logger.error("problem getting service descriptor",
@@ -76,7 +102,7 @@ public class ComponentServiceProvider extends
 				callBack.partialResults(results);
 				callBack.finished();
 			}
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("problem querying registry", e);
 			callBack.fail("Unable to read components", e);
 		}
@@ -111,13 +137,17 @@ public class ComponentServiceProvider extends
 
 	@Override
 	protected List<? extends Object> getIdentifyingData() {
-		return asList(getConfiguration().getRegistryBase().toString(),
-				getConfiguration().getFamilyName());
+		try {
+			Conf config = new Conf(getConfiguration());
+			return asList(config.registryBase.toString(), config.familyName);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public void createCustomizedConfigurePanel(
-			CustomizedConfigureCallBack<ComponentServiceProviderConfig> callBack) {
+			CustomizedConfigureCallBack callBack) {
 		RegistryAndFamilyChooserPanel panel = new RegistryAndFamilyChooserPanel();
 
 		if (showConfirmDialog(null, panel, "Component family import",
@@ -129,7 +159,14 @@ public class ComponentServiceProvider extends
 		if ((chosenRegistry == null) || (chosenFamily == null))
 			return;
 
-		callBack.newProviderConfiguration(new ComponentServiceProviderConfig(
-				chosenFamily));
+		ObjectNode cfg = JsonNodeFactory.instance.objectNode();
+		cfg.put(REGISTRY_BASE, chosenRegistry.getRegistryBaseString());
+		cfg.put(FAMILY_NAME, chosenFamily.getName());
+		callBack.newProviderConfiguration(cfg);
+	}
+
+	@Override
+	public ServiceDescriptionProvider newInstance() {
+		return new ComponentServiceProvider(factory);
 	}
 }

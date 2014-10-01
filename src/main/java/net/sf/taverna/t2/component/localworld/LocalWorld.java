@@ -6,18 +6,20 @@ package net.sf.taverna.t2.component.localworld;
 import static com.hp.hpl.jena.rdf.model.ModelFactory.createOntologyModel;
 import static net.sf.taverna.t2.component.annotation.SemanticAnnotationUtils.createTurtle;
 import static net.sf.taverna.t2.component.annotation.SemanticAnnotationUtils.populateModelFromString;
-import static org.apache.commons.io.FileUtils.readFileToString;
-import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.util.List;
 
-import net.sf.taverna.raven.appconfig.ApplicationRuntime;
-
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.configuration.app.ApplicationConfiguration;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -26,7 +28,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * @author alanrw
- * 
  */
 public class LocalWorld {
 	private static final String FILENAME = "localWorld.ttl";
@@ -45,18 +46,19 @@ public class LocalWorld {
 	private LocalWorld() {
 		File modelFile = new File(calculateComponentsDirectory(), FILENAME);
 		model = createOntologyModel();
-		try {
-			if (modelFile.exists())
-				model.read(new StringReader(readFileToString(modelFile)), null,
-						ENCODING);
-		} catch (IOException e) {
-			logger.error("failed to construct local annotation world", e);
-		}
+		if (modelFile.exists())
+			try (Reader in = new InputStreamReader(new FileInputStream(
+					modelFile), "UTF-8")) {
+				model.read(in, null, ENCODING);
+			} catch (IOException e) {
+				logger.error("failed to construct local annotation world", e);
+			}
 	}
 
+	ApplicationConfiguration config;//FIXME beaninject
+
 	public File calculateComponentsDirectory() {
-		return new File(ApplicationRuntime.getInstance()
-				.getApplicationHomeDir(), "components");
+		return new File(config.getApplicationHomeDir(), "components");
 	}
 
 	public Individual createIndividual(String urlString, OntClass rangeClass) {
@@ -69,8 +71,8 @@ public class LocalWorld {
 
 	private void saveModel() {
 		File modelFile = new File(calculateComponentsDirectory(), FILENAME);
-		try {
-			writeStringToFile(modelFile, createTurtle(model));
+		try (OutputStream out = new FileOutputStream(modelFile)) {
+			out.write(createTurtle(model).getBytes("UTF-8"));
 		} catch (IOException e) {
 			logger.error("failed to save local annotation world", e);
 		}

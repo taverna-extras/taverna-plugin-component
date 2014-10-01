@@ -34,9 +34,9 @@ import net.sf.taverna.t2.annotation.Annotated;
 import net.sf.taverna.t2.annotation.AnnotationAssertion;
 import net.sf.taverna.t2.annotation.AnnotationChain;
 import net.sf.taverna.t2.annotation.annotationbeans.SemanticAnnotation;
-import net.sf.taverna.t2.component.api.Profile;
-import net.sf.taverna.t2.component.api.RegistryException;
-import net.sf.taverna.t2.component.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.Profile;
+import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
@@ -153,12 +153,12 @@ public class SemanticAnnotationUtils {
 	public static Set<SemanticAnnotationProfile> checkComponent(
 			Dataflow dataflow, Profile componentProfile) {
 		// TODO Check port presence by name
-		Set<SemanticAnnotationProfile> problemProfiles = new HashSet<SemanticAnnotationProfile>();
+		Set<SemanticAnnotationProfile> problemProfiles = new HashSet<>();
 		Model model = populateModel(dataflow);
 		Set<Statement> statements = model.listStatements().toSet();
 		try {
 			for (SemanticAnnotationProfile saProfile : componentProfile
-					.getSemanticAnnotationProfiles()) {
+					.getSemanticAnnotations()) {
 				OntProperty predicate = saProfile.getPredicate();
 				if (predicate == null)
 					continue;
@@ -173,7 +173,7 @@ public class SemanticAnnotationUtils {
 					// The UI should prevent this, but check anyway
 					problemProfiles.add(saProfile);
 			}
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("failed to look up profiles for semantic annotations", e);
 		}
 		return problemProfiles;

@@ -9,10 +9,9 @@ import net.sf.taverna.t2.component.ComponentActivity;
 import net.sf.taverna.t2.component.ui.config.ComponentConfigureAction;
 
 public class ComponentConfigureMenuAction extends
-		AbstractConfigureActivityMenuAction<ComponentActivity> {
-
+		AbstractConfigureActivityMenuAction {
 	public ComponentConfigureMenuAction() {
-		super(ComponentActivity.class);
+		super(ComponentActivity.class);// FIXME use URI
 	}
 
 	@Override
@@ -23,5 +22,4 @@ public class ComponentConfigureMenuAction extends
 		addMenuDots(result);
 		return result;
 	}
-
 }

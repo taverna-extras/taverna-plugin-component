@@ -39,9 +39,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import net.sf.taverna.t2.component.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
-import net.sf.taverna.t2.spi.SPIRegistry;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -50,11 +49,10 @@ import com.hp.hpl.jena.rdf.model.Statement;
 public class SemanticAnnotationPanel extends JPanel {
 	private static final long serialVersionUID = -5949183295606132775L;
 
+	private List<PropertyPanelFactorySPI> propertyPanelFactories; //FIXME beaninject
 	private final AbstractSemanticAnnotationContextualView semanticAnnotationContextualView;
 	private final SemanticAnnotationProfile semanticAnnotationProfile;
 	private final Set<Statement> statements;
-	protected final SPIRegistry<PropertyPanelFactorySPI> propertyPanelFactoryRegistry = new SPIRegistry<PropertyPanelFactorySPI>(
-			PropertyPanelFactorySPI.class);
 	private final boolean allowChange;
 	private final PropertyPanelFactorySPI bestFactory;
 
@@ -212,10 +210,8 @@ public class SemanticAnnotationPanel extends JPanel {
 
 	private PropertyPanelFactorySPI findBestPanelFactory() {
 		PropertyPanelFactorySPI result = null;
-		List<PropertyPanelFactorySPI> instances = propertyPanelFactoryRegistry
-				.getInstances();
 		int currentRating = MIN_VALUE;
-		for (PropertyPanelFactorySPI factory : instances) {
+		for (PropertyPanelFactorySPI factory : propertyPanelFactories) {
 			int ratingForSemanticAnnotation = factory
 					.getRatingForSemanticAnnotation(semanticAnnotationProfile);
 			if (ratingForSemanticAnnotation > currentRating) {

@@ -31,7 +31,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingWorker;
 
 import net.sf.taverna.t2.annotation.Annotated;
-import net.sf.taverna.t2.component.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
@@ -54,9 +54,9 @@ public abstract class AbstractSemanticAnnotationContextualView extends
 		ContextualView {
 	private static final long serialVersionUID = 3567849347002793442L;
 	private static final Logger logger = getLogger(SemanticAnnotationContextualView.class);
-	private static final EditManager editManager = EditManager.getInstance();
-	private static final FileManager fileManager = FileManager.getInstance();
-	private static final Edits edits = editManager.getEdits();
+	private static final EditManager editManager = EditManager.getInstance();//FIXME
+	private static final FileManager fileManager = FileManager.getInstance();//FIXME
+	private static final Edits edits = editManager.getEdits();//FIXME
 
 	public AbstractSemanticAnnotationContextualView(boolean allowChange) {
 		super();
@@ -155,8 +155,8 @@ public abstract class AbstractSemanticAnnotationContextualView extends
 	}
 
 	public void setSemanticAnnotationProfiles(
-			List<SemanticAnnotationProfile> semanticAnnotationProfiles) {
-		this.semanticAnnotationProfiles = semanticAnnotationProfiles;
+			List<SemanticAnnotationProfile> profiles) {
+		this.semanticAnnotationProfiles = profiles;
 	}
 
 	public Model getModel() {
