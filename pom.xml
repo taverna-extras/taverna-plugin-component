@@ -27,7 +27,7 @@
 		<dependency>
 			<groupId>net.sf.taverna.component</groupId>
 			<artifactId>component-repository</artifactId>
-			<version>3.0.1-SNAPSHOT</version>
+			<version>${t2.activities.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.taverna.t2.core</groupId>
