@@ -5,17 +5,17 @@
 	<parent>
 		<groupId>net.sf.taverna</groupId>
 		<artifactId>taverna-parent</artifactId>
-		<version>2.6-SNAPSHOT</version>
+		<version>3.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>net.sf.taverna.t2.ui-activities</groupId>
 	<artifactId>component-activity-ui</artifactId>
-	<name>Taverna 2 Component activity UI bindings</name>
-	<version>1.6-SNAPSHOT</version>
+	<name>Taverna 3 Component activity UI bindings</name>
+	<version>2.0-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
-			<groupId>net.sf.taverna.t2.component</groupId>
-			<artifactId>component-activity</artifactId>
-			<version>${t2.ui.components.version}</version>
+			<groupId>net.sf.taverna.component</groupId>
+			<artifactId>component-repository</artifactId>
+			<version>${t2.activities.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.taverna.t2.core</groupId>
@@ -26,11 +26,6 @@
 			<groupId>net.sf.taverna.t2.ui-api</groupId>
 			<artifactId>activity-palette-api</artifactId>
 			<version>${t2.ui.api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-impl</groupId>
-			<artifactId>contextual-views-impl</artifactId>
-			<version>${t2.ui.impl.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.taverna.t2.ui-api</groupId>
@@ -46,16 +41,6 @@
 			<groupId>net.sf.taverna.t2.ui-api</groupId>
 			<artifactId>contextual-views-api</artifactId>
 			<version>${t2.ui.api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-impl</groupId>
-			<artifactId>activity-tools</artifactId>
-			<version>${t2.ui.impl.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-impl</groupId>
-			<artifactId>activity-palette-impl</artifactId>
-			<version>${t2.ui.impl.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.taverna.t2.ui-components</groupId>
