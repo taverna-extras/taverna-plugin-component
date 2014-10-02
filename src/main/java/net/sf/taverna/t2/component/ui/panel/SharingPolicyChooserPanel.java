@@ -35,12 +35,11 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
@@ -49,7 +48,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class SharingPolicyChooserPanel extends JPanel implements
 		Observer<RegistryChoiceMessage> {
@@ -59,9 +57,8 @@ public class SharingPolicyChooserPanel extends JPanel implements
 	private static final long serialVersionUID = 2175274929391537032L;
 	private static final Logger logger = getLogger(SharingPolicyChooserPanel.class);
 
-	private final JComboBox permissionBox = new JComboBox();
-	private final SortedMap<String, SharingPolicy> permissionMap = new TreeMap<String, SharingPolicy>();
-
+	private final JComboBox<String> permissionBox = new JComboBox<>();
+	private final SortedMap<String, SharingPolicy> permissionMap = new TreeMap<>();
 	private Registry registry;
 
 	public SharingPolicyChooserPanel() {
@@ -110,7 +107,6 @@ public class SharingPolicyChooserPanel extends JPanel implements
 	}
 
 	private class SharingPolicyUpdater extends SwingWorker<String, Object> {
-
 		@Override
 		protected String doInBackground() throws Exception {
 			List<SharingPolicy> sharingPolicies;
@@ -120,7 +116,7 @@ public class SharingPolicyChooserPanel extends JPanel implements
 				sharingPolicies = registry.getPermissions();
 				if (sharingPolicies == null)
 					return null;
-			} catch (RegistryException e) {
+			} catch (ComponentException e) {
 				logger.error("problem getting permissions", e);
 				throw e;
 			} catch (NullPointerException e) {

@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.swing.Icon;
 
-
 //import net.sf.taverna.t2.component.ComponentActivity;
 //import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.ComponentException;
@@ -24,14 +23,16 @@ import org.apache.log4j.Logger;
 import uk.org.taverna.scufl2.api.configurations.Configuration;
 
 public class ComponentServiceDesc extends ServiceDescription {
-	private static ComponentPreference preference = ComponentPreference
-			.getInstance();
 	private static Logger logger = getLogger(ComponentServiceDesc.class);
 
 	private Version.ID identification;
-	ComponentFactory factory;//FIXME beaninject
+	private ComponentPreference preference;
+	private ComponentFactory factory;
 
-	public ComponentServiceDesc(Version.ID identification) {
+	public ComponentServiceDesc(ComponentPreference preference,
+			ComponentFactory factory, Version.ID identification) {
+		this.preference = preference;
+		this.factory = factory;
 		this.identification = identification;
 	}
 
@@ -52,7 +53,9 @@ public class ComponentServiceDesc extends ServiceDescription {
 	 */
 	@Override
 	public Configuration getActivityConfiguration() {
-		return new ComponentActivityConfigurationBean(getIdentification());
+		Configuration config = new Configuration();
+		config.setJson(getIdentification());
+		return config;
 	}
 
 	/**
@@ -78,20 +81,18 @@ public class ComponentServiceDesc extends ServiceDescription {
 	 */
 	@Override
 	public List<String> getPath() {
-		// For deeper paths you may return several strings
 		return asList("Components",
 				preference.getRegistryName(identification.getRegistryBase()),
 				identification.getFamilyName());
 	}
 
 	/**
-	 * Return a list of data values uniquely identifying this service
-	 * description (to avoid duplicates). Include only primary key like fields,
-	 * i.e. ignore descriptions, icons, etc.
+	 * Returns a list of data values uniquely identifying this component
+	 * description (i.e., no duplicates).
 	 */
 	@Override
 	protected List<? extends Object> getIdentifyingData() {
-		return Arrays.<Object> asList(identification.getRegistryBase(),
+		return Arrays.asList(identification.getRegistryBase(),
 				identification.getFamilyName(),
 				identification.getComponentName());
 	}
@@ -116,7 +117,6 @@ public class ComponentServiceDesc extends ServiceDescription {
 		this.identification = identification;
 	}
 	
-	@Override
 	public URL getHelpURL() {
 		try {
 			Version version = factory.getVersion(getIdentification());

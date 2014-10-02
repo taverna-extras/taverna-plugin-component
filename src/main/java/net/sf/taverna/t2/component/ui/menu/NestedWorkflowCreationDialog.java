@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
@@ -74,44 +75,47 @@ import net.sf.taverna.t2.workflowmodel.utils.AnnotationTools;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+
 /**
  * @author alanrw
  */
 public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	private static final long serialVersionUID = 727059218457420449L;
 	private static final Logger logger = getLogger(NestedWorkflowCreationDialog.class);
-	private static final EditManager em = EditManager.getInstance();//FIXME
+	private static final EditManager em;//FIXME beaninject
 	private static final AnnotationTools at = new AnnotationTools();
-	private final List<TokenProcessingEntity> includedProcessors = new ArrayList<TokenProcessingEntity>();
+	private final List<TokenProcessingEntity> includedProcessors = new ArrayList<>();
 	private List<? extends Processor> allProcessors;
-	private final List<TokenProcessingEntity> includableProcessors = new ArrayList<TokenProcessingEntity>();
+	private final List<TokenProcessingEntity> includableProcessors = new ArrayList<>();
 	private static final Comparator<TokenProcessingEntity> processorComparator = new Comparator<TokenProcessingEntity>() {
 		@Override
 		public int compare(TokenProcessingEntity o1, TokenProcessingEntity o2) {
 			return o1.getLocalName().compareTo(o2.getLocalName());
 		}
 	};
-	private static final ListCellRenderer defaultRenderer = new DefaultListCellRenderer();
-	private static final ListCellRenderer processorRenderer = new ListCellRenderer() {
+	private static final ListCellRenderer<Object> defaultRenderer = new DefaultListCellRenderer();
+	private static final ListCellRenderer<TokenProcessingEntity> processorRenderer = new ListCellRenderer<TokenProcessingEntity>() {
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value,
-				int index, boolean isSelected, boolean cellHasFocus) {
-			TokenProcessingEntity p = (TokenProcessingEntity) value;
+		public Component getListCellRendererComponent(
+				JList<? extends TokenProcessingEntity> list,
+				TokenProcessingEntity value, int index, boolean isSelected,
+				boolean cellHasFocus) {
 			return defaultRenderer.getListCellRendererComponent(list,
-					p.getLocalName(), index, isSelected, cellHasFocus);
+					value.getLocalName(), index, isSelected, cellHasFocus);
 		}
 	};
 
-	private JList<TokenProcessingEntity> includableList = new JList();
-	private JList<TokenProcessingEntity> includedList = new JList();
-	private final Dataflow currentDataflow;
+	private JList<TokenProcessingEntity> includableList = new JList<>();
+	private JList<TokenProcessingEntity> includedList = new JList<>();
+	private final WorkflowBundle currentDataflow;
 	private JButton excludeButton;
 	private JButton includeButton;
 	private JButton okButton;
 	private JButton resetButton;
 	private JTextField nameField = new JTextField(30);
 
-	public NestedWorkflowCreationDialog(Frame owner, Object o, Dataflow dataflow) {
+	public NestedWorkflowCreationDialog(Frame owner, Object o, WorkflowBundle dataflow) {
 		super(owner, "Nested workflow creation", true, null);
 
 		if (o instanceof Processor)
@@ -166,17 +170,16 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 		JPanel result = new JPanel();
 		result.setLayout(new BorderLayout());
 		result.add(new JLabel("Possible services"), NORTH);
-		includableList.setModel(new DefaultComboBoxModel(includableProcessors
-				.toArray()));
+		includableList.setModel(new DefaultComboBoxModel<>(new Vector<>(
+				includableProcessors)));
 		includableList.setCellRenderer(processorRenderer);
 		result.add(new JScrollPane(includableList), CENTER);
 
 		includeButton = new DeselectingButton("Include", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for (Object o : includableList.getSelectedValues())
-					if (o instanceof TokenProcessingEntity)
-						includedProcessors.add((TokenProcessingEntity) o);
+				includedProcessors.addAll(includableList
+						.getSelectedValuesList());
 				calculateIncludableProcessors();
 				updateLists();
 			}
@@ -198,17 +201,16 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 		JPanel result = new JPanel();
 		result.setLayout(new BorderLayout());
 		result.add(new JLabel("Included services"), NORTH);
-		includedList.setModel(new DefaultComboBoxModel(includedProcessors
-				.toArray()));
+		includedList.setModel(new DefaultComboBoxModel<>(new Vector<>(
+				includedProcessors)));
 		includedList.setCellRenderer(processorRenderer);
 		result.add(new JScrollPane(includedList), CENTER);
 
 		excludeButton = new DeselectingButton("Exclude", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for (Object o : includedList.getSelectedValues())
-					if (o instanceof TokenProcessingEntity)
-						includedProcessors.remove((TokenProcessingEntity) o);
+				includedProcessors.removeAll(includedList
+						.getSelectedValuesList());
 				calculateIncludableProcessors();
 				updateLists();
 			}
@@ -225,10 +227,10 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 		calculateIncludableProcessors();
 		sort(includedProcessors, processorComparator);
 		sort(includableProcessors, processorComparator);
-		includedList.setModel(new DefaultComboBoxModel(includedProcessors
-				.toArray()));
-		includableList.setModel(new DefaultComboBoxModel(includableProcessors
-				.toArray()));
+		includedList.setModel(new DefaultComboBoxModel<>(new Vector<>(
+				includedProcessors)));
+		includableList.setModel(new DefaultComboBoxModel<>(new Vector<>(
+				includableProcessors)));
 		boolean someIncludedProcessors = includedProcessors.size() > 0;
 		excludeButton.setEnabled(someIncludedProcessors);
 		okButton.setEnabled(someIncludedProcessors);
@@ -412,7 +414,7 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 
 	private void transferConditions(List<Edit<?>> editList,
 			Map<Object, Object> oldNewMapping, Processor nestingProcessor) {
-		HashSet<Condition> alreadyConsidered = new HashSet<Condition>();
+		HashSet<Condition> alreadyConsidered = new HashSet<>();
 		for (Processor p : currentDataflow.getProcessors()) {
 			boolean isTargetMoved = oldNewMapping.containsKey(p);
 			for (Condition c : p.getPreconditionList()) {
@@ -448,8 +450,9 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 			Map<EventForwardingOutputPort, DataflowOutputPort> outputPortMap,
 			Map<EventHandlingInputPort, DataflowInputPort> inputPortMap,
 			Dataflow nestedDataflow) {
-		HashSet<String> inputPortNames = new HashSet<String>();
-		HashSet<String> outputPortNames = new HashSet<String>();
+		HashSet<String> inputPortNames = new HashSet<>();
+		HashSet<String> outputPortNames = new HashSet<>();
+
 		for (Datalink dl : currentDataflow.getLinks()) {
 			final EventForwardingOutputPort datalinkSource = dl.getSource();
 			final EventHandlingInputPort datalinkSink = dl.getSink();

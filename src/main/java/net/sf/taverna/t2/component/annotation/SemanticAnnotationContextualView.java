@@ -30,6 +30,7 @@ import java.util.Collections;
 import net.sf.taverna.t2.annotation.Annotated;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.profile.Profile;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
@@ -49,19 +50,23 @@ public class SemanticAnnotationContextualView extends
 		AbstractSemanticAnnotationContextualView {
 	private static final long serialVersionUID = -322165507536778154L;
 	public static final String VIEW_TITLE = "Semantic Annotations";
-	private static FileManager fileManager = FileManager.getInstance();//FIXME
 	private static Logger logger = getLogger(SemanticAnnotationContextualView.class);
 
+	private FileManager fileManager;//FIXME beaninject
+	private ComponentFactory factory;//FIXME beaninject
 	private Profile componentProfile;
 
-	public SemanticAnnotationContextualView(Annotated<?> selection) {
+	public SemanticAnnotationContextualView(FileManager fileManager,
+			ComponentFactory factory, Annotated<?> selection) {
 		super(true);
+		this.fileManager = fileManager;
+		this.factory = factory;
 		super.setAnnotated(selection);
 		componentProfile = getComponentProfile();
 		try {
 			//FIXME
 			if (componentProfile == null)
-				super.setSemanticAnnotationProfiles(emptyList());
+				super.setSemanticAnnotationProfiles(new ArrayList<SemanticAnnotationProfile>());
 			else if (selection instanceof Dataflow)
 				super.setSemanticAnnotationProfiles(componentProfile
 						.getSemanticAnnotations());
@@ -90,12 +95,12 @@ public class SemanticAnnotationContextualView extends
 		if (dataflowSource instanceof Version.ID) {
 			Version.ID identification = (Version.ID) dataflowSource;
 			try {
-				Registry componentRegistry = calculateRegistry(identification
+				Registry componentRegistry = factory.getRegistry(identification
 						.getRegistryBase());
 				Family componentFamily = componentRegistry
 						.getComponentFamily(identification.getFamilyName());
 				return componentFamily.getComponentProfile();
-			} catch (RegistryException e) {
+			} catch (ComponentException e) {
 				logger.warn(
 						format("No component profile found for component family %s at component registry %s",
 								identification.getFamilyName(),

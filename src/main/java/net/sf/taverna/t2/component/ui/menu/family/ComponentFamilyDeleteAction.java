@@ -29,16 +29,17 @@ import javax.swing.SwingWorker;
 
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.panel.FamilyChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workflowmodel.ConfigurationException;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
@@ -56,9 +57,10 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 	private static final String REGISTRY_FAIL_TITLE = "Component Registry Problem";
 	private static final String WHAT_FAMILY_MSG = "Unable to determine family";
 	private static final String WHAT_REGISTRY_MSG = "Unable to determine registry";
-	private static final FileManager fm = FileManager.getInstance();
 	private static final Logger logger = getLogger(ComponentFamilyDeleteAction.class);
 	private static final long serialVersionUID = -4976161883778371344L;
+
+	private FileManager fm;//FIXME beaninject
 
 	public ComponentFamilyDeleteAction() {
 		super(DELETE_FAMILY_LABEL, getIcon());
@@ -135,7 +137,7 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 	}
 
 	private ComponentServiceProviderConfig deleteFamily(Family family)
-			throws RegistryException {
+			throws ComponentException {
 		ComponentServiceProviderConfig config = new ComponentServiceProviderConfig(
 				family);
 		family.delete();
@@ -160,9 +162,9 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 		}
 	}
 
-	private static boolean familyIsInUse(Registry chosenRegistry,
+	private boolean familyIsInUse(Registry chosenRegistry,
 			Family chosenFamily) {
-		for (Dataflow d : fm.getOpenDataflows()) {
+		for (WorkflowBundle d : fm.getOpenDataflows()) {
 			Object dataflowSource = fm.getDataflowSource(d);
 			if (dataflowSource instanceof Version.ID) {
 				Version.ID ident = (Version.ID) dataflowSource;
@@ -174,5 +176,4 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 		}
 		return false;
 	}
-
 }

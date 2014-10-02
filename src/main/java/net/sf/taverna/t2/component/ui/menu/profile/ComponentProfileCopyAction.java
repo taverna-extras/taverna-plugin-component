@@ -22,9 +22,9 @@ import javax.swing.border.TitledBorder;
 import org.apache.log4j.Logger;
 
 import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.ui.panel.LicenseChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChooserPanel;
@@ -102,7 +102,7 @@ public class ComponentProfileCopyAction extends AbstractAction {
 						targetRegistryPanel.getChosenRegistry(),
 						permissionPanel.getChosenPermission(),
 						licensePanel.getChosenLicense());
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			log.error("failed to copy profile", e);
 			showMessageDialog(null, "Unable to save profile: " + e.getMessage(),
 					"Registry Exception", ERROR_MESSAGE);
@@ -111,7 +111,7 @@ public class ComponentProfileCopyAction extends AbstractAction {
 
 	private void doCopy(Registry sourceRegistry, Profile sourceProfile,
 			Registry targetRegistry, SharingPolicy permission, License license)
-			throws RegistryException {
+			throws ComponentException {
 		if (sourceRegistry == null) {
 			showMessageDialog(null, "Unable to determine source registry",
 					"Component Registry Problem", ERROR_MESSAGE);
@@ -158,5 +158,4 @@ public class ComponentProfileCopyAction extends AbstractAction {
 		}
 		targetRegistry.addComponentProfile(sourceProfile, license, permission);
 	}
-
 }

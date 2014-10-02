@@ -1,6 +1,5 @@
 package net.sf.taverna.t2.component.ui.config;
 
-
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 

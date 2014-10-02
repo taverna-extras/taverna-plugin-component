@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import net.sf.taverna.t2.annotation.Annotated;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
@@ -31,13 +32,13 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityPort;
 
 /**
  * @author alanrw
- * 
  */
 public class AnnotateSemanticsMenuAction extends AbstractContextualMenuAction {
 	private static final String ANNOTATE_SEMANTICS = "Annotate semantics...";
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
-	private static final FileManager fileManager = FileManager.getInstance();
+	private FileManager fileManager;//FIXME beaninject
+	private ComponentFactory factory;//FIXME beaninject
 
 	public AnnotateSemanticsMenuAction() {
 		super(configureSection, 45);
@@ -67,15 +68,14 @@ public class AnnotateSemanticsMenuAction extends AbstractContextualMenuAction {
 
 	private void showAnnotateSemanticsPanel() {
 		SemanticAnnotationContextualView view = new SemanticAnnotationContextualView(
-				(Annotated<?>) getContextualSelection().getSelection());
+				fileManager, factory, (Annotated<?>) getContextualSelection()
+						.getSelection());
 
 		final JDialog dialog = new JDialog((Frame) null, "Annotate semantics");
 		dialog.setLayout(new BorderLayout());
-
 		dialog.add(new JScrollPane(view), CENTER);
 
 		JPanel buttonPanel = new JPanel(new FlowLayout(TRAILING));
-
 		buttonPanel.add(new DeselectingButton("OK", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

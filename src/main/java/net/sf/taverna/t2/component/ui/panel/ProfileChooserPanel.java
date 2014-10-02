@@ -22,13 +22,12 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 
@@ -36,7 +35,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class ProfileChooserPanel extends JPanel implements
 		Observer<RegistryChoiceMessage>, Observable<ProfileChoiceMessage> {
@@ -45,9 +43,9 @@ public class ProfileChooserPanel extends JPanel implements
 	private static final long serialVersionUID = 2175274929391537032L;
 	private static Logger logger = getLogger(ProfileChooserPanel.class);
 
-	private final List<Observer<ProfileChoiceMessage>> observers = new ArrayList<Observer<ProfileChoiceMessage>>();
-	private final JComboBox profileBox = new JComboBox();
-	private final SortedMap<String, Profile> profileMap = new TreeMap<String, Profile>();
+	private final List<Observer<ProfileChoiceMessage>> observers = new ArrayList<>();
+	private final JComboBox<String> profileBox = new JComboBox<>();
+	private final SortedMap<String, Profile> profileMap = new TreeMap<>();
 
 	private Registry registry;
 
@@ -129,7 +127,7 @@ public class ProfileChooserPanel extends JPanel implements
 			List<Profile> componentProfiles;
 			try {
 				componentProfiles = registry.getComponentProfiles();
-			} catch (RegistryException e) {
+			} catch (ComponentException e) {
 				logger.error("failed to get profiles", e);
 				throw e;
 			} catch (NullPointerException e) {
@@ -157,9 +155,8 @@ public class ProfileChooserPanel extends JPanel implements
 					String firstKey = profileMap.firstKey();
 					profileBox.setSelectedItem(firstKey);
 					setProfile(profileMap.get(firstKey));
-				} else {
+				} else
 					profileBox.addItem("No profiles available");
-				}
 			} catch (InterruptedException | ExecutionException e) {
 				logger.error(e);
 				profileBox.addItem("Unable to read profiles");
@@ -171,8 +168,7 @@ public class ProfileChooserPanel extends JPanel implements
 	@Override
 	public void addObserver(Observer<ProfileChoiceMessage> observer) {
 		observers.add(observer);
-		Profile chosenProfile = getChosenProfile();
-		ProfileChoiceMessage message = new ProfileChoiceMessage(chosenProfile);
+		ProfileChoiceMessage message = new ProfileChoiceMessage(getChosenProfile());
 		try {
 			observer.notify(this, message);
 		} catch (Exception e) {

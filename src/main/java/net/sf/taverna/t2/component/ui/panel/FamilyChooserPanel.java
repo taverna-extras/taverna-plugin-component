@@ -22,14 +22,13 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Profile;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 
@@ -37,9 +36,8 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings("rawtypes")
 public class FamilyChooserPanel extends JPanel implements Observer,
 		Observable<FamilyChoiceMessage> {
 	private static final String FAMILY_LABEL = "Component family:";
@@ -47,10 +45,10 @@ public class FamilyChooserPanel extends JPanel implements Observer,
 	private static final long serialVersionUID = -2608831126562927778L;
 	private static Logger logger = getLogger(FamilyChooserPanel.class);
 
-	private final List<Observer<FamilyChoiceMessage>> observers = new ArrayList<Observer<FamilyChoiceMessage>>();
-	private final JComboBox familyBox = new JComboBox();
+	private final List<Observer<FamilyChoiceMessage>> observers = new ArrayList<>();
+	private final JComboBox<String> familyBox = new JComboBox<>();
 	// private JTextArea familyDescription = new JTextArea(10,60);
-	private final SortedMap<String, Family> familyMap = new TreeMap<String, Family>();
+	private final SortedMap<String, Family> familyMap = new TreeMap<>();
 	private Registry chosenRegistry = null;
 	private Profile profileFilter = null;
 
@@ -94,16 +92,16 @@ public class FamilyChooserPanel extends JPanel implements Observer,
 	public void notify(Observable sender, Object message) throws Exception {
 		try {
 			if (message instanceof RegistryChoiceMessage)
-				this.chosenRegistry = ((RegistryChoiceMessage) message)
+				chosenRegistry = ((RegistryChoiceMessage) message)
 						.getChosenRegistry();
 			else if (message instanceof ProfileChoiceMessage)
-				this.profileFilter = ((ProfileChoiceMessage) message)
+				profileFilter = ((ProfileChoiceMessage) message)
 						.getChosenProfile();
 		} catch (Exception e) {
 			logger.error("failed to notify about registry choice", e);
 		}
 		try {
-			this.updateList();
+			updateList();
 		} catch (Exception e) {
 			logger.error("failed to update list after registry choice", e);
 		}
@@ -160,17 +158,18 @@ public class FamilyChooserPanel extends JPanel implements Observer,
 		observers.remove(observer);
 	}
 
-	private void updateFamiliesFromRegistry() throws RegistryException {
+	private void updateFamiliesFromRegistry() throws ComponentException {
 		for (Family f : chosenRegistry.getComponentFamilies()) {
 			if (profileFilter == null) {
 				familyMap.put(f.getName(), f);
 				continue;
 			}
-			Profile componentProfile = null;
+			Profile componentProfile;
 			try {
 				componentProfile = f.getComponentProfile();
 			} catch (Exception e) {
 				logger.error("failed to get profile of component", e);
+				componentProfile = null;
 			}
 			if (componentProfile != null) {
 				String id = componentProfile.getId();

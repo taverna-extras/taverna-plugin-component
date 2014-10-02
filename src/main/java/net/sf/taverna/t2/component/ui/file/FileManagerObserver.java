@@ -13,27 +13,30 @@ import java.awt.Insets;
 
 import javax.swing.border.Border;
 
-import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
+import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 import net.sf.taverna.t2.workbench.StartupSPI;
+import net.sf.taverna.t2.workbench.configuration.colour.ColourManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.events.FileManagerEvent;
 import net.sf.taverna.t2.workbench.models.graph.svg.SVGGraphController;
-import net.sf.taverna.t2.workbench.ui.impl.configuration.colour.ColourManager;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.batik.swing.JSVGCanvas;
 
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+
 public class FileManagerObserver implements StartupSPI {
 	private static final Color COLOR = new Color(230, 147, 210);
-	private static FileManager fileManager = FileManager.getInstance();
+	private FileManager fileManager; //FIXME beaninject
+	private ColourManager colours; //FIXME beaninject
 
 	@Override
 	public boolean startup() {
-		ColourManager.getInstance().setPreferredColour(
+		colours.setPreferredColour(
 				"net.sf.taverna.t2.component.registry.Component", COLOR);
-		ColourManager.getInstance().setPreferredColour(
+		colours.setPreferredColour(
 				"net.sf.taverna.t2.component.ComponentActivity", COLOR);
 		fileManager.addObserver(new Observer<FileManagerEvent>() {
 			@Override
@@ -57,7 +60,7 @@ public class FileManagerObserver implements StartupSPI {
 	public class FileManagerObserverRunnable implements Runnable {
 		@Override
 		public void run() {
-			Dataflow currentDataflow = fileManager.getCurrentDataflow();
+			WorkflowBundle currentDataflow = fileManager.getCurrentDataflow();
 			if (currentDataflow == null)
 				return;
 			SVGGraphController graphController = graphControllerMap
@@ -67,14 +70,12 @@ public class FileManagerObserver implements StartupSPI {
 			JSVGCanvas svgCanvas = graphController.getSVGCanvas();
 			Object dataflowSource = fileManager
 					.getDataflowSource(currentDataflow);
-			if (currentDataflowIsComponent()) {
+			if (currentDataflowIsComponent())
 				svgCanvas.setBorder(new ComponentBorder(
-						(ComponentVersionIdentification) dataflowSource));
-				svgCanvas.repaint();
-			} else {
+						(Version.ID) dataflowSource));
+			else
 				svgCanvas.setBorder(null);
-				svgCanvas.repaint();
-			}
+			svgCanvas.repaint();
 		}
 	}
 
@@ -82,7 +83,7 @@ public class FileManagerObserver implements StartupSPI {
 		private final Insets insets = new Insets(25, 0, 0, 0);
 		private final String text;
 
-		public ComponentBorder(ComponentVersionIdentification identification) {
+		public ComponentBorder(Version.ID identification) {
 			text = "Component : " + identification.getComponentName();
 		}
 

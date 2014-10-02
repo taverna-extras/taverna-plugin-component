@@ -38,13 +38,12 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.License;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 
@@ -52,16 +51,15 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class LicenseChooserPanel extends JPanel implements
 		Observer<RegistryChoiceMessage> {
 	private static final long serialVersionUID = 2175274929391537032L;
 	private static final Logger logger = getLogger(LicenseChooserPanel.class);
 
-	private JComboBox licenseBox = new JComboBox();
+	private JComboBox<String> licenseBox = new JComboBox<>();
 
-	private SortedMap<String, License> licenseMap = new TreeMap<String, License>();
+	private SortedMap<String, License> licenseMap = new TreeMap<>();
 
 	private Registry registry;
 
@@ -137,7 +135,7 @@ public class LicenseChooserPanel extends JPanel implements
 				licenses = registry.getLicenses();
 				if (licenses == null)
 					return null;
-			} catch (RegistryException e) {
+			} catch (ComponentException e) {
 				logger.error("failure when reading licenses from registry", e);
 				throw e;
 			} catch (NullPointerException e) {
@@ -177,7 +175,7 @@ public class LicenseChooserPanel extends JPanel implements
 			License preferredLicense = null;
 			try {
 				preferredLicense = registry.getPreferredLicense();
-			} catch (RegistryException e) {
+			} catch (ComponentException e) {
 				logger.error("failed to get preferred license", e);
 			}
 			if (preferredLicense != null) {

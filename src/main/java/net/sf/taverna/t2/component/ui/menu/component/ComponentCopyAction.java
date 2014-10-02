@@ -25,8 +25,8 @@ import javax.swing.border.TitledBorder;
 
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Profile;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.profile.Profile;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.panel.ComponentChoiceMessage;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
@@ -118,10 +118,11 @@ public class ComponentCopyAction extends AbstractAction {
 						.getComponentVersionMap().get(
 								sourceComponent.getComponentVersionMap()
 										.lastKey());
-				Version targetVersion = targetFamily.createComponentBasedOn(componentName,
-						sourceComponent.getDescription(),
-						sourceVersion.getDataflow());
+				Version targetVersion = targetFamily.createComponentBasedOn(
+						componentName, sourceComponent.getDescription(),
+						sourceVersion.getImplementation());
 				try {
+					//FIXME is this meaningful?
 					refreshComponentServiceProvider(new ComponentServiceProviderConfig(
 							targetVersion.getID()));
 				} catch (ConfigurationException e) {
@@ -129,7 +130,7 @@ public class ComponentCopyAction extends AbstractAction {
 				}
 				
 			}
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("failed to copy component", e);
 			showMessageDialog(null,
 					"Unable to create component: " + e.getMessage(),

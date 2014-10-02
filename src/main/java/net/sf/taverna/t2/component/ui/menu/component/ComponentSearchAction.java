@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.panel.PrefixPanel;
@@ -126,7 +126,8 @@ public class ComponentSearchAction extends AbstractAction {
 		if (answer == OK_OPTION) {
 			Version.ID ident = searchChoicePanel.getVersionIdentification();
 			if (ident != null)
-				importServiceDescription(new ComponentServiceDesc(ident), false);
+				importServiceDescription(new ComponentServiceDesc(null,null,//FIXME
+						ident), false);
 		}
 	}
 

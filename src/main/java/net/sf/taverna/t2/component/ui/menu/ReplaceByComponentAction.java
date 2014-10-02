@@ -3,7 +3,6 @@
  */
 package net.sf.taverna.t2.component.ui.menu;
 
-
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.SOUTH;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
@@ -33,7 +32,6 @@ import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
@@ -61,9 +59,10 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  */
 public class ReplaceByComponentAction extends AbstractAction {
 	private static final long serialVersionUID = 7364648399658711574L;
-	private static final FileManager fileManager = FileManager.getInstance();
-	private static EditManager em = EditManager.getInstance();
-	private static Edits edits = em.getEdits();
+
+	private FileManager fileManager = FileManager.getInstance(); //FIXME beaninject
+	private EditManager em = EditManager.getInstance(); //FIXME beaninject
+	private Edits edits = em.getEdits(); //FIXME beaninject
 
 	public ReplaceByComponentAction() {
 		super("Replace by component...", getIcon());
@@ -81,7 +80,7 @@ public class ReplaceByComponentAction extends AbstractAction {
 				"Replace all matching services");
 		checkBoxPanel.add(replaceAllCheckBox);
 		checkBoxPanel.add(new JSeparator());
-		final JCheckBox renameServicesCheckBox = new JCheckBox("Rename service(s)");
+		JCheckBox renameServicesCheckBox = new JCheckBox("Rename service(s)");
 		checkBoxPanel.add(renameServicesCheckBox);
 		renameServicesCheckBox.setSelected(true);
 		overallPanel.add(checkBoxPanel, SOUTH);
@@ -96,7 +95,7 @@ public class ReplaceByComponentAction extends AbstractAction {
 			boolean replaceAll, boolean rename, Component chosenComponent) {
 		Version chosenVersion = chosenComponent.getComponentVersionMap().get(
 				chosenComponent.getComponentVersionMap().lastKey());
-		Version.ID ident = new ComponentVersionIdentification(
+		Version.ID ident = new Version.Identifier(
 				chosenRegistry.getRegistryBase(), chosenFamily.getName(),
 				chosenComponent.getName(), chosenVersion.getVersionNumber());
 
@@ -189,13 +188,13 @@ public class ReplaceByComponentAction extends AbstractAction {
 			int aopDepth = aop.getDepth();
 			OutputPort caop = getActivityOutputPort(replacementActivity,
 					aopName);
-			if (((caop == null) || (aopDepth != caop.getDepth()))
+			if ((caop == null || aopDepth != caop.getDepth())
 					&& !ignorableNames.contains(aopName))
 				throw new ActivityConfigurationException(
 						"Original output port " + aopName + " is not matched");
 		}
 
-		final List<Edit<?>> currentWorkflowEditList = new ArrayList<Edit<?>>();
+		final List<Edit<?>> currentWorkflowEditList = new ArrayList<>();
 
 		for (ProcessorInputPort pip : p.getInputPorts())
 			currentWorkflowEditList.add(edits
@@ -228,5 +227,4 @@ public class ReplaceByComponentAction extends AbstractAction {
 	public void setSelection(Processor selection) {
 		this.selection = selection;
 	}
-
 }

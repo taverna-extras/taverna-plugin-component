@@ -43,7 +43,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class OpenWorkflowFromComponentAction extends AbstractAction {
 	private static final long serialVersionUID = 7382677337746318211L;
@@ -105,7 +104,7 @@ public class OpenWorkflowFromComponentAction extends AbstractAction {
 
 	private void doOpen(Registry registry, Family family, Component component,
 			Version version) {
-		Version.ID ident = new ComponentVersionIdentification(
+		Version.ID ident = new Version.Identifier(
 				registry.getRegistryBase(), family.getName(),
 				component.getName(), version.getVersionNumber());
 

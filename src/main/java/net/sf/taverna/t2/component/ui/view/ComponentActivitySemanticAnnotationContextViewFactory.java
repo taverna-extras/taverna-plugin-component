@@ -6,6 +6,7 @@ import static net.sf.taverna.t2.workflowmodel.utils.Tools.getFirstProcessorWithA
 import java.util.Arrays;
 import java.util.List;
 
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import net.sf.taverna.t2.component.ComponentActivity;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
@@ -18,21 +19,21 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityOutputPort;
 
 public class ComponentActivitySemanticAnnotationContextViewFactory implements
 		ContextualViewFactory<Object> {
-	private static FileManager fm = FileManager.getInstance();
+	private FileManager fm;//FIXME beaninject
 
 	@Override
 	public boolean canHandle(Object selection) {
 		return getContainingComponentActivity(selection) != null;
 	}
 
-	public static ComponentActivity getContainingComponentActivity(
+	public ComponentActivity getContainingComponentActivity(
 			Object selection) {
 		if (selection instanceof ComponentActivity)
 			return (ComponentActivity) selection;
 
 		if (selection instanceof ActivityInputPort) {
 			Processor p = null;
-			Dataflow d = fm.getCurrentDataflow();
+			WorkflowBundle d = fm.getCurrentDataflow();
 			p = getFirstProcessorWithActivityInputPort(d,
 					(ActivityInputPort) selection);
 			Activity<?> a = p.getActivityList().get(0);
@@ -40,14 +41,13 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 		}
 		if (selection instanceof ActivityOutputPort) {
 			Processor p = null;
-			Dataflow d = fm.getCurrentDataflow();
+			WorkflowBundle d = fm.getCurrentDataflow();
 			p = getFirstProcessorWithActivityOutputPort(d,
 					(ActivityOutputPort) selection);
 			Activity<?> a = p.getActivityList().get(0);
 			return getContainingComponentActivity(a);
 		}
 		return null;
-
 	}
 
 	@Override
@@ -56,5 +56,4 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 				.<ContextualView> asList(new ComponentActivitySemanticAnnotationContextualView(
 						selection));
 	}
-
 }

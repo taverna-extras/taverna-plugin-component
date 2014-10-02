@@ -20,7 +20,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
@@ -35,15 +34,14 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentVersionChooserPanel extends JPanel implements
 		Observer<ComponentChoiceMessage> {
 	private static final long serialVersionUID = 5125907010496468219L;
 	private static Logger logger = getLogger(ComponentVersionChooserPanel.class);
 
-	private final JComboBox componentVersionChoice = new JComboBox();
-	private final SortedMap<Integer, Version> componentVersionMap = new TreeMap<Integer, Version>();
+	private final JComboBox<String> componentVersionChoice = new JComboBox<>();
+	private final SortedMap<Integer, Version> componentVersionMap = new TreeMap<>();
 	private final ComponentChooserPanel componentChooserPanel = new ComponentChooserPanel();
 
 	public ComponentVersionChooserPanel() {
@@ -100,11 +98,11 @@ public class ComponentVersionChooserPanel extends JPanel implements
 		if (componentVersionMap.isEmpty())
 			return null;
 		try {
-            return componentVersionMap.get(new Integer(componentVersionChoice
-                            .getSelectedItem().toString()));
+			return componentVersionMap.get(new Integer(componentVersionChoice
+					.getSelectedItem().toString()));
 		} catch (NumberFormatException nfe) {
-            // Not a number, no version chosen
-            return null;
+			// Not a number, no version chosen
+			return null;
 		}
 	}
 
@@ -150,7 +148,7 @@ public class ComponentVersionChooserPanel extends JPanel implements
 			try {
 				get();
 				for (Integer versionNumber : componentVersionMap.keySet())
-					componentVersionChoice.addItem(versionNumber);
+					componentVersionChoice.addItem(versionNumber.toString());
 
 				if (!componentVersionMap.isEmpty()) {
 					componentVersionChoice.setSelectedItem(componentVersionMap
@@ -166,9 +164,8 @@ public class ComponentVersionChooserPanel extends JPanel implements
 			componentVersionChoice.setEnabled(!componentVersionMap.isEmpty());
 		}
 	}
-	
-	public ComponentChooserPanel getComponentChooserPanel(){
+
+	public ComponentChooserPanel getComponentChooserPanel() {
 		return componentChooserPanel;
-		
 	}
 }

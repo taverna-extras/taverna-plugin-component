@@ -1,7 +1,6 @@
 package net.sf.taverna.t2.component.ui.config;
 
 import static java.awt.event.ItemEvent.SELECTED;
-import static net.sf.taverna.t2.component.registry.ComponentUtil.calculateComponent;
 import static net.sf.taverna.t2.component.ui.util.Utils.SHORT_STRING;
 import static org.apache.log4j.Logger.getLogger;
 
@@ -18,24 +17,23 @@ import javax.swing.JLabel;
 import net.sf.taverna.t2.component.ComponentActivity;
 import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
 import net.sf.taverna.t2.component.ui.panel.ComponentListCellRenderer;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ActivityConfigurationPanel;
 
 import org.apache.log4j.Logger;
 
 @SuppressWarnings("serial")
-public class ComponentConfigurationPanel
-		extends
-		ActivityConfigurationPanel {
+public class ComponentConfigurationPanel extends ActivityConfigurationPanel {
 	private static Logger logger = getLogger(ComponentConfigurationPanel.class);
 
+	private ComponentFactory factory;//FIXME beaninject
 	private ComponentActivity activity;
 	private ComponentActivityConfigurationBean configBean;
 
-	private final JComboBox componentVersionChoice = new JComboBox();
+	private final JComboBox<Object> componentVersionChoice = new JComboBox<>();
 
 	public ComponentConfigurationPanel(ComponentActivity activity) {
 		this.activity = activity;
@@ -48,7 +46,7 @@ public class ComponentConfigurationPanel
 		removeAll();
 		setLayout(new GridLayout(0, 2));
 
-		componentVersionChoice.setRenderer(new ComponentListCellRenderer());
+		componentVersionChoice.setRenderer(new ComponentListCellRenderer<>());
 		componentVersionChoice.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
@@ -130,16 +128,15 @@ public class ComponentConfigurationPanel
 		componentVersionChoice.removeAllItems();
 		componentVersionChoice.setToolTipText(null);
 		try {
-			component = calculateComponent(configBean);
-		} catch (RegistryException e) {
+			component = factory.getComponent(configBean);
+		} catch (ComponentException e) {
 			logger.error("failed to get component", e);
 			return;
 		}
 		SortedMap<Integer, Version> componentVersionMap = component
 				.getComponentVersionMap();
-		for (Version v : componentVersionMap.values()) {
+		for (Version v : componentVersionMap.values())
 			componentVersionChoice.addItem(v);
-		}
 		componentVersionChoice.setSelectedItem(componentVersionMap
 				.get(configBean.getComponentVersion()));
 		updateToolTipText();

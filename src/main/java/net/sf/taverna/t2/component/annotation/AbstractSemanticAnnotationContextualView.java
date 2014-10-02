@@ -48,15 +48,15 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 /**
  * @author alanrw
- * 
  */
 public abstract class AbstractSemanticAnnotationContextualView extends
 		ContextualView {
 	private static final long serialVersionUID = 3567849347002793442L;
 	private static final Logger logger = getLogger(SemanticAnnotationContextualView.class);
-	private static final EditManager editManager = EditManager.getInstance();//FIXME
-	private static final FileManager fileManager = FileManager.getInstance();//FIXME
-	private static final Edits edits = editManager.getEdits();//FIXME
+
+	private EditManager editManager;//FIXME beaninject
+	private FileManager fileManager;//FIXME beaninject
+	private Edits edits = editManager.getEdits();//FIXME
 
 	public AbstractSemanticAnnotationContextualView(boolean allowChange) {
 		super();
@@ -193,10 +193,52 @@ public abstract class AbstractSemanticAnnotationContextualView extends
 		return model.listStatements(subject, predicate, (RDFNode) null).toSet();
 	}
 
+	private void populateViewWithPredicates(
+			Map<SemanticAnnotationProfile, Set<Statement>> profileStatements,
+			Set<Statement> statements,
+			Set<SemanticAnnotationProfile> unresolvablePredicates) {
+		panel.removeAll();
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = NORTHWEST;
+		gbc.fill = HORIZONTAL;
+		gbc.gridx = 0;
+		gbc.weightx = 1;
+		gbc.weighty = 0;
+		gbc.insets = new Insets(5, 5, 5, 5);
+		try {
+			for (Entry<SemanticAnnotationProfile, Set<Statement>> entry : profileStatements
+					.entrySet()) {
+				panel.add(new SemanticAnnotationPanel(this, entry.getKey(),
+						entry.getValue(), allowChange), gbc);
+				panel.add(new JSeparator(), gbc);
+			}
+			for (SemanticAnnotationProfile semanticAnnotationProfile : unresolvablePredicates) {
+				panel.add(new UnresolveablePredicatePanel(
+						semanticAnnotationProfile), gbc);
+				panel.add(new JSeparator(), gbc);
+			}
+
+			if (semanticAnnotationProfiles.isEmpty())
+				panel.add(new JLabel("No annotations possible"), gbc);
+			for (Statement s : statements)
+				panel.add(new UnrecognizedStatementPanel(s), gbc);
+
+			gbc.weighty = 1;
+			panel.add(new JPanel(), gbc);
+		} catch (ExecutionException | InterruptedException e) {
+			logger.error(e);
+			panel.add(new JLabel("Unable to read semantic annotations"), gbc);
+		}
+
+		revalidate();
+		initView();
+	}
+
 	private class StatementsReader extends SwingWorker<String, Object> {
-		private Map<SemanticAnnotationProfile, Set<Statement>> profileStatements;
+		private Map<SemanticAnnotationProfile, Set<Statement>> profileStatements = new TreeMap<>(
+				comparator);
 		private Set<Statement> statements;
-		private Set<SemanticAnnotationProfile> unresolvablePredicates;
+		private Set<SemanticAnnotationProfile> unresolvablePredicates = new HashSet<>();
 
 		@Override
 		protected String doInBackground() throws Exception {
@@ -211,9 +253,6 @@ public abstract class AbstractSemanticAnnotationContextualView extends
 
 		private void parseStatements() {
 			statements = listStatements(null);
-			profileStatements = new TreeMap<SemanticAnnotationProfile, Set<Statement>>(
-					comparator);
-			unresolvablePredicates = new HashSet<SemanticAnnotationProfile>();
 			for (SemanticAnnotationProfile semanticAnnotationProfile : semanticAnnotationProfiles) {
 				OntProperty predicate = semanticAnnotationProfile
 						.getPredicate();
@@ -231,46 +270,9 @@ public abstract class AbstractSemanticAnnotationContextualView extends
 
 		@Override
 		protected void done() {
-			panel.removeAll();
-			GridBagConstraints gbc = new GridBagConstraints();
-			gbc.anchor = NORTHWEST;
-			gbc.fill = HORIZONTAL;
-			gbc.gridx = 0;
-			gbc.weightx = 1;
-			gbc.weighty = 0;
-			gbc.insets = new Insets(5, 5, 5, 5);
-			try {
-				get();
-				for (Entry<SemanticAnnotationProfile, Set<Statement>> entry : profileStatements
-						.entrySet()) {
-					panel.add(
-							new SemanticAnnotationPanel(
-									AbstractSemanticAnnotationContextualView.this,
-									entry.getKey(), entry.getValue(), allowChange),
-							gbc);
-					panel.add(new JSeparator(), gbc);
-				}
-				for (SemanticAnnotationProfile semanticAnnotationProfile : unresolvablePredicates) {
-					panel.add(new UnresolveablePredicatePanel(
-							semanticAnnotationProfile), gbc);
-					panel.add(new JSeparator(), gbc);
-				}
-
-				if (semanticAnnotationProfiles.isEmpty())
-					panel.add(new JLabel("No annotations possible"), gbc);
-				for (Statement s : statements)
-					panel.add(new UnrecognizedStatementPanel(s), gbc);
-
-				gbc.weighty = 1;
-				panel.add(new JPanel(), gbc);
-			} catch (ExecutionException | InterruptedException e) {
-				logger.error(e);
-				panel.add(new JLabel("Unable to read semantic annotations"), gbc);
-			}
-
-
-			revalidate();
-			initView();
+			get();
+			populateViewWithPredicates(profileStatements, statements,
+					unresolvablePredicates);
 		}
 	}
 }

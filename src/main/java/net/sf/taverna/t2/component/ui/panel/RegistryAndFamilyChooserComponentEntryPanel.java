@@ -13,29 +13,19 @@ import javax.swing.JTextField;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * @author alanrw
- * 
  */
-public class RegisteryAndFamilyChooserComponentEntryPanel extends JPanel {
-
-	/**
-	 *
-	 */
+public class RegistryAndFamilyChooserComponentEntryPanel extends JPanel {
 	private static final long serialVersionUID = -6675545311458594678L;
-
 	private static final String T2FLOW = ".t2flow";
+	private static final String WFBUNDLE = ".wfbundle";
 
 	private JTextField componentNameField = new JTextField(20);
-
 	private RegistryAndFamilyChooserPanel registryAndFamilyChooserPanel = new RegistryAndFamilyChooserPanel();
 
-	public RegisteryAndFamilyChooserComponentEntryPanel() {
-
+	public RegistryAndFamilyChooserComponentEntryPanel() {
 		this.setLayout(new GridBagLayout());
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -79,10 +69,15 @@ public class RegisteryAndFamilyChooserComponentEntryPanel extends JPanel {
 			return null;
 		}
 
-		componentName = StringUtils.remove(componentName, T2FLOW);
-		Version.ID ident = new ComponentVersionIdentification(
-				registry.getRegistryBase(), familyChoice.getName(),
-				componentName, -1);
-		return ident;
+		return new Version.Identifier(registry.getRegistryBase(),
+				familyChoice.getName(), trim(componentName), -1);
+	}
+
+	private static String trim(String name) {
+		if (name.endsWith(WFBUNDLE))
+			return name.substring(0, name.length() - WFBUNDLE.length());
+		else if (name.endsWith(T2FLOW))
+			return name.substring(0, name.length() - T2FLOW.length());
+		return name;
 	}
 }

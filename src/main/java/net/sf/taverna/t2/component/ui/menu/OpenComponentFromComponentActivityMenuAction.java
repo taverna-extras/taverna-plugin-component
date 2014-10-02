@@ -15,7 +15,6 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
 /**
  * @author alanrw
- * 
  */
 public class OpenComponentFromComponentActivityMenuAction extends
 		AbstractContextualMenuAction {
@@ -30,7 +29,7 @@ public class OpenComponentFromComponentActivityMenuAction extends
 
 	@Override
 	public boolean isEnabled() {
-		return (getSelectedActivity() != null);
+		return getSelectedActivity() != null;
 	}
 
 	@Override

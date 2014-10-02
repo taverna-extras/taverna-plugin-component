@@ -10,8 +10,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.ComponentFileType;
 import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
 import net.sf.taverna.t2.workbench.file.AbstractDataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.DataflowInfo;
@@ -24,7 +26,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentOpener extends AbstractDataflowPersistenceHandler
 		implements DataflowPersistenceHandler {
@@ -37,14 +38,14 @@ public class ComponentOpener extends AbstractDataflowPersistenceHandler
 		if (!getOpenFileTypes().contains(fileType))
 			throw new IllegalArgumentException("Unsupported file type "
 					+ fileType);
-		if (!(source instanceof ComponentVersionIdentification))
+		if (!(source instanceof Version.ID))
 			throw new IllegalArgumentException("Unsupported source type "
 					+ source.getClass().getName());
 
 		Dataflow d;
 		try {
-			d = getDataflow((ComponentVersionIdentification) source);
-		} catch (RegistryException e) {
+			d = getDataflow((Version.ID) source);
+		} catch (ComponentException e) {
 			logger.error("Unable to read dataflow", e);
 			throw new OpenException("Unable to read dataflow", e);
 		}

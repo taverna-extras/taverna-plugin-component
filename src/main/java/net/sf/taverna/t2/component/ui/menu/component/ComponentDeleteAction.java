@@ -22,7 +22,7 @@ import javax.swing.AbstractAction;
 import javax.swing.SwingWorker;
 
 import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
@@ -32,9 +32,10 @@ import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+
 /**
  * @author alanrw
- * 
  */
 public class ComponentDeleteAction extends AbstractAction {
 	private static final String COMPONENT_PROBLEM_TITLE = "Component Problem";
@@ -48,7 +49,7 @@ public class ComponentDeleteAction extends AbstractAction {
 	private static final String WHAT_COMPONENT_MSG = "Unable to determine component";
 	private static final long serialVersionUID = -2992743162132614936L;
 	private static final Logger logger = getLogger(ComponentDeleteAction.class);
-	private static final FileManager fm = FileManager.getInstance();
+	private static final FileManager fm = FileManager.getInstance();//FIXME beaninject
 
 	public ComponentDeleteAction() {
 		super(DELETE_COMPONENT_LABEL, getIcon());
@@ -87,7 +88,7 @@ public class ComponentDeleteAction extends AbstractAction {
 	}
 
 	private ComponentServiceProviderConfig deleteComponent(Component component)
-			throws RegistryException {
+			throws ComponentException {
 		ComponentServiceProviderConfig config = new ComponentServiceProviderConfig(
 				component.getFamily());
 		component.delete();
@@ -113,7 +114,7 @@ public class ComponentDeleteAction extends AbstractAction {
 	}
 
 	private static boolean componentIsInUse(Component component) {
-		for (Dataflow d : fm.getOpenDataflows()) {
+		for (WorkflowBundle d : fm.getOpenDataflows()) {
 			Object dataflowSource = fm.getDataflowSource(d);
 			if (dataflowSource instanceof Version.ID
 					&& ((Version.ID) dataflowSource).mostlyEqualTo(component))

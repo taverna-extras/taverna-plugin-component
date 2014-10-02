@@ -20,15 +20,13 @@
  ******************************************************************************/
 package net.sf.taverna.t2.component.ui.view;
 
-import static net.sf.taverna.t2.component.registry.ComponentDataflowCache.getDataflow;
-import static net.sf.taverna.t2.component.registry.ComponentUtil.calculateFamily;
 import static net.sf.taverna.t2.component.ui.view.ComponentActivitySemanticAnnotationContextViewFactory.getContainingComponentActivity;
 import static org.apache.log4j.Logger.getLogger;
 import net.sf.taverna.t2.component.ComponentActivity;
 import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.annotation.AbstractSemanticAnnotationContextualView;
-import net.sf.taverna.t2.component.api.Profile;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.profile.Profile;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 import net.sf.taverna.t2.workflowmodel.DataflowInputPort;
 import net.sf.taverna.t2.workflowmodel.DataflowOutputPort;
@@ -38,8 +36,6 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityOutputPort;
 import org.apache.log4j.Logger;
 
 /**
- * 
- * 
  * @author David Withers
  */
 public class ComponentActivitySemanticAnnotationContextualView extends
@@ -83,7 +79,7 @@ public class ComponentActivitySemanticAnnotationContextualView extends
 			if (componentProfile != null)
 				if (selection instanceof ComponentActivity) {
 					super.setSemanticAnnotationProfiles(componentProfile
-							.getSemanticAnnotationProfiles());
+							.getSemanticAnnotations());
 				} else if (selection instanceof ActivityInputPort) {
 					super.setSemanticAnnotationProfiles(componentProfile
 							.getInputSemanticAnnotationProfiles());
@@ -93,7 +89,7 @@ public class ComponentActivitySemanticAnnotationContextualView extends
 				}
 
 			super.initialise();
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("problem querying registry", e);
 		}
 	}

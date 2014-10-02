@@ -23,7 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
 
-import net.sf.taverna.t2.component.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -32,14 +32,12 @@ public class ComponentActivitySemanticAnnotationPanel extends JPanel {
 	private static final long serialVersionUID = 3599768150252711758L;
 	private static final String ANNTYPE_MSG = "Annotation type : %s";
 	private static final String NONE_MSG = "No semantic annotations";	
-	private SemanticAnnotationProfile semanticAnnotationProfile;
+	private SemanticAnnotationProfile profile;
 	private final Set<Statement> statements;
 
 	public ComponentActivitySemanticAnnotationPanel(
-			ComponentActivitySemanticAnnotationContextualView semanticAnnotationContextualView,
-			SemanticAnnotationProfile semanticAnnotationProfile,
-			Set<Statement> statements) {
-		this.semanticAnnotationProfile = semanticAnnotationProfile;
+			SemanticAnnotationProfile profile, Set<Statement> statements) {
+		this.profile = profile;
 		this.statements = statements;
 		initialize();
 	}
@@ -63,7 +61,7 @@ public class ComponentActivitySemanticAnnotationPanel extends JPanel {
 		c.weightx = 1;
 		c.gridx = 0;
 
-		OntProperty predicate = semanticAnnotationProfile.getPredicate();
+		OntProperty predicate = profile.getPredicate();
 		c.gridwidth = 2;
 		JLabel label = new JLabel(format(ANNTYPE_MSG, getDisplayName(predicate)));
 		label.setBorder(new EmptyBorder(5, 5, 5, 5));

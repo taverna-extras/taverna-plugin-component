@@ -16,6 +16,7 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
+import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -30,7 +31,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class RegistryChooserPanel extends JPanel implements
 		Observable<RegistryChoiceMessage> {
@@ -38,9 +38,9 @@ public class RegistryChooserPanel extends JPanel implements
 	private static final long serialVersionUID = 8390860727800654604L;
 	private static final Logger logger = getLogger(RegistryChooserPanel.class);
 
-	private final List<Observer<RegistryChoiceMessage>> observers = new ArrayList<Observer<RegistryChoiceMessage>>();
-	private final JComboBox registryBox;
-	private final ComponentPreference pref = ComponentPreference.getInstance();
+	private final List<Observer<RegistryChoiceMessage>> observers = new ArrayList<>();
+	private final JComboBox<String> registryBox;
+	private final ComponentPreference pref = ComponentPreference.getInstance();//FIXME beaninject
 	private final SortedMap<String, Registry> registryMap;
 
 	public RegistryChooserPanel() {
@@ -49,7 +49,7 @@ public class RegistryChooserPanel extends JPanel implements
 		GridBagConstraints gbc = new GridBagConstraints();
 
 		registryMap = pref.getRegistryMap();
-		registryBox = new JComboBox(registryMap.keySet().toArray());
+		registryBox = new JComboBox<>(new Vector<>(registryMap.keySet()));
 		registryBox.setPrototypeDisplayValue(LONG_STRING);
 
 		registryBox.setEditable(false);

@@ -25,10 +25,10 @@ import javax.swing.AbstractAction;
 import net.sf.taverna.t2.component.ComponentActivity;
 import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.Component;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.ComponentFileType;
-import net.sf.taverna.t2.component.api.RegistryException;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.ui.panel.RegisteryAndFamilyChooserComponentEntryPanel;
+import net.sf.taverna.t2.component.ui.panel.RegistryAndFamilyChooserComponentEntryPanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
@@ -182,7 +182,7 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 	}
 
 	static Version.ID getNewComponentIdentification(String defaultName) {
-		RegisteryAndFamilyChooserComponentEntryPanel panel = new RegisteryAndFamilyChooserComponentEntryPanel();
+		RegistryAndFamilyChooserComponentEntryPanel panel = new RegistryAndFamilyChooserComponentEntryPanel();
 		panel.setComponentName(defaultName);
 		int result = showConfirmDialog(null, panel, "Component location",
 				OK_CANCEL_OPTION);
@@ -205,7 +205,7 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 						"Component creation problem", ERROR_MESSAGE);
 				return null;
 			}
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("failed to search registry", e);
 			showMessageDialog(null,
 					"Problem searching registry: " + e.getMessage(),
@@ -262,22 +262,15 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 	}
 
 	public static Version.ID createInitialComponent(Dataflow d, Version.ID ident)
-			throws RegistryException {
+			throws ComponentException {
 		try {
 			fm.saveDataflow(d, ComponentFileType.instance, ident, false);
 
 			em.doDataflowEdit(d,
 					edits.getUpdateDataflowNameEdit(d, d.getLocalName()));
-		} catch (OverwriteException e) {
-			throw new RegistryException(e);
-		} catch (SaveException e) {
-			throw new RegistryException(e);
-		} catch (IllegalStateException e) {
-			throw new RegistryException(e);
-		} catch (EditException e) {
-			throw new RegistryException(e);
+		} catch (OverwriteException|SaveException|IllegalStateException|EditException e) {
+			throw new ComponentException(e);
 		}
 		return ident;
 	}
-
 }

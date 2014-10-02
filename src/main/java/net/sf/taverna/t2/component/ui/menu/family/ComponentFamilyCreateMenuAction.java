@@ -13,7 +13,6 @@ import net.sf.taverna.t2.ui.menu.AbstractMenuAction;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentFamilyCreateMenuAction extends AbstractMenuAction {
 	private static final URI COMPONENT_FAMILY_CREATE_URI = URI
@@ -28,5 +27,4 @@ public class ComponentFamilyCreateMenuAction extends AbstractMenuAction {
 	protected Action createAction() {
 		return familyCreateAction;
 	}
-
 }

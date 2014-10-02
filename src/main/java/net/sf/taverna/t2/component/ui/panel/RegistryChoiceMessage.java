@@ -7,10 +7,8 @@ import net.sf.taverna.t2.component.api.Registry;
 
 /**
  * @author alanrw
- * 
  */
 public class RegistryChoiceMessage {
-
 	private final Registry chosenRegistry;
 
 	public RegistryChoiceMessage(Registry chosenRegistry) {
@@ -23,5 +21,4 @@ public class RegistryChoiceMessage {
 	public Registry getChosenRegistry() {
 		return chosenRegistry;
 	}
-
 }

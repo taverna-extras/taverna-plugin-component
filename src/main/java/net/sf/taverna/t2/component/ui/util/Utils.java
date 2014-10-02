@@ -4,6 +4,7 @@
 package net.sf.taverna.t2.component.ui.util;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProvider;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionRegistry;
@@ -49,7 +50,7 @@ public class Utils {
 		if (d == null)
 			return false;
 		Object dataflowSource = fileManager.getDataflowSource(d);
-		return dataflowSource instanceof ComponentVersionIdentification;
+		return dataflowSource instanceof Version.ID;// Really?
 	}
 
 	public static boolean currentDataflowIsComponent() {

@@ -1,6 +1,7 @@
 package net.sf.taverna.t2.component.ui.view;
 
 import static java.lang.String.format;
+import static net.sf.taverna.t2.component.ui.view.ViewUtil.getRawTablesHtml;
 import static net.sf.taverna.t2.lang.ui.HtmlUtils.buildTableOpeningTag;
 import static net.sf.taverna.t2.lang.ui.HtmlUtils.createEditorPane;
 import static net.sf.taverna.t2.lang.ui.HtmlUtils.getHtmlHead;
@@ -12,14 +13,14 @@ import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.workbench.ui.impl.configuration.colour.ColourManager;
+import net.sf.taverna.t2.workbench.configuration.colour.ColourManager;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 
 @SuppressWarnings("serial")
 public class ComponentContextualView extends ContextualView {
-
 	private JEditorPane editorPane;
 	private final Version.ID component;
+	ColourManager colourManager;//FIXME beaninject
 
 	public ComponentContextualView(Version.ID component) {
 		this.component = component;
@@ -33,18 +34,16 @@ public class ComponentContextualView extends ContextualView {
 	}
 
 	private String buildHtml() {
-		String html = getHtmlHead(getBackgroundColour());
-		html += buildTableOpeningTag();
+		StringBuilder html = new StringBuilder(getHtmlHead(getBackgroundColour()));
+		html.append(buildTableOpeningTag());
 
-		html += ViewUtil.getRawTablesHtml(component);
+		html.append(getRawTablesHtml(component));
 
-		html += "</table>";
-		html += "</body></html>";
-		return html;
+		return html.append("</table></body></html>").toString();
 	}
 
 	public String getBackgroundColour() {
-		Color colour = ColourManager.getInstance().getPreferredColour(
+		Color colour = colourManager.getPreferredColour(
 				"net.sf.taverna.t2.component.registry.Component");
 		return format("#%1$2x%2$2x%3$2x", colour.getRed(), colour.getGreen(),
 				colour.getBlue());
@@ -74,5 +73,4 @@ public class ComponentContextualView extends ContextualView {
 		editorPane.setText(buildHtml());
 		repaint();
 	}
-
 }

@@ -18,14 +18,13 @@ import net.sf.taverna.t2.workflowmodel.Processor;
 
 /**
  * @author alanrw
- * 
  */
 public class NestedWorkflowCreatorMenuAction extends
 		AbstractContextualMenuAction {
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
 
-	FileManager fm = FileManager.getInstance();
+	FileManager fm;//FIXME beaninject
 
 	public NestedWorkflowCreatorMenuAction() {
 		super(configureSection, 70);

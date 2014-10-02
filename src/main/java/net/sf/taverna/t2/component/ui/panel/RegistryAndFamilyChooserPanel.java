@@ -22,7 +22,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class RegistryAndFamilyChooserPanel extends JPanel implements
 		Observer<ProfileChoiceMessage>, Observable<FamilyChoiceMessage> {

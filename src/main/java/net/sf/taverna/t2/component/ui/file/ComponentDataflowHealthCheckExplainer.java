@@ -16,7 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JTextArea;
 
 import net.sf.taverna.t2.component.ComponentHealthCheck;
-import net.sf.taverna.t2.component.profile.SemanticAnnotationProfile;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.visit.VisitKind;
 import net.sf.taverna.t2.visit.VisitReport;
 import net.sf.taverna.t2.workbench.report.explainer.VisitExplainer;

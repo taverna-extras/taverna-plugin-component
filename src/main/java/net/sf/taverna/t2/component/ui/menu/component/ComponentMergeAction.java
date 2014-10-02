@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.panel.ComponentChoiceMessage;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
@@ -35,7 +35,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentMergeAction extends AbstractAction {
 	private static final long serialVersionUID = 6791184757725253807L;
@@ -104,14 +103,14 @@ public class ComponentMergeAction extends AbstractAction {
 		try {
 			Version sourceVersion = sourceComponent.getComponentVersionMap()
 					.get(sourceComponent.getComponentVersionMap().lastKey());
-			targetComponent.addVersionBasedOn(sourceVersion.getDataflow(),
-					"Merge from " + sourceComponent.getFamily().getName() + ":"
+			targetComponent.addVersionBasedOn(
+					sourceVersion.getImplementation(), "Merge from "
+							+ sourceComponent.getFamily().getName() + ":"
 							+ sourceComponent.getName());
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("failed to merge component", e);
 			showMessageDialog(null, "Failed to merge component: " + e,
 					"Component Merge Problem", ERROR_MESSAGE);
 		}
 	}
-
 }

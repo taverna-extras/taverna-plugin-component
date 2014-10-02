@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.taverna.t2.annotation.Annotated;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
@@ -36,7 +37,8 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityPort;
  */
 public class SemanticAnnotationContextualViewFactory implements
 		ContextualViewFactory<Annotated<?>> {
-	private static final FileManager fileManager = FileManager.getInstance();
+	private FileManager fileManager;//FIXME beaninject
+	private ComponentFactory factory;//FIXME beaninject
 
 	@Override
 	public boolean canHandle(Object selection) {
@@ -50,7 +52,7 @@ public class SemanticAnnotationContextualViewFactory implements
 
 	@Override
 	public List<ContextualView> getViews(Annotated<?> selection) {
-		return Arrays.asList(new SemanticAnnotationContextualView(selection),
-				new TurtleContextualView(selection));
+		return Arrays.asList(new SemanticAnnotationContextualView(fileManager,
+				factory, selection), new TurtleContextualView(selection));
 	}
 }

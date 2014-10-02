@@ -7,10 +7,8 @@ import net.sf.taverna.t2.component.api.Family;
 
 /**
  * @author alanrw
- * 
  */
 public class FamilyChoiceMessage {
-
 	private final Family chosenFamily;
 
 	public FamilyChoiceMessage(Family chosenFamily) {
@@ -23,5 +21,4 @@ public class FamilyChoiceMessage {
 	public Family getChosenFamily() {
 		return chosenFamily;
 	}
-
 }

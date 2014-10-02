@@ -7,7 +7,6 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static net.sf.taverna.t2.component.annotation.SemanticAnnotationUtils.checkComponent;
-import static net.sf.taverna.t2.component.registry.ComponentUtil.calculateRegistry;
 import static net.sf.taverna.t2.component.ui.util.Utils.refreshComponentServiceProvider;
 import static org.apache.log4j.Logger.getLogger;
 
@@ -19,13 +18,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import net.sf.taverna.t2.component.api.Component;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.ComponentFileType;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.profile.SemanticAnnotationProfile;
-import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
+import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
 import net.sf.taverna.t2.workbench.file.AbstractDataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.DataflowInfo;
@@ -38,6 +37,8 @@ import net.sf.taverna.t2.workflowmodel.DataflowValidationReport;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+
 /**
  * @author alanrw
  * 
@@ -47,9 +48,10 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 	private static final String UNSATISFIED_PROFILE_WARNING = "The component does not satisfy the profile.\nSee validation report.\nDo you still want to save?";
 	private static final FileType COMPONENT_FILE_TYPE = ComponentFileType.instance;
 	private static final Logger logger = getLogger(ComponentSaver.class);
+	private ComponentFactory factory;//FIXME beaninject
 
 	@Override
-	public DataflowInfo saveDataflow(Dataflow dataflow, FileType fileType,
+	public DataflowInfo saveDataflow(WorkflowBundle dataflow, FileType fileType,
 			Object destination) throws SaveException {
 		if (!getSaveFileTypes().contains(fileType))
 			throw new IllegalArgumentException("Unsupported file type "
@@ -59,31 +61,34 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 					+ destination.getClass().getName());
 
 		DataflowValidationReport dvr = dataflow.checkValidity();
-		if (!dvr.isValid()) {
+		if (!dvr.isValid())
 			throw new SaveException("Cannot save a structurally invalid workflow as a component");
-		}
-		// Saving an invalid dataflow is OK. Validity check is done to get predicted depth for output (if possible)
+
+		/*
+		 * Saving an invalid dataflow is OK. Validity check is done to get
+		 * predicted depth for output (if possible)
+		 */
 
 		Version.ID ident = (Version.ID) destination;
 
 		if (ident.getComponentVersion() == -1) {
-			ComponentVersionIdentification newIdent = new ComponentVersionIdentification(
-					ident);
-			newIdent.setComponentVersion(0);
+			Version.ID newIdent = new Version.Identifier(
+					ident.getRegistryBase(), ident.getFamilyName(),
+					ident.getComponentName(), 0);
 			return new DataflowInfo(COMPONENT_FILE_TYPE, newIdent, dataflow);
 		}
 
 		Family family;
 		try {
-			Registry registry = calculateRegistry(ident.getRegistryBase());
+			Registry registry = factory.getRegistry(ident.getRegistryBase());
 			family = registry.getComponentFamily(ident.getFamilyName());
-		} catch (RegistryException e1) {
-			throw new SaveException("Unable to read component", e1);
+		} catch (ComponentException e) {
+			throw new SaveException("Unable to read component", e);
 		}
 
 		Version newVersion = null;
 		try {
-			List<SemanticAnnotationProfile> problemProfiles = new ArrayList<SemanticAnnotationProfile>(
+			List<SemanticAnnotationProfile> problemProfiles = new ArrayList<>(
 					checkComponent(dataflow, family.getComponentProfile()));
 
 			if (!problemProfiles.isEmpty()) {
@@ -100,36 +105,32 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 			final JScrollPane descriptionScrollPane = new JScrollPane(
 					descriptionArea);
 			if (ident.getComponentVersion() == 0) {
-				
-				int answer = showConfirmDialog(null, descriptionScrollPane, "Component description",
-						OK_CANCEL_OPTION);
-				if (answer == OK_OPTION) {
-					newVersion = family.createComponentBasedOn(
-							ident.getComponentName(),
-							descriptionArea.getText(), dataflow);
-				} else {
+				int answer = showConfirmDialog(null, descriptionScrollPane,
+						"Component description", OK_CANCEL_OPTION);
+				if (answer != OK_OPTION)
 					throw new SaveException("Saving cancelled");
-				}
+				newVersion = family.createComponentBasedOn(
+						ident.getComponentName(), descriptionArea.getText(),
+						dataflow);
 			} else {
 				Component component = family.getComponent(ident
 						.getComponentName());
-				int answer = showConfirmDialog(null, descriptionScrollPane, "Version description",
-						OK_CANCEL_OPTION);
+				int answer = showConfirmDialog(null, descriptionScrollPane,
+						"Version description", OK_CANCEL_OPTION);
 				if (answer != OK_OPTION)
 					throw new SaveException("Saving cancelled");
 				newVersion = component.addVersionBasedOn(dataflow,
 						descriptionArea.getText());
 			}
-	
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("Unable to save new version of component", e);
 			throw new SaveException("Unable to save new version of component",
 					e);
 		}
 
-		ComponentVersionIdentification newIdent = new ComponentVersionIdentification(
-				ident);
-		newIdent.setComponentVersion(newVersion.getVersionNumber());
+		Version.ID newIdent = new Version.Identifier(ident.getRegistryBase(),
+				ident.getFamilyName(), ident.getComponentName(),
+				newVersion.getVersionNumber());
 
 		try {
 			refreshComponentServiceProvider(new ComponentServiceProviderConfig(
@@ -154,10 +155,9 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 	@Override
 	public boolean wouldOverwriteDataflow(Dataflow dataflow, FileType fileType,
 			Object destination, DataflowInfo lastDataflowInfo) {
-		if (!getSaveFileTypes().contains(fileType)) {
+		if (!getSaveFileTypes().contains(fileType))
 			throw new IllegalArgumentException("Unsupported file type "
 					+ fileType);
-		}
 		return false;
 	}
 }

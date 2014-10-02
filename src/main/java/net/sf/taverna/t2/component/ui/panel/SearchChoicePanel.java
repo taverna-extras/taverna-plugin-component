@@ -24,10 +24,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
-import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
 
 import org.apache.log4j.Logger;
 
@@ -45,13 +46,15 @@ public class SearchChoicePanel extends JPanel {
 	private static final List<String> RESERVED_WORDS = Arrays
 			.asList(new String[] { SEARCHING, NO_MATCHES, SEARCH_FAILED });
 
+	private ComponentPreference preference;//FIXME beaninject
+	private ComponentFactory factory;//FIXME beaninject
 	private Registry registry;
 	private String prefixes;
 	private String queryText;
 	private JLabel registryURLLabel;
-	private JComboBox familyBox;
-	private JComboBox componentBox;
-	private JComboBox versionBox;
+	private JComboBox<String> familyBox;
+	private JComboBox<String> componentBox;
+	private JComboBox<Object> versionBox;
 
 	public SearchChoicePanel(Registry registry, String prefixes,
 			String queryText) {
@@ -61,11 +64,11 @@ public class SearchChoicePanel extends JPanel {
 		this.queryText = queryText;
 		this.setLayout(new GridBagLayout());
 
-		componentBox = new JComboBox(SEARCHING_ARRAY);
+		componentBox = new JComboBox<>(SEARCHING_ARRAY);
 		componentBox.setPrototypeDisplayValue(LONG_STRING);
-		familyBox = new JComboBox(SEARCHING_ARRAY);
+		familyBox = new JComboBox<>(SEARCHING_ARRAY);
 		familyBox.setPrototypeDisplayValue(LONG_STRING);
-		versionBox = new JComboBox(SEARCHING_ARRAY);
+		versionBox = new JComboBox<Object>(SEARCHING_ARRAY);
 		versionBox.setPrototypeDisplayValue(LONG_STRING);
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -146,14 +149,14 @@ public class SearchChoicePanel extends JPanel {
 
 	private String[] calculateMatchingFamilyNames(
 			Set<Version.ID> matchingComponents) {
-		TreeSet<String> result = new TreeSet<String>();
+		Set<String> result = new TreeSet<>();
 		for (Version.ID v : matchingComponents)
 			result.add(v.getFamilyName());
 		return result.toArray(new String[0]);
 	}
 
 	private void updateComponentBox(Set<Version.ID> matchingComponents,
-			JComboBox componentBox, String selectedItem) {
+			JComboBox<String> componentBox, String selectedItem) {
 		componentBox.removeAllItems();
 		String[] matchingComponentNames = calculateMatchingComponentNames(
 				matchingComponents, selectedItem);
@@ -164,7 +167,7 @@ public class SearchChoicePanel extends JPanel {
 
 	private String[] calculateMatchingComponentNames(
 			Set<Version.ID> matchingComponents, String familyName) {
-		TreeSet<String> result = new TreeSet<String>();
+		Set<String> result = new TreeSet<>();
 		for (Version.ID v : matchingComponents)
 			if (v.getFamilyName().equals(familyName))
 				result.add(v.getComponentName());
@@ -172,7 +175,8 @@ public class SearchChoicePanel extends JPanel {
 	}
 
 	private void updateVersionBox(Set<Version.ID> matchingComponents,
-			JComboBox versionBox, String componentName, String familyName) {
+			JComboBox<Object> versionBox, String componentName,
+			String familyName) {
 		versionBox.removeAllItems();
 		for (Integer v : calculateMatchingVersionNumbers(matchingComponents,
 				componentName, familyName))
@@ -183,7 +187,7 @@ public class SearchChoicePanel extends JPanel {
 	private Integer[] calculateMatchingVersionNumbers(
 			Set<Version.ID> matchingComponents, String componentName,
 			String familyName) {
-		TreeSet<Integer> result = new TreeSet<Integer>();
+		Set<Integer> result = new TreeSet<>();
 		for (Version.ID v : matchingComponents)
 			if (v.getFamilyName().equals(familyName)
 					&& v.getComponentName().equals(componentName))
@@ -196,18 +200,24 @@ public class SearchChoicePanel extends JPanel {
 		if (RESERVED_WORDS.contains(registryString))
 			return null;
 
-		return new ComponentVersionIdentification(registry.getRegistryBase(),
-				(String) familyBox.getSelectedItem(),
-				(String) componentBox.getSelectedItem(),
-				(Integer) versionBox.getSelectedItem());
+		try {
+			return factory.getVersion(registry.getRegistryBase(),
+					(String) familyBox.getSelectedItem(),
+					(String) componentBox.getSelectedItem(),
+					(Integer) versionBox.getSelectedItem()).getID();
+		} catch (ComponentException e) {
+			logger.warn(
+					"unexpected failure to construct component version token",
+					e);
+			return null;
+		}
 	}
 
 	private void searchCompletedSuccessfully(final Set<Version.ID> matches) {
 		Version.ID one = (Version.ID) matches.toArray()[0];
-		registryURLLabel.setText(ComponentPreference.getInstance()
-				.getRegistryName(one.getRegistryBase()));
-		String[] componentFamilyNames = calculateMatchingFamilyNames(matches);
-		for (String familyName : componentFamilyNames)
+		registryURLLabel.setText(preference.getRegistryName(one
+				.getRegistryBase()));
+		for (String familyName : calculateMatchingFamilyNames(matches))
 			familyBox.addItem(familyName);
 		familyBox.addItemListener(new ItemListener() {
 			@Override

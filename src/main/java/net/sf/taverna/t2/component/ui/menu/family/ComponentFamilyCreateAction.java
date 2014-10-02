@@ -25,9 +25,9 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
 import net.sf.taverna.t2.component.ui.panel.LicenseChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChooserPanel;
@@ -39,7 +39,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentFamilyCreateAction extends AbstractAction {
 	private static final long serialVersionUID = -7780471499146286881L;
@@ -150,12 +149,11 @@ public class ComponentFamilyCreateAction extends AbstractAction {
 			}
 			chosenRegistry.createComponentFamily(newName, chosenProfile,
 					familyDescription, license, permission);
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("failed to create family", e);
 			showMessageDialog(null,
 					"Unable to create family: " + e.getMessage(),
 					"Family creation problem", ERROR_MESSAGE);
 		}
 	}
-
 }

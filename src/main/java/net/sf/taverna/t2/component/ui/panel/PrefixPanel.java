@@ -5,6 +5,8 @@ package net.sf.taverna.t2.component.ui.panel;
 
 import static javax.swing.BorderFactory.createEtchedBorder;
 import static javax.swing.BorderFactory.createTitledBorder;
+import static javax.swing.border.TitledBorder.CENTER;
+import static javax.swing.border.TitledBorder.TOP;
 
 import java.awt.BorderLayout;
 import java.util.Map.Entry;
@@ -13,16 +15,14 @@ import java.util.TreeMap;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 
 /**
  * @author alanrw
- * 
  */
 @SuppressWarnings("serial")
 public class PrefixPanel extends JPanel implements
@@ -43,7 +43,7 @@ public class PrefixPanel extends JPanel implements
 		prefixModel.setColumnIdentifiers(new String[] { "Prefix", "URL" });
 		this.add(new JScrollPane(prefixTable), BorderLayout.CENTER);
 		this.setBorder(createTitledBorder(createEtchedBorder(), "Prefixes",
-				TitledBorder.CENTER, TitledBorder.TOP));
+				CENTER, TOP));
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class PrefixPanel extends JPanel implements
 	}
 
 	public TreeMap<String, String> getPrefixMap() {
-		TreeMap<String, String> result = new TreeMap<String, String>();
+		TreeMap<String, String> result = new TreeMap<>();
 		for (int i = 0; i < prefixModel.getRowCount(); i++)
 			result.put((String) prefixModel.getValueAt(i, 0),
 					(String) prefixModel.getValueAt(i, 1));

@@ -24,6 +24,8 @@ import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+
 /**
  * @author alanrw
  * 
@@ -32,7 +34,7 @@ import org.apache.log4j.Logger;
 public class OpenComponentFromComponentActivityAction extends AbstractAction {
 	private static Logger logger = getLogger(OpenComponentFromComponentActivityAction.class);
 
-	private static final FileManager fileManager = FileManager.getInstance();
+	private FileManager fileManager;//FIXME beaninject
 
 	public OpenComponentFromComponentActivityAction() {
 		super("Open component...", getIcon());
@@ -45,20 +47,19 @@ public class OpenComponentFromComponentActivityAction extends AbstractAction {
 		Version.ID ident = selection.getConfiguration();
 
 		try {
-			Dataflow d = fileManager.openDataflow(ComponentFileType.instance,
-					ident);
+			WorkflowBundle d = fileManager.openDataflow(
+					ComponentFileType.instance, ident);
 
 			final GraphController gc = graphControllerMap.get(d);
 			invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					try {
-					SVGGraph g = (SVGGraph) gc.getGraph();
-					g.setFillColor(RED);
-					gc.redraw();
-					}
-					catch (NullPointerException e) {
-						OpenComponentFromComponentActivityAction.logger.error(e);
+						SVGGraph g = (SVGGraph) gc.getGraph();
+						g.setFillColor(RED);
+						gc.redraw();
+					} catch (NullPointerException e) {
+						logger.error(e);
 					}
 				}
 			});

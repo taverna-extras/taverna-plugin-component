@@ -22,7 +22,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentCloseAction extends AbstractAction implements
 		Observer<FileManagerEvent> {
@@ -54,5 +53,4 @@ public class ComponentCloseAction extends AbstractAction implements
 			FileManagerEvent message) throws Exception {
 		setEnabled(currentDataflowIsComponent());
 	}
-
 }

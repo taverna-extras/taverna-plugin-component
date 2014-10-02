@@ -92,7 +92,7 @@ public class ComponentServiceProvider extends
 						try {
 							SortedMap<Integer, Version> versions = component
 									.getComponentVersionMap();
-							ComponentServiceDesc newDesc = new ComponentServiceDesc(
+							ComponentServiceDesc newDesc = new ComponentServiceDesc(null,null,//FIXME
 									versions.get(versions.lastKey()).getID());
 							results.add(newDesc);
 						} catch (Exception e) {

@@ -10,7 +10,6 @@ import net.sf.taverna.t2.component.ComponentActivity;
 
 public class ComponentActivityContextViewFactory implements
 		ContextualViewFactory<ComponentActivity> {
-
 	@Override
 	public boolean canHandle(Object selection) {
 		return selection instanceof ComponentActivity;
@@ -20,5 +19,4 @@ public class ComponentActivityContextViewFactory implements
 	public List<ContextualView> getViews(ComponentActivity selection) {
 		return Arrays.<ContextualView>asList(new ComponentActivityContextualView(selection));
 	}
-
 }

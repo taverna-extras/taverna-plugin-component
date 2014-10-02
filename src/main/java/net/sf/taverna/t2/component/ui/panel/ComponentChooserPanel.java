@@ -21,7 +21,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
@@ -35,7 +34,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ComponentChooserPanel extends JPanel implements
@@ -44,9 +42,9 @@ public class ComponentChooserPanel extends JPanel implements
 	private static final long serialVersionUID = -4459660016225074302L;
 	private static Logger logger = getLogger(ComponentChooserPanel.class);
 
-	private final List<Observer<ComponentChoiceMessage>> observers = new ArrayList<Observer<ComponentChoiceMessage>>();
-	private final JComboBox componentChoice = new JComboBox();
-	private final SortedMap<String, Component> componentMap = new TreeMap<String, Component>();
+	private final List<Observer<ComponentChoiceMessage>> observers = new ArrayList<>();
+	private final JComboBox<String> componentChoice = new JComboBox<>();
+	private final SortedMap<String, Component> componentMap = new TreeMap<>();
 	private final RegistryAndFamilyChooserPanel registryAndFamilyChooserPanel = new RegistryAndFamilyChooserPanel();
 
 	public ComponentChooserPanel() {

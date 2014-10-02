@@ -3,14 +3,12 @@
  */
 package net.sf.taverna.t2.component.ui.panel;
 
-import net.sf.taverna.t2.component.api.Profile;
+import net.sf.taverna.t2.component.api.profile.Profile;
 
 /**
  * @author alanrw
- *
  */
 public class ProfileChoiceMessage {
-
 	private final Profile chosenProfile;
 
 	public ProfileChoiceMessage(Profile chosenProfile) {
@@ -23,5 +21,4 @@ public class ProfileChoiceMessage {
 	public Profile getChosenProfile() {
 		return chosenProfile;
 	}
-
 }
