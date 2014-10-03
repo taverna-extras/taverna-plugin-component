@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 
@@ -27,12 +28,13 @@ public class RegistryAndFamilyChooserPanel extends JPanel implements
 		Observer<ProfileChoiceMessage>, Observable<FamilyChoiceMessage> {
 	private static Logger logger = getLogger(RegistryAndFamilyChooserPanel.class);
 	private static final long serialVersionUID = -535518473593617735L;
-	final RegistryChooserPanel registryPanel = new RegistryChooserPanel();
+	final RegistryChooserPanel registryPanel;
 	final FamilyChooserPanel familyPanel = new FamilyChooserPanel();
 
 	@SuppressWarnings("unchecked")
-	public RegistryAndFamilyChooserPanel() {
-		setLayout(new GridBagLayout());
+	public RegistryAndFamilyChooserPanel(ComponentPreference prefs) {
+		super(new GridBagLayout());
+		registryPanel = new RegistryChooserPanel(prefs);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;

@@ -27,6 +27,7 @@ import javax.swing.SwingWorker;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 
@@ -45,11 +46,11 @@ public class ComponentChooserPanel extends JPanel implements
 	private final List<Observer<ComponentChoiceMessage>> observers = new ArrayList<>();
 	private final JComboBox<String> componentChoice = new JComboBox<>();
 	private final SortedMap<String, Component> componentMap = new TreeMap<>();
-	private final RegistryAndFamilyChooserPanel registryAndFamilyChooserPanel = new RegistryAndFamilyChooserPanel();
+	private final RegistryAndFamilyChooserPanel registryAndFamilyChooserPanel;
 
-	public ComponentChooserPanel() {
-		super();
-		setLayout(new GridBagLayout());
+	public ComponentChooserPanel(ComponentPreference prefs) {
+		super(new GridBagLayout());
+		registryAndFamilyChooserPanel = new RegistryAndFamilyChooserPanel(prefs);
 
 		componentChoice.setPrototypeDisplayValue(LONG_STRING);
 

@@ -1,7 +1,7 @@
 package net.sf.taverna.t2.component.ui.view;
 
 import static java.lang.String.format;
-import static net.sf.taverna.t2.component.ui.view.ViewUtil.getRawTablesHtml;
+//import static net.sf.taverna.t2.component.ui.view.ViewUtil.getRawTablesHtml;
 import static net.sf.taverna.t2.lang.ui.HtmlUtils.buildTableOpeningTag;
 import static net.sf.taverna.t2.lang.ui.HtmlUtils.createEditorPane;
 import static net.sf.taverna.t2.lang.ui.HtmlUtils.getHtmlHead;
@@ -21,6 +21,7 @@ public class ComponentContextualView extends ContextualView {
 	private JEditorPane editorPane;
 	private final Version.ID component;
 	ColourManager colourManager;//FIXME beaninject
+	ViewUtil viewUtils;//FIXME beaninject;
 
 	public ComponentContextualView(Version.ID component) {
 		this.component = component;
@@ -36,9 +37,7 @@ public class ComponentContextualView extends ContextualView {
 	private String buildHtml() {
 		StringBuilder html = new StringBuilder(getHtmlHead(getBackgroundColour()));
 		html.append(buildTableOpeningTag());
-
-		html.append(getRawTablesHtml(component));
-
+		viewUtils.getRawTablesHtml(component, html);
 		return html.append("</table></body></html>").toString();
 	}
 
@@ -57,9 +56,8 @@ public class ComponentContextualView extends ContextualView {
 	private static int MAX_LENGTH = 50;
 
 	private String limitName(String fullName) {
-		if (fullName.length() > MAX_LENGTH) {
-			return (fullName.substring(0, MAX_LENGTH - 3) + "...");
-		}
+		if (fullName.length() > MAX_LENGTH)
+			return fullName.substring(0, MAX_LENGTH - 3) + "...";
 		return fullName;
 	}
 

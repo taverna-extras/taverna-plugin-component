@@ -23,6 +23,7 @@ import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.RegistryAndFamilyChooserPanel;
 import net.sf.taverna.t2.servicedescriptions.AbstractConfigurableServiceProvider;
 import net.sf.taverna.t2.servicedescriptions.CustomizedConfigurePanelProvider;
@@ -41,6 +42,7 @@ public class ComponentServiceProvider extends
 	private static Logger logger = getLogger(ComponentServiceProvider.class);
 
 	private ComponentFactory factory;//FIXME beaninject
+	private ComponentPreference prefs;//FIXME beaninject
 
 	public ComponentServiceProvider() {
 		super(JsonNodeFactory.instance.objectNode());
@@ -148,7 +150,7 @@ public class ComponentServiceProvider extends
 	@Override
 	public void createCustomizedConfigurePanel(
 			CustomizedConfigureCallBack callBack) {
-		RegistryAndFamilyChooserPanel panel = new RegistryAndFamilyChooserPanel();
+		RegistryAndFamilyChooserPanel panel = new RegistryAndFamilyChooserPanel(prefs);
 
 		if (showConfirmDialog(null, panel, "Component family import",
 				OK_CANCEL_OPTION) != OK_OPTION)

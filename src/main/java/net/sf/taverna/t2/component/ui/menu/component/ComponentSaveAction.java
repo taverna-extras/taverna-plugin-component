@@ -27,9 +27,9 @@ public class ComponentSaveAction extends AbstractAction implements
 	private static final long serialVersionUID = -2391891750558659714L;
 	@SuppressWarnings("unused")
 	private static Logger logger = getLogger(ComponentSaveAction.class);
-	private static Action saveWorkflowAction = new net.sf.taverna.t2.workbench.file.impl.actions.SaveWorkflowAction();
 	private static final String SAVE_COMPONENT = "Save component";
 
+	private Action saveWorkflowAction;//FIXME beaninject net.sf.taverna.t2.workbench.file.impl.actions.SaveWorkflowAction
 	private FileManager fileManager; //FIXME beaninject
 
 	public ComponentSaveAction() {
@@ -38,8 +38,8 @@ public class ComponentSaveAction extends AbstractAction implements
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		saveWorkflowAction.actionPerformed(arg0);
+	public void actionPerformed(ActionEvent e) {
+		saveWorkflowAction.actionPerformed(e);
 	}
 
 	@Override

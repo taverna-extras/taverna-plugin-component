@@ -28,6 +28,7 @@ import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.ComponentChoiceMessage;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChoiceMessage;
@@ -41,12 +42,13 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentCopyAction extends AbstractAction {
 	private static final long serialVersionUID = -4440978712410081685L;
 	private static final Logger logger = getLogger(ComponentCopyAction.class);
 	private static final String COPY_COMPONENT = "Copy component...";
+
+	private ComponentPreference prefs;//FIXME beaninject
 
 	public ComponentCopyAction() {
 		super(COPY_COMPONENT, getIcon());
@@ -71,7 +73,7 @@ public class ComponentCopyAction extends AbstractAction {
 		gbc.weightx = 1;
 		overallPanel.add(source, gbc);
 
-		final RegistryAndFamilyChooserPanel target = new RegistryAndFamilyChooserPanel();
+		final RegistryAndFamilyChooserPanel target = new RegistryAndFamilyChooserPanel(prefs);
 		target.setBorder(new TitledBorder("Target family"));
 		gbc.gridy++;
 		overallPanel.add(target, gbc);

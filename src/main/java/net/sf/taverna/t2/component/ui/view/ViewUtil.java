@@ -39,7 +39,11 @@ public class ViewUtil {
 
 	public String getRawTablesHtml(Version.ID id) {
 		StringBuilder html = new StringBuilder();
+		getRawTablesHtml(id, html);
+		return html.toString();
+	}
 
+	public void getRawTablesHtml(Version.ID id, StringBuilder html) {
 		URL registryBase = id.getRegistryBase();
 		String registryLink = null;
 		if (registryBase.getProtocol().startsWith("http"))
@@ -121,8 +125,6 @@ public class ViewUtil {
 				logger.error("failed to get component port description", e);
 			}
 		}
-		return html.toString();
-
 	}
 
 	private static void appendRow(StringBuilder html, Object label,
