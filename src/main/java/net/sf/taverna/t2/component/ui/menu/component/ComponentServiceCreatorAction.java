@@ -26,10 +26,10 @@ import net.sf.taverna.t2.component.ComponentActivity;
 import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFileType;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.panel.RegistryAndFamilyChooserComponentEntryPanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
+import net.sf.taverna.t2.component.ui.util.ComponentFileType;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.exceptions.OverwriteException;
@@ -59,9 +59,10 @@ import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+
 /**
  * @author alanrw
- * 
  */
 public class ComponentServiceCreatorAction extends AbstractAction {
 	private static final long serialVersionUID = -2611514696254112190L;
@@ -69,13 +70,13 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 
 	private final Processor p;
 
-	private static FileManager fm = FileManager.getInstance();
-	private static EditManager em = EditManager.getInstance();
-	private static Edits edits = em.getEdits();
+	private static FileManager fm; //FIXME beaninject
+	private static EditManager em; //FIXME beaninject
+	private static Edits edits; //FIXME beaninject
 
-	public ComponentServiceCreatorAction(final Processor p) {
+	public ComponentServiceCreatorAction(Processor processor) {
 		super("Create component...", getIcon());
-		this.p = p;
+		this.p = processor;
 	}
 
 	@Override
@@ -85,7 +86,7 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 			return;
 
 		Activity<?> a = p.getActivityList().get(0);
-		Dataflow current = fm.getCurrentDataflow();
+		WorkflowBundle current = fm.getCurrentDataflow();
 
 		try {
 			Dataflow d;
@@ -169,8 +170,8 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 	}
 
 	public static ComponentActivityConfigurationBean saveWorkflowAsComponent(
-			Dataflow d, Version.ID ident) throws SaveException, IOException,
-			ConfigurationException, RegistryException {
+			WorkflowBundle d, Version.ID ident) throws SaveException, IOException,
+			ConfigurationException, ComponentException {
 		if (ident == null)
 			return null;
 
@@ -217,7 +218,7 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 
 	private static HashMap<String, Element> requiredSubworkflows = new HashMap<String, Element>();
 
-	public static Element copyProcessor(final Processor p) throws IOException,
+	public static Element copyProcessor(Processor p) throws IOException,
 			JDOMException, SerializationException {
 		Element result = ProcessorXMLSerializer.getInstance().processorToXML(p);
 		requiredSubworkflows = new HashMap<>();
@@ -225,9 +226,9 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 		return result;
 	}
 
-	private static void rememberSubworkflows(final Processor p)
+	private static void rememberSubworkflows(Processor p)
 			throws SerializationException {
-		for (final Activity<?> a : p.getActivityList())
+		for (Activity<?> a : p.getActivityList())
 			if (a instanceof NestedDataflow) {
 				NestedDataflow da = (NestedDataflow) a;
 				Dataflow df = da.getNestedDataflow();
@@ -241,7 +242,7 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 			}
 	}
 
-	public static Processor pasteProcessor(final Element e, final Dataflow d)
+	public static Processor pasteProcessor(Element e, Dataflow d)
 			throws ActivityConfigurationException, Exception,
 			ClassNotFoundException, InstantiationException,
 			IllegalAccessException, DeserializationException {
@@ -261,13 +262,13 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 		return result;
 	}
 
-	public static Version.ID createInitialComponent(Dataflow d, Version.ID ident)
+	public static Version.ID createInitialComponent(WorkflowBundle d, Version.ID ident)
 			throws ComponentException {
 		try {
 			fm.saveDataflow(d, ComponentFileType.instance, ident, false);
 
 			em.doDataflowEdit(d,
-					edits.getUpdateDataflowNameEdit(d, d.getLocalName()));
+					edits.getUpdateDataflowNameEdit(d, d.getName()));
 		} catch (OverwriteException|SaveException|IllegalStateException|EditException e) {
 			throw new ComponentException(e);
 		}

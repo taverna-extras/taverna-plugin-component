@@ -14,7 +14,6 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentServiceCreatorMenuAction extends
 		AbstractContextualMenuAction {
@@ -27,9 +26,10 @@ public class ComponentServiceCreatorMenuAction extends
 
 	@Override
 	public boolean isEnabled() {
+		if (!super.isEnabled())
+			return false;
 		Activity<?> a = findActivity();
-		return super.isEnabled() && (a != null)
-				&& !(a instanceof ComponentActivity);
+		return (a != null) && !(a instanceof ComponentActivity);
 	}
 
 	@Override
@@ -39,19 +39,15 @@ public class ComponentServiceCreatorMenuAction extends
 	}
 
 	protected Activity<?> findActivity() {
-		if (getContextualSelection() == null) {
+		if (getContextualSelection() == null)
 			return null;
-		}
 		Object selection = getContextualSelection().getSelection();
 		if (selection instanceof Processor) {
 			Processor processor = (Processor) selection;
-			for (Activity<?> activity : processor.getActivityList()) {
-				if (Activity.class.isInstance(activity)) {
+			for (Activity<?> activity : processor.getActivityList())
+				if (Activity.class.isInstance(activity))
 					return Activity.class.cast(activity);
-				}
-			}
 		}
 		return null;
 	}
-
 }

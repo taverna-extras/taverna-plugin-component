@@ -21,9 +21,10 @@ import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.events.FileManagerEvent;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
@@ -33,8 +34,9 @@ public class ComponentWorkflowCreatorAction extends AbstractAction implements
 		Observer<FileManagerEvent> {
 	private static final long serialVersionUID = -299685223430721587L;
 	private static Logger logger = getLogger(ComponentWorkflowCreatorAction.class);
-	private static FileManager fileManager = FileManager.getInstance();
 	private static final String CREATE_COMPONENT = "Create component from current workflow...";
+
+	private FileManager fileManager; //FIXME beaninject
 
 	public ComponentWorkflowCreatorAction() {
 		super(CREATE_COMPONENT, getIcon());
@@ -43,13 +45,13 @@ public class ComponentWorkflowCreatorAction extends AbstractAction implements
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		Dataflow d = FileManager.getInstance().getCurrentDataflow();
+		WorkflowBundle bundle = fileManager.getCurrentDataflow();
 		try {
-			Version.ID ident = getNewComponentIdentification(d.getLocalName());
+			Version.ID ident = getNewComponentIdentification(bundle.getName());//TODO is this right
 			if (ident == null)
 				return;
 
-			saveWorkflowAsComponent(d, ident);
+			saveWorkflowAsComponent(bundle, ident);
 		} catch (Exception e) {
 			showMessageDialog(null, e.getCause().getMessage(),
 					"Component creation failure", ERROR_MESSAGE);

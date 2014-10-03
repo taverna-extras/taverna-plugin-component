@@ -83,7 +83,6 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	private static final long serialVersionUID = 727059218457420449L;
 	private static final Logger logger = getLogger(NestedWorkflowCreationDialog.class);
-	private static final EditManager em;//FIXME beaninject
 	private static final AnnotationTools at = new AnnotationTools();
 	private final List<TokenProcessingEntity> includedProcessors = new ArrayList<>();
 	private List<? extends Processor> allProcessors;
@@ -105,6 +104,8 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 					value.getLocalName(), index, isSelected, cellHasFocus);
 		}
 	};
+
+	private EditManager em;//FIXME beaninject
 
 	private JList<TokenProcessingEntity> includableList = new JList<>();
 	private JList<TokenProcessingEntity> includedList = new JList<>();

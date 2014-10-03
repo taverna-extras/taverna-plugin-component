@@ -12,7 +12,7 @@ import net.sf.taverna.t2.workflowmodel.Edits;
 
 @SuppressWarnings("serial")
 public class ComponentConfigureAction extends ActivityConfigurationAction {
-	EditManager edits = null;//FIXME beaninject
+	EditManager edits;//FIXME beaninject
 
 	public ComponentConfigureAction(ComponentActivity activity, Frame owner) {
 		super(activity);

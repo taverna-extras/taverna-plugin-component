@@ -19,13 +19,13 @@ import javax.swing.JTextArea;
 
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.ComponentFileType;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
+import net.sf.taverna.t2.component.ui.util.ComponentFileType;
 import net.sf.taverna.t2.workbench.file.AbstractDataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.DataflowInfo;
 import net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler;
@@ -41,13 +41,12 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentSaver extends AbstractDataflowPersistenceHandler
 		implements DataflowPersistenceHandler {
 	private static final String UNSATISFIED_PROFILE_WARNING = "The component does not satisfy the profile.\nSee validation report.\nDo you still want to save?";
-	private static final FileType COMPONENT_FILE_TYPE = ComponentFileType.instance;
 	private static final Logger logger = getLogger(ComponentSaver.class);
+	private static final FileType COMPONENT_FILE_TYPE = ComponentFileType.instance;//FIXME beaninject?
 	private ComponentFactory factory;//FIXME beaninject
 
 	@Override
@@ -149,12 +148,12 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 
 	@Override
 	public List<Class<?>> getSaveDestinationTypes() {
-		return Arrays.<Class<?>> asList(ComponentVersionIdentification.class);
+		return Arrays.<Class<?>> asList(Version.ID.class);
 	}
 
 	@Override
-	public boolean wouldOverwriteDataflow(Dataflow dataflow, FileType fileType,
-			Object destination, DataflowInfo lastDataflowInfo) {
+	public boolean wouldOverwriteDataflow(WorkflowBundle dataflow,
+			FileType fileType, Object destination, DataflowInfo lastDataflowInfo) {
 		if (!getSaveFileTypes().contains(fileType))
 			throw new IllegalArgumentException("Unsupported file type "
 					+ fileType);

@@ -21,11 +21,9 @@
 package net.sf.taverna.t2.component.annotation;
 
 import static java.lang.String.format;
-import static java.util.Collections.emptyList;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import net.sf.taverna.t2.annotation.Annotated;
 import net.sf.taverna.t2.component.api.Family;

@@ -105,8 +105,7 @@ public class ComponentConfigurationPanel extends ActivityConfigurationPanel {
 	 */
 	@Override
 	public void noteConfiguration() {
-		ComponentVersionIdentification newIdent = new ComponentVersionIdentification(
-				configBean);
+		Version.ID newIdent = new Version.Identifier(configBean.);
 		newIdent.setComponentVersion(((Version) componentVersionChoice
 				.getSelectedItem()).getVersionNumber());
 		configBean = new ComponentActivityConfigurationBean(newIdent);

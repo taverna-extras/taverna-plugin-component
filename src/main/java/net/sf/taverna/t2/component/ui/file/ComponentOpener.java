@@ -3,7 +3,6 @@
  */
 package net.sf.taverna.t2.component.ui.file;
 
-import static net.sf.taverna.t2.component.registry.ComponentDataflowCache.getDataflow;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.util.Arrays;
@@ -11,18 +10,19 @@ import java.util.Date;
 import java.util.List;
 
 import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFileType;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
+import net.sf.taverna.t2.component.api.Version.ID;
+import net.sf.taverna.t2.component.ui.util.ComponentFileType;
 import net.sf.taverna.t2.workbench.file.AbstractDataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.DataflowInfo;
 import net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.FileType;
 import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
@@ -31,6 +31,7 @@ public class ComponentOpener extends AbstractDataflowPersistenceHandler
 		implements DataflowPersistenceHandler {
 	private static final FileType COMPONENT_FILE_TYPE = ComponentFileType.instance;
 	private static Logger logger = getLogger(ComponentOpener.class);
+	ComponentFactory factory;//FIXME beaninject
 
 	@Override
 	public DataflowInfo openDataflow(FileType fileType, Object source)
@@ -42,9 +43,9 @@ public class ComponentOpener extends AbstractDataflowPersistenceHandler
 			throw new IllegalArgumentException("Unsupported source type "
 					+ source.getClass().getName());
 
-		Dataflow d;
+		WorkflowBundle d;
 		try {
-			d = getDataflow((Version.ID) source);
+			d = factory.getVersion((ID) source).getImplementation();
 		} catch (ComponentException e) {
 			logger.error("Unable to read dataflow", e);
 			throw new OpenException("Unable to read dataflow", e);
@@ -59,6 +60,6 @@ public class ComponentOpener extends AbstractDataflowPersistenceHandler
 
 	@Override
 	public List<Class<?>> getOpenSourceTypes() {
-		return Arrays.<Class<?>> asList(ComponentVersionIdentification.class);
+		return Arrays.<Class<?>> asList(Version.ID.class);
 	}
 }

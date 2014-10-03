@@ -40,10 +40,9 @@ public class RegistryChooserPanel extends JPanel implements
 
 	private final List<Observer<RegistryChoiceMessage>> observers = new ArrayList<>();
 	private final JComboBox<String> registryBox;
-	private final ComponentPreference pref = ComponentPreference.getInstance();//FIXME beaninject
 	private final SortedMap<String, Registry> registryMap;
 
-	public RegistryChooserPanel() {
+	public RegistryChooserPanel(ComponentPreference pref) { //FIXME beaninject
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -51,7 +50,6 @@ public class RegistryChooserPanel extends JPanel implements
 		registryMap = pref.getRegistryMap();
 		registryBox = new JComboBox<>(new Vector<>(registryMap.keySet()));
 		registryBox.setPrototypeDisplayValue(LONG_STRING);
-
 		registryBox.setEditable(false);
 
 		gbc.gridx = 0;

@@ -30,6 +30,7 @@ import javax.swing.JTextArea;
 import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.PrefixPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
@@ -40,7 +41,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentSearchAction extends AbstractAction {
 	private static final String WFDESC_PREFIX = "wfdesc";
@@ -49,21 +49,18 @@ public class ComponentSearchAction extends AbstractAction {
 	private static final Logger logger = getLogger(ComponentSearchAction.class);
 	private static final String SEARCH_FOR_COMPONENTS = "Search for components...";
 
-	private JPanel overallPanel;
-	private GridBagConstraints gbc;
+	private ComponentPreference prefs; //FIXME beaninject
 
 	public ComponentSearchAction() {
 		super(SEARCH_FOR_COMPONENTS, getIcon());
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		overallPanel = new JPanel();
-		overallPanel.setLayout(new GridBagLayout());
+	public void actionPerformed(ActionEvent e) {
+		JPanel overallPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
 
-		gbc = new GridBagConstraints();
-
-		RegistryChooserPanel registryPanel = new RegistryChooserPanel();
+		RegistryChooserPanel registryPanel = new RegistryChooserPanel(prefs);
 
 		gbc.insets.left = 5;
 		gbc.insets.right = 5;

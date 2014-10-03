@@ -8,7 +8,6 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
-import static net.sf.taverna.t2.component.registry.ComponentUtil.calculateRegistry;
 import static net.sf.taverna.t2.component.ui.util.Utils.URL_PATTERN;
 import static net.sf.taverna.t2.workbench.helper.Helper.showHelp;
 import static org.apache.log4j.Logger.getLogger;
@@ -31,8 +30,9 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.RegistryException;
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
 import net.sf.taverna.t2.lang.ui.ValidatingUserInputDialog;
@@ -60,16 +60,18 @@ public class ComponentPreferencePanel extends JPanel {
 
 	private final Logger logger = getLogger(ComponentPreferencePanel.class);
 
+	private ComponentFactory factory; // FIXME beaninject
+	private ComponentPreference prefs; // FIXME beaninject
 	private RegistryTableModel tableModel = new RegistryTableModel();
 
+	@SuppressWarnings("serial")
 	private JTable registryTable = new JTable(tableModel) {
-		
 		@Override
-        public String getToolTipText(MouseEvent me) {
-        int row = rowAtPoint(me.getPoint());
-        if (row >= 0)
-                return tableModel.getRowTooltipText(row);
-        return super.getToolTipText(me);
+		public String getToolTipText(MouseEvent me) {
+			int row = rowAtPoint(me.getPoint());
+			if (row >= 0)
+				return tableModel.getRowTooltipText(row);
+			return super.getToolTipText(me);
 		}
 	};
 	
@@ -224,7 +226,7 @@ public class ComponentPreferencePanel extends JPanel {
 			logger.error("bad url provided by user", e);
 			showMessageDialog(null, EXCEPTION_MESSAGE + location,
 					EXCEPTION_TITLE, ERROR_MESSAGE);
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			logger.error("problem creating local registry", e);
 			showMessageDialog(null, EXCEPTION_MESSAGE + location,
 					EXCEPTION_TITLE, ERROR_MESSAGE);
@@ -252,35 +254,32 @@ public class ComponentPreferencePanel extends JPanel {
 			logger.error("bad url provided by user", e);
 			showMessageDialog(null, EXCEPTION_MESSAGE + location,
 					EXCEPTION_TITLE, ERROR_MESSAGE);
-		} catch (RegistryException e) {
+		} catch (ComponentException e) {
 			showMessageDialog(null, EXCEPTION_MESSAGE + location,
 					EXCEPTION_TITLE, ERROR_MESSAGE);
 			logger.error("problem creating remote registry", e);
 		}
 	}
 
-	Registry getLocalRegistry(File location) throws RegistryException,
+	Registry getLocalRegistry(File location) throws ComponentException,
 			MalformedURLException {
-		return calculateRegistry(location.toURI().toURL());
+		return factory.getRegistry(location.toURI().toURL());
 	}
 
 	Registry getRemoteRegistry(String location) throws MalformedURLException,
-			RegistryException {
+			ComponentException {
 		URL url = new URL(location);
 		if (url.getProtocol() == null || url.getProtocol().equals("file"))
 			throw new MalformedURLException(
 					"may not use relative or local URLs for locating registry");
-		return calculateRegistry(url);
+		return factory.getRegistry(url);
 	}
 
 	private void applySettings() {
-		ComponentPreference pref = ComponentPreference.getInstance();
-		pref.setRegistryMap(tableModel.getRegistryMap());
+		prefs.setRegistryMap(tableModel.getRegistryMap());
 	}
 
 	private void setFields() {
-		ComponentPreference pref = ComponentPreference.getInstance();
-		tableModel.setRegistryMap(pref.getRegistryMap());
+		tableModel.setRegistryMap(prefs.getRegistryMap());
 	}
-
 }

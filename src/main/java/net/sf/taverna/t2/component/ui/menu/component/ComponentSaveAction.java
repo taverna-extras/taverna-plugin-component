@@ -16,22 +16,21 @@ import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.events.FileManagerEvent;
-import net.sf.taverna.t2.workbench.file.impl.actions.SaveWorkflowAction;
 
 import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentSaveAction extends AbstractAction implements
 		Observer<FileManagerEvent> {
 	private static final long serialVersionUID = -2391891750558659714L;
 	@SuppressWarnings("unused")
 	private static Logger logger = getLogger(ComponentSaveAction.class);
-	private static Action saveWorkflowAction = new SaveWorkflowAction();
-	private static FileManager fileManager = FileManager.getInstance();
+	private static Action saveWorkflowAction = new net.sf.taverna.t2.workbench.file.impl.actions.SaveWorkflowAction();
 	private static final String SAVE_COMPONENT = "Save component";
+
+	private FileManager fileManager; //FIXME beaninject
 
 	public ComponentSaveAction() {
 		super(SAVE_COMPONENT, getIcon());
@@ -48,5 +47,4 @@ public class ComponentSaveAction extends AbstractAction implements
 			FileManagerEvent message) throws Exception {
 		setEnabled(/* saveWorkflowAction.isEnabled() && */currentDataflowIsComponent());
 	}
-
 }

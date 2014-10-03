@@ -3,16 +3,11 @@
  */
 package net.sf.taverna.t2.component.preference;
 
-import static net.sf.taverna.t2.component.preference.ComponentDefaults.DEFAULT_REGISTRY_LIST;
 import static net.sf.taverna.t2.component.preference.ComponentDefaults.REGISTRY_LIST;
 import static net.sf.taverna.t2.component.preference.ComponentDefaults.getDefaultProperties;
+import static org.apache.commons.lang.StringUtils.join;
 import static org.apache.log4j.Logger.getLogger;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -28,10 +22,10 @@ import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.configuration.AbstractConfigurable;
+import uk.org.taverna.configuration.ConfigurationManager;
 
 /**
  * @author alanrw
@@ -43,16 +37,9 @@ public class ComponentPreference extends AbstractConfigurable {
 	private final Logger logger = getLogger(ComponentPreference.class);
 	private final SortedMap<String, Registry> registryMap = new TreeMap<>();
 	ComponentFactory factory;// FIXME beaninject
-	
-	public static ComponentPreference getInstance() {
-		if (instance == null)
-			instance = new ComponentPreference();
-		return instance;
-	}
 
-	private ComponentPreference() {
-		super();
-
+	public ComponentPreference(ConfigurationManager cm) {
+		super(cm);
 		updateRegistryMap();
 	}
 
@@ -114,15 +101,14 @@ public class ComponentPreference extends AbstractConfigurable {
 		registryMap.clear();
 		registryMap.putAll(registries);
 		super.clear();
-		List<String> keyList = new ArrayList<String>();
+		List<String> keyList = new ArrayList<>();
 		for (Entry<String, Registry> entry : registryMap.entrySet()) {
-			final String key = entry.getKey();
-			keyList.add (key);
-			super.setProperty(key, entry.getValue()
-					.getRegistryBaseString());
+			String key = entry.getKey();
+			keyList.add(key);
+			super.setProperty(key, entry.getValue().getRegistryBaseString());
 		}
 		Collections.sort(keyList);
-		String registryNamesConcatenated = StringUtils.join(keyList, ",");
+		String registryNamesConcatenated = join(keyList, ",");
 		super.setProperty(REGISTRY_LIST, registryNamesConcatenated);
 	}
 
