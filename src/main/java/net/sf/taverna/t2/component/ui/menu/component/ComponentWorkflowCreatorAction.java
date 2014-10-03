@@ -5,8 +5,6 @@ package net.sf.taverna.t2.component.ui.menu.component;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ui.menu.component.ComponentServiceCreatorAction.getNewComponentIdentification;
-import static net.sf.taverna.t2.component.ui.menu.component.ComponentServiceCreatorAction.saveWorkflowAsComponent;
 import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static net.sf.taverna.t2.component.ui.util.Utils.currentDataflowIsComponent;
 import static org.apache.log4j.Logger.getLogger;
@@ -17,6 +15,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.ui.ComponentAction;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 import net.sf.taverna.t2.workbench.file.FileManager;
@@ -28,18 +27,18 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
- * 
  */
-public class ComponentWorkflowCreatorAction extends AbstractAction implements
+public class ComponentWorkflowCreatorAction extends ComponentAction implements
 		Observer<FileManagerEvent> {
 	private static final long serialVersionUID = -299685223430721587L;
 	private static Logger logger = getLogger(ComponentWorkflowCreatorAction.class);
 	private static final String CREATE_COMPONENT = "Create component from current workflow...";
 
+	private ComponentCreatorSupport support;
 	private FileManager fileManager; //FIXME beaninject
 
 	public ComponentWorkflowCreatorAction() {
-		super(CREATE_COMPONENT, getIcon());
+		super(CREATE_COMPONENT);
 		fileManager.addObserver(this);
 	}
 
@@ -47,13 +46,12 @@ public class ComponentWorkflowCreatorAction extends AbstractAction implements
 	public void actionPerformed(ActionEvent event) {
 		WorkflowBundle bundle = fileManager.getCurrentDataflow();
 		try {
-			Version.ID ident = getNewComponentIdentification(bundle.getName());//TODO is this right
+			Version.ID ident = support.getNewComponentIdentification(bundle.getName());//TODO is this right
 			if (ident == null)
 				return;
-
-			saveWorkflowAsComponent(bundle, ident);
+			support.saveWorkflowAsComponent(bundle, ident);
 		} catch (Exception e) {
-			showMessageDialog(null, e.getCause().getMessage(),
+			showMessageDialog(graphView, e.getCause().getMessage(),
 					"Component creation failure", ERROR_MESSAGE);
 			logger.error("failed to save workflow as component", e);
 		}

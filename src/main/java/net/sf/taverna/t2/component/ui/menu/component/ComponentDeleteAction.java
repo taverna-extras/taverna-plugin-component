@@ -28,7 +28,6 @@ import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workflowmodel.ConfigurationException;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
 
@@ -49,7 +48,8 @@ public class ComponentDeleteAction extends AbstractAction {
 	private static final String WHAT_COMPONENT_MSG = "Unable to determine component";
 	private static final long serialVersionUID = -2992743162132614936L;
 	private static final Logger logger = getLogger(ComponentDeleteAction.class);
-	private static final FileManager fm = FileManager.getInstance();//FIXME beaninject
+
+	private FileManager fm;//FIXME beaninject
 
 	public ComponentDeleteAction() {
 		super(DELETE_COMPONENT_LABEL, getIcon());
@@ -113,7 +113,7 @@ public class ComponentDeleteAction extends AbstractAction {
 		}
 	}
 
-	private static boolean componentIsInUse(Component component) {
+	private boolean componentIsInUse(Component component) {
 		for (WorkflowBundle d : fm.getOpenDataflows()) {
 			Object dataflowSource = fm.getDataflowSource(d);
 			if (dataflowSource instanceof Version.ID
@@ -122,5 +122,4 @@ public class ComponentDeleteAction extends AbstractAction {
 		}
 		return false;
 	}
-
 }

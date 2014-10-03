@@ -8,7 +8,6 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.registry.ComponentUtil.calculateComponent;
 import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static net.sf.taverna.t2.component.ui.util.Utils.refreshComponentServiceProvider;
 import static net.sf.taverna.t2.workflowmodel.utils.Tools.uniqueProcessorName;
@@ -23,10 +22,11 @@ import java.util.List;
 import javax.swing.AbstractAction;
 
 import net.sf.taverna.t2.component.ComponentActivity;
-import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.ui.menu.component.ComponentCreatorSupport.CopiedProcessor;
 import net.sf.taverna.t2.component.ui.panel.RegistryAndFamilyChooserComponentEntryPanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
 import net.sf.taverna.t2.component.ui.util.ComponentFileType;
@@ -51,9 +51,6 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationE
 import net.sf.taverna.t2.workflowmodel.processor.activity.NestedDataflow;
 import net.sf.taverna.t2.workflowmodel.serialization.DeserializationException;
 import net.sf.taverna.t2.workflowmodel.serialization.SerializationException;
-import net.sf.taverna.t2.workflowmodel.serialization.xml.DataflowXMLSerializer;
-import net.sf.taverna.t2.workflowmodel.serialization.xml.ProcessorXMLDeserializer;
-import net.sf.taverna.t2.workflowmodel.serialization.xml.ProcessorXMLSerializer;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
@@ -70,9 +67,9 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 
 	private final Processor p;
 
-	private static FileManager fm; //FIXME beaninject
-	private static EditManager em; //FIXME beaninject
-	private static Edits edits; //FIXME beaninject
+	private ComponentCreatorSupport support;//FIXME beaninject
+	private FileManager fm; //FIXME beaninject
+	private Edits edits; //FIXME beaninject
 
 	public ComponentServiceCreatorAction(Processor processor) {
 		super("Create component...", getIcon());
@@ -81,7 +78,8 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		Version.ID ident = getNewComponentIdentification(p.getLocalName());
+		Version.ID ident = support.getNewComponentIdentification(p
+				.getLocalName());
 		if (ident == null)
 			return;
 
@@ -98,11 +96,11 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 				/* TODO: Keep the description */
 				// fm.setCurrentDataflow(current);
 
-				Element processorElement = copyProcessor(p);
+				CopiedProcessor processorElement = support.copyProcessor(p);
 
 				Processor newProcessor;
 				try {
-					newProcessor = pasteProcessor(processorElement, d);
+					newProcessor = support.pasteProcessor(processorElement, d);
 				} catch (IllegalArgumentException e) {
 					logger.error(
 							"failed to paste processor representing component",
@@ -112,13 +110,11 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 					return;
 				}
 
-				connectNewProcessor(d, newProcessor);
+				support.connectNewProcessor(d, newProcessor);
 			}
 
 			ComponentActivity ca = new ComponentActivity();
-			ComponentActivityConfigurationBean cacb = saveWorkflowAsComponent(
-					d, ident);
-			ca.configure(cacb);
+			ca.configure(support.saveWorkflowAsComponent(d, ident));
 			moveComponentActivityIntoPlace(a, current, ca);
 		} catch (Exception e) {
 			logger.error("failed to instantiate component", e);
@@ -127,151 +123,4 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 		}
 	}
 
-	private void moveComponentActivityIntoPlace(Activity<?> a,
-			Dataflow current, ComponentActivity ca) throws EditException {
-		List<Edit<?>> editsToDo = new ArrayList<>();
-
-		for (ProcessorInputPort pip : p.getInputPorts())
-			editsToDo.add(edits.getAddActivityInputPortMappingEdit(ca,
-					pip.getName(), pip.getName()));
-
-		for (ProcessorOutputPort pop : p.getOutputPorts())
-			editsToDo.add(edits.getAddActivityOutputPortMappingEdit(ca,
-					pop.getName(), pop.getName()));
-
-		editsToDo.add(edits.getRemoveActivityEdit(p, a));
-		editsToDo.add(edits.getAddActivityEdit(p, ca));
-		em.doDataflowEdit(current, new CompoundEdit(editsToDo));
-	}
-
-	private void connectNewProcessor(Dataflow d, Processor newProcessor)
-			throws EditException {
-		List<Edit<?>> editsToDo = new ArrayList<>();
-
-		for (ProcessorInputPort pip : newProcessor.getInputPorts()) {
-			DataflowInputPort dip = edits.createDataflowInputPort(
-					pip.getName(), pip.getDepth(), pip.getDepth(), d);
-			editsToDo.add(edits.getAddDataflowInputPortEdit(d, dip));
-
-			Datalink dl = edits
-					.createDatalink(dip.getInternalOutputPort(), pip);
-			editsToDo.add(edits.getConnectDatalinkEdit(dl));
-		}
-
-		for (ProcessorOutputPort pop : newProcessor.getOutputPorts()) {
-			DataflowOutputPort dop = edits.createDataflowOutputPort(
-					pop.getName(), d);
-			editsToDo.add(edits.getAddDataflowOutputPortEdit(d, dop));
-
-			Datalink dl = edits.createDatalink(pop, dop.getInternalInputPort());
-			editsToDo.add(edits.getConnectDatalinkEdit(dl));
-		}
-		em.doDataflowEdit(d, new CompoundEdit(editsToDo));
-	}
-
-	public static ComponentActivityConfigurationBean saveWorkflowAsComponent(
-			WorkflowBundle d, Version.ID ident) throws SaveException, IOException,
-			ConfigurationException, ComponentException {
-		if (ident == null)
-			return null;
-
-		createInitialComponent(d, ident);
-
-		refreshComponentServiceProvider(new ComponentServiceProviderConfig(
-				ident));
-		return new ComponentActivityConfigurationBean(ident);
-	}
-
-	static Version.ID getNewComponentIdentification(String defaultName) {
-		RegistryAndFamilyChooserComponentEntryPanel panel = new RegistryAndFamilyChooserComponentEntryPanel();
-		panel.setComponentName(defaultName);
-		int result = showConfirmDialog(null, panel, "Component location",
-				OK_CANCEL_OPTION);
-		if (result != OK_OPTION)
-			return null;
-
-		Version.ID ident = panel.getComponentVersionIdentification();
-		if (ident == null) {
-			showMessageDialog(null,
-					"Not enough information to create component",
-					"Component creation problem", ERROR_MESSAGE);
-			return null;
-		}
-
-		try {
-			Component existingComponent = calculateComponent(ident);
-			if (existingComponent != null) {
-				showMessageDialog(null,
-						"Component with this name already exists",
-						"Component creation problem", ERROR_MESSAGE);
-				return null;
-			}
-		} catch (ComponentException e) {
-			logger.error("failed to search registry", e);
-			showMessageDialog(null,
-					"Problem searching registry: " + e.getMessage(),
-					"Component creation problem", ERROR_MESSAGE);
-			return null;
-		}
-		return ident;
-	}
-
-	private static HashMap<String, Element> requiredSubworkflows = new HashMap<String, Element>();
-
-	public static Element copyProcessor(Processor p) throws IOException,
-			JDOMException, SerializationException {
-		Element result = ProcessorXMLSerializer.getInstance().processorToXML(p);
-		requiredSubworkflows = new HashMap<>();
-		rememberSubworkflows(p);
-		return result;
-	}
-
-	private static void rememberSubworkflows(Processor p)
-			throws SerializationException {
-		for (Activity<?> a : p.getActivityList())
-			if (a instanceof NestedDataflow) {
-				NestedDataflow da = (NestedDataflow) a;
-				Dataflow df = da.getNestedDataflow();
-				if (!requiredSubworkflows.containsKey(df.getIdentifier())) {
-					requiredSubworkflows.put(df.getIdentifier(),
-							DataflowXMLSerializer.getInstance()
-									.serializeDataflow(df));
-					for (Processor sp : df.getProcessors())
-						rememberSubworkflows(sp);
-				}
-			}
-	}
-
-	public static Processor pasteProcessor(Element e, Dataflow d)
-			throws ActivityConfigurationException, Exception,
-			ClassNotFoundException, InstantiationException,
-			IllegalAccessException, DeserializationException {
-		Processor result = ProcessorXMLDeserializer.getInstance()
-				.deserializeProcessor(e, requiredSubworkflows);
-		if (result == null)
-			return null;
-
-		String newName = uniqueProcessorName(result.getLocalName(), d);
-
-		List<Edit<?>> editList = new ArrayList<>();
-		if (!newName.equals(result.getLocalName()))
-			editList.add(edits.getRenameProcessorEdit(result, newName));
-		editList.add(edits.getAddProcessorEdit(d, result));
-		em.doDataflowEdit(d, new CompoundEdit(editList));
-
-		return result;
-	}
-
-	public static Version.ID createInitialComponent(WorkflowBundle d, Version.ID ident)
-			throws ComponentException {
-		try {
-			fm.saveDataflow(d, ComponentFileType.instance, ident, false);
-
-			em.doDataflowEdit(d,
-					edits.getUpdateDataflowNameEdit(d, d.getName()));
-		} catch (OverwriteException|SaveException|IllegalStateException|EditException e) {
-			throw new ComponentException(e);
-		}
-		return ident;
-	}
 }

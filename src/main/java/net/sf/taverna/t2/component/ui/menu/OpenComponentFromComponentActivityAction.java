@@ -14,6 +14,7 @@ import javax.swing.AbstractAction;
 
 import net.sf.taverna.t2.component.ComponentActivity;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.ui.ComponentAction;
 import net.sf.taverna.t2.component.ui.util.ComponentFileType;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
@@ -28,20 +29,18 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
- * 
  */
 @SuppressWarnings("serial")
-public class OpenComponentFromComponentActivityAction extends AbstractAction {
+public class OpenComponentFromComponentActivityAction extends ComponentAction {
 	private static Logger logger = getLogger(OpenComponentFromComponentActivityAction.class);
 
 	private FileManager fileManager;//FIXME beaninject
 
 	public OpenComponentFromComponentActivityAction() {
-		super("Open component...", getIcon());
+		super("Open component...");
 	}
 
 	private ComponentActivity selection;
-	private GraphViewComponent gvc; //FIXME???
 
 	@Override
 	public void actionPerformed(ActionEvent ev) {
@@ -50,21 +49,7 @@ public class OpenComponentFromComponentActivityAction extends AbstractAction {
 		try {
 			WorkflowBundle d = fileManager.openDataflow(
 					ComponentFileType.instance, ident);
-
-			final GraphController gc = gvc.getGraphController(d
-					.getMainWorkflow());
-			invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						SVGGraph g = (SVGGraph) gc.getGraph();
-						g.setFillColor(RED);
-						gc.redraw();
-					} catch (NullPointerException e) {
-						logger.error(e);
-					}
-				}
-			});
+			markGraphAsBelongingToComponent(d);
 		} catch (OpenException e) {
 			logger.error("failed to open component", e);
 		}

@@ -3,20 +3,16 @@
  */
 package net.sf.taverna.t2.component.ui.menu.component;
 
-import static java.awt.Color.RED;
 import static javax.swing.JOptionPane.CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.QUESTION_MESSAGE;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.showOptionDialog;
-import static javax.swing.SwingUtilities.invokeLater;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -25,6 +21,7 @@ import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.ui.ComponentAction;
 import net.sf.taverna.t2.component.ui.panel.ComponentChoiceMessage;
 import net.sf.taverna.t2.component.ui.panel.ComponentVersionChooserPanel;
 import net.sf.taverna.t2.component.ui.util.ComponentFileType;
@@ -32,9 +29,6 @@ import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
-import net.sf.taverna.t2.workbench.models.graph.GraphController;
-import net.sf.taverna.t2.workbench.models.graph.svg.SVGGraph;
-import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
 
 import org.apache.log4j.Logger;
 
@@ -43,18 +37,16 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 /**
  * @author alanrw
  */
-public class OpenWorkflowFromComponentAction extends AbstractAction {
+public class OpenWorkflowFromComponentAction extends ComponentAction {
 	private static final long serialVersionUID = 7382677337746318211L;
 	private static final Logger logger = getLogger(OpenWorkflowFromComponentAction.class);
 	private static final String ACTION_NAME = "Open component...";
 	private static final String ACTION_DESCRIPTION = "Open the workflow that implements a component";
 
 	private FileManager fm;//FIXME beaninject
-	private GraphViewComponent gvc;//FIXME what is this anyway?
 
 	public OpenWorkflowFromComponentAction(final java.awt.Component component) {
-		putValue(SMALL_ICON, getIcon());
-		putValue(NAME, ACTION_NAME);
+		super(ACTION_NAME);
 		putValue(SHORT_DESCRIPTION, ACTION_DESCRIPTION);
 	}
 
@@ -92,7 +84,7 @@ public class OpenWorkflowFromComponentAction extends AbstractAction {
 		    }
 		});
 
-		showOptionDialog(null/* FIXME */, panel, "Component version choice",
+		showOptionDialog(graphView, panel, "Component version choice",
 				YES_NO_OPTION, QUESTION_MESSAGE, null, new Object[] { okay,
 						cancel }, okay);
 	}
@@ -111,17 +103,7 @@ public class OpenWorkflowFromComponentAction extends AbstractAction {
 
 		try {
 			WorkflowBundle d = fm.openDataflow(ComponentFileType.instance, ident);
-			final GraphController gc = gvc.getGraphController(d.getMainWorkflow());
-			invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					if (gc != null) {
-						SVGGraph g = (SVGGraph) gc.getGraph();
-						g.setFillColor(RED);
-						gc.redraw();
-					}
-				}
-			});
+			markGraphAsBelongingToComponent(d);
 		} catch (OpenException e) {
 			logger.error("Failed to open component definition", e);
 		}
