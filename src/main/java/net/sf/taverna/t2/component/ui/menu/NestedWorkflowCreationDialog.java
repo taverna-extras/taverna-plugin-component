@@ -301,11 +301,11 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	}
 
 	private void createNestedWorkflow(ActionEvent e) {
-		final List<Edit<?>> currentWorkflowEditList = new ArrayList<Edit<?>>();
-		Map<Object, Object> oldNewMapping = new HashMap<Object, Object>();
-		Map<Datalink, String> linkProcessorPortMapping = new HashMap<Datalink, String>();
-		Map<EventForwardingOutputPort, DataflowOutputPort> outputPortMap = new HashMap<EventForwardingOutputPort, DataflowOutputPort>();
-		Map<EventHandlingInputPort, DataflowInputPort> inputPortMap = new HashMap<EventHandlingInputPort, DataflowInputPort>();
+		final List<Edit<?>> currentWorkflowEditList = new ArrayList<>();
+		Map<Object, Object> oldNewMapping = new HashMap<>();
+		Map<Datalink, String> linkProcessorPortMapping = new HashMap<>();
+		Map<EventForwardingOutputPort, DataflowOutputPort> outputPortMap = new HashMap<>();
+		Map<EventHandlingInputPort, DataflowInputPort> inputPortMap = new HashMap<>();
 
 		Processor nestingProcessor = createNestingProcessor(currentWorkflowEditList);
 
@@ -373,10 +373,10 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 			Processor nestingProcessor) {
 		for (Datalink dl : currentDataflow.getLinks()) {
 			if (oldNewMapping.containsKey(dl.getSource())
-					&& oldNewMapping.containsKey(dl.getSink())) {
+					&& oldNewMapping.containsKey(dl.getSink()))
 				// Internal to nested workflow
 				editList.add(edits.getDisconnectDatalinkEdit(dl));
-			} else if (oldNewMapping.containsKey(dl.getSource())) {
+			else if (oldNewMapping.containsKey(dl.getSource())) {
 				// Coming out of nested workflow
 				String portName = linkProcessorPortMapping.get(dl);
 				ProcessorOutputPort nestedPort = null;

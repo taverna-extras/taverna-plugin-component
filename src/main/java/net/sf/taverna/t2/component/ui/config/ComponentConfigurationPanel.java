@@ -1,6 +1,10 @@
 package net.sf.taverna.t2.component.ui.config;
 
 import static java.awt.event.ItemEvent.SELECTED;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 import static net.sf.taverna.t2.component.ui.util.Utils.SHORT_STRING;
 import static org.apache.log4j.Logger.getLogger;
 
@@ -9,13 +13,13 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.SortedMap;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
-import net.sf.taverna.t2.component.ComponentActivity;
-import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.ComponentFactory;
@@ -25,21 +29,41 @@ import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ActivityCon
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.commons.services.ServiceRegistry;
+import uk.org.taverna.scufl2.api.activity.Activity;
+
 @SuppressWarnings("serial")
 public class ComponentConfigurationPanel extends ActivityConfigurationPanel {
 	private static Logger logger = getLogger(ComponentConfigurationPanel.class);
 
 	private ComponentFactory factory;//FIXME beaninject
-	private ComponentActivity activity;
-	private ComponentActivityConfigurationBean configBean;
+	private ServiceRegistry sr;
 
 	private final JComboBox<Object> componentVersionChoice = new JComboBox<>();
 
-	public ComponentConfigurationPanel(ComponentActivity activity) {
-		this.activity = activity;
+	public ComponentConfigurationPanel(Activity activity,
+			ComponentFactory factory, ServiceRegistry serviceRegistry) {
+		super(activity);
+		sr = serviceRegistry;
+		this.factory = factory;
 		componentVersionChoice.setPrototypeDisplayValue(SHORT_STRING);
-		configBean = activity.getConfiguration();
 		initGui();
+	}
+
+	private Version getSelectedVersion() {
+		return (Version) componentVersionChoice.getSelectedItem();
+	}
+	private URI getRegistryBase() {
+		return URI.create(getProperty(REGISTRY_BASE));
+	}
+	private String getFamilyName() {
+		return getProperty(FAMILY_NAME);
+	}
+	private String getComponentName() {
+		return getProperty(COMPONENT_NAME);
+	}
+	private Integer getComponentVersion() {
+		return Integer.parseInt(getProperty(COMPONENT_VERSION));
 	}
 
 	protected void initGui() {
@@ -80,23 +104,12 @@ public class ComponentConfigurationPanel extends ActivityConfigurationPanel {
 	}
 
 	/**
-	 * Return configuration bean generated from user interface last time
-	 * noteConfiguration() was called.
-	 */
-	@Override
-	public ComponentActivityConfigurationBean getConfiguration() {
-		// Should already have been made by noteConfiguration()
-		return configBean;
-	}
-
-	/**
 	 * Check if the user has changed the configuration from the original
 	 */
 	@Override
 	public boolean isConfigurationChanged() {
-		Integer version = ((Version) componentVersionChoice.getSelectedItem())
-				.getVersionNumber();
-		return !version.equals(configBean.getComponentVersion());
+		return !getSelectedVersion().getVersionNumber().equals(
+				getComponentVersion());
 	}
 
 	/**
@@ -105,21 +118,11 @@ public class ComponentConfigurationPanel extends ActivityConfigurationPanel {
 	 */
 	@Override
 	public void noteConfiguration() {
-		Version.ID newIdent = new Version.Identifier(configBean.);
-		newIdent.setComponentVersion(((Version) componentVersionChoice
-				.getSelectedItem()).getVersionNumber());
-		configBean = new ComponentActivityConfigurationBean(newIdent);
-	}
-
-	/**
-	 * Update GUI from a changed configuration bean (perhaps by undo/redo).
-	 * 
-	 */
-	@Override
-	public void refreshConfiguration() {
-		configBean = activity.getConfiguration();
-
-		updateComponentVersionChoice();
+		setProperty(COMPONENT_VERSION, getSelectedVersion().getVersionNumber()
+				.toString());
+		//FIXME is this right at all???
+		configureInputPorts(sr);
+		configureOutputPorts(sr);
 	}
 
 	private void updateComponentVersionChoice() {
@@ -127,8 +130,9 @@ public class ComponentConfigurationPanel extends ActivityConfigurationPanel {
 		componentVersionChoice.removeAllItems();
 		componentVersionChoice.setToolTipText(null);
 		try {
-			component = factory.getComponent(configBean);
-		} catch (ComponentException e) {
+			component = factory.getComponent(getRegistryBase().toURL(),
+					getFamilyName(), getComponentName());
+		} catch (ComponentException | MalformedURLException e) {
 			logger.error("failed to get component", e);
 			return;
 		}
@@ -137,7 +141,7 @@ public class ComponentConfigurationPanel extends ActivityConfigurationPanel {
 		for (Version v : componentVersionMap.values())
 			componentVersionChoice.addItem(v);
 		componentVersionChoice.setSelectedItem(componentVersionMap
-				.get(configBean.getComponentVersion()));
+				.get(getComponentVersion()));
 		updateToolTipText();
 	}
 
