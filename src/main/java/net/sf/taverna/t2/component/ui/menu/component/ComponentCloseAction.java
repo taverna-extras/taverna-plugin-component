@@ -16,7 +16,6 @@ import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.events.FileManagerEvent;
-import net.sf.taverna.t2.workbench.file.impl.actions.CloseWorkflowAction;
 
 import org.apache.log4j.Logger;
 
@@ -30,8 +29,8 @@ public class ComponentCloseAction extends AbstractAction implements
 
 	@SuppressWarnings("unused")
 	private static Logger logger = getLogger(ComponentCloseAction.class);
-	private static Action closeWorkflowAction = new CloseWorkflowAction();
-	private static FileManager fileManager = FileManager.getInstance();
+	private static Action closeWorkflowAction;//FIXME beaninject CloseWorkflowAction
+	private static FileManager fileManager;//FIXME beaninject
 
 	public ComponentCloseAction() {
 		super(CLOSE_COMPONENT, getIcon());

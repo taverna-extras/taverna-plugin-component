@@ -32,12 +32,12 @@ import net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.FileType;
 import net.sf.taverna.t2.workbench.file.exceptions.SaveException;
 import net.sf.taverna.t2.workflowmodel.ConfigurationException;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.DataflowValidationReport;
 
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.validation.ValidationReport;
+import uk.org.taverna.scufl2.validation.structural.StructuralValidator;
 
 /**
  * @author alanrw
@@ -50,7 +50,7 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 	private ComponentFactory factory;//FIXME beaninject
 
 	@Override
-	public DataflowInfo saveDataflow(WorkflowBundle dataflow, FileType fileType,
+	public DataflowInfo saveDataflow(WorkflowBundle bundle, FileType fileType,
 			Object destination) throws SaveException {
 		if (!getSaveFileTypes().contains(fileType))
 			throw new IllegalArgumentException("Unsupported file type "
@@ -59,9 +59,12 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 			throw new IllegalArgumentException("Unsupported destination type "
 					+ destination.getClass().getName());
 
-		DataflowValidationReport dvr = dataflow.checkValidity();
-		if (!dvr.isValid())
-			throw new SaveException("Cannot save a structurally invalid workflow as a component");
+		ValidationReport structuralValidity = new StructuralValidator()
+				.validate(bundle);
+		if (structuralValidity.detectedProblems())
+			throw new SaveException(
+					"Cannot save a structurally invalid workflow as a component",
+					structuralValidity.getException());
 
 		/*
 		 * Saving an invalid dataflow is OK. Validity check is done to get
@@ -74,7 +77,7 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 			Version.ID newIdent = new Version.Identifier(
 					ident.getRegistryBase(), ident.getFamilyName(),
 					ident.getComponentName(), 0);
-			return new DataflowInfo(COMPONENT_FILE_TYPE, newIdent, dataflow);
+			return new DataflowInfo(COMPONENT_FILE_TYPE, newIdent, bundle);
 		}
 
 		Family family;
@@ -88,7 +91,7 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 		Version newVersion = null;
 		try {
 			List<SemanticAnnotationProfile> problemProfiles = new ArrayList<>(
-					checkComponent(dataflow, family.getComponentProfile()));
+					checkComponent(bundle, family.getComponentProfile()));
 
 			if (!problemProfiles.isEmpty()) {
 				int answer = showConfirmDialog(null,
@@ -110,7 +113,7 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 					throw new SaveException("Saving cancelled");
 				newVersion = family.createComponentBasedOn(
 						ident.getComponentName(), descriptionArea.getText(),
-						dataflow);
+						bundle);
 			} else {
 				Component component = family.getComponent(ident
 						.getComponentName());
@@ -118,7 +121,7 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 						"Version description", OK_CANCEL_OPTION);
 				if (answer != OK_OPTION)
 					throw new SaveException("Saving cancelled");
-				newVersion = component.addVersionBasedOn(dataflow,
+				newVersion = component.addVersionBasedOn(bundle,
 						descriptionArea.getText());
 			}
 		} catch (ComponentException e) {
@@ -138,7 +141,7 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 			logger.error("Unable to refresh service panel", e);
 		}
 
-		return new DataflowInfo(COMPONENT_FILE_TYPE, newIdent, dataflow);
+		return new DataflowInfo(COMPONENT_FILE_TYPE, newIdent, bundle);
 	}
 
 	@Override

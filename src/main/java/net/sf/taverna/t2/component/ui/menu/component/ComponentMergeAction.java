@@ -25,6 +25,7 @@ import javax.swing.border.TitledBorder;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.ComponentChoiceMessage;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChoiceMessage;
@@ -41,6 +42,8 @@ public class ComponentMergeAction extends AbstractAction {
 	private static final Logger logger = getLogger(ComponentMergeAction.class);
 	private static final String MERGE_COMPONENT = "Merge component...";
 
+	private ComponentPreference prefs;//FIXME beaninject
+
 	public ComponentMergeAction() {
 		super(MERGE_COMPONENT, getIcon());
 	}
@@ -52,7 +55,7 @@ public class ComponentMergeAction extends AbstractAction {
 
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		ComponentChooserPanel source = new ComponentChooserPanel();
+		ComponentChooserPanel source = new ComponentChooserPanel(prefs);
 		source.setBorder(new TitledBorder("Source component"));
 
 		gbc.insets = new Insets(0, 5, 0, 5);
@@ -64,7 +67,7 @@ public class ComponentMergeAction extends AbstractAction {
 		gbc.weightx = 1;
 		overallPanel.add(source, gbc);
 
-		final ComponentChooserPanel target = new ComponentChooserPanel();
+		final ComponentChooserPanel target = new ComponentChooserPanel(prefs);
 		target.setBorder(new TitledBorder("Target component"));
 		gbc.gridy++;
 		overallPanel.add(target, gbc);

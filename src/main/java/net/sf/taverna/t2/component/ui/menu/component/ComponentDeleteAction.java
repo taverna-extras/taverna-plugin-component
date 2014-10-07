@@ -24,6 +24,7 @@ import javax.swing.SwingWorker;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
 import net.sf.taverna.t2.workbench.file.FileManager;
@@ -50,6 +51,7 @@ public class ComponentDeleteAction extends AbstractAction {
 	private static final Logger logger = getLogger(ComponentDeleteAction.class);
 
 	private FileManager fm;//FIXME beaninject
+	private ComponentPreference prefs;//FIXME beaninject
 
 	public ComponentDeleteAction() {
 		super(DELETE_COMPONENT_LABEL, getIcon());
@@ -57,7 +59,7 @@ public class ComponentDeleteAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		ComponentChooserPanel panel = new ComponentChooserPanel();
+		ComponentChooserPanel panel = new ComponentChooserPanel(prefs);
 		int answer = showConfirmDialog(null, panel, TITLE, OK_CANCEL_OPTION);
 		if (answer == OK_OPTION)
 			doDelete(panel.getChosenComponent());

@@ -28,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import net.sf.taverna.t2.component.api.profile.Profile;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
@@ -36,8 +37,13 @@ import net.sf.taverna.t2.component.ui.panel.ProfileChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.SearchChoicePanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceDesc;
+import net.sf.taverna.t2.ui.menu.MenuManager;
+import net.sf.taverna.t2.workbench.edits.EditManager;
+import net.sf.taverna.t2.workbench.selection.SelectionManager;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.commons.services.ServiceRegistry;
 
 /**
  * @author alanrw
@@ -50,6 +56,11 @@ public class ComponentSearchAction extends AbstractAction {
 	private static final String SEARCH_FOR_COMPONENTS = "Search for components...";
 
 	private ComponentPreference prefs; //FIXME beaninject
+	private ComponentFactory factory; //FIXME beaninject
+	private EditManager em; //FIXME beaninject
+	private MenuManager mm; //FIXME beaninject
+	private SelectionManager sm; //FIXME beaninject
+	private ServiceRegistry sr; //FIXME beaninject
 
 	public ComponentSearchAction() {
 		super(SEARCH_FOR_COMPONENTS, getIcon());
@@ -123,8 +134,8 @@ public class ComponentSearchAction extends AbstractAction {
 		if (answer == OK_OPTION) {
 			Version.ID ident = searchChoicePanel.getVersionIdentification();
 			if (ident != null)
-				importServiceDescription(new ComponentServiceDesc(null,null,//FIXME
-						ident), false);
+				importServiceDescription(new ComponentServiceDesc(prefs,
+						factory, ident), false, em, mm, sm, sr);
 		}
 	}
 

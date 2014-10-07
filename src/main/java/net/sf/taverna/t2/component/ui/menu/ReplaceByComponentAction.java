@@ -26,32 +26,20 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-import net.sf.taverna.t2.component.ComponentActivity;
+import uk.org.taverna.scufl2.api.activity.Activity;
+import uk.org.taverna.scufl2.api.core.Processor;
 import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
+import net.sf.taverna.t2.workbench.edits.CompoundEdit;
+import net.sf.taverna.t2.workbench.edits.Edit;
+import net.sf.taverna.t2.workbench.edits.EditException;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workflowmodel.CompoundEdit;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.Edit;
-import net.sf.taverna.t2.workflowmodel.EditException;
-import net.sf.taverna.t2.workflowmodel.Edits;
-import net.sf.taverna.t2.workflowmodel.OutputPort;
-import net.sf.taverna.t2.workflowmodel.Processor;
-import net.sf.taverna.t2.workflowmodel.ProcessorInputPort;
-import net.sf.taverna.t2.workflowmodel.ProcessorOutputPort;
-import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
-import net.sf.taverna.t2.workflowmodel.processor.activity.NestedDataflow;
 import net.sf.taverna.t2.workflowmodel.utils.Tools;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
  * @author alanrw
@@ -60,9 +48,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class ReplaceByComponentAction extends AbstractAction {
 	private static final long serialVersionUID = 7364648399658711574L;
 
-	private FileManager fileManager = FileManager.getInstance(); //FIXME beaninject
-	private EditManager em = EditManager.getInstance(); //FIXME beaninject
-	private Edits edits = em.getEdits(); //FIXME beaninject
+	private FileManager fileManager; //FIXME beaninject
+	private EditManager em; //FIXME beaninject
+	private Edits edits; //FIXME beaninject
 
 	public ReplaceByComponentAction() {
 		super("Replace by component...", getIcon());
@@ -133,7 +121,7 @@ public class ReplaceByComponentAction extends AbstractAction {
 			ComponentActivityConfigurationBean cacb, String configString,
 			boolean rename, Dataflow d) throws ActivityConfigurationException {
 		for (Processor p : d.getProcessors()) {
-			Activity<?> a = p.getActivityList().get(0);
+			Activity a = p.getActivityList().get(0);
 			if (a.getClass().equals(activityClass)
 					&& getConfigString(a).equals(configString))
 				replaceActivity(cacb, p, rename, d);
@@ -146,7 +134,7 @@ public class ReplaceByComponentAction extends AbstractAction {
 
 	private void replaceActivity(ComponentActivityConfigurationBean cacb,
 			Processor p, boolean rename, Dataflow d) throws ActivityConfigurationException {
-		final Activity<?> originalActivity = p.getActivityList().get(0);
+		final Activity originalActivity = p.getActivityList().get(0);
 
 		ComponentActivity replacementActivity = new ComponentActivity();
 		try {

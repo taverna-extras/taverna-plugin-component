@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 
-import net.sf.taverna.t2.component.ComponentActivity;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.ComponentFactory;
@@ -34,29 +33,14 @@ import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.exceptions.OverwriteException;
 import net.sf.taverna.t2.workbench.file.exceptions.SaveException;
-import net.sf.taverna.t2.workflowmodel.CompoundEdit;
-import net.sf.taverna.t2.workflowmodel.ConfigurationException;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.DataflowInputPort;
-import net.sf.taverna.t2.workflowmodel.DataflowOutputPort;
-import net.sf.taverna.t2.workflowmodel.Datalink;
-import net.sf.taverna.t2.workflowmodel.Edit;
-import net.sf.taverna.t2.workflowmodel.EditException;
-import net.sf.taverna.t2.workflowmodel.Edits;
-import net.sf.taverna.t2.workflowmodel.Processor;
-import net.sf.taverna.t2.workflowmodel.ProcessorInputPort;
-import net.sf.taverna.t2.workflowmodel.ProcessorOutputPort;
-import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
-import net.sf.taverna.t2.workflowmodel.processor.activity.NestedDataflow;
-import net.sf.taverna.t2.workflowmodel.serialization.DeserializationException;
-import net.sf.taverna.t2.workflowmodel.serialization.SerializationException;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 
+import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.core.Processor;
 
 /**
  * @author alanrw
@@ -78,12 +62,11 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		Version.ID ident = support.getNewComponentIdentification(p
-				.getLocalName());
+		Version.ID ident = support.getNewComponentIdentification(p.getName());
 		if (ident == null)
 			return;
 
-		Activity<?> a = p.getActivityList().get(0);
+		Activity a = p.getActivityList().get(0);
 		WorkflowBundle current = fm.getCurrentDataflow();
 
 		try {
@@ -113,7 +96,7 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 				support.connectNewProcessor(d, newProcessor);
 			}
 
-			ComponentActivity ca = new ComponentActivity();
+			Activity ca = new ComponentActivity();
 			ca.configure(support.saveWorkflowAsComponent(d, ident));
 			moveComponentActivityIntoPlace(a, current, ca);
 		} catch (Exception e) {

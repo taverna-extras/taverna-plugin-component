@@ -43,39 +43,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
-import net.sf.taverna.t2.annotation.AnnotationBeanSPI;
-import net.sf.taverna.t2.annotation.annotationbeans.AbstractTextualValueAssertion;
-import net.sf.taverna.t2.annotation.annotationbeans.DescriptiveTitle;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.helper.HelpEnabledDialog;
 import net.sf.taverna.t2.workbench.models.graph.GraphController;
-import net.sf.taverna.t2.workflowmodel.CompoundEdit;
-import net.sf.taverna.t2.workflowmodel.Condition;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.DataflowInputPort;
-import net.sf.taverna.t2.workflowmodel.DataflowOutputPort;
-import net.sf.taverna.t2.workflowmodel.Datalink;
-import net.sf.taverna.t2.workflowmodel.Edit;
-import net.sf.taverna.t2.workflowmodel.EditException;
-import net.sf.taverna.t2.workflowmodel.Edits;
-import net.sf.taverna.t2.workflowmodel.EventForwardingOutputPort;
-import net.sf.taverna.t2.workflowmodel.EventHandlingInputPort;
-import net.sf.taverna.t2.workflowmodel.Merge;
-import net.sf.taverna.t2.workflowmodel.MergeInputPort;
-import net.sf.taverna.t2.workflowmodel.MergeOutputPort;
-import net.sf.taverna.t2.workflowmodel.OutputPort;
-import net.sf.taverna.t2.workflowmodel.Processor;
-import net.sf.taverna.t2.workflowmodel.ProcessorInputPort;
-import net.sf.taverna.t2.workflowmodel.ProcessorOutputPort;
-import net.sf.taverna.t2.workflowmodel.TokenProcessingEntity;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
-import net.sf.taverna.t2.workflowmodel.utils.AnnotationTools;
 
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.core.Processor;
+import uk.org.taverna.scufl2.api.port.ProcessorPort;
 
 /**
  * @author alanrw
@@ -284,8 +261,8 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 			if (incomingLink == null)
 				continue;
 			EventForwardingOutputPort source = incomingLink.getSource();
-			if (source instanceof ProcessorOutputPort)
-				considerInclusion(((ProcessorOutputPort) source).getProcessor());
+			if (source instanceof ProcessorPort)
+				considerInclusion(((ProcessorPort) source).getProcessor());
 			else if (source instanceof MergeOutputPort)
 				considerInclusion(((MergeOutputPort) source).getMerge());
 			else {

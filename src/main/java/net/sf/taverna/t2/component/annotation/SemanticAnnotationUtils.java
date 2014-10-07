@@ -21,12 +21,10 @@
 package net.sf.taverna.t2.component.annotation;
 
 import static com.hp.hpl.jena.rdf.model.ModelFactory.createDefaultModel;
-import static java.lang.Long.MIN_VALUE;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,9 +35,12 @@ import net.sf.taverna.t2.annotation.annotationbeans.SemanticAnnotation;
 import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.annotation.Annotation;
+import uk.org.taverna.scufl2.api.common.NamedSet;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
@@ -49,8 +50,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 /**
- * 
- * 
  * @author David Withers
  */
 public class SemanticAnnotationUtils {
@@ -85,19 +84,9 @@ public class SemanticAnnotationUtils {
 			return "unknown";
 	}
 
-	public static SemanticAnnotation findSemanticAnnotation(
-			Annotated<?> annotated) {
-		Date latestDate = new Date(MIN_VALUE);
-		SemanticAnnotation annotation = null;
-		// Need to scan all assertions...
-		for (AnnotationChain chain : annotated.getAnnotations())
-			for (AnnotationAssertion<?> assertion : chain.getAssertions())
-				if (assertion.getDetail() instanceof SemanticAnnotation
-						&& latestDate.before(assertion.getCreationDate())) {
-					annotation = (SemanticAnnotation) assertion.getDetail();
-					latestDate = assertion.getCreationDate();
-				}
-		return annotation;
+	public static NamedSet<Annotation> findSemanticAnnotation(
+			WorkflowBundle annotated) {
+		return annotated.getAnnotations();
 	}
 
 	public static SemanticAnnotation createSemanticAnnotation(Model model) {
@@ -120,12 +109,15 @@ public class SemanticAnnotationUtils {
 		return turtle;
 	}
 
-	public static Model populateModel(Annotated<?> annotated) {
+	public static Model populateModel(WorkflowBundle annotated) {
 		Model result = createDefaultModel();
-		SemanticAnnotation annotation = findSemanticAnnotation(annotated);
+		//FIXME How does this work anyway?
+		NamedSet<Annotation> annotations = findSemanticAnnotation(annotated);
 		try {
-			if (annotation != null && !annotation.getContent().isEmpty())
-				populateModelFromString(result, annotation.getContent());
+			if (annotations != null && !annotations.isEmpty())
+				for (Annotation a : annotations)
+					a.getBody();
+				//populateModelFromString(result, annotation.getContent());
 		} catch (Exception e) {
 			logger.error("failed to construct semantic annotation model", e);
 		}
@@ -143,7 +135,7 @@ public class SemanticAnnotationUtils {
 	/**
 	 * Check if a profile is satisfied by a component.
 	 * 
-	 * @param dataflow
+	 * @param bundle
 	 *            The component definition.
 	 * @param componentProfile
 	 *            The profile definition.
@@ -151,10 +143,10 @@ public class SemanticAnnotationUtils {
 	 *         by the component.
 	 */
 	public static Set<SemanticAnnotationProfile> checkComponent(
-			Dataflow dataflow, Profile componentProfile) {
+			WorkflowBundle bundle, Profile componentProfile) {
 		// TODO Check port presence by name
 		Set<SemanticAnnotationProfile> problemProfiles = new HashSet<>();
-		Model model = populateModel(dataflow);
+		Model model = populateModel(bundle);
 		Set<Statement> statements = model.listStatements().toSet();
 		try {
 			for (SemanticAnnotationProfile saProfile : componentProfile

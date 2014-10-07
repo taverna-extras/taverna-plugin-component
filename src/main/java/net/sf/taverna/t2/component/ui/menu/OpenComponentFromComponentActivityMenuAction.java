@@ -8,10 +8,9 @@ import java.util.List;
 
 import javax.swing.Action;
 
-import net.sf.taverna.t2.component.ComponentActivity;
+import uk.org.taverna.scufl2.api.activity.Activity;
+import uk.org.taverna.scufl2.api.core.Processor;
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
-import net.sf.taverna.t2.workflowmodel.Processor;
-import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
 /**
  * @author alanrw
@@ -21,7 +20,7 @@ public class OpenComponentFromComponentActivityMenuAction extends
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
 
-	private static OpenComponentFromComponentActivityAction action = new OpenComponentFromComponentActivityAction();
+	private static OpenComponentFromComponentActivityAction action;//FIXME beaninject
 
 	public OpenComponentFromComponentActivityMenuAction() {
 		super(configureSection, 75);
@@ -38,7 +37,7 @@ public class OpenComponentFromComponentActivityMenuAction extends
 		return action;
 	}
 
-	private ComponentActivity getSelectedActivity() {
+	private Activity getSelectedActivity() {
 		Object selection = getContextualSelection().getSelection();
 		if (!super.isEnabled() || !(selection instanceof Processor))
 			return null;
@@ -48,10 +47,6 @@ public class OpenComponentFromComponentActivityMenuAction extends
 		if (activities.isEmpty())
 			return null;
 
-		Activity<?> a = activities.get(0);
-		if (a instanceof ComponentActivity)
-			return (ComponentActivity) a;
-
-		return null;
+		return activities.get(0);
 	}
 }
