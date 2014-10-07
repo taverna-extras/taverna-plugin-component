@@ -27,6 +27,7 @@ import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 
@@ -42,12 +43,12 @@ public class ComponentVersionChooserPanel extends JPanel implements
 
 	private final JComboBox<String> componentVersionChoice = new JComboBox<>();
 	private final SortedMap<Integer, Version> componentVersionMap = new TreeMap<>();
-	private final ComponentChooserPanel componentChooserPanel = new ComponentChooserPanel();
+	private final ComponentChooserPanel componentChooserPanel;
 
-	public ComponentVersionChooserPanel() {
-		super();
-		setLayout(new GridBagLayout());
+	public ComponentVersionChooserPanel(ComponentPreference prefs) {
+		super(new GridBagLayout());
 
+		componentChooserPanel = new ComponentChooserPanel(prefs);
 		componentVersionChoice.setPrototypeDisplayValue(SHORT_STRING);
 
 		GridBagConstraints gbc = new GridBagConstraints();

@@ -26,6 +26,7 @@ import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.LicenseChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
@@ -41,19 +42,20 @@ public class ComponentProfileCopyAction extends AbstractAction {
 	private static final Logger log = getLogger(ComponentProfileCopyAction.class);
 	private static final String COPY_PROFILE = "Copy profile...";
 
+	private ComponentPreference prefs;//FIXME beaninject
+
 	public ComponentProfileCopyAction() {
 		super(COPY_PROFILE, ComponentServiceIcon.getIcon());
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-
+	public void actionPerformed(ActionEvent ev) {
 		JPanel overallPanel = new JPanel();
 		overallPanel.setLayout(new GridBagLayout());
 
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		RegistryChooserPanel sourceRegistryPanel = new RegistryChooserPanel();
+		RegistryChooserPanel sourceRegistryPanel = new RegistryChooserPanel(prefs);
 		sourceRegistryPanel.setBorder(new TitledBorder("Source registry"));
 
 		gbc.insets = new Insets(0, 5, 0, 5);
@@ -74,7 +76,7 @@ public class ComponentProfileCopyAction extends AbstractAction {
 		gbc.weighty = 1;
 		overallPanel.add(profilePanel, gbc);
 
-		RegistryChooserPanel targetRegistryPanel = new RegistryChooserPanel();
+		RegistryChooserPanel targetRegistryPanel = new RegistryChooserPanel(prefs);
 		targetRegistryPanel.setBorder(new TitledBorder("Target registry"));
 		gbc.gridy = 2;
 		overallPanel.add(targetRegistryPanel, gbc);

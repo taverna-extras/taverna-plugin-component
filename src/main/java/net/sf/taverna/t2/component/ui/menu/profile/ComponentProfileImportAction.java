@@ -11,6 +11,7 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.GridBagConstraints;
@@ -36,10 +37,10 @@ import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.LicenseChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.SharingPolicyChooserPanel;
-import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
 
 /**
@@ -50,10 +51,12 @@ public class ComponentProfileImportAction extends AbstractAction {
 	private static final Logger log = getLogger(ComponentProfileImportAction.class);
 	private static final String IMPORT_PROFILE = "Import profile...";
 	private static final JFileChooser chooser = new JFileChooser();
-	ComponentFactory factory;//FIXME beaninject
+
+	private ComponentFactory factory;//FIXME beaninject
+	private ComponentPreference prefs;//FIXME beaninject
 
 	public ComponentProfileImportAction() {
-		super(IMPORT_PROFILE, ComponentServiceIcon.getIcon());
+		super(IMPORT_PROFILE, getIcon());
 	}
 
 	@Override
@@ -63,7 +66,7 @@ public class ComponentProfileImportAction extends AbstractAction {
 
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		RegistryChooserPanel registryPanel = new RegistryChooserPanel();
+		RegistryChooserPanel registryPanel = new RegistryChooserPanel(prefs);
 
 		gbc.insets = new Insets(0, 5, 0, 5);
 		gbc.gridx = 0;
@@ -158,5 +161,4 @@ public class ComponentProfileImportAction extends AbstractAction {
 					"Registry Exception", ERROR_MESSAGE);
 		}
 	}
-
 }

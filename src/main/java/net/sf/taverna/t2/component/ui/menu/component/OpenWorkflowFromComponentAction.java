@@ -21,6 +21,7 @@ import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.ComponentAction;
 import net.sf.taverna.t2.component.ui.panel.ComponentChoiceMessage;
 import net.sf.taverna.t2.component.ui.panel.ComponentVersionChooserPanel;
@@ -44,6 +45,7 @@ public class OpenWorkflowFromComponentAction extends ComponentAction {
 	private static final String ACTION_DESCRIPTION = "Open the workflow that implements a component";
 
 	private FileManager fm;//FIXME beaninject
+	private ComponentPreference prefs;//FIXME beaninject
 
 	public OpenWorkflowFromComponentAction(final java.awt.Component component) {
 		super(ACTION_NAME);
@@ -52,7 +54,7 @@ public class OpenWorkflowFromComponentAction extends ComponentAction {
 
 	@Override
 	public void actionPerformed(ActionEvent arg) {
-		final ComponentVersionChooserPanel panel = new ComponentVersionChooserPanel();	
+		final ComponentVersionChooserPanel panel = new ComponentVersionChooserPanel(prefs);	
 		
 		final JButton okay = new JButton("OK");
 		okay.addActionListener(new ActionListener() {

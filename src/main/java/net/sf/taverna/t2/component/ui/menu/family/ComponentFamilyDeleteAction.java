@@ -31,6 +31,7 @@ import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.FamilyChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
@@ -43,7 +44,6 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentFamilyDeleteAction extends AbstractAction {
 	private static final String CONFIRM_MSG = "Are you sure you want to delete %s";
@@ -61,6 +61,7 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 	private static final long serialVersionUID = -4976161883778371344L;
 
 	private FileManager fm;//FIXME beaninject
+	private ComponentPreference prefs;//FIXME beaninject
 
 	public ComponentFamilyDeleteAction() {
 		super(DELETE_FAMILY_LABEL, getIcon());
@@ -68,13 +69,11 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		JPanel overallPanel = new JPanel();
-		overallPanel.setLayout(new GridBagLayout());
-
+	public void actionPerformed(ActionEvent ev) {
+		JPanel overallPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		RegistryChooserPanel registryPanel = new RegistryChooserPanel();
+		RegistryChooserPanel registryPanel = new RegistryChooserPanel(prefs);
 
 		gbc.insets = new Insets(0, 5, 0, 5);
 		gbc.gridx = 0;

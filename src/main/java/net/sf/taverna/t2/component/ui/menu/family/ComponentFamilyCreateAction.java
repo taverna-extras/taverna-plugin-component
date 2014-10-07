@@ -29,6 +29,7 @@ import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.SharingPolicy;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.LicenseChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
@@ -45,6 +46,8 @@ public class ComponentFamilyCreateAction extends AbstractAction {
 	private static final Logger logger = getLogger(ComponentFamilyCreateAction.class);
 	private static final String CREATE_FAMILY = "Create family...";
 
+	private ComponentPreference prefs;//FIXME beaninject
+
 	private JPanel overallPanel;
 	private GridBagConstraints gbc;
 
@@ -54,12 +57,10 @@ public class ComponentFamilyCreateAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		overallPanel = new JPanel();
-		overallPanel.setLayout(new GridBagLayout());
-
+		overallPanel = new JPanel(new GridBagLayout());
 		gbc = new GridBagConstraints();
 
-		RegistryChooserPanel registryPanel = new RegistryChooserPanel();
+		RegistryChooserPanel registryPanel = new RegistryChooserPanel(prefs);
 
 		gbc.insets.left = 5;
 		gbc.insets.right = 5;
