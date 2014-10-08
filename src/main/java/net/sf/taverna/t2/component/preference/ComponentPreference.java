@@ -32,10 +32,9 @@ import uk.org.taverna.configuration.ConfigurationManager;
  */
 public class ComponentPreference extends AbstractConfigurable {
 	public static final String DISPLAY_NAME = "Components";
-	private static ComponentPreference instance = null;
-
 	private final Logger logger = getLogger(ComponentPreference.class);
 	private final SortedMap<String, Registry> registryMap = new TreeMap<>();
+
 	ComponentFactory factory;// FIXME beaninject
 
 	public ComponentPreference(ConfigurationManager cm) {

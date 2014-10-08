@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/osgi
+                      http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+<bean id="prefs" class="net.sf.taverna.t2.component.preference.ComponentPreference">
+	<constructor-arg name="cm" ref="configManager" />
+</bean>
+
+<!-- === Configuration UI factories -->
+<bean id="componentConfigurationUI"
+		class="net.sf.taverna.t2.component.ui.preference.ComponentPreferenceUIFactory">
+	<property name="prefs" ref="prefs" />
+</bean>
+
+<!-- === Context view factories === -->
+<bean id="componentActivityContextView"
+		class="net.sf.taverna.t2.component.ui.view.ComponentActivityContextViewFactory" />
+<bean id="componentContextView"
+		class="net.sf.taverna.t2.component.ui.view.ComponentContextViewFactory" />
+<bean id="componentActivitySemanticAnnotationContextView"
+		class="net.sf.taverna.t2.component.ui.view.ComponentActivitySemanticAnnotationContextViewFactory" />
+<bean id="semanticAnnotationContextView"
+		class="net.sf.taverna.t2.component.annotation.SemanticAnnotationContextualViewFactory" />
+
+<!-- === Menu actions === -->
+<bean id="componentConfigureMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.ComponentConfigureMenuAction" />
+<!-- don't publish --><bean id="componentServiceCreatorMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentServiceCreatorMenuAction" />
+<bean id="nestedWorkflowCreatorMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.NestedWorkflowCreatorMenuAction" />
+<bean id="replaceByComponentMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.ReplaceByComponentMenuAction" />
+<bean id="openComponentFromComponentActivityMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.OpenComponentFromComponentActivityMenuAction" />
+<bean id="componentMenu"
+		class="net.sf.taverna.t2.component.ui.menu.ComponentMenu" />
+<bean id="componentRegistryMenuSection"
+		class="net.sf.taverna.t2.component.ui.menu.registry.ComponentRegistryMenuSection" />
+<bean id="componentRegistryManageMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.registry.ComponentRegistryManageMenuAction" />
+<bean id="componentProfileMenuSection"
+		class="net.sf.taverna.t2.component.ui.menu.profile.ComponentProfileMenuSection" />
+<bean id="componentProfileImportMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.profile.ComponentProfileImportMenuAction" />
+<bean id="componentProfileCopyMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.profile.ComponentProfileCopyMenuAction" />
+<bean id="componentFamilyMenuSection"
+		class="net.sf.taverna.t2.component.ui.menu.family.ComponentFamilyMenuSection" />
+<bean id="componentFamilyCreateMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.family.ComponentFamilyCreateMenuAction" />
+<bean id="componentFamilyDeleteMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.family.ComponentFamilyDeleteMenuAction" />
+<bean id="componentMenuSection"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentMenuSection" />
+<bean id="componentWorkflowCreatorMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentWorkflowCreatorMenuAction" />
+<bean id="fileOpenFromComponentMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.component.FileOpenFromComponentMenuAction" />
+<bean id="componentCopyMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentCopyMenuAction" />
+<bean id="componentDeleteMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentDeleteMenuAction" />
+<bean id="componentMergeMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentMergeMenuAction" />
+<bean id="componentCloseMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentCloseMenuAction" />
+<bean id="componentSaveMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentSaveMenuAction" />
+<!-- don't publish --><bean id="componentSearchMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentSearchMenuAction" />
+<bean id="annotateSemanticsMenuAction"
+		class="net.sf.taverna.t2.component.annotation.AnnotateSemanticsMenuAction" />
+
+<!-- 
+	<bean id="ComponentLocalHealthChecker"
+		class="net.sf.taverna.t2.component.ComponentActivityLocalChecker" />
+	<bean id="ComponentUpgradeHealthChecker"
+		class="net.sf.taverna.t2.component.ComponentActivityUpgradeChecker">
+		<property name="componentUtil" ref="componentUtil" />
+	</bean>
+	<bean id="baseProfileLocator" class="net.sf.taverna.t2.component.profile.BaseProfileLocator">
+		<property name="appConfig" ref="app-config" />
+	</bean>
+
+	<bean id="componentActivityFactory" class="net.sf.taverna.t2.component.ComponentActivityFactory">
+		<property name="componentUtil" ref="componentUtil" />
+		<property name="dataflowCache" ref="cache" />
+		<property name="edits" ref="edits" />
+		<property name="annotationUtils" ref="annotationUtil" />
+	</bean>
+
+	<bean id="networkRegistry"
+		class="net.sf.taverna.t2.component.registry.standard.NewComponentRegistryFactory">
+		<property name="credentialManager" ref="credentialManager" />
+		<property name="componentUtil" ref="componentUtil" />
+		<property name="systemUtils" ref="systemUtil" />
+		<property name="annotationUtils" ref="annotationUtil" />
+	</bean>
+	<bean id="fileRegistry"
+		class="net.sf.taverna.t2.component.registry.local.LocalComponentRegistryFactory">
+		<property name="componentUtil" ref="componentUtil" />
+		<property name="systemUtils" ref="systemUtil" />
+	</bean>
+	<bean id="componentUtil" class="net.sf.taverna.t2.component.registry.ComponentUtil">
+		<property name="networkLocator" ref="networkRegistry" />
+		<property name="fileLocator" ref="fileRegistry" />
+		<property name="baseLocator" ref="baseProfileLocator" />
+	</bean>
+
+	<bean id="cache" class="net.sf.taverna.t2.component.registry.ComponentImplementationCache">
+		<property name="componentUtil" ref="componentUtil" />
+	</bean>
+	<bean id="systemUtil" class="net.sf.taverna.t2.component.utils.SystemUtils">
+		<property name="appConfig" ref="app-config" />
+		<property name="workflowBundler" ref="workflowBundleIO" />
+		<property name="compilers" ref="compilers" />
+	</bean>
+	<bean id="annotationUtil" class="net.sf.taverna.t2.component.utils.AnnotationUtils" />
+
+	<osgi:service ref="ComponentLocalHealthChecker"
+		interface="net.sf.taverna.t2.workflowmodel.health.HealthChecker" />
+	<osgi:service ref="ComponentUpgradeHealthChecker"
+		interface="net.sf.taverna.t2.workflowmodel.health.HealthChecker" />
+	<osgi:service ref="componentActivityFactory"
+		interface="net.sf.taverna.t2.workflowmodel.processor.activity.ActivityFactory" />
+	<osgi:service ref="componentUtil"
+		interface="net.sf.taverna.t2.component.api.ComponentFactory" />
+
+	<osgi:reference id="app-config"
+		interface="uk.org.taverna.configuration.app.ApplicationConfiguration" />
+	<osgi:reference id="credentialManager"
+		interface="net.sf.taverna.t2.security.credentialmanager.CredentialManager" />
+	<osgi:reference id="edits" interface="net.sf.taverna.t2.workflowmodel.Edits" />
+	<osgi:reference id="workflowBundleIO" interface="uk.org.taverna.scufl2.api.io.WorkflowBundleIO" />
+	<osgi:list id="compilers" interface="uk.org.taverna.platform.execution.api.WorkflowCompiler" />
+ -->
+ 	<osgi:reference id="fileManager" interface="net.sf.taverna.t2.workbench.file.FileManager" />
+ 	<osgi:reference id="configManager" interface="uk.org.taverna.configuration.ConfigurationManager" />
+ 	<osgi:reference id="componentFactory" interface="net.sf.taverna.t2.component.api.ComponentFactory" />
+</beans>
