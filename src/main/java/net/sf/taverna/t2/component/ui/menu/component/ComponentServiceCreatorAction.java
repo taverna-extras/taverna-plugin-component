@@ -39,8 +39,11 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 
 import uk.org.taverna.scufl2.api.activity.Activity;
+import uk.org.taverna.scufl2.api.configurations.Configuration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import uk.org.taverna.scufl2.api.core.Processor;
+import uk.org.taverna.scufl2.api.core.Workflow;
+import uk.org.taverna.scufl2.api.profiles.Profile;
 
 /**
  * @author alanrw
@@ -50,14 +53,26 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 	private static Logger logger = getLogger(ComponentServiceCreatorAction.class);
 
 	private final Processor p;
+	private final Profile profile;
 
 	private ComponentCreatorSupport support;//FIXME beaninject
 	private FileManager fm; //FIXME beaninject
-	private Edits edits; //FIXME beaninject
 
 	public ComponentServiceCreatorAction(Processor processor) {
 		super("Create component...", getIcon());
-		this.p = processor;
+		p = processor;
+		profile = p.getParent().getParent().getMainProfile();
+	}
+
+	private Activity getActivity() {
+		return profile.getProcessorBindings().getByName(p.getName())
+				.getBoundActivity();
+	}
+
+	private Workflow getNestedWorkflow(Activity a) {
+		Configuration c = profile.getConfigurations().getByName(a.getName());
+		c.getJsonAsObjectNode();
+		return null;//FIXME!
 	}
 
 	@Override
@@ -66,15 +81,15 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 		if (ident == null)
 			return;
 
-		Activity a = p.getActivityList().get(0);
+		Activity a = getActivity();
 		WorkflowBundle current = fm.getCurrentDataflow();
 
 		try {
-			Dataflow d;
+			Workflow d;
 			if (a instanceof NestedDataflow)
 				d = ((NestedDataflow) a).getNestedDataflow();
 			else {
-				d = edits.createDataflow();
+				d = new Workflow();
 
 				/* TODO: Keep the description */
 				// fm.setCurrentDataflow(current);
@@ -98,12 +113,11 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 
 			Activity ca = new ComponentActivity();
 			ca.configure(support.saveWorkflowAsComponent(d, ident));
-			moveComponentActivityIntoPlace(a, current, ca);
+			support.moveComponentActivityIntoPlace(a, p, ca);
 		} catch (Exception e) {
 			logger.error("failed to instantiate component", e);
 			showMessageDialog(null, e.getCause().getMessage(),
 					"Component creation failure", ERROR_MESSAGE);
 		}
 	}
-
 }

@@ -33,6 +33,7 @@ import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
 import net.sf.taverna.t2.workbench.edits.CompoundEdit;
 import net.sf.taverna.t2.workbench.edits.Edit;
@@ -51,6 +52,7 @@ public class ReplaceByComponentAction extends AbstractAction {
 	private FileManager fileManager; //FIXME beaninject
 	private EditManager em; //FIXME beaninject
 	private Edits edits; //FIXME beaninject
+	private ComponentPreference prefs;//FIXME beaninject
 
 	public ReplaceByComponentAction() {
 		super("Replace by component...", getIcon());
@@ -61,7 +63,7 @@ public class ReplaceByComponentAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JPanel overallPanel = new JPanel(new BorderLayout());
-		ComponentChooserPanel panel = new ComponentChooserPanel();
+		ComponentChooserPanel panel = new ComponentChooserPanel(prefs);
 		overallPanel.add(panel, CENTER);
 		JPanel checkBoxPanel = new JPanel(new FlowLayout());
 		JCheckBox replaceAllCheckBox = new JCheckBox(
@@ -76,7 +78,9 @@ public class ReplaceByComponentAction extends AbstractAction {
 				OK_CANCEL_OPTION);
 		if (answer == OK_OPTION)
 			doReplace(panel.getChosenRegistry(), panel.getChosenFamily(),
-					replaceAllCheckBox.isSelected(), renameServicesCheckBox.isSelected(), panel.getChosenComponent());
+					replaceAllCheckBox.isSelected(),
+					renameServicesCheckBox.isSelected(),
+					panel.getChosenComponent());
 	}
 
 	private void doReplace(Registry chosenRegistry, Family chosenFamily,

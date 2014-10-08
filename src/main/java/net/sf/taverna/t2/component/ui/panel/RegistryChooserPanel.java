@@ -42,7 +42,7 @@ public class RegistryChooserPanel extends JPanel implements
 	private final JComboBox<String> registryBox;
 	private final SortedMap<String, Registry> registryMap;
 
-	public RegistryChooserPanel(ComponentPreference pref) { //FIXME beaninject
+	public RegistryChooserPanel(ComponentPreference pref) {
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints gbc = new GridBagConstraints();

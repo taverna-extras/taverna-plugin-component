@@ -7,23 +7,21 @@ import java.net.URI;
 
 import javax.swing.Action;
 
-import net.sf.taverna.t2.ui.menu.AbstractMenuAction;
-
 /**
  * @author alanrw
- * 
  */
-public class ComponentCopyMenuAction extends AbstractMenuAction {
+public class ComponentCopyMenuAction extends AbstractComponentMenuAction {
 	private static final URI COPY_COMPONENT_URI = URI
 			.create("http://taverna.sf.net/2008/t2workbench/menu#componentCopy");
-	private static final Action componentCopyAction = new ComponentCopyAction();
+
+	private Action action;//FIXME beaninject ComponentCopyAction
 
 	public ComponentCopyMenuAction() {
-		super(ComponentMenuSection.COMPONENT_SECTION, 800, COPY_COMPONENT_URI);
+		super(800, COPY_COMPONENT_URI);
 	}
 
 	@Override
 	protected Action createAction() {
-		return componentCopyAction;
+		return action;
 	}
 }

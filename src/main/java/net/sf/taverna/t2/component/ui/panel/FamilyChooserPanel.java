@@ -37,9 +37,8 @@ import org.apache.log4j.Logger;
 /**
  * @author alanrw
  */
-@SuppressWarnings("rawtypes")
-public class FamilyChooserPanel extends JPanel implements Observer,
-		Observable<FamilyChoiceMessage> {
+public class FamilyChooserPanel extends JPanel implements
+		Observer<ProfileChoiceMessage>, Observable<FamilyChoiceMessage> {
 	private static final String FAMILY_LABEL = "Component family:";
 	private static final String READING_MSG = "Reading families";
 	private static final long serialVersionUID = -2608831126562927778L;
@@ -52,9 +51,26 @@ public class FamilyChooserPanel extends JPanel implements Observer,
 	private Registry chosenRegistry = null;
 	private Profile profileFilter = null;
 
+	public FamilyChooserPanel(RegistryChooserPanel registryPanel) {
+		this();
+		registryPanel.addObserver(new Observer<RegistryChoiceMessage>() {
+			@Override
+			public void notify(Observable<RegistryChoiceMessage> sender,
+					RegistryChoiceMessage message) throws Exception {
+				try {
+					chosenRegistry = message.getChosenRegistry();
+					updateList();
+				} catch (RuntimeException e) {
+					logger.error("failed to update list after registry choice",
+							e);
+				}
+			}
+		});
+	}
+
 	public FamilyChooserPanel() {
+		super(new GridBagLayout());
 		familyBox.setPrototypeDisplayValue(LONG_STRING);
-		setLayout(new GridBagLayout());
 
 		GridBagConstraints gbc = new GridBagConstraints();
 
@@ -88,25 +104,6 @@ public class FamilyChooserPanel extends JPanel implements Observer,
 			familyBox.setToolTipText(null);
 	}
 
-	@Override
-	public void notify(Observable sender, Object message) throws Exception {
-		try {
-			if (message instanceof RegistryChoiceMessage)
-				chosenRegistry = ((RegistryChoiceMessage) message)
-						.getChosenRegistry();
-			else if (message instanceof ProfileChoiceMessage)
-				profileFilter = ((ProfileChoiceMessage) message)
-						.getChosenProfile();
-		} catch (Exception e) {
-			logger.error("failed to notify about registry choice", e);
-		}
-		try {
-			updateList();
-		} catch (Exception e) {
-			logger.error("failed to update list after registry choice", e);
-		}
-	}
-
 	private void updateList() {
 		familyMap.clear();
 		familyBox.removeAllItems();
@@ -130,10 +127,9 @@ public class FamilyChooserPanel extends JPanel implements Observer,
 	}
 
 	public Family getChosenFamily() {
-		if (familyBox.getSelectedIndex() >= 0)
-			return familyMap.get(familyBox.getSelectedItem());
-
-		return null;
+		if (familyBox.getSelectedIndex() < 0)
+			return null;
+		return familyMap.get(familyBox.getSelectedItem());
 	}
 
 	@Override
@@ -158,6 +154,17 @@ public class FamilyChooserPanel extends JPanel implements Observer,
 		observers.remove(observer);
 	}
 
+	@Override
+	public void notify(Observable<ProfileChoiceMessage> sender,
+			ProfileChoiceMessage message) throws Exception {
+		try {
+			profileFilter = message.getChosenProfile();
+			updateList();
+		} catch (RuntimeException e) {
+			logger.error("failed to update list after profile choice", e);
+		}
+	}
+
 	private void updateFamiliesFromRegistry() throws ComponentException {
 		for (Family f : chosenRegistry.getComponentFamilies()) {
 			if (profileFilter == null) {
@@ -167,7 +174,7 @@ public class FamilyChooserPanel extends JPanel implements Observer,
 			Profile componentProfile;
 			try {
 				componentProfile = f.getComponentProfile();
-			} catch (Exception e) {
+			} catch (ComponentException | RuntimeException e) {
 				logger.error("failed to get profile of component", e);
 				componentProfile = null;
 			}

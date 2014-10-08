@@ -49,8 +49,7 @@ import org.apache.log4j.Logger;
 /**
  * @author alanrw
  */
-public class SharingPolicyChooserPanel extends JPanel implements
-		Observer<RegistryChoiceMessage> {
+public class SharingPolicyChooserPanel extends JPanel {
 	private static final String SHARING_LABEL = "Sharing policy:";
 	private static final String READING_MSG = "Reading sharing policies";
 	private static final String NO_PERMISSIONS_MSG = "No permissions available";
@@ -61,6 +60,21 @@ public class SharingPolicyChooserPanel extends JPanel implements
 	private final SortedMap<String, SharingPolicy> permissionMap = new TreeMap<>();
 	private Registry registry;
 
+	public SharingPolicyChooserPanel(RegistryChooserPanel registryPanel) {
+		this();
+		registryPanel.addObserver(new Observer<RegistryChoiceMessage>(){
+			@Override
+			public void notify(Observable<RegistryChoiceMessage> sender,
+					RegistryChoiceMessage message) throws Exception {
+				try {
+					registry = message.getChosenRegistry();
+					updateProfileModel();
+				} catch (Exception e) {
+					logger.error("problem when handling notification of registry", e);
+				}
+			}
+		});
+	}
 	public SharingPolicyChooserPanel() {
 		super();
 		permissionBox.setPrototypeDisplayValue(LONG_STRING);
@@ -79,17 +93,6 @@ public class SharingPolicyChooserPanel extends JPanel implements
 		this.add(permissionBox, gbc);
 
 		permissionBox.setEditable(false);
-	}
-
-	@Override
-	public void notify(Observable<RegistryChoiceMessage> sender,
-			RegistryChoiceMessage message) {
-		try {
-			registry = message.getChosenRegistry();
-			updateProfileModel();
-		} catch (Exception e) {
-			logger.error("problem when handling notification of registry", e);
-		}
 	}
 
 	private void updateProfileModel() {

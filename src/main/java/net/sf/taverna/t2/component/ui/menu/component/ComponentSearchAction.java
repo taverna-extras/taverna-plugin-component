@@ -83,14 +83,12 @@ public class ComponentSearchAction extends AbstractAction {
 		gbc.gridy++;
 		overallPanel.add(registryPanel, gbc);
 
-		ProfileChooserPanel profilePanel = new ProfileChooserPanel();
-		registryPanel.addObserver(profilePanel);
+		ProfileChooserPanel profilePanel = new ProfileChooserPanel(registryPanel);
 		gbc.gridx = 0;
 		gbc.gridy++;
 		overallPanel.add(profilePanel, gbc);
 
-		PrefixPanel prefixPanel = new PrefixPanel();
-		profilePanel.addObserver(prefixPanel);
+		PrefixPanel prefixPanel = new PrefixPanel(profilePanel);
 		gbc.gridx = 0;
 		gbc.gridy++;
 		overallPanel.add(prefixPanel, gbc);

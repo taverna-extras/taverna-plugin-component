@@ -110,8 +110,7 @@ public class ComponentProfileImportAction extends AbstractAction {
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.gridy++;
-		SharingPolicyChooserPanel permissionPanel = new SharingPolicyChooserPanel();
-		registryPanel.addObserver(permissionPanel);
+		SharingPolicyChooserPanel permissionPanel = new SharingPolicyChooserPanel(registryPanel);
 		overallPanel.add(permissionPanel, gbc);
 
 		gbc.gridy++;

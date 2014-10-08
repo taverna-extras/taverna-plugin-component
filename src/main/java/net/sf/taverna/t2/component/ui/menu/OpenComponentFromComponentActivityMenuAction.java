@@ -20,7 +20,7 @@ public class OpenComponentFromComponentActivityMenuAction extends
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
 
-	private static OpenComponentFromComponentActivityAction action;//FIXME beaninject
+	private OpenComponentFromComponentActivityAction action;//FIXME beaninject
 
 	public OpenComponentFromComponentActivityMenuAction() {
 		super(configureSection, 75);
@@ -43,7 +43,7 @@ public class OpenComponentFromComponentActivityMenuAction extends
 			return null;
 
 		Processor p = (Processor) selection;
-		List<? extends Activity<?>> activities = p.getActivityList();
+		List<Activity> activities = p.getActivityList();
 		if (activities.isEmpty())
 			return null;
 

@@ -3,25 +3,21 @@
  */
 package net.sf.taverna.t2.component.ui.menu.component;
 
-import static net.sf.taverna.t2.component.ui.menu.component.ComponentMenuSection.COMPONENT_SECTION;
-
 import java.net.URI;
 
 import javax.swing.Action;
 
-import net.sf.taverna.t2.ui.menu.AbstractMenuAction;
-
 /**
  * @author alanrw
- * 
  */
-public class ComponentSearchMenuAction extends AbstractMenuAction {
+public class ComponentSearchMenuAction extends AbstractComponentMenuAction {
 	private static final URI SEARCH_COMPONENT_URI = URI
 			.create("http://taverna.sf.net/2008/t2workbench/menu#componentSearch");
-	private static final Action componentSearchAction = new ComponentSearchAction();
+
+	private Action componentSearchAction; //FIXME beaninject ComponentSearchAction
 
 	public ComponentSearchMenuAction() {
-		super(COMPONENT_SECTION, 1500, SEARCH_COMPONENT_URI);
+		super(1500, SEARCH_COMPONENT_URI);
 	}
 
 	@Override

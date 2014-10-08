@@ -18,7 +18,6 @@ import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 
 /**
  * @author alanrw
- * 
  */
 public class TurtleContextualView extends ContextualView {
 	private static final long serialVersionUID = -3401885589263647202L;

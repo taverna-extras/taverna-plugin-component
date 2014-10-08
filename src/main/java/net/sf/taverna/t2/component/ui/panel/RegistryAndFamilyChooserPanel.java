@@ -29,12 +29,12 @@ public class RegistryAndFamilyChooserPanel extends JPanel implements
 	private static Logger logger = getLogger(RegistryAndFamilyChooserPanel.class);
 	private static final long serialVersionUID = -535518473593617735L;
 	final RegistryChooserPanel registryPanel;
-	final FamilyChooserPanel familyPanel = new FamilyChooserPanel();
+	final FamilyChooserPanel familyPanel;
 
-	@SuppressWarnings("unchecked")
 	public RegistryAndFamilyChooserPanel(ComponentPreference prefs) {
 		super(new GridBagLayout());
 		registryPanel = new RegistryChooserPanel(prefs);
+		familyPanel = new FamilyChooserPanel(registryPanel);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -45,7 +45,6 @@ public class RegistryAndFamilyChooserPanel extends JPanel implements
 		gbc.weightx = 1;
 		add(registryPanel, gbc);
 
-		registryPanel.addObserver(familyPanel);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.weighty = 1;

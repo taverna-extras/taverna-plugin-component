@@ -8,10 +8,8 @@ import net.sf.taverna.t2.component.api.Family;
 
 /**
  * @author alanrw
- *
  */
 public class ComponentChoiceMessage {
-
 	private final Component chosenComponent;
 	private final Family componentFamily;
 
@@ -33,5 +31,4 @@ public class ComponentChoiceMessage {
 	public Family getComponentFamily() {
 		return componentFamily;
 	}
-
 }

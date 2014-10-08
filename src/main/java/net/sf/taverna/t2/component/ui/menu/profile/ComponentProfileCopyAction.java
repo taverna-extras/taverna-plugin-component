@@ -67,10 +67,9 @@ public class ComponentProfileCopyAction extends AbstractAction {
 		gbc.weightx = 1;
 		overallPanel.add(sourceRegistryPanel, gbc);
 
-		ProfileChooserPanel profilePanel = new ProfileChooserPanel();
+		ProfileChooserPanel profilePanel = new ProfileChooserPanel(sourceRegistryPanel);
 		profilePanel.setBorder(new TitledBorder("Source profile"));
 
-		sourceRegistryPanel.addObserver(profilePanel);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.weighty = 1;
@@ -86,8 +85,7 @@ public class ComponentProfileCopyAction extends AbstractAction {
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.gridy++;
-		SharingPolicyChooserPanel permissionPanel = new SharingPolicyChooserPanel();
-		targetRegistryPanel.addObserver(permissionPanel);
+		SharingPolicyChooserPanel permissionPanel = new SharingPolicyChooserPanel(targetRegistryPanel);
 		overallPanel.add(permissionPanel, gbc);
 
 		gbc.gridy++;

@@ -61,15 +61,12 @@ public class RegistryAndFamilyChooserComponentEntryPanel extends JPanel {
 
 	public Version.ID getComponentVersionIdentification() {
 		String componentName = getComponentName();
-
 		Family familyChoice = registryAndFamilyChooserPanel.getChosenFamily();
-
 		Registry registry = registryAndFamilyChooserPanel.getChosenRegistry();
 
-		if ((familyChoice == null) || (registry == null)
-				|| (componentName == null) || componentName.isEmpty()) {
+		if (familyChoice == null || registry == null || componentName == null
+				|| componentName.isEmpty())
 			return null;
-		}
 
 		return new Version.Identifier(registry.getRegistryBase(),
 				familyChoice.getName(), trim(componentName), -1);

@@ -72,8 +72,7 @@ public class ComponentFamilyCreateAction extends AbstractAction {
 		gbc.gridy++;
 		overallPanel.add(registryPanel, gbc);
 
-		ProfileChooserPanel profilePanel = new ProfileChooserPanel();
-		registryPanel.addObserver(profilePanel);
+		ProfileChooserPanel profilePanel = new ProfileChooserPanel(registryPanel);
 		gbc.gridx = 0;
 		gbc.weighty = 1;
 		gbc.gridy++;
@@ -106,8 +105,7 @@ public class ComponentFamilyCreateAction extends AbstractAction {
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.gridy++;
-		SharingPolicyChooserPanel permissionPanel = new SharingPolicyChooserPanel();
-		registryPanel.addObserver(permissionPanel);
+		SharingPolicyChooserPanel permissionPanel = new SharingPolicyChooserPanel(registryPanel);
 		overallPanel.add(permissionPanel, gbc);
 
 		gbc.gridy++;

@@ -41,14 +41,15 @@ public class ComponentVersionChooserPanel extends JPanel implements
 	private static final long serialVersionUID = 5125907010496468219L;
 	private static Logger logger = getLogger(ComponentVersionChooserPanel.class);
 
-	private final JComboBox<String> componentVersionChoice = new JComboBox<>();
-	private final SortedMap<Integer, Version> componentVersionMap = new TreeMap<>();
+	private final JComboBox<String> componentVersionChoice;
+	private final SortedMap<Integer, Version> componentVersionMap;
 	private final ComponentChooserPanel componentChooserPanel;
 
 	public ComponentVersionChooserPanel(ComponentPreference prefs) {
 		super(new GridBagLayout());
-
+		componentVersionMap = new TreeMap<>();
 		componentChooserPanel = new ComponentChooserPanel(prefs);
+		componentVersionChoice = new JComboBox<>();
 		componentVersionChoice.setPrototypeDisplayValue(SHORT_STRING);
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -57,17 +58,17 @@ public class ComponentVersionChooserPanel extends JPanel implements
 		gbc.fill = HORIZONTAL;
 		gbc.gridwidth = 2;
 		gbc.weightx = 1;
-		this.add(componentChooserPanel, gbc);
+		add(componentChooserPanel, gbc);
 		componentChooserPanel.addObserver(this);
 
 		gbc.gridy = 1;
 		gbc.gridwidth = 1;
 		gbc.weightx = 0;
 		gbc.fill = NONE;
-		this.add(new JLabel("Component version:"), gbc);
+		add(new JLabel("Component version:"), gbc);
 		gbc.gridx = 1;
 		gbc.weightx = 1;
-		this.add(componentVersionChoice, gbc);
+		add(componentVersionChoice, gbc);
 		componentVersionChoice.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
@@ -79,11 +80,9 @@ public class ComponentVersionChooserPanel extends JPanel implements
 
 	protected void updateToolTipText() {
 		Version chosenComponentVersion = getChosenComponentVersion();
-		if (chosenComponentVersion != null)
-			componentVersionChoice.setToolTipText(chosenComponentVersion
-					.getDescription());
-		else
-			componentVersionChoice.setToolTipText(null);
+		componentVersionChoice
+				.setToolTipText(chosenComponentVersion == null ? null
+						: chosenComponentVersion.getDescription());
 	}
 
 	private void updateComponentVersionModel() {

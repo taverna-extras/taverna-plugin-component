@@ -28,7 +28,6 @@ import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * @author alanrw
- * 
  */
 @SuppressWarnings("serial")
 public class TurtleInputPanel extends JPanel {
@@ -37,10 +36,10 @@ public class TurtleInputPanel extends JPanel {
 	private OntClass clazz;
 
 	public TurtleInputPanel(OntClass clazz) {
+		super(new BorderLayout());
 		this.clazz = clazz;
 
-		this.setLayout(new BorderLayout());
-		this.add(new JScrollPane(turtleTextArea), CENTER);
+		add(new JScrollPane(turtleTextArea), CENTER);
 
 		turtleTextArea.setText("<#changeme> a <" + clazz.getURI() + ">\n\n\n.");
 
@@ -56,7 +55,7 @@ public class TurtleInputPanel extends JPanel {
 		buttonPanel.add(errors, CENTER);
 		errors.setOpaque(false);
 		buttonPanel.add(validateButton, EAST);
-		this.add(buttonPanel, SOUTH);
+		add(buttonPanel, SOUTH);
 	}
 
 	public OntModel getContentAsModel() {

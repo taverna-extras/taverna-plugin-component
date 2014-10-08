@@ -34,7 +34,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
- * 
  */
 @SuppressWarnings("serial")
 public class SearchChoicePanel extends JPanel {
@@ -58,11 +57,10 @@ public class SearchChoicePanel extends JPanel {
 
 	public SearchChoicePanel(Registry registry, String prefixes,
 			String queryText) {
-		super();
+		super(new GridBagLayout());
 		this.registry = registry;
 		this.prefixes = prefixes;
 		this.queryText = queryText;
-		this.setLayout(new GridBagLayout());
 
 		componentBox = new JComboBox<>(SEARCHING_ARRAY);
 		componentBox.setPrototypeDisplayValue(LONG_STRING);

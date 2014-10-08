@@ -76,9 +76,8 @@ public class ComponentMergeAction extends AbstractAction {
 			@Override
 			public void notify(Observable<ComponentChoiceMessage> sender,
 					ComponentChoiceMessage message) throws Exception {
-				ProfileChoiceMessage profileMessage = new ProfileChoiceMessage(
-						message.getComponentFamily().getComponentProfile());
-				target.notify(null, profileMessage);
+				target.notify(null, new ProfileChoiceMessage(
+						message.getComponentFamily().getComponentProfile()));
 			}
 		});
 

@@ -61,7 +61,7 @@ public class ComponentCopyAction extends AbstractAction {
 
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		ComponentChooserPanel source = new ComponentChooserPanel();
+		ComponentChooserPanel source = new ComponentChooserPanel(prefs);
 		source.setBorder(new TitledBorder("Source component"));
 
 		gbc.insets = new Insets(0, 5, 0, 5);

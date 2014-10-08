@@ -49,6 +49,22 @@ public class ProfileChooserPanel extends JPanel implements
 
 	private Registry registry;
 
+	public ProfileChooserPanel(RegistryChooserPanel registryPanel) {
+		this();
+		registryPanel.addObserver(new Observer<RegistryChoiceMessage>() {
+			@Override
+			public void notify(Observable<RegistryChoiceMessage> sender,
+					RegistryChoiceMessage message) throws Exception {
+				try {
+					registry = message.getChosenRegistry();
+					updateProfileModel();
+				} catch (Exception e) {
+					logger.error("failure when notifying about chosen registry", e);
+				}
+			}
+		});
+	}
+
 	public ProfileChooserPanel() {
 		super();
 		profileBox.setPrototypeDisplayValue(LONG_STRING);

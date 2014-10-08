@@ -48,6 +48,22 @@ public class ComponentChooserPanel extends JPanel implements
 	private final SortedMap<String, Component> componentMap = new TreeMap<>();
 	private final RegistryAndFamilyChooserPanel registryAndFamilyChooserPanel;
 
+	public ComponentChooserPanel(ComponentPreference prefs, FamilyChooserPanel familyPanel) {
+		this(prefs);
+		familyPanel.addObserver(new Observer<FamilyChoiceMessage>() {
+			@Override
+			public void notify(Observable<FamilyChoiceMessage> sender,
+					FamilyChoiceMessage message) throws Exception {
+				try {
+					updateComponentModel();
+				} catch (Exception e) {
+					logger.error("problem when component/family was selected",
+							e);
+				}
+			}
+		});
+	}
+
 	public ComponentChooserPanel(ComponentPreference prefs) {
 		super(new GridBagLayout());
 		registryAndFamilyChooserPanel = new RegistryAndFamilyChooserPanel(prefs);

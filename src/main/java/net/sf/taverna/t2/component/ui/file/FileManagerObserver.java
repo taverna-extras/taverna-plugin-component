@@ -5,7 +5,6 @@ import static java.awt.Font.BOLD;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.SwingUtilities.isEventDispatchThread;
 import static net.sf.taverna.t2.component.ui.util.Utils.currentDataflowIsComponent;
-import static net.sf.taverna.t2.workbench.views.graph.GraphViewComponent.graphControllerMap;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -21,7 +20,7 @@ import net.sf.taverna.t2.workbench.configuration.colour.ColourManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.events.FileManagerEvent;
 import net.sf.taverna.t2.workbench.models.graph.svg.SVGGraphController;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
+import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
 
 import org.apache.batik.swing.JSVGCanvas;
 
@@ -31,6 +30,7 @@ public class FileManagerObserver implements StartupSPI {
 	private static final Color COLOR = new Color(230, 147, 210);
 	private FileManager fileManager; //FIXME beaninject
 	private ColourManager colours; //FIXME beaninject
+	private GraphViewComponent graphView; //FIXME beaninject
 
 	@Override
 	public boolean startup() {
@@ -63,8 +63,8 @@ public class FileManagerObserver implements StartupSPI {
 			WorkflowBundle currentDataflow = fileManager.getCurrentDataflow();
 			if (currentDataflow == null)
 				return;
-			SVGGraphController graphController = graphControllerMap
-					.get(currentDataflow);
+			SVGGraphController graphController = (SVGGraphController) graphView
+					.getGraphController(currentDataflow.getMainWorkflow());
 			if (graphController == null)
 				return;
 			JSVGCanvas svgCanvas = graphController.getSVGCanvas();

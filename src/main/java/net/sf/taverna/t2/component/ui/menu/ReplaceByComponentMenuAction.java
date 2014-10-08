@@ -7,8 +7,8 @@ import java.net.URI;
 
 import javax.swing.Action;
 
+import uk.org.taverna.scufl2.api.core.Processor;
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
-import net.sf.taverna.t2.workflowmodel.Processor;
 
 /**
  * @author alanrw
@@ -17,7 +17,7 @@ import net.sf.taverna.t2.workflowmodel.Processor;
 public class ReplaceByComponentMenuAction extends AbstractContextualMenuAction {
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
-	private static final ReplaceByComponentAction action = new ReplaceByComponentAction();
+	private ReplaceByComponentAction action;//FIXME beaninject
 
 	public ReplaceByComponentMenuAction() {
 		super(configureSection, 75);

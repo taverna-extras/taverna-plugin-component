@@ -58,9 +58,7 @@ public class LicenseChooserPanel extends JPanel implements
 	private static final Logger logger = getLogger(LicenseChooserPanel.class);
 
 	private JComboBox<String> licenseBox = new JComboBox<>();
-
 	private SortedMap<String, License> licenseMap = new TreeMap<>();
-
 	private Registry registry;
 
 	public LicenseChooserPanel() {

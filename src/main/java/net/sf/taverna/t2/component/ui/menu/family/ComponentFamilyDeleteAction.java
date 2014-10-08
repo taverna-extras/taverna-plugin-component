@@ -67,7 +67,6 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 		super(DELETE_FAMILY_LABEL, getIcon());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent ev) {
 		JPanel overallPanel = new JPanel(new GridBagLayout());
@@ -84,8 +83,7 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 		gbc.weightx = 1;
 		overallPanel.add(registryPanel, gbc);
 
-		FamilyChooserPanel familyPanel = new FamilyChooserPanel();
-		registryPanel.addObserver(familyPanel);
+		FamilyChooserPanel familyPanel = new FamilyChooserPanel(registryPanel);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.weighty = 1;

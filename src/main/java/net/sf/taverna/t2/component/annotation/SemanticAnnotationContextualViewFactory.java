@@ -45,8 +45,8 @@ public class SemanticAnnotationContextualViewFactory implements
 		Object dataflowSource = fileManager.getDataflowSource(fileManager
 				.getCurrentDataflow());
 		// FIXME
-		return (dataflowSource instanceof Version.ID)
-				&& (selection instanceof Annotated)
+		return dataflowSource instanceof Version.ID
+				&& selection instanceof Annotated
 				&& !(selection instanceof Activity || selection instanceof ActivityPort);
 	}
 

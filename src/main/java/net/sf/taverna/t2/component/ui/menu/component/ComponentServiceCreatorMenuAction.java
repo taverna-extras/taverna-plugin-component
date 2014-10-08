@@ -9,14 +9,13 @@ import javax.swing.Action;
 
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.core.Processor;
-import net.sf.taverna.t2.component.ComponentActivity;
-import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
+import net.sf.taverna.t2.component.ui.menu.AbstractContextComponentMenuAction;
 
 /**
  * @author alanrw
  */
 public class ComponentServiceCreatorMenuAction extends
-		AbstractContextualMenuAction {
+		AbstractContextComponentMenuAction {
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
 
@@ -29,25 +28,14 @@ public class ComponentServiceCreatorMenuAction extends
 		if (!super.isEnabled())
 			return false;
 		Activity a = findActivity();
-		return (a != null) && !(a instanceof ComponentActivity);
+		if (a == null)
+			return false;
+		return !isComponentActivity(a);
 	}
 
 	@Override
 	protected Action createAction() {
 		return new ComponentServiceCreatorAction(
 				(Processor) getContextualSelection().getSelection());
-	}
-
-	protected Activity findActivity() {
-		if (getContextualSelection() == null)
-			return null;
-		Object selection = getContextualSelection().getSelection();
-		if (selection instanceof Processor) {
-			Processor processor = (Processor) selection;
-			for (Activity activity : processor.getActivityList())
-				if (Activity.class.isInstance(activity))
-					return Activity.class.cast(activity);
-		}
-		return null;
 	}
 }
