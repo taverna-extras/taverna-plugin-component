@@ -55,6 +55,10 @@ public class ComponentFamilyCreateAction extends AbstractAction {
 		super(CREATE_FAMILY, ComponentServiceIcon.getIcon());
 	}
 
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		overallPanel = new JPanel(new GridBagLayout());

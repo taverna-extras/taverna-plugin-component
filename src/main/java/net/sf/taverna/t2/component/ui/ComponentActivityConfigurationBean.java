@@ -16,9 +16,6 @@ import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.api.profile.ExceptionHandling;
-import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityInputPortDefinitionBean;
-import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityOutputPortDefinitionBean;
-import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityPortsDefinitionBean;
 
 import org.apache.log4j.Logger;
 

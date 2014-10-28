@@ -27,6 +27,10 @@ public class ComponentConfigureMenuAction extends
 	private ServiceRegistry sr;//FIXME beaninject
 	private ComponentFactory factory;//FIXME beaninject
 
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
+
 	@Override
 	protected Action createAction() {
 		Action result = new ComponentConfigureAction(findActivity(),

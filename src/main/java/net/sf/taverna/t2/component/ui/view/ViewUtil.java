@@ -37,6 +37,10 @@ public class ViewUtil {
 
 	private ComponentFactory factory;//FIXME beaninject
 
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
+
 	public String getRawTablesHtml(Version.ID id) {
 		StringBuilder html = new StringBuilder();
 		getRawTablesHtml(id, html);

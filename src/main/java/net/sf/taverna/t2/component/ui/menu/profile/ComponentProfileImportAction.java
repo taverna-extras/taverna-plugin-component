@@ -59,6 +59,14 @@ public class ComponentProfileImportAction extends AbstractAction {
 		super(IMPORT_PROFILE, getIcon());
 	}
 
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
+
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		JPanel overallPanel = new JPanel();

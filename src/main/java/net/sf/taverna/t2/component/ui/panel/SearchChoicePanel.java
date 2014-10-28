@@ -42,11 +42,11 @@ public class SearchChoicePanel extends JPanel {
 	private static final String[] SEARCHING_ARRAY = new String[] { SEARCHING };
 	private static final String NO_MATCHES = "No matches";
 	private static final String SEARCH_FAILED = "Search failed";
-	private static final List<String> RESERVED_WORDS = Arrays
-			.asList(new String[] { SEARCHING, NO_MATCHES, SEARCH_FAILED });
+	private static final List<String> RESERVED_WORDS = Arrays.asList(SEARCHING,
+			NO_MATCHES, SEARCH_FAILED);
 
-	private ComponentPreference preference;//FIXME beaninject
-	private ComponentFactory factory;//FIXME beaninject
+	private ComponentPreference preference;//FIXME beaninject from constructor
+	private ComponentFactory factory;//FIXME beaninject from constructor
 	private Registry registry;
 	private String prefixes;
 	private String queryText;

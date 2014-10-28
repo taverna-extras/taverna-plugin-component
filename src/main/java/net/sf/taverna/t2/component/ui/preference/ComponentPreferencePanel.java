@@ -60,8 +60,8 @@ public class ComponentPreferencePanel extends JPanel {
 
 	private final Logger logger = getLogger(ComponentPreferencePanel.class);
 
-	private ComponentFactory factory; // FIXME beaninject
-	private ComponentPreference prefs; // FIXME beaninject
+	private ComponentFactory factory;
+	private ComponentPreference prefs;
 	private RegistryTableModel tableModel = new RegistryTableModel();
 
 	@SuppressWarnings("serial")
@@ -74,14 +74,12 @@ public class ComponentPreferencePanel extends JPanel {
 			return super.getToolTipText(me);
 		}
 	};
-	
-	public ComponentPreferencePanel() {
-		super();
-		initialize();
-	}
 
-	private void initialize() {
-		setLayout(new GridBagLayout());
+	public ComponentPreferencePanel(ComponentFactory componentFactory,
+			ComponentPreference preferences) {
+		super(new GridBagLayout());
+		factory = componentFactory;
+		prefs = preferences;
 
 		GridBagConstraints gbc = new GridBagConstraints();
 
@@ -99,7 +97,7 @@ public class ComponentPreferencePanel extends JPanel {
 		gbc.weightx = 1.0;
 		gbc.weighty = 0.0;
 		gbc.fill = HORIZONTAL;
-		this.add(descriptionText, gbc);
+		add(descriptionText, gbc);
 
 		gbc.gridy++;
 		gbc.insets = new Insets(10, 0, 0, 0);
@@ -113,7 +111,7 @@ public class ComponentPreferencePanel extends JPanel {
 		gbc.weighty = 1.0;
 		gbc.fill = BOTH;
 
-		this.add(scrollPane, gbc);
+		add(scrollPane, gbc);
 
 		// Add buttons panel
 		gbc.gridx = 0;
@@ -124,7 +122,7 @@ public class ComponentPreferencePanel extends JPanel {
 		gbc.fill = HORIZONTAL;
 		gbc.anchor = CENTER;
 		gbc.insets = new Insets(10, 0, 0, 0);
-		this.add(createRegistryButtonPanel(), gbc);
+		add(createRegistryButtonPanel(), gbc);
 
 		// Add buttons panel
 		gbc.gridx = 0;
@@ -135,7 +133,7 @@ public class ComponentPreferencePanel extends JPanel {
 		gbc.fill = HORIZONTAL;
 		gbc.anchor = CENTER;
 		gbc.insets = new Insets(10, 0, 0, 0);
-		this.add(createButtonPanel(), gbc);
+		add(createButtonPanel(), gbc);
 
 		setFields();
 	}

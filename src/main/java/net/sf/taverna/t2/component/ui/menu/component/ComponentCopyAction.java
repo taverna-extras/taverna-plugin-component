@@ -54,6 +54,10 @@ public class ComponentCopyAction extends AbstractAction {
 		super(COPY_COMPONENT, getIcon());
 	}
 
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		JPanel overallPanel = new JPanel();

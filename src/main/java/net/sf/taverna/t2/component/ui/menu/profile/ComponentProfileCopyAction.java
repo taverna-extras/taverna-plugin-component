@@ -48,6 +48,10 @@ public class ComponentProfileCopyAction extends AbstractAction {
 		super(COPY_PROFILE, ComponentServiceIcon.getIcon());
 	}
 
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent ev) {
 		JPanel overallPanel = new JPanel();

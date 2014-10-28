@@ -6,6 +6,7 @@ import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.FAMILY_NAME;
 import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
+import static net.sf.taverna.t2.component.ui.ComponentConstants.ACTIVITY_URI;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.net.MalformedURLException;
@@ -31,6 +32,10 @@ import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionProvider;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.scufl2.api.common.Visitor;
+import uk.org.taverna.scufl2.api.configurations.Configuration;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -41,25 +46,31 @@ public class ComponentServiceProvider extends
 			.create("http://taverna.sf.net/2012/service-provider/component");
 	private static Logger logger = getLogger(ComponentServiceProvider.class);
 
-	private ComponentFactory factory;//FIXME beaninject
-	private ComponentPreference prefs;//FIXME beaninject
+	private final ComponentFactory factory;
+	private ComponentPreference prefs;
 
-	public ComponentServiceProvider() {
-		super(JsonNodeFactory.instance.objectNode());
+	public ComponentServiceProvider(ComponentFactory factory, ComponentPreference prefs) {
+		super(makeConfig(null, null));
+		this.factory = factory;
+		this.prefs = prefs;
 	}
 
-	ComponentServiceProvider(ComponentFactory factory) {
-		super(JsonNodeFactory.instance.objectNode());
-		this.factory = factory;
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
 	}
 
 	private static class Conf {
 		URL registryBase;
 		String familyName;
 
-		Conf(ObjectNode config) throws MalformedURLException  {
-			registryBase = URI.create(config.get(REGISTRY_BASE).textValue()).toURL();
-			familyName = config.get(FAMILY_NAME).textValue();
+		Conf(Configuration config) throws MalformedURLException  {
+			ObjectNode node = config.getJsonAsObjectNode();
+			JsonNode item = node.get(REGISTRY_BASE);
+			if (item != null && !item.isNull())
+				registryBase = URI.create(item.textValue()).toURL();
+			item = node.get(FAMILY_NAME);
+			if (item != null && !item.isNull())
+				familyName = item.textValue();
 		}
 	}
 
@@ -75,12 +86,8 @@ public class ComponentServiceProvider extends
 		try {
 			config = new Conf(getConfiguration());
 			registry = factory.getRegistry(config.registryBase);
-		} catch (ComponentException e) {
+		} catch (ComponentException | MalformedURLException e) {
 			logger.error("failed to get registry API", e);
-			callBack.fail("Unable to read components", e);
-			return;
-		} catch (MalformedURLException e) {
-			logger.error("failed to get registry URL", e);
 			callBack.fail("Unable to read components", e);
 			return;
 		}
@@ -94,8 +101,9 @@ public class ComponentServiceProvider extends
 						try {
 							SortedMap<Integer, Version> versions = component
 									.getComponentVersionMap();
-							ComponentServiceDesc newDesc = new ComponentServiceDesc(null,null,//FIXME
-									versions.get(versions.lastKey()).getID());
+							ComponentServiceDesc newDesc = new ComponentServiceDesc(
+									prefs, factory, versions.get(
+											versions.lastKey()).getID());
 							results.add(newDesc);
 						} catch (Exception e) {
 							logger.error("problem getting service descriptor",
@@ -156,19 +164,43 @@ public class ComponentServiceProvider extends
 				OK_CANCEL_OPTION) != OK_OPTION)
 			return;
 
-		Registry chosenRegistry = panel.getChosenRegistry();
-		Family chosenFamily = panel.getChosenFamily();
-		if ((chosenRegistry == null) || (chosenFamily == null))
+		Registry registry = panel.getChosenRegistry();
+		Family family = panel.getChosenFamily();
+		if (registry == null || family == null)
 			return;
+		callBack.newProviderConfiguration(makeConfig(
+				registry.getRegistryBaseString(), family.getName()));
+	}
 
+	private static Configuration makeConfig(String registryUrl,
+			String familyName) {
 		ObjectNode cfg = JsonNodeFactory.instance.objectNode();
-		cfg.put(REGISTRY_BASE, chosenRegistry.getRegistryBaseString());
-		cfg.put(FAMILY_NAME, chosenFamily.getName());
-		callBack.newProviderConfiguration(cfg);
+		cfg.put(REGISTRY_BASE, registryUrl);
+		cfg.put(FAMILY_NAME, familyName);
+		Configuration conf = new Configuration();
+		conf.setJson(cfg);
+		conf.setType(providerId);
+		return conf;
 	}
 
 	@Override
 	public ServiceDescriptionProvider newInstance() {
-		return new ComponentServiceProvider(factory);
+		return new ComponentServiceProvider(factory, prefs);
+	}
+
+	@Override
+	public URI getType() {
+		return ACTIVITY_URI;
+	}
+
+	@Override
+	public void setType(URI type) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

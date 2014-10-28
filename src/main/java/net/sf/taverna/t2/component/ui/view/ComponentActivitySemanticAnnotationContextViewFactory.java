@@ -1,5 +1,6 @@
 package net.sf.taverna.t2.component.ui.view;
 
+import static net.sf.taverna.t2.component.api.config.ComponentConfig.URI;
 import static net.sf.taverna.t2.workflowmodel.utils.Tools.getFirstProcessorWithActivityInputPort;
 import static net.sf.taverna.t2.workflowmodel.utils.Tools.getFirstProcessorWithActivityOutputPort;
 import static org.apache.log4j.Logger.getLogger;
@@ -26,7 +27,6 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityOutputPort;
 
 public class ComponentActivitySemanticAnnotationContextViewFactory implements
 		ContextualViewFactory<Object> {
-	private static final long serialVersionUID = 7403728889085410126L;
 	public static final String VIEW_TITLE = "Inherited Semantic Annotations";
 	private static final Logger logger = getLogger(ComponentActivitySemanticAnnotationContextViewFactory.class);
 
@@ -38,8 +38,11 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 	}
 
 	public Activity getContainingComponentActivity(Object selection) {
-		if (selection instanceof ComponentActivity)
-			return (ComponentActivity) selection;
+		if (selection instanceof Activity) {
+			Activity a = (Activity) selection;
+			if (a.getType().equals(URI))
+				return a;
+		}
 
 		if (selection instanceof ActivityInputPort) {
 			Processor p = null;
@@ -74,8 +77,8 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 
 		public SemanticAnnotationCV(Object selection) {
 			super(false);
-			//FIXME! This is wrong entirely
 			Activity componentActivity = getContainingComponentActivity(selection);
+			//FIXME! This is wrong entirely
 			ComponentActivityConfigurationBean configuration = componentActivity
 					.getConfiguration();
 			Dataflow underlyingDataflow;
@@ -94,7 +97,7 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 
 		private void setAnnotatedThing(Object selection,
 				Dataflow underlyingDataflow) {
-			if (selection instanceof ComponentActivity) {
+			if (selection instanceof Activity) {
 				setAnnotated(underlyingDataflow);
 			} else if (selection instanceof ActivityInputPort) {
 				String name = ((ActivityInputPort) selection).getName();
@@ -117,7 +120,7 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 		private void setProfile(Object selection) throws ComponentException {
 			if (componentProfile == null)
 				return;
-			if (selection instanceof ComponentActivity) {
+			if (selection instanceof Activity) {
 				setSemanticAnnotationProfiles(componentProfile
 						.getSemanticAnnotations());
 			} else if (selection instanceof ActivityInputPort) {

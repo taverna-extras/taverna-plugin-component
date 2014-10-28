@@ -33,9 +33,17 @@ public class ComponentDataflowHealthChecker implements HealthChecker<Dataflow> {
 	private static final String PROFILE_UNSATISFIED_MSG = "Workflow does not satisfy component profile";
 	private static Logger logger = getLogger(ComponentDataflowHealthChecker.class);
 
-	private FileManager fm;//FIXME beaninject
+	private FileManager fm;
 	private ComponentHealthCheck visitType = ComponentHealthCheck.getInstance(); //FIXME beaninject?
-	private ComponentFactory factory;//FIXME beaninject
+	private ComponentFactory factory;
+
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
+
+	public void setFileManager(FileManager fm) {
+		this.fm = fm;
+	}
 
 	private Version.ID getSource(Object o) {
 		return (Version.ID) fm.getDataflowSource((WorkflowBundle) o);

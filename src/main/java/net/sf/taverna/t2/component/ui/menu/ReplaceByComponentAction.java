@@ -44,21 +44,23 @@ import net.sf.taverna.t2.workflowmodel.utils.Tools;
 
 /**
  * @author alanrw
- * 
  */
 public class ReplaceByComponentAction extends AbstractAction {
 	private static final long serialVersionUID = 7364648399658711574L;
 
 	private FileManager fileManager; //FIXME beaninject
 	private EditManager em; //FIXME beaninject
-	private Edits edits; //FIXME beaninject
 	private ComponentPreference prefs;//FIXME beaninject
+
+	private Processor selection;
 
 	public ReplaceByComponentAction() {
 		super("Replace by component...", getIcon());
 	}
 
-	private Processor selection;
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

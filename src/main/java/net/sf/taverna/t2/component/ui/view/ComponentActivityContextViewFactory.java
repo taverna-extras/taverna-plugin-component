@@ -1,5 +1,7 @@
 package net.sf.taverna.t2.component.ui.view;
 
+import static net.sf.taverna.t2.component.api.config.ComponentConfig.URI;
+
 import java.awt.Frame;
 import java.util.Arrays;
 import java.util.List;
@@ -17,24 +19,28 @@ import net.sf.taverna.t2.workbench.ui.actions.activity.HTMLBasedActivityContextu
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;
 import net.sf.taverna.t2.component.api.ComponentFactory;
+import net.sf.taverna.t2.component.api.config.ComponentConfig;
 import net.sf.taverna.t2.component.ui.config.ComponentConfigureAction;
 
 public class ComponentActivityContextViewFactory implements
 		ContextualViewFactory<Activity> {
 	private ColourManager colourManager;//FIXME beaninject
 	private ViewUtil util;//FIXME beaninject
-	public ComponentFactory factory;//FIXME beaninject
-	public ActivityIconManager aim;//FIXME beaninject
-	public ServiceDescriptionRegistry sdr;//FIXME beaninject
-	public EditManager em;//FIXME beaninject
-	public FileManager fm;//FIXME beaninject
-	public ServiceRegistry sr;//FIXME beaninject
+	private ComponentFactory factory;//FIXME beaninject
+	private ActivityIconManager aim;//FIXME beaninject
+	private ServiceDescriptionRegistry sdr;//FIXME beaninject
+	private EditManager em;//FIXME beaninject
+	private FileManager fm;//FIXME beaninject
+	private ServiceRegistry sr;//FIXME beaninject
+
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
 
 	@Override
 	public boolean canHandle(Object selection) {
-		//FIXME
-		return false;
-		//return selection instanceof ComponentActivity;
+		return selection instanceof Activity
+				&& ((Activity) selection).getType().equals(URI);
 	}
 
 	@Override

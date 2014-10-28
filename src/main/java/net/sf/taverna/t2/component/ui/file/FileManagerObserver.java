@@ -28,9 +28,22 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 public class FileManagerObserver implements StartupSPI {
 	private static final Color COLOR = new Color(230, 147, 210);
-	private FileManager fileManager; //FIXME beaninject
-	private ColourManager colours; //FIXME beaninject
-	private GraphViewComponent graphView; //FIXME beaninject
+
+	private FileManager fileManager;
+	private ColourManager colours;
+	private GraphViewComponent graphView;
+
+	public void setFileManager(FileManager fileManager) {
+		this.fileManager = fileManager;
+	}
+
+	public void setColours(ColourManager colours) {
+		this.colours = colours;
+	}
+
+	public void setGraphView(GraphViewComponent graphView) {
+		this.graphView = graphView;
+	}
 
 	@Override
 	public boolean startup() {

@@ -5,14 +5,10 @@ package net.sf.taverna.t2.component.ui.menu.component;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static net.sf.taverna.t2.component.ui.util.Utils.currentDataflowIsComponent;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.JOptionPane;
 
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.ComponentAction;

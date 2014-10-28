@@ -67,6 +67,10 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 		super(DELETE_FAMILY_LABEL, getIcon());
 	}
 
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent ev) {
 		JPanel overallPanel = new JPanel(new GridBagLayout());

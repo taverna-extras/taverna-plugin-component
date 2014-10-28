@@ -66,6 +66,14 @@ public class ComponentSearchAction extends AbstractAction {
 		super(SEARCH_FOR_COMPONENTS, getIcon());
 	}
 
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
+
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JPanel overallPanel = new JPanel(new GridBagLayout());

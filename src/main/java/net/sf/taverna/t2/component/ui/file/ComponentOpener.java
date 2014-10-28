@@ -29,9 +29,14 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
  */
 public class ComponentOpener extends AbstractDataflowPersistenceHandler
 		implements DataflowPersistenceHandler {
-	private static final FileType COMPONENT_FILE_TYPE = ComponentFileType.instance;
+	private static final FileType COMPONENT_FILE_TYPE = ComponentFileType.instance;//TODO beaninject?
 	private static Logger logger = getLogger(ComponentOpener.class);
-	ComponentFactory factory;//FIXME beaninject
+
+	private ComponentFactory factory;
+
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
 
 	@Override
 	public DataflowInfo openDataflow(FileType fileType, Object source)

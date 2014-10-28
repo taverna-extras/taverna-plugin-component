@@ -46,6 +46,10 @@ public class ComponentProfileDeleteAction extends AbstractAction {
 		setEnabled(false);
 	}
 
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent ev) {
 		JPanel overallPanel = new JPanel(new GridBagLayout());

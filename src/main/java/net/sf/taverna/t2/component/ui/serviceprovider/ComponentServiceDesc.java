@@ -1,26 +1,32 @@
 package net.sf.taverna.t2.component.ui.serviceprovider;
 
 import static java.util.Arrays.asList;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
+import static net.sf.taverna.t2.component.ui.ComponentConstants.ACTIVITY_URI;
 import static org.apache.log4j.Logger.getLogger;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.Icon;
 
-//import net.sf.taverna.t2.component.ComponentActivity;
-//import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
-import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.scufl2.api.configurations.Configuration;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ComponentServiceDesc extends ServiceDescription {
 	private static Logger logger = getLogger(ComponentServiceDesc.class);
@@ -36,25 +42,20 @@ public class ComponentServiceDesc extends ServiceDescription {
 		this.identification = identification;
 	}
 
-	///**
-	// * The subclass of Activity which should be instantiated when adding a
-	// * service for this description
-	// */
-	//@Override
-	//public Class<? extends Activity<ComponentActivityConfigurationBean>> getActivityClass() {
-	//	return ComponentActivity.class;
-	//}
-
 	/**
 	 * The configuration bean which is to be used for configuring the
-	 * instantiated activity. Making this bean will typically require some of
-	 * the fields set on this service description, like an endpoint URL or
-	 * method name.
+	 * instantiated activity. This is built from the component identifier.
 	 */
 	@Override
 	public Configuration getActivityConfiguration() {
 		Configuration config = new Configuration();
-		config.setJson(getIdentification());
+		ObjectNode c = config.getJsonAsObjectNode();
+		ID id = getIdentification();
+		c.put(REGISTRY_BASE, id.getRegistryBase().toExternalForm());
+		c.put(FAMILY_NAME, id.getFamilyName());
+		c.put(COMPONENT_NAME, id.getComponentName());
+		c.put(COMPONENT_VERSION, id.getComponentVersion());
+		config.setJson(c);
 		return config;
 	}
 
@@ -119,11 +120,17 @@ public class ComponentServiceDesc extends ServiceDescription {
 	
 	public URL getHelpURL() {
 		try {
-			Version version = factory.getVersion(getIdentification());
-			return version.getHelpURL();
+			return factory.getVersion(getIdentification()).getHelpURL();
 		} catch (ComponentException e) {
-			logger.error(e);
+			logger.error(
+					"failed to get component in order to determine its help URL",
+					e);
+			return null;
 		}
-		return null;
+	}
+
+	@Override
+	public URI getActivityType() {
+		return ACTIVITY_URI;
 	}
 }

@@ -57,6 +57,10 @@ public class ComponentDeleteAction extends AbstractAction {
 		super(DELETE_COMPONENT_LABEL, getIcon());
 	}
 
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		ComponentChooserPanel panel = new ComponentChooserPanel(prefs);

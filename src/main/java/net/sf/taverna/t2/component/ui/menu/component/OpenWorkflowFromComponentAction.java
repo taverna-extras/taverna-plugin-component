@@ -52,6 +52,10 @@ public class OpenWorkflowFromComponentAction extends ComponentAction {
 		putValue(SHORT_DESCRIPTION, ACTION_DESCRIPTION);
 	}
 
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent arg) {
 		final ComponentVersionChooserPanel panel = new ComponentVersionChooserPanel(prefs);	

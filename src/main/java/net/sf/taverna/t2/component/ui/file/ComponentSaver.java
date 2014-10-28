@@ -31,7 +31,6 @@ import net.sf.taverna.t2.workbench.file.DataflowInfo;
 import net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.FileType;
 import net.sf.taverna.t2.workbench.file.exceptions.SaveException;
-import net.sf.taverna.t2.workflowmodel.ConfigurationException;
 
 import org.apache.log4j.Logger;
 
@@ -44,10 +43,16 @@ import uk.org.taverna.scufl2.validation.structural.StructuralValidator;
  */
 public class ComponentSaver extends AbstractDataflowPersistenceHandler
 		implements DataflowPersistenceHandler {
-	private static final String UNSATISFIED_PROFILE_WARNING = "The component does not satisfy the profile.\nSee validation report.\nDo you still want to save?";
+	private static final String UNSATISFIED_PROFILE_WARNING = "The component does not satisfy the profile.\n"
+			+ "See validation report.\nDo you still want to save?";
 	private static final Logger logger = getLogger(ComponentSaver.class);
 	private static final FileType COMPONENT_FILE_TYPE = ComponentFileType.instance;//FIXME beaninject?
-	private ComponentFactory factory;//FIXME beaninject
+
+	private ComponentFactory factory;
+
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
 
 	@Override
 	public DataflowInfo saveDataflow(WorkflowBundle bundle, FileType fileType,

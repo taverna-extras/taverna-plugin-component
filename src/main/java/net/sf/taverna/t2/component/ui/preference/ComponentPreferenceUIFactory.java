@@ -14,22 +14,30 @@ import net.sf.taverna.t2.component.preference.ComponentPreference;
  */
 public class ComponentPreferenceUIFactory implements ConfigurationUIFactory {
 	public static final String DISPLAY_NAME = "Components";
-	private final JPanel configPanel;
-	private static ComponentPreference pref;// FIXME beaninject
+
+	private JPanel configPanel;//FIXME beaninject
+	private ComponentPreference prefs;// FIXME beaninject
 
 	public ComponentPreferenceUIFactory() {
 		super();
-		configPanel = new ComponentPreferencePanel();
+	}
+
+	public void setConfigPanel(JPanel configPanel) {
+		this.configPanel = configPanel;
+	}
+
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
 	}
 
 	@Override
 	public boolean canHandle(String uuid) {
-		return uuid.equals(pref.getUUID());
+		return uuid.equals(prefs.getUUID());
 	}
 
 	@Override
 	public Configurable getConfigurable() {
-		return pref;
+		return prefs;
 	}
 
 	@Override

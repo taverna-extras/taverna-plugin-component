@@ -59,7 +59,15 @@ public class ComponentCreatorSupport {
 	private ComponentFactory factory; //FIXME beaninject
 	private FileManager fm; //FIXME beaninject
 	private EditManager em; //FIXME beaninject
-	private ComponentPreference pref;//FIXME beaninject
+	private ComponentPreference prefs;//FIXME beaninject
+
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
+
+	public void setPreferences(ComponentPreference pref) {
+		this.prefs = pref;
+	}
 
 	public class CopiedProcessor {
 		Element processor;
@@ -113,7 +121,7 @@ public class ComponentCreatorSupport {
 	}
 
 	Version.ID getNewComponentIdentification(String defaultName) {
-		RegistryAndFamilyChooserComponentEntryPanel panel = new RegistryAndFamilyChooserComponentEntryPanel(pref);
+		RegistryAndFamilyChooserComponentEntryPanel panel = new RegistryAndFamilyChooserComponentEntryPanel(prefs);
 		panel.setComponentName(defaultName);
 		int result = showConfirmDialog(null, panel, "Component location",
 				OK_CANCEL_OPTION);

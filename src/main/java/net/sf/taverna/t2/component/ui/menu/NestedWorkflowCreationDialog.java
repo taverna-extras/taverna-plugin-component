@@ -44,6 +44,8 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
+import net.sf.taverna.t2.workbench.edits.Edit;
+import net.sf.taverna.t2.workbench.edits.EditException;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.helper.HelpEnabledDialog;
 import net.sf.taverna.t2.workbench.models.graph.GraphController;
@@ -51,7 +53,9 @@ import net.sf.taverna.t2.workbench.models.graph.GraphController;
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.core.DataLink;
 import uk.org.taverna.scufl2.api.core.Processor;
+import uk.org.taverna.scufl2.api.core.Workflow;
 import uk.org.taverna.scufl2.api.port.ProcessorPort;
 
 /**
@@ -60,10 +64,6 @@ import uk.org.taverna.scufl2.api.port.ProcessorPort;
 public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	private static final long serialVersionUID = 727059218457420449L;
 	private static final Logger logger = getLogger(NestedWorkflowCreationDialog.class);
-	private static final AnnotationTools at = new AnnotationTools();
-	private final List<TokenProcessingEntity> includedProcessors = new ArrayList<>();
-	private List<? extends Processor> allProcessors;
-	private final List<TokenProcessingEntity> includableProcessors = new ArrayList<>();
 	private static final Comparator<TokenProcessingEntity> processorComparator = new Comparator<TokenProcessingEntity>() {
 		@Override
 		public int compare(TokenProcessingEntity o1, TokenProcessingEntity o2) {
@@ -82,6 +82,10 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 		}
 	};
 
+	private final List<TokenProcessingEntity> includedProcessors = new ArrayList<>();
+	private List<? extends Processor> allProcessors;
+	private final List<TokenProcessingEntity> includableProcessors = new ArrayList<>();
+	private final AnnotationTools at = new AnnotationTools();//beaninject?
 	private EditManager em;//FIXME beaninject
 
 	private JList<TokenProcessingEntity> includableList = new JList<>();
@@ -132,7 +136,7 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 		this.setSize(new Dimension(500, 800));
 	}
 
-	private JPanel createProcessorChoicePanel(Dataflow dataflow) {
+	private JPanel createProcessorChoicePanel(Workflow dataflow) {
 		JPanel result = new JPanel();
 		result.setLayout(new GridLayout(0, 2));
 
@@ -257,7 +261,7 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 					.getPreconditionList())
 				considerInclusion(condition.getControl());
 		for (EventHandlingInputPort inputPort : investigate.getInputPorts()) {
-			Datalink incomingLink = inputPort.getIncomingLink();
+			DataLink incomingLink = inputPort.getIncomingLink();
 			if (incomingLink == null)
 				continue;
 			EventForwardingOutputPort source = incomingLink.getSource();
@@ -280,13 +284,13 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	private void createNestedWorkflow(ActionEvent e) {
 		final List<Edit<?>> currentWorkflowEditList = new ArrayList<>();
 		Map<Object, Object> oldNewMapping = new HashMap<>();
-		Map<Datalink, String> linkProcessorPortMapping = new HashMap<>();
+		Map<DataLink, String> linkProcessorPortMapping = new HashMap<>();
 		Map<EventForwardingOutputPort, DataflowOutputPort> outputPortMap = new HashMap<>();
 		Map<EventHandlingInputPort, DataflowInputPort> inputPortMap = new HashMap<>();
 
 		Processor nestingProcessor = createNestingProcessor(currentWorkflowEditList);
 
-		Dataflow nestedDataflow = createNestedDataflow(e);
+		Workflow nestedDataflow = createNestedDataflow(e);
 
 		transferProcessors(currentWorkflowEditList, oldNewMapping,
 				nestedDataflow);
@@ -312,7 +316,7 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	}
 
 	private void addDataflowToNestingProcessor(Processor nestingProcessor,
-			Dataflow nestedDataflow) {
+			Workflow nestedDataflow) {
 		DataflowActivity da = new DataflowActivity();
 		try {
 			da.configure(nestedDataflow);
@@ -346,9 +350,9 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 
 	private void createDatalinkEdits(List<Edit<?>> editList,
 			Map<Object, Object> oldNewMapping,
-			Map<Datalink, String> linkProcessorPortMapping,
+			Map<DataLink, String> linkProcessorPortMapping,
 			Processor nestingProcessor) {
-		for (Datalink dl : currentDataflow.getLinks()) {
+		for (DataLink dl : currentDataflow.getLinks()) {
 			if (oldNewMapping.containsKey(dl.getSource())
 					&& oldNewMapping.containsKey(dl.getSink()))
 				// Internal to nested workflow
@@ -364,7 +368,7 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 						break;
 					}
 				if (nestedPort != null) {
-					Datalink replacementDatalink = edits.createDatalink(
+					DataLink replacementDatalink = edits.createDatalink(
 							nestedPort, dl.getSink());
 					editList.add(edits.getDisconnectDatalinkEdit(dl));
 					editList.add(edits
@@ -424,10 +428,10 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	}
 
 	private void transferDatalinks(Map<Object, Object> oldNewMapping,
-			Map<Datalink, String> linkProcessorPortMapping,
+			Map<DataLink, String> linkProcessorPortMapping,
 			Map<EventForwardingOutputPort, DataflowOutputPort> outputPortMap,
 			Map<EventHandlingInputPort, DataflowInputPort> inputPortMap,
-			Dataflow nestedDataflow) {
+			Workflow nestedDataflow) {
 		HashSet<String> inputPortNames = new HashSet<>();
 		HashSet<String> outputPortNames = new HashSet<>();
 
@@ -506,7 +510,7 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	}
 
 	private void transferProcessors(List<Edit<?>> editList,
-			Map<Object, Object> oldNewMapping, Dataflow nestedDataflow) {
+			Map<Object, Object> oldNewMapping, Workflow nestedDataflow) {
 		for (TokenProcessingEntity entity : includedProcessors)
 			try {
 				if (entity instanceof Processor)
@@ -521,7 +525,7 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	}
 
 	private void transferMerge(List<Edit<?>> editList,
-			Map<Object, Object> oldNewMapping, Dataflow nestedDataflow,
+			Map<Object, Object> oldNewMapping, Workflow nestedDataflow,
 			Merge merge) throws EditException {
 		editList.add(edits.getRemoveMergeEdit(currentDataflow, merge));
 		Merge newMerge = edits.createMerge(nestedDataflow);
@@ -537,7 +541,7 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	}
 
 	private void transferProcessor(List<Edit<?>> editList,
-			Map<Object, Object> oldNewMapping, Dataflow nestedDataflow,
+			Map<Object, Object> oldNewMapping, Workflow nestedDataflow,
 			Processor p) throws Exception {
 		editList.add(edits.getRemoveProcessorEdit(currentDataflow, p));
 		Processor newProcessor = pasteProcessor(copyProcessor(p),
@@ -558,7 +562,7 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 	}
 
 	private Processor createNestingProcessor(List<Edit<?>> editList) {
-		Processor nestingProcessor = edits.createProcessor(uniqueProcessorName(
+		Processor nestingProcessor = new Processor(uniqueProcessorName(
 				nameField.getText(), currentDataflow));
 		if (includedProcessors.size() != 1
 				|| !(includedProcessors.get(0) instanceof Processor))
@@ -575,9 +579,8 @@ public class NestedWorkflowCreationDialog extends HelpEnabledDialog {
 		return nestingProcessor;
 	}
 
-	private Dataflow createNestedDataflow(ActionEvent e) {
-		Dataflow nestedDataflow = edits.createDataflow();
-		((DataflowImpl) nestedDataflow).setLocalName(nameField.getText());
+	private Workflow createNestedDataflow(ActionEvent e) {
+		Workflow nestedDataflow = new Workflow(nameField.getText());
 		try {
 			AnnotationTools at = new AnnotationTools();
 			at.setAnnotationString(nestedDataflow, DescriptiveTitle.class,

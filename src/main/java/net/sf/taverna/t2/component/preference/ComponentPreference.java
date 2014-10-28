@@ -33,12 +33,13 @@ import uk.org.taverna.configuration.ConfigurationManager;
 public class ComponentPreference extends AbstractConfigurable {
 	public static final String DISPLAY_NAME = "Components";
 	private final Logger logger = getLogger(ComponentPreference.class);
-	private final SortedMap<String, Registry> registryMap = new TreeMap<>();
 
-	ComponentFactory factory;// FIXME beaninject
+	private SortedMap<String, Registry> registryMap = new TreeMap<>();
+	private ComponentFactory factory;
 
-	public ComponentPreference(ConfigurationManager cm) {
+	public ComponentPreference(ConfigurationManager cm, ComponentFactory factory) {
 		super(cm);
+		this.factory = factory;
 		updateRegistryMap();
 	}
 
