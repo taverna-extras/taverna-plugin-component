@@ -6,7 +6,6 @@ package net.sf.taverna.t2.component.annotation;
 import static java.awt.GridBagConstraints.HORIZONTAL;
 import static java.awt.GridBagConstraints.NORTHWEST;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
-import static net.sf.taverna.t2.component.annotation.SemanticAnnotationUtils.createBaseResource;
 import static net.sf.taverna.t2.component.annotation.SemanticAnnotationUtils.createSemanticAnnotation;
 import static net.sf.taverna.t2.component.annotation.SemanticAnnotationUtils.getDisplayName;
 import static org.apache.log4j.Logger.getLogger;
@@ -14,6 +13,7 @@ import static org.apache.log4j.Logger.getLogger;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -30,15 +30,14 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingWorker;
 
-import net.sf.taverna.t2.annotation.Annotated;
 import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
-import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
-import net.sf.taverna.t2.workflowmodel.EditException;
-import net.sf.taverna.t2.workflowmodel.Edits;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.common.AbstractNamed;
+import uk.org.taverna.scufl2.api.common.Named;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -54,18 +53,18 @@ public abstract class AbstractSemanticAnnotationContextualView extends
 	private static final long serialVersionUID = 3567849347002793442L;
 	private static final Logger logger = getLogger(SemanticAnnotationContextualView.class);
 
-	private EditManager editManager;//FIXME beaninject
-	private FileManager fileManager;//FIXME beaninject
-	private Edits edits;//FIXME beaninject
+	private final FileManager fileManager;
 
-	public AbstractSemanticAnnotationContextualView(boolean allowChange) {
+	public AbstractSemanticAnnotationContextualView(FileManager fileManager,
+			boolean allowChange) {
 		super();
+		this.fileManager = fileManager;
 		this.allowChange = allowChange;
 	}
 
 	private final boolean allowChange;
 	private JPanel panel;
-	private Annotated<?> annotated;
+	private AbstractNamed annotated;
 	private List<SemanticAnnotationProfile> semanticAnnotationProfiles;
 	private Model model;
 	private Resource subject;
@@ -115,7 +114,7 @@ public abstract class AbstractSemanticAnnotationContextualView extends
 			RDFNode node) {
 		if (predicate == null)
 			return;
- 		model.remove(origStatement);
+		model.remove(origStatement);
 		model.add(subject, predicate, node);
 		// populatePanel(panel);
 		updateSemanticAnnotation();
@@ -142,16 +141,15 @@ public abstract class AbstractSemanticAnnotationContextualView extends
 
 	public void updateSemanticAnnotation() {
 		try {
-			editManager.doDataflowEdit(fileManager.getCurrentDataflow(), edits
-					.getAddAnnotationChainEdit(annotated,
-							createSemanticAnnotation(getModel())));
-		} catch (EditException e) {
-			logger.warn("Can't set semantic annotation", e);
+			createSemanticAnnotation(fileManager.getCurrentDataflow(),
+					annotated, model);
+		} catch (IOException e) {
+			logger.error("failed to add semantic annotation", e);
 		}
 	}
 
-	public void setAnnotated(Annotated<?> annotated) {
-		this.annotated = annotated;
+	public void setAnnotated(Named annotated) {
+		this.annotated = (AbstractNamed) annotated;
 	}
 
 	public void setSemanticAnnotationProfiles(
@@ -164,11 +162,12 @@ public abstract class AbstractSemanticAnnotationContextualView extends
 	}
 
 	private void populateModel() {
-		this.model = SemanticAnnotationUtils.populateModel(getAnnotated());
-		this.subject = createBaseResource(this.model);
+		this.model = SemanticAnnotationUtils.populateModel(fileManager
+				.getCurrentDataflow());
+		this.subject = model.createResource(annotated.getURI().toASCIIString());
 	}
 
-	public Annotated<?> getAnnotated() {
+	public Named getAnnotated() {
 		return annotated;
 	}
 
@@ -220,14 +219,14 @@ public abstract class AbstractSemanticAnnotationContextualView extends
 		panel.add(new JPanel(), gbc);
 	}
 
-	private class StatementsReader extends SwingWorker<String, Object> {
+	private class StatementsReader extends SwingWorker<Void, Object> {
 		private Map<SemanticAnnotationProfile, Set<Statement>> profileStatements = new TreeMap<>(
 				comparator);
 		private Set<Statement> statements;
 		private Set<SemanticAnnotationProfile> unresolvablePredicates = new HashSet<>();
 
 		@Override
-		protected String doInBackground() throws Exception {
+		protected Void doInBackground() throws Exception {
 			try {
 				parseStatements();
 			} catch (Exception e) {

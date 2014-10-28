@@ -23,36 +23,41 @@ package net.sf.taverna.t2.component.annotation;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.taverna.t2.annotation.Annotated;
+import uk.org.taverna.scufl2.api.activity.Activity;
+import uk.org.taverna.scufl2.api.common.AbstractNamed;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.port.ActivityPort;
 import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;
-import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityPort;
 
 /**
  * @author David Withers
  */
 public class SemanticAnnotationContextualViewFactory implements
-		ContextualViewFactory<Annotated<?>> {
+		ContextualViewFactory<AbstractNamed> {
 	private FileManager fileManager;//FIXME beaninject
 	private ComponentFactory factory;//FIXME beaninject
 
+	private WorkflowBundle bundle;
+
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
+
 	@Override
 	public boolean canHandle(Object selection) {
-		Object dataflowSource = fileManager.getDataflowSource(fileManager
-				.getCurrentDataflow());
-		// FIXME
-		return dataflowSource instanceof Version.ID
-				&& selection instanceof Annotated
+		bundle = fileManager.getCurrentDataflow();
+		return fileManager.getDataflowSource(bundle) instanceof Version.ID
+				&& selection instanceof AbstractNamed
 				&& !(selection instanceof Activity || selection instanceof ActivityPort);
 	}
 
 	@Override
-	public List<ContextualView> getViews(Annotated<?> selection) {
+	public List<ContextualView> getViews(AbstractNamed selection) {
 		return Arrays.asList(new SemanticAnnotationContextualView(fileManager,
-				factory, selection), new TurtleContextualView(selection));
+				factory, selection), new TurtleContextualView(selection, bundle));
 	}
 }

@@ -23,15 +23,14 @@ package net.sf.taverna.t2.component.annotation;
 import static com.hp.hpl.jena.rdf.model.ModelFactory.createDefaultModel;
 import static org.apache.log4j.Logger.getLogger;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.taverna.t2.annotation.Annotated;
-import net.sf.taverna.t2.annotation.AnnotationAssertion;
-import net.sf.taverna.t2.annotation.AnnotationChain;
-import net.sf.taverna.t2.annotation.annotationbeans.SemanticAnnotation;
 import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
@@ -39,7 +38,7 @@ import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.scufl2.api.annotation.Annotation;
-import uk.org.taverna.scufl2.api.common.NamedSet;
+import uk.org.taverna.scufl2.api.common.AbstractNamed;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 import com.hp.hpl.jena.ontology.OntProperty;
@@ -84,16 +83,34 @@ public class SemanticAnnotationUtils {
 			return "unknown";
 	}
 
-	public static NamedSet<Annotation> findSemanticAnnotation(
-			WorkflowBundle annotated) {
-		return annotated.getAnnotations();
+	public static Annotation findSemanticAnnotation(AbstractNamed annotated) {
+		for (Annotation annotation : annotated.getAnnotations())
+			return annotation;
+		return null;
 	}
 
-	public static SemanticAnnotation createSemanticAnnotation(Model model) {
-		SemanticAnnotation semanticAnnotation = new SemanticAnnotation();
-		String turtle = createTurtle(model);
-		semanticAnnotation.setContent(turtle);
-		return semanticAnnotation;
+	public static String getStrippedAnnotationContent(Annotation annotation)
+			throws IOException {
+		AbstractNamed target = (AbstractNamed) annotation.getTarget();
+		return annotation.getRDFContent().replace(
+				target.getRelativeURI(annotation).toASCIIString(), BASE);
+	}
+
+	public static Annotation createSemanticAnnotation(WorkflowBundle bundle,
+			AbstractNamed target, Model model) throws IOException {
+		Calendar now = new GregorianCalendar();
+		Annotation annotation = new Annotation();
+		annotation.setParent(bundle);
+		String path = annotation.getResourcePath();
+		annotation.setTarget(target);
+		// annotation.setAnnotatedBy(annotatedBy);
+		annotation.setAnnotatedAt(now);
+		// annotation.setSerializedBy(serializedBy);
+		annotation.setSerializedAt(now);
+		bundle.getResources().addResource(
+				"@base<" + target.getRelativeURI(annotation).toASCIIString()
+						+ "> .\n" + createTurtle(model), path, "text/rdf+n3");
+		return annotation;
 	}
 
 	/**
@@ -104,24 +121,26 @@ public class SemanticAnnotationUtils {
 		StringWriter stringWriter = new StringWriter();
 		model.write(stringWriter, ENCODING, BASE);
 		// Workaround for https://issues.apache.org/jira/browse/JENA-132
-		String turtle = stringWriter.toString().replace(
-				"widget://4aa8c93c-3212-487c-a505-3e337adf54a3/", "");
-		return turtle;
+		return stringWriter.toString().replace(BASE, "");
 	}
 
 	public static Model populateModel(WorkflowBundle annotated) {
 		Model result = createDefaultModel();
-		//FIXME How does this work anyway?
-		NamedSet<Annotation> annotations = findSemanticAnnotation(annotated);
 		try {
-			if (annotations != null && !annotations.isEmpty())
-				for (Annotation a : annotations)
-					a.getBody();
-				//populateModelFromString(result, annotation.getContent());
+			for (Annotation a : annotated.getAnnotations())
+				populateModelFromString(result, a.getRDFContent());
 		} catch (Exception e) {
 			logger.error("failed to construct semantic annotation model", e);
 		}
 		return result;
+	}
+
+	public static void populateModel(Model result, Annotation annotation)
+			throws IOException {
+		AbstractNamed target = (AbstractNamed) annotation.getTarget();
+		String content = annotation.getRDFContent().replace(
+				target.getRelativeURI(annotation).toASCIIString(), BASE);
+		populateModelFromString(result, content);
 	}
 
 	public static void populateModelFromString(Model result, String content) {

@@ -21,14 +21,14 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import net.sf.taverna.t2.annotation.Annotated;
+import uk.org.taverna.scufl2.api.activity.Activity;
+import uk.org.taverna.scufl2.api.common.AbstractNamed;
+import uk.org.taverna.scufl2.api.port.ActivityPort;
 import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
 import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityPort;
 
 /**
  * @author alanrw
@@ -37,11 +37,15 @@ public class AnnotateSemanticsMenuAction extends AbstractContextualMenuAction {
 	private static final String ANNOTATE_SEMANTICS = "Annotate semantics...";
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
-	private FileManager fileManager;//FIXME beaninject
-	private ComponentFactory factory;//FIXME beaninject
+	private FileManager fileManager;// FIXME beaninject
+	private ComponentFactory factory;// FIXME beaninject
 
 	public AnnotateSemanticsMenuAction() {
 		super(configureSection, 45);
+	}
+
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
 	}
 
 	@Override
@@ -50,7 +54,7 @@ public class AnnotateSemanticsMenuAction extends AbstractContextualMenuAction {
 		Object dataflowSource = fileManager.getDataflowSource(fileManager
 				.getCurrentDataflow());
 		if (dataflowSource instanceof Version.ID)
-			return (selection instanceof Annotated)
+			return (selection instanceof AbstractNamed)
 					&& !(selection instanceof Activity || selection instanceof ActivityPort);
 		return false;
 	}
@@ -68,7 +72,7 @@ public class AnnotateSemanticsMenuAction extends AbstractContextualMenuAction {
 
 	private void showAnnotateSemanticsPanel() {
 		SemanticAnnotationContextualView view = new SemanticAnnotationContextualView(
-				fileManager, factory, (Annotated<?>) getContextualSelection()
+				fileManager, factory, (AbstractNamed) getContextualSelection()
 						.getSelection());
 
 		final JDialog dialog = new JDialog((Frame) null, "Annotate semantics");

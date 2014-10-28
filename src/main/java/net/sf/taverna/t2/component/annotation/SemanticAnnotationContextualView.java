@@ -24,22 +24,25 @@ import static java.lang.String.format;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import net.sf.taverna.t2.annotation.Annotated;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.profile.Profile;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
+import net.sf.taverna.t2.component.api.Family;
+import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.DataflowInputPort;
-import net.sf.taverna.t2.workflowmodel.DataflowOutputPort;
-import net.sf.taverna.t2.workflowmodel.Processor;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.common.AbstractNamed;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.core.Processor;
+import uk.org.taverna.scufl2.api.core.Workflow;
+import uk.org.taverna.scufl2.api.port.InputWorkflowPort;
+import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
 
 /**
  * @author David Withers
@@ -50,40 +53,36 @@ public class SemanticAnnotationContextualView extends
 	public static final String VIEW_TITLE = "Semantic Annotations";
 	private static Logger logger = getLogger(SemanticAnnotationContextualView.class);
 
-	private FileManager fileManager;//FIXME beaninject
-	private ComponentFactory factory;//FIXME beaninject
-	private Profile componentProfile;
+	private final FileManager fileManager;
+	private final ComponentFactory factory;
 
 	public SemanticAnnotationContextualView(FileManager fileManager,
-			ComponentFactory factory, Annotated<?> selection) {
-		super(true);
+			ComponentFactory factory, AbstractNamed selection) {
+		super(fileManager, true);
 		this.fileManager = fileManager;
 		this.factory = factory;
 		super.setAnnotated(selection);
-		componentProfile = getComponentProfile();
+		List<SemanticAnnotationProfile> profiles = new ArrayList<>();
 		try {
-			//FIXME
-			if (componentProfile == null)
-				super.setSemanticAnnotationProfiles(new ArrayList<SemanticAnnotationProfile>());
-			else if (selection instanceof Dataflow)
-				super.setSemanticAnnotationProfiles(componentProfile
-						.getSemanticAnnotations());
-			else if (selection instanceof DataflowInputPort)
-				super.setSemanticAnnotationProfiles(componentProfile
-						.getInputSemanticAnnotationProfiles());
-			else if (selection instanceof DataflowOutputPort)
-				super.setSemanticAnnotationProfiles(componentProfile
-						.getOutputSemanticAnnotationProfiles());
-			else if (selection instanceof Processor)
-				super.setSemanticAnnotationProfiles(componentProfile
-						.getActivitySemanticAnnotationProfiles());
-			else
-				super.setSemanticAnnotationProfiles(new ArrayList<SemanticAnnotationProfile>());
-
+			Profile componentProfile = getComponentProfile();
+			if (componentProfile != null) {
+				if (selection instanceof Workflow
+						|| selection instanceof WorkflowBundle)
+					profiles = componentProfile.getSemanticAnnotations();
+				else if (selection instanceof InputWorkflowPort)
+					profiles = componentProfile
+							.getInputSemanticAnnotationProfiles();
+				else if (selection instanceof OutputWorkflowPort)
+					profiles = componentProfile
+							.getOutputSemanticAnnotationProfiles();
+				else if (selection instanceof Processor)
+					profiles = componentProfile
+							.getActivitySemanticAnnotationProfiles();
+			}
 		} catch (ComponentException e) {
 			logger.error("failed to look up semantic annotations", e);
 		}
-
+		super.setSemanticAnnotationProfiles(profiles);
 		super.initialise();
 	}
 
