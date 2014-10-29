@@ -1,5 +1,6 @@
 package net.sf.taverna.t2.component.ui.util;
 
+import static net.sf.taverna.t2.component.ui.ComponentConstants.ACTIVITY_URI;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.util.List;
@@ -9,6 +10,8 @@ import org.apache.log4j.Logger;
 import uk.org.taverna.scufl2.api.activity.Activity;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.ComponentFactory;
+import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
+import net.sf.taverna.t2.component.ui.ComponentConstants;
 import net.sf.taverna.t2.visit.VisitKind;
 import net.sf.taverna.t2.visit.VisitReport;
 import net.sf.taverna.t2.visit.Visitor;
@@ -42,7 +45,7 @@ public class ComponentHealthCheck extends VisitKind {
 
 		@Override
 		public boolean canVisit(Object o) {
-			return o instanceof ComponentActivity;
+			return Utils.isComponentActivity(o);
 		}
 
 		@Override
@@ -51,19 +54,14 @@ public class ComponentHealthCheck extends VisitKind {
 		}
 
 		@Override
-		public VisitReport visit(Activity activity,
-				List<Object> ancestry) {
-			ComponentActivityConfigurationBean config = activity
-					.getConfiguration();
+		public VisitReport visit(Activity activity, List<Object> ancestry) {
+			ComponentActivityConfigurationBean config = new ComponentActivityConfigurationBean(
+					activity.getConfiguration().getJson(), factory);
 			int versionNumber = config.getComponentVersion();
 			int latestVersion = 0;
 
 			try {
-				latestVersion = factory
-						.getComponent(config.getRegistryBase(),
-								config.getFamilyName(),
-								config.getComponentName())
-						.getComponentVersionMap().lastKey();
+				latestVersion = config.getComponent().getComponentVersionMap().lastKey();
 			} catch (ComponentException e) {
 				logger.error("failed to get component description", e);
 			}

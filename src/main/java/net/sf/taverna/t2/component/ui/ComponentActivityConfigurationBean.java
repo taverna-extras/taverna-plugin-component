@@ -4,6 +4,7 @@ import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMP
 import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
 import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.FAMILY_NAME;
 import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
+import static net.sf.taverna.t2.component.ui.ComponentConstants.ACTIVITY_URI;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.net.MalformedURLException;
@@ -12,18 +13,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.api.config.ComponentPropertyNames;
 import net.sf.taverna.t2.component.api.profile.ExceptionHandling;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.scufl2.api.activity.Activity;
+import uk.org.taverna.scufl2.api.configurations.Configuration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import uk.org.taverna.scufl2.api.port.InputWorkflowPort;
 import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Component activity configuration bean.
@@ -58,6 +64,11 @@ public class ComponentActivityConfigurationBean extends Version.Identifier {
 		this.factory = factory;
 	}
 
+	public ComponentActivityConfigurationBean(Configuration configuration,
+			ComponentFactory factory) {
+		this(configuration.getJson(), factory);
+	}
+
 	private static URL getUrl(JsonNode json) throws MalformedURLException {
 		return new URL(json.get(REGISTRY_BASE).textValue());
 	}
@@ -75,6 +86,11 @@ public class ComponentActivityConfigurationBean extends Version.Identifier {
 		if (node == null || !node.isInt())
 			return null;
 		return node.intValue();
+	}
+
+	public Component getComponent() {
+		return factory.getComponent(getRegistryBase(), getFamilyName(),
+				getComponentName());
 	}
 
 	public Version getVersion() throws ComponentException {
@@ -139,5 +155,14 @@ public class ComponentActivityConfigurationBean extends Version.Identifier {
 
 	public ExceptionHandling getExceptionHandling() {
 		return eh;
+	}
+
+	public void installConfiguration(Activity a) {
+		Configuration conf = a.createConfiguration(ACTIVITY_URI);
+		ObjectNode json = conf.getJsonAsObjectNode();
+		json.put(REGISTRY_BASE, getRegistryBase().toExternalForm());
+		json.put(FAMILY_NAME, getFamilyName());
+		json.put(COMPONENT_NAME, getComponentName());
+		json.put(COMPONENT_VERSION, getComponentVersion());
 	}
 }

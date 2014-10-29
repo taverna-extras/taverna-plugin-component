@@ -3,6 +3,7 @@ package net.sf.taverna.t2.component.ui.view;
 import static net.sf.taverna.t2.component.api.config.ComponentConfig.URI;
 
 import java.awt.Frame;
+import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +20,6 @@ import net.sf.taverna.t2.workbench.ui.actions.activity.HTMLBasedActivityContextu
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;
 import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.config.ComponentConfig;
 import net.sf.taverna.t2.component.ui.config.ComponentConfigureAction;
 
 public class ComponentActivityContextViewFactory implements
@@ -75,12 +75,18 @@ public class ComponentActivityContextViewFactory implements
 
 		@Override
 		public Action getConfigureAction(Frame owner) {
-			return new ComponentConfigureAction(getActivity(), owner, factory, aim, sdr, em, fm, sr);
+			return new ComponentConfigureAction(getActivity(), owner, factory,
+					aim, sdr, em, fm, sr);
 		}
 
 		@Override
 		protected String getRawTableRowsHtml() {
-			return util.getRawTablesHtml(getConfigBean());
+			try {
+				return util.getRawTablesHtml(getConfigBean());
+			} catch (MalformedURLException e) {
+				return "<tr><td>malformed URL: <pre>" + e.getMessage()
+						+ "</pre></td></tr>";
+			}
 		}
 	}
 }

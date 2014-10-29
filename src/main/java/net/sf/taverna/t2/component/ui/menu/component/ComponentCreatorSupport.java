@@ -120,6 +120,15 @@ public class ComponentCreatorSupport {
 		return new ComponentActivityConfigurationBean(ident, factory);
 	}
 
+	public ComponentActivityConfigurationBean saveWorkflowAsComponent(
+			Workflow d, Version.ID ident) throws SaveException, IOException,
+			ComponentException {
+		WorkflowBundle b = new WorkflowBundle();
+		((Workflow)d.clone()).setParent(b);
+		//FIXME also must copy profile parts!
+		return saveWorkflowAsComponent(b, ident);
+	}
+
 	Version.ID getNewComponentIdentification(String defaultName) {
 		RegistryAndFamilyChooserComponentEntryPanel panel = new RegistryAndFamilyChooserComponentEntryPanel(prefs);
 		panel.setComponentName(defaultName);

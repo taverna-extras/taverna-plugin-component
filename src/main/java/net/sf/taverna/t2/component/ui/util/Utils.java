@@ -3,6 +3,8 @@
  */
 package net.sf.taverna.t2.component.ui.util;
 
+import static net.sf.taverna.t2.component.ui.ComponentConstants.ACTIVITY_URI;
+import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.configurations.Configuration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import net.sf.taverna.t2.component.api.ComponentFactory;
@@ -52,5 +54,12 @@ public class Utils {
 
 	public static boolean currentDataflowIsComponent() {
 		return dataflowIsComponent(fileManager.getCurrentDataflow());
+	}
+
+	public static boolean isComponentActivity(Object obj) {
+		if (obj==null||!(obj instanceof Activity))
+			return false;
+		Configuration cfg = ((Activity) obj).getConfiguration();
+		return cfg != null && ACTIVITY_URI.equals(cfg.getType());
 	}
 }

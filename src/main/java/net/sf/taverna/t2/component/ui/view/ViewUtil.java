@@ -6,18 +6,22 @@ package net.sf.taverna.t2.component.ui.view;
 import static java.lang.String.format;
 import static org.apache.log4j.Logger.getLogger;
 
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
+import java.util.Set;
 
-import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityInputPortDefinitionBean;
-import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityOutputPortDefinitionBean;
+import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
 
 import org.apache.log4j.Logger;
+
+import uk.org.taverna.scufl2.api.configurations.Configuration;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.port.InputWorkflowPort;
+import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
 
 /**
  * @author alanrw
@@ -44,6 +48,14 @@ public class ViewUtil {
 	public String getRawTablesHtml(Version.ID id) {
 		StringBuilder html = new StringBuilder();
 		getRawTablesHtml(id, html);
+		return html.toString();
+	}
+
+	public String getRawTablesHtml(Configuration config) throws MalformedURLException {
+		StringBuilder html = new StringBuilder();
+		getRawTablesHtml(
+				new ComponentActivityConfigurationBean(
+						config.getJsonAsObjectNode(), factory), html);
 		return html.toString();
 	}
 
@@ -100,33 +112,27 @@ public class ViewUtil {
 			try {
 				Version version = factory.getVersion(registryBase,
 						familyName, componentName, componentVersion);
-				if (version != null)
+				if (version != null) {
 					appendDescriptionHtml(html, VERSION_DESCRIPTION_LABEL,
 							version.getDescription());
+					WorkflowBundle impl = version.getImplementation();
+					Set<InputWorkflowPort> inputs = impl.getMainWorkflow().getInputPorts();
+					if (!inputs.isEmpty()) {
+						appendHeaderRow(html, "Input Port Name", "Depth");
+						for (InputWorkflowPort input : inputs)
+							appendPlainRow(html, input.getName(), input.getDepth());
+					}
+					Set<OutputWorkflowPort> outputs = impl.getMainWorkflow().getOutputPorts();
+					if (!outputs.isEmpty()) {
+						appendHeaderRow(html, "Output Port Name", "Depth");
+						for (OutputWorkflowPort output : outputs) {
+							//FIXME get depth of output ports!
+							appendPlainRow(html, output.getName(), -1 /*output.getDepth()*/);
+						}
+					}
+				}
 			} catch (Exception e) {
 				logger.error("failed to get component version description", e);
-			}
-		}
-
-		if (id instanceof ComponentActivityConfigurationBean) {
-			ComponentActivityConfigurationBean config = (ComponentActivityConfigurationBean) id;
-			try {
-				List<ActivityInputPortDefinitionBean> inputPortDefinitions = config
-						.getPorts().getInputPortDefinitions();
-				if (!inputPortDefinitions.isEmpty()) {
-					appendHeaderRow(html, "Input Port Name", "Depth");
-					for (ActivityInputPortDefinitionBean bean : inputPortDefinitions)
-						appendPlainRow(html, bean.getName(), bean.getDepth());
-				}
-				List<ActivityOutputPortDefinitionBean> outputPortDefinitions = config
-						.getPorts().getOutputPortDefinitions();
-				if (!outputPortDefinitions.isEmpty()) {
-					appendHeaderRow(html, "Output Port Name", "Depth");
-					for (ActivityOutputPortDefinitionBean bean : outputPortDefinitions)
-						appendPlainRow(html, bean.getName(), bean.getDepth());
-				}
-			} catch (Exception e) {
-				logger.error("failed to get component port description", e);
 			}
 		}
 	}

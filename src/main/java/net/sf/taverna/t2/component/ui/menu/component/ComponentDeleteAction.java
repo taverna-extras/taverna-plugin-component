@@ -28,10 +28,10 @@ import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
 import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workflowmodel.ConfigurationException;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.scufl2.api.configurations.Configuration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
@@ -79,9 +79,9 @@ public class ComponentDeleteAction extends AbstractAction {
 		} else if (showConfirmDialog(null,
 				format(CONFIRM_MSG, chosenComponent.getName()), CONFIRM_TITLE,
 				YES_NO_OPTION) == YES_OPTION)
-			new SwingWorker<ComponentServiceProviderConfig, Object>() {
+			new SwingWorker<Configuration, Object>() {
 				@Override
-				protected ComponentServiceProviderConfig doInBackground()
+				protected Configuration doInBackground()
 						throws Exception {
 					return deleteComponent(chosenComponent);
 				}
@@ -93,16 +93,16 @@ public class ComponentDeleteAction extends AbstractAction {
 			}.execute();
 	}
 
-	private ComponentServiceProviderConfig deleteComponent(Component component)
+	private Configuration deleteComponent(Component component)
 			throws ComponentException {
 		ComponentServiceProviderConfig config = new ComponentServiceProviderConfig(
 				component.getFamily());
 		component.delete();
-		return config;
+		return config.getConfiguration();
 	}
 
 	protected void refresh(Component component,
-			SwingWorker<ComponentServiceProviderConfig, Object> worker) {
+			SwingWorker<Configuration, Object> worker) {
 		try {
 			refreshComponentServiceProvider(worker.get());
 		} catch (ExecutionException e) {
@@ -111,9 +111,6 @@ public class ComponentDeleteAction extends AbstractAction {
 					null,
 					format(FAILED_MSG, component.getName(), e.getCause()
 							.getMessage()), DELETE_FAILED_TITLE, ERROR_MESSAGE);
-		} catch (ConfigurationException e) {
-			logger.error("failed to handle service panel update "
-					+ "after deleting component", e);
 		} catch (InterruptedException e) {
 			logger.warn("interrupted during component deletion", e);
 		}

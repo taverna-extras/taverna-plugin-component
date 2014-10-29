@@ -1,8 +1,6 @@
 package net.sf.taverna.t2.component.ui.view;
 
 import static net.sf.taverna.t2.component.api.config.ComponentConfig.URI;
-import static net.sf.taverna.t2.workflowmodel.utils.Tools.getFirstProcessorWithActivityInputPort;
-import static net.sf.taverna.t2.workflowmodel.utils.Tools.getFirstProcessorWithActivityOutputPort;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.util.Arrays;
@@ -11,19 +9,20 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.api.core.Processor;
+import uk.org.taverna.scufl2.api.core.Workflow;
+import uk.org.taverna.scufl2.api.port.InputActivityPort;
+import uk.org.taverna.scufl2.api.port.InputWorkflowPort;
+import uk.org.taverna.scufl2.api.port.OutputActivityPort;
+import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
+import uk.org.taverna.scufl2.api.port.Port;
 import net.sf.taverna.t2.component.annotation.AbstractSemanticAnnotationContextualView;
 import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.profile.Profile;
+import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.DataflowInputPort;
-import net.sf.taverna.t2.workflowmodel.DataflowOutputPort;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityOutputPort;
 
 public class ComponentActivitySemanticAnnotationContextViewFactory implements
 		ContextualViewFactory<Object> {
@@ -31,6 +30,7 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 	private static final Logger logger = getLogger(ComponentActivitySemanticAnnotationContextViewFactory.class);
 
 	private FileManager fm;// FIXME beaninject
+	private ComponentFactory factory;//FIXME beaninject
 
 	@Override
 	public boolean canHandle(Object selection) {
@@ -43,23 +43,10 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 			if (a.getType().equals(URI))
 				return a;
 		}
-
-		if (selection instanceof ActivityInputPort) {
-			Processor p = null;
-			WorkflowBundle d = fm.getCurrentDataflow();
-			p = getFirstProcessorWithActivityInputPort(d,
-					(ActivityInputPort) selection);
-			Activity a = p.getActivityList().get(0);
-			return getContainingComponentActivity(a);
-		}
-		if (selection instanceof ActivityOutputPort) {
-			Processor p = null;
-			WorkflowBundle d = fm.getCurrentDataflow();
-			p = getFirstProcessorWithActivityOutputPort(d,
-					(ActivityOutputPort) selection);
-			Activity a = p.getActivityList().get(0);
-			return getContainingComponentActivity(a);
-		}
+		if (selection instanceof InputActivityPort
+				|| selection instanceof OutputActivityPort)
+			return getContainingComponentActivity(((OutputActivityPort) selection)
+					.getParent());
 		return null;
 	}
 
@@ -76,18 +63,15 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 		private Profile componentProfile;
 
 		public SemanticAnnotationCV(Object selection) {
-			super(false);
+			super(fm, false);
 			Activity componentActivity = getContainingComponentActivity(selection);
-			//FIXME! This is wrong entirely
-			ComponentActivityConfigurationBean configuration = componentActivity
-					.getConfiguration();
-			Dataflow underlyingDataflow;
+			ComponentActivityConfigurationBean configuration = new ComponentActivityConfigurationBean(
+					componentActivity.getConfiguration(), factory);
 			try {
-				underlyingDataflow = getDataflow(configuration);
-				setAnnotatedThing(selection, underlyingDataflow);
-				componentProfile = calculateFamily(
-						configuration.getRegistryBase(),
-						configuration.getFamilyName()).getComponentProfile();
+				setAnnotatedThing(selection, configuration.getVersion()
+						.getImplementation().getMainWorkflow());
+				componentProfile = configuration.getComponent().getFamily()
+						.getComponentProfile();
 				setProfile(selection);
 				super.initialise();
 			} catch (ComponentException e) {
@@ -96,19 +80,19 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 		}
 
 		private void setAnnotatedThing(Object selection,
-				Dataflow underlyingDataflow) {
+				Workflow underlyingDataflow) {
 			if (selection instanceof Activity) {
 				setAnnotated(underlyingDataflow);
-			} else if (selection instanceof ActivityInputPort) {
-				String name = ((ActivityInputPort) selection).getName();
-				for (DataflowInputPort dip : underlyingDataflow.getInputPorts())
+			} else if (selection instanceof InputActivityPort) {
+				String name = ((Port) selection).getName();
+				for (InputWorkflowPort dip : underlyingDataflow.getInputPorts())
 					if (dip.getName().equals(name)) {
 						setAnnotated(dip);
 						break;
 					}
-			} else if (selection instanceof ActivityOutputPort) {
-				String name = ((ActivityOutputPort) selection).getName();
-				for (DataflowOutputPort dop : underlyingDataflow
+			} else if (selection instanceof OutputActivityPort) {
+				String name = ((Port) selection).getName();
+				for (OutputWorkflowPort dop : underlyingDataflow
 						.getOutputPorts())
 					if (dop.getName().equals(name)) {
 						setAnnotated(dop);
@@ -123,10 +107,10 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 			if (selection instanceof Activity) {
 				setSemanticAnnotationProfiles(componentProfile
 						.getSemanticAnnotations());
-			} else if (selection instanceof ActivityInputPort) {
+			} else if (selection instanceof InputActivityPort) {
 				setSemanticAnnotationProfiles(componentProfile
 						.getInputSemanticAnnotationProfiles());
-			} else if (selection instanceof ActivityOutputPort) {
+			} else if (selection instanceof OutputActivityPort) {
 				setSemanticAnnotationProfiles(componentProfile
 						.getOutputSemanticAnnotationProfiles());
 			}

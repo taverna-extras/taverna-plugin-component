@@ -4,43 +4,23 @@
 package net.sf.taverna.t2.component.ui.menu.component;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
-import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
-import static javax.swing.JOptionPane.OK_OPTION;
-import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
-import static net.sf.taverna.t2.component.ui.util.Utils.refreshComponentServiceProvider;
-import static net.sf.taverna.t2.workflowmodel.utils.Tools.uniqueProcessorName;
 import static org.apache.log4j.Logger.getLogger;
+import static uk.org.taverna.scufl2.api.common.Scufl2Tools.NESTED_WORKFLOW;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.menu.component.ComponentCreatorSupport.CopiedProcessor;
-import net.sf.taverna.t2.component.ui.panel.RegistryAndFamilyChooserComponentEntryPanel;
-import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
-import net.sf.taverna.t2.component.ui.util.ComponentFileType;
-import net.sf.taverna.t2.workbench.edits.EditManager;
-import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workbench.file.exceptions.OverwriteException;
-import net.sf.taverna.t2.workbench.file.exceptions.SaveException;
 
 import org.apache.log4j.Logger;
-import org.jdom.Element;
-import org.jdom.JDOMException;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.configurations.Configuration;
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import uk.org.taverna.scufl2.api.core.Processor;
 import uk.org.taverna.scufl2.api.core.Workflow;
 import uk.org.taverna.scufl2.api.profiles.Profile;
@@ -55,11 +35,11 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 	private final Processor p;
 	private final Profile profile;
 
-	private ComponentCreatorSupport support;//FIXME beaninject
-	private FileManager fm; //FIXME beaninject
+	private ComponentCreatorSupport support;
 
-	public ComponentServiceCreatorAction(Processor processor) {
+	public ComponentServiceCreatorAction(Processor processor, ComponentCreatorSupport support) {
 		super("Create component...", getIcon());
+		this.support = support;
 		p = processor;
 		profile = p.getParent().getParent().getMainProfile();
 	}
@@ -70,9 +50,8 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 	}
 
 	private Workflow getNestedWorkflow(Activity a) {
-		Configuration c = profile.getConfigurations().getByName(a.getName());
-		c.getJsonAsObjectNode();
-		return null;//FIXME!
+		JsonNode nw = a.getConfiguration().getJson().get("nestedWorkflow");
+		return a.getParent().getParent().getWorkflows().getByName(nw.asText());
 	}
 
 	@Override
@@ -82,12 +61,11 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 			return;
 
 		Activity a = getActivity();
-		WorkflowBundle current = fm.getCurrentDataflow();
 
 		try {
 			Workflow d;
-			if (a instanceof NestedDataflow)
-				d = ((NestedDataflow) a).getNestedDataflow();
+			if (NESTED_WORKFLOW.equals(a.getType()))
+				d = getNestedWorkflow(a);
 			else {
 				d = new Workflow();
 
@@ -111,8 +89,8 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 				support.connectNewProcessor(d, newProcessor);
 			}
 
-			Activity ca = new ComponentActivity();
-			ca.configure(support.saveWorkflowAsComponent(d, ident));
+			Activity ca = new Activity();
+			support.saveWorkflowAsComponent(d, ident).installConfiguration(ca);
 			support.moveComponentActivityIntoPlace(a, p, ca);
 		} catch (Exception e) {
 			logger.error("failed to instantiate component", e);

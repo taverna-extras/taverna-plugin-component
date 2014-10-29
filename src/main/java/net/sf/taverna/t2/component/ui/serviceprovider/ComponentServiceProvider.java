@@ -42,7 +42,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class ComponentServiceProvider extends
 		AbstractConfigurableServiceProvider implements
 		CustomizedConfigurePanelProvider {
-	private static final URI providerId = URI
+	static final URI providerId = URI
 			.create("http://taverna.sf.net/2012/service-provider/component");
 	private static Logger logger = getLogger(ComponentServiceProvider.class);
 
