@@ -48,13 +48,10 @@ public class ComponentCopyAction extends AbstractAction {
 	private static final Logger logger = getLogger(ComponentCopyAction.class);
 	private static final String COPY_COMPONENT = "Copy component...";
 
-	private ComponentPreference prefs;//FIXME beaninject
+	private ComponentPreference prefs;
 
-	public ComponentCopyAction() {
+	public ComponentCopyAction(ComponentPreference pref) {
 		super(COPY_COMPONENT, getIcon());
-	}
-
-	public void setPreferences(ComponentPreference pref) {
 		this.prefs = pref;
 	}
 

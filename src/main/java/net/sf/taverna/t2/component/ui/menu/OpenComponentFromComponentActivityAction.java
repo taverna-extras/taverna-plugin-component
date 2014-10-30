@@ -7,8 +7,10 @@ import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.event.ActionEvent;
 
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.ComponentAction;
+import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.ui.util.ComponentFileType;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
@@ -25,17 +27,22 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 public class OpenComponentFromComponentActivityAction extends ComponentAction {
 	private static Logger logger = getLogger(OpenComponentFromComponentActivityAction.class);
 
-	private FileManager fileManager;//FIXME beaninject
+	private final FileManager fileManager;
+	private final ComponentFactory factory;
 
-	public OpenComponentFromComponentActivityAction() {
+	public OpenComponentFromComponentActivityAction(FileManager fileManager,
+			ComponentFactory factory) {
 		super("Open component...");
+		this.fileManager = fileManager;
+		this.factory = factory;
 	}
 
 	private Activity selection;
 
 	@Override
 	public void actionPerformed(ActionEvent ev) {
-		Version.ID ident = selection.getConfiguration();
+		Version.ID ident = new ComponentActivityConfigurationBean(
+				selection.getConfiguration(), factory);
 
 		try {
 			WorkflowBundle d = fileManager.openDataflow(

@@ -19,10 +19,14 @@ public class ComponentServiceCreatorMenuAction extends
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
 
-	private ComponentCreatorSupport support; //FIXME beaninject
+	private ComponentCreatorSupport support;
 
 	public ComponentServiceCreatorMenuAction() {
 		super(configureSection, 60);
+	}
+
+	public void setSupport(ComponentCreatorSupport support) { //FIXME beaninject
+		this.support = support;
 	}
 
 	@Override

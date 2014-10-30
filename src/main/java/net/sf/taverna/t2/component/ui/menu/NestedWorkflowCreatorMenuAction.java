@@ -10,11 +10,11 @@ import java.net.URI;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import uk.org.taverna.scufl2.api.core.Processor;
+import uk.org.taverna.scufl2.api.core.Workflow;
 import net.sf.taverna.t2.activities.dataflow.servicedescriptions.DataflowActivityIcon;
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
 import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.Processor;
 
 /**
  * @author alanrw
@@ -24,10 +24,14 @@ public class NestedWorkflowCreatorMenuAction extends
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
 
-	FileManager fm;//FIXME beaninject
+	private FileManager fm;
 
 	public NestedWorkflowCreatorMenuAction() {
 		super(configureSection, 70);
+	}
+
+	public void setFileManager(FileManager fileManager) {//FIXME beaninject
+		fm = fileManager;
 	}
 
 	@Override
@@ -37,10 +41,9 @@ public class NestedWorkflowCreatorMenuAction extends
 			return false;
 		if (selection instanceof Processor)
 			return true;
-		if (!(selection instanceof Dataflow))
+		if (!(selection instanceof Workflow))
 			return false;
-		Dataflow d = (Dataflow) selection;
-		return !(d.getProcessors().isEmpty());
+		return !((Workflow) selection).getProcessors().isEmpty();
 	}
 
 	@Override

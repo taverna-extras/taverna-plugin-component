@@ -46,17 +46,13 @@ public class ComponentFamilyCreateAction extends AbstractAction {
 	private static final Logger logger = getLogger(ComponentFamilyCreateAction.class);
 	private static final String CREATE_FAMILY = "Create family...";
 
-	private ComponentPreference prefs;//FIXME beaninject
-
+	private ComponentPreference prefs;
 	private JPanel overallPanel;
 	private GridBagConstraints gbc;
 
-	public ComponentFamilyCreateAction() {
+	public ComponentFamilyCreateAction(ComponentPreference prefs) {
 		super(CREATE_FAMILY, ComponentServiceIcon.getIcon());
-	}
-
-	public void setPreferences(ComponentPreference pref) {
-		this.prefs = pref;
+		this.prefs = prefs;
 	}
 
 	@Override

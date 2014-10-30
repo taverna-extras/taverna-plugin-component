@@ -31,11 +31,12 @@ public class ComponentWorkflowCreatorAction extends ComponentAction implements
 	private static final String CREATE_COMPONENT = "Create component from current workflow...";
 
 	private ComponentCreatorSupport support;
-	private FileManager fileManager; //FIXME beaninject
+	private FileManager fileManager;
 
-	public ComponentWorkflowCreatorAction() {
+	public ComponentWorkflowCreatorAction(ComponentCreatorSupport support, FileManager fm) {
 		super(CREATE_COMPONENT);
-		fileManager.addObserver(this);
+		this.support = support;
+		fm.addObserver(this);
 	}
 
 	@Override

@@ -44,16 +44,15 @@ public class OpenWorkflowFromComponentAction extends ComponentAction {
 	private static final String ACTION_NAME = "Open component...";
 	private static final String ACTION_DESCRIPTION = "Open the workflow that implements a component";
 
-	private FileManager fm;//FIXME beaninject
-	private ComponentPreference prefs;//FIXME beaninject
+	private final FileManager fm;
+	private final ComponentPreference prefs;
 
-	public OpenWorkflowFromComponentAction(final java.awt.Component component) {
+	public OpenWorkflowFromComponentAction(FileManager fm,
+			ComponentPreference prefs) {
 		super(ACTION_NAME);
+		this.fm = fm;
+		this.prefs = prefs;
 		putValue(SHORT_DESCRIPTION, ACTION_DESCRIPTION);
-	}
-
-	public void setPreferences(ComponentPreference pref) {
-		this.prefs = pref;
 	}
 
 	@Override

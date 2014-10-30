@@ -6,7 +6,6 @@ import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static net.sf.taverna.t2.component.ui.util.Utils.refreshComponentServiceProvider;
-import static net.sf.taverna.t2.workflowmodel.utils.Tools.uniqueProcessorName;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.io.IOException;
@@ -53,6 +52,7 @@ import net.sf.taverna.t2.workflow.edits.AddWorkflowInputPortEdit;
 import net.sf.taverna.t2.workflow.edits.AddWorkflowOutputPortEdit;
 import net.sf.taverna.t2.workflow.edits.RemoveActivityEdit;
 import net.sf.taverna.t2.workflow.edits.RenameEdit;
+import static net.sf.taverna.t2.workflowmodel.utils.Tools;
 
 public class ComponentCreatorSupport {
 	private static final Logger logger = getLogger(ComponentCreatorSupport.class);
@@ -67,6 +67,14 @@ public class ComponentCreatorSupport {
 
 	public void setPreferences(ComponentPreference pref) {
 		this.prefs = pref;
+	}
+
+	public void setFileManager(FileManager fm) {
+		this.fm = fm;
+	}
+
+	public void setEditManager(EditManager em) {
+		this.em = em;
 	}
 
 	public class CopiedProcessor {
@@ -195,7 +203,7 @@ public class ComponentCreatorSupport {
 		if (result == null)
 			return null;
 
-		String newName = uniqueProcessorName(result.getName(), d);
+		String newName = Tools.uniqueProcessorName(result.getName(), d);
 
 		List<Edit<?>> editList = new ArrayList<>();
 		if (!newName.equals(result.getName()))

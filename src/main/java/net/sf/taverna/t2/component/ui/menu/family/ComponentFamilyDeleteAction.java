@@ -60,15 +60,13 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 	private static final Logger logger = getLogger(ComponentFamilyDeleteAction.class);
 	private static final long serialVersionUID = -4976161883778371344L;
 
-	private FileManager fm;//FIXME beaninject
-	private ComponentPreference prefs;//FIXME beaninject
+	private final FileManager fm;
+	private final ComponentPreference prefs;
 
-	public ComponentFamilyDeleteAction() {
+	public ComponentFamilyDeleteAction(FileManager fm, ComponentPreference prefs) {
 		super(DELETE_FAMILY_LABEL, getIcon());
-	}
-
-	public void setPreferences(ComponentPreference pref) {
-		this.prefs = pref;
+		this.fm = fm;
+		this.prefs = prefs;
 	}
 
 	@Override

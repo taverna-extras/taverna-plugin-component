@@ -11,7 +11,6 @@ import net.sf.taverna.t2.ui.menu.AbstractMenuSection;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentMenuSection extends AbstractMenuSection {
 	public static final URI COMPONENT_SECTION = URI
@@ -20,5 +19,4 @@ public class ComponentMenuSection extends AbstractMenuSection {
 	public ComponentMenuSection() {
 		super(COMPONENT, 400, COMPONENT_SECTION);
 	}
-
 }

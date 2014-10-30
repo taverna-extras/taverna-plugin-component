@@ -26,20 +26,20 @@ public class ComponentCloseAction extends AbstractAction implements
 		Observer<FileManagerEvent> {
 	private static final long serialVersionUID = -153986599735293879L;
 	private static final String CLOSE_COMPONENT = "Close component";
-
 	@SuppressWarnings("unused")
 	private static Logger logger = getLogger(ComponentCloseAction.class);
-	private static Action closeWorkflowAction;//FIXME beaninject CloseWorkflowAction
-	private static FileManager fileManager;//FIXME beaninject
 
-	public ComponentCloseAction() {
+	private Action closeAction;
+
+	public ComponentCloseAction(Action closeWorkflowAction, FileManager fm) {
 		super(CLOSE_COMPONENT, getIcon());
-		fileManager.addObserver(this);
+		closeAction = closeWorkflowAction;
+		fm.addObserver(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		closeWorkflowAction.actionPerformed(arg0);
+		closeAction.actionPerformed(arg0);
 	}
 
 	@Override

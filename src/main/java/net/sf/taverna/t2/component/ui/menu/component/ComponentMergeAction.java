@@ -42,14 +42,11 @@ public class ComponentMergeAction extends AbstractAction {
 	private static final Logger logger = getLogger(ComponentMergeAction.class);
 	private static final String MERGE_COMPONENT = "Merge component...";
 
-	private ComponentPreference prefs;//FIXME beaninject
+	private final ComponentPreference prefs;
 
-	public ComponentMergeAction() {
+	public ComponentMergeAction(ComponentPreference prefs) {
 		super(MERGE_COMPONENT, getIcon());
-	}
-
-	public void setPreferences(ComponentPreference pref) {
-		this.prefs = pref;
+		this.prefs = prefs;
 	}
 
 	@Override

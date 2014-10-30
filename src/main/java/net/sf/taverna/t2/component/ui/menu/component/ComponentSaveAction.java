@@ -29,12 +29,12 @@ public class ComponentSaveAction extends AbstractAction implements
 	private static Logger logger = getLogger(ComponentSaveAction.class);
 	private static final String SAVE_COMPONENT = "Save component";
 
-	private Action saveWorkflowAction;//FIXME beaninject net.sf.taverna.t2.workbench.file.impl.actions.SaveWorkflowAction
-	private FileManager fileManager; //FIXME beaninject
+	private Action saveWorkflowAction;
 
-	public ComponentSaveAction() {
+	public ComponentSaveAction(Action saveAction, FileManager fm) {
 		super(SAVE_COMPONENT, getIcon());
-		fileManager.addObserver(this);
+		saveWorkflowAction = saveAction;
+		fm.addObserver(this);
 	}
 
 	@Override
@@ -45,6 +45,6 @@ public class ComponentSaveAction extends AbstractAction implements
 	@Override
 	public void notify(Observable<FileManagerEvent> sender,
 			FileManagerEvent message) throws Exception {
-		setEnabled(/* saveWorkflowAction.isEnabled() && */currentDataflowIsComponent());
+		setEnabled(saveWorkflowAction.isEnabled() && currentDataflowIsComponent());
 	}
 }

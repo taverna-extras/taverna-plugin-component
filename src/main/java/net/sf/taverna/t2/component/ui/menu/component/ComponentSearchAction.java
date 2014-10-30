@@ -55,23 +55,23 @@ public class ComponentSearchAction extends AbstractAction {
 	private static final Logger logger = getLogger(ComponentSearchAction.class);
 	private static final String SEARCH_FOR_COMPONENTS = "Search for components...";
 
-	private ComponentPreference prefs; //FIXME beaninject
-	private ComponentFactory factory; //FIXME beaninject
-	private EditManager em; //FIXME beaninject
-	private MenuManager mm; //FIXME beaninject
-	private SelectionManager sm; //FIXME beaninject
-	private ServiceRegistry sr; //FIXME beaninject
+	private final ComponentPreference prefs;
+	private final ComponentFactory factory;
+	private final EditManager em;
+	private final MenuManager mm;
+	private final SelectionManager sm;
+	private final ServiceRegistry sr;
 
-	public ComponentSearchAction() {
+	public ComponentSearchAction(ComponentPreference prefs,
+			ComponentFactory factory, EditManager em, MenuManager mm,
+			SelectionManager sm, ServiceRegistry sr) {
 		super(SEARCH_FOR_COMPONENTS, getIcon());
-	}
-
-	public void setComponentFactory(ComponentFactory factory) {
+		this.prefs = prefs;
 		this.factory = factory;
-	}
-
-	public void setPreferences(ComponentPreference pref) {
-		this.prefs = pref;
+		this.em = em;
+		this.mm = mm;
+		this.sm = sm;
+		this.sr = sr;
 	}
 
 	@Override

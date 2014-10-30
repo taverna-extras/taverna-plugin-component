@@ -12,12 +12,11 @@ import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static net.sf.taverna.t2.component.ComponentActivityConfigurationBean.ignorableNames;
 import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
-import static net.sf.taverna.t2.workflowmodel.utils.Tools.getActivityInputPort;
-import static net.sf.taverna.t2.workflowmodel.utils.Tools.getActivityOutputPort;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +27,12 @@ import javax.swing.JSeparator;
 
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.core.Processor;
+import uk.org.taverna.scufl2.api.core.Workflow;
+import uk.org.taverna.scufl2.api.port.InputActivityPort;
+import uk.org.taverna.scufl2.api.port.InputProcessorPort;
+import uk.org.taverna.scufl2.api.port.OutputActivityPort;
+import uk.org.taverna.scufl2.api.port.OutputPort;
+import uk.org.taverna.scufl2.api.port.OutputProcessorPort;
 import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.Component;
 import net.sf.taverna.t2.component.api.Family;
@@ -40,7 +45,13 @@ import net.sf.taverna.t2.workbench.edits.Edit;
 import net.sf.taverna.t2.workbench.edits.EditException;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workflowmodel.utils.Tools;
+import net.sf.taverna.t2.workbench.selection.SelectionManager;
+import net.sf.taverna.t2.workflow.edits.AddActivityEdit;
+import net.sf.taverna.t2.workflow.edits.AddActivityInputPortMappingEdit;
+import net.sf.taverna.t2.workflow.edits.AddActivityOutputPortMappingEdit;
+import net.sf.taverna.t2.workflow.edits.RemoveActivityEdit;
+import net.sf.taverna.t2.workflow.edits.RenameEdit;
+//import net.sf.taverna.t2.workflowmodel.utils.Tools;
 
 /**
  * @author alanrw
@@ -51,6 +62,7 @@ public class ReplaceByComponentAction extends AbstractAction {
 	private FileManager fileManager; //FIXME beaninject
 	private EditManager em; //FIXME beaninject
 	private ComponentPreference prefs;//FIXME beaninject
+	private SelectionManager sm;//FIXME beaninject
 
 	private Processor selection;
 
@@ -98,7 +110,7 @@ public class ReplaceByComponentAction extends AbstractAction {
 
 		try {
 			if (replaceAll) {
-				Activity<?> baseActivity = selection.getActivityList().get(0);
+				Activity baseActivity = selection.getActivity(sm.getSelectedProfile());
 				Class<?> activityClass = baseActivity.getClass();
 				String configString = getConfigString(baseActivity);
 
@@ -116,7 +128,7 @@ public class ReplaceByComponentAction extends AbstractAction {
 		}
 	}
 
-	private String getConfigString(Activity<?> baseActivity) {
+	private String getConfigString(Activity baseActivity) {
 		XStream xstream = new XStream(new DomDriver());
 		Object baseConfig = baseActivity.getConfiguration();
 		xstream.setClassLoader(baseConfig.getClass().getClassLoader());
@@ -125,9 +137,9 @@ public class ReplaceByComponentAction extends AbstractAction {
 
 	private void replaceAllMatchingActivities(Class<?> activityClass,
 			ComponentActivityConfigurationBean cacb, String configString,
-			boolean rename, Dataflow d) throws ActivityConfigurationException {
+			boolean rename, Workflow d) throws ActivityConfigurationException {
 		for (Processor p : d.getProcessors()) {
-			Activity a = p.getActivityList().get(0);
+			Activity a = p.getActivity(sm.getSelectedProfile());
 			if (a.getClass().equals(activityClass)
 					&& getConfigString(a).equals(configString))
 				replaceActivity(cacb, p, rename, d);
@@ -139,12 +151,17 @@ public class ReplaceByComponentAction extends AbstractAction {
 	}
 
 	private void replaceActivity(ComponentActivityConfigurationBean cacb,
-			Processor p, boolean rename, Dataflow d) throws ActivityConfigurationException {
-		final Activity originalActivity = p.getActivityList().get(0);
-
-		ComponentActivity replacementActivity = new ComponentActivity();
+			Processor p, boolean rename, Workflow d) throws ActivityConfigurationException {
+		final Activity originalActivity = p.getActivity(sm.getSelectedProfile());
+		final List<Edit<?>> currentWorkflowEditList = new ArrayList<>();
+				
+		Activity replacementActivity = new Activity();
 		try {
+			URI configType;
+			replacementActivity.createConfiguration(configType);
+			
 			replacementActivity.configure(cacb);
+			//FIXME
 		} catch (ActivityConfigurationException e) {
 			throw new ActivityConfigurationException(
 					"Unable to configure component", e);
@@ -157,9 +174,9 @@ public class ReplaceByComponentAction extends AbstractAction {
 		int replacementOutputSize = replacementActivity.getOutputPorts().size();
 		int originalOutputSize = originalActivity.getOutputPorts().size();
 		for (String name : ignorableNames) {
-			if (getActivityOutputPort(originalActivity, name) != null)
+			if (originalActivity.getOutputPorts().getByName(name) != null)
 				originalOutputSize--;
-			if (getActivityOutputPort(replacementActivity, name) != null)
+			if (replacementActivity.getOutputPorts().getByName(name) != null)
 				replacementOutputSize--;
 		}
 
@@ -168,47 +185,51 @@ public class ReplaceByComponentAction extends AbstractAction {
 			throw new ActivityConfigurationException(
 					"Component does not have matching ports");
 
-		for (ActivityInputPort aip : originalActivity.getInputPorts()) {
+		for (InputActivityPort aip : originalActivity.getInputPorts()) {
 			String aipName = aip.getName();
 			int aipDepth = aip.getDepth();
-			ActivityInputPort caip = getActivityInputPort(replacementActivity,
-					aipName);
+			InputActivityPort caip = replacementActivity.getInputPorts().getByName(aipName);
 			if ((caip == null) || (caip.getDepth() != aipDepth))
 				throw new ActivityConfigurationException("Original input port "
 						+ aipName + " is not matched");
 		}
-		for (OutputPort aop : originalActivity.getOutputPorts()) {
+		for (OutputActivityPort aop : originalActivity.getOutputPorts()) {
 			String aopName = aop.getName();
 			int aopDepth = aop.getDepth();
-			OutputPort caop = getActivityOutputPort(replacementActivity,
-					aopName);
+			OutputActivityPort caop = replacementActivity.getOutputPorts().getByName(aopName);
 			if ((caop == null || aopDepth != caop.getDepth())
 					&& !ignorableNames.contains(aopName))
 				throw new ActivityConfigurationException(
 						"Original output port " + aopName + " is not matched");
 		}
 
-		final List<Edit<?>> currentWorkflowEditList = new ArrayList<>();
+		for (InputProcessorPort pip : p.getInputPorts()) {
+			InputActivityPort iap = replacementActivity.getInputPorts()
+					.getByName(pip.getName());
+			if (iap == null)
+				iap = new InputActivityPort(replacementActivity, pip.getName());
+			currentWorkflowEditList.add(new AddActivityInputPortMappingEdit(
+					replacementActivity, pip, iap));
+		}
 
-		for (ProcessorInputPort pip : p.getInputPorts())
-			currentWorkflowEditList.add(edits
-					.getAddActivityInputPortMappingEdit(replacementActivity,
-							pip.getName(), pip.getName()));
+		for (OutputProcessorPort pop : p.getOutputPorts()) {
+			OutputActivityPort oap = replacementActivity.getOutputPorts()
+					.getByName(pop.getName());
+			if (oap == null)
+				oap = new OutputActivityPort(replacementActivity, pop.getName());
+			currentWorkflowEditList.add(new AddActivityOutputPortMappingEdit(
+					replacementActivity, pop, oap));
+		}
 
-		for (ProcessorOutputPort pop : p.getOutputPorts())
-			currentWorkflowEditList.add(edits
-					.getAddActivityOutputPortMappingEdit(replacementActivity,
-							pop.getName(), pop.getName()));
-
-		currentWorkflowEditList.add(edits.getAddActivityEdit(p,
-				replacementActivity));
-		currentWorkflowEditList.add(edits.getRemoveActivityEdit(p,
-				originalActivity));
+		currentWorkflowEditList
+				.add(new AddActivityEdit(p, replacementActivity));
+		currentWorkflowEditList
+				.add(new RemoveActivityEdit(p, originalActivity));
 		
 		if (rename) {
-			String possibleName =  replacementActivity.getConfiguration().getComponentName();
+			String possibleName = replacementActivity.getConfiguration().getComponentName();
 			String newName = Tools.uniqueProcessorName(Tools.sanitiseName(possibleName), d);
-			currentWorkflowEditList.add(edits.getRenameProcessorEdit(p, newName));
+			currentWorkflowEditList.add(new RenameEdit<>(p, newName));
 		}
 		try {
 			em.doDataflowEdit(d, new CompoundEdit(currentWorkflowEditList));

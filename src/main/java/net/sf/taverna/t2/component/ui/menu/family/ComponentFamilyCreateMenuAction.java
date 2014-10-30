@@ -9,6 +9,7 @@ import java.net.URI;
 
 import javax.swing.Action;
 
+import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.ui.menu.AbstractMenuAction;
 
 /**
@@ -17,14 +18,19 @@ import net.sf.taverna.t2.ui.menu.AbstractMenuAction;
 public class ComponentFamilyCreateMenuAction extends AbstractMenuAction {
 	private static final URI COMPONENT_FAMILY_CREATE_URI = URI
 			.create("http://taverna.sf.net/2008/t2workbench/menu#componentFamilyCreate");
-	private static final Action familyCreateAction = new ComponentFamilyCreateAction();
+
+	private ComponentPreference prefs;
 
 	public ComponentFamilyCreateMenuAction() {
 		super(COMPONENT_FAMILY_SECTION, 400, COMPONENT_FAMILY_CREATE_URI);
 	}
 
+	public void setPreferences(ComponentPreference prefs) {
+		this.prefs = prefs;
+	}
+
 	@Override
 	protected Action createAction() {
-		return familyCreateAction;
+		return new ComponentFamilyCreateAction(prefs);
 	}
 }

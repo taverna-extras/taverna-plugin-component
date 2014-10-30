@@ -37,8 +37,8 @@ public class AnnotateSemanticsMenuAction extends AbstractContextualMenuAction {
 	private static final String ANNOTATE_SEMANTICS = "Annotate semantics...";
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
-	private FileManager fileManager;// FIXME beaninject
-	private ComponentFactory factory;// FIXME beaninject
+	private FileManager fileManager;
+	private ComponentFactory factory;
 
 	public AnnotateSemanticsMenuAction() {
 		super(configureSection, 45);
@@ -46,6 +46,10 @@ public class AnnotateSemanticsMenuAction extends AbstractContextualMenuAction {
 
 	public void setComponentFactory(ComponentFactory factory) {
 		this.factory = factory;
+	}
+
+	public void setFileManager(FileManager fm) {
+		this.fileManager = fm;
 	}
 
 	@Override
