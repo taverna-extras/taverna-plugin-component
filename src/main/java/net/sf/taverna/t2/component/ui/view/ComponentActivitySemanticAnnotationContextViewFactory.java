@@ -29,8 +29,16 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 	public static final String VIEW_TITLE = "Inherited Semantic Annotations";
 	private static final Logger logger = getLogger(ComponentActivitySemanticAnnotationContextViewFactory.class);
 
-	private FileManager fm;// FIXME beaninject
-	private ComponentFactory factory;//FIXME beaninject
+	private FileManager fm;
+	private ComponentFactory factory;
+
+	public void setFileManager(FileManager fm) {
+		this.fm = fm;
+	}
+
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
+	}
 
 	@Override
 	public boolean canHandle(Object selection) {

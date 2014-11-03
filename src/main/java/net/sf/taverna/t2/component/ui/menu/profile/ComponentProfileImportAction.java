@@ -11,7 +11,6 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.GridBagConstraints;
@@ -29,19 +28,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.apache.log4j.Logger;
-
-import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.profile.Profile;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
+import net.sf.taverna.t2.component.api.License;
+import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.SharingPolicy;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.LicenseChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.SharingPolicyChooserPanel;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author alanrw
@@ -52,19 +52,14 @@ public class ComponentProfileImportAction extends AbstractAction {
 	private static final String IMPORT_PROFILE = "Import profile...";
 	private static final JFileChooser chooser = new JFileChooser();
 
-	private ComponentFactory factory;//FIXME beaninject
-	private ComponentPreference prefs;//FIXME beaninject
+	private final ComponentFactory factory;
+	private final ComponentPreference prefs;
 
-	public ComponentProfileImportAction() {
-		super(IMPORT_PROFILE, getIcon());
-	}
-
-	public void setPreferences(ComponentPreference pref) {
-		this.prefs = pref;
-	}
-
-	public void setComponentFactory(ComponentFactory factory) {
+	public ComponentProfileImportAction(ComponentFactory factory,
+			ComponentPreference prefs, ComponentServiceIcon icon) {
+		super(IMPORT_PROFILE, icon.getIcon());
 		this.factory = factory;
+		this.prefs = prefs;
 	}
 
 	@Override

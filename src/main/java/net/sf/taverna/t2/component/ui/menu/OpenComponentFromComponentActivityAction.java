@@ -11,9 +11,11 @@ import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.ComponentAction;
 import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
-import net.sf.taverna.t2.component.ui.util.ComponentFileType;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.workbench.file.FileManager;
+import net.sf.taverna.t2.workbench.file.FileType;
 import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
+import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
 
 import org.apache.log4j.Logger;
 
@@ -29,12 +31,16 @@ public class OpenComponentFromComponentActivityAction extends ComponentAction {
 
 	private final FileManager fileManager;
 	private final ComponentFactory factory;
+	private final FileType fileType;
 
 	public OpenComponentFromComponentActivityAction(FileManager fileManager,
-			ComponentFactory factory) {
-		super("Open component...");
+			ComponentFactory factory, FileType ft,
+			GraphViewComponent graphView, ComponentServiceIcon icon) {
+		super("Open component...", graphView);
 		this.fileManager = fileManager;
 		this.factory = factory;
+		this.fileType = ft;
+		setIcon(icon);
 	}
 
 	private Activity selection;
@@ -45,8 +51,7 @@ public class OpenComponentFromComponentActivityAction extends ComponentAction {
 				selection.getConfiguration(), factory);
 
 		try {
-			WorkflowBundle d = fileManager.openDataflow(
-					ComponentFileType.instance, ident);
+			WorkflowBundle d = fileManager.openDataflow(fileType, ident);
 			markGraphAsBelongingToComponent(d);
 		} catch (OpenException e) {
 			logger.error("failed to open component", e);

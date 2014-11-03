@@ -24,6 +24,7 @@ import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.configurations.Configuration;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -32,14 +33,17 @@ public class ComponentServiceDesc extends ServiceDescription {
 	private static Logger logger = getLogger(ComponentServiceDesc.class);
 
 	private Version.ID identification;
-	private ComponentPreference preference;
-	private ComponentFactory factory;
+	private final ComponentPreference preference;
+	private final ComponentFactory factory;
+	private final ComponentServiceIcon iconProvider;
 
 	public ComponentServiceDesc(ComponentPreference preference,
-			ComponentFactory factory, Version.ID identification) {
+			ComponentFactory factory, ComponentServiceIcon iconProvider,
+			Version.ID identification) {
 		this.preference = preference;
 		this.factory = factory;
 		this.identification = identification;
+		this.iconProvider = iconProvider;
 	}
 
 	/**
@@ -49,6 +53,23 @@ public class ComponentServiceDesc extends ServiceDescription {
 	@Override
 	public Configuration getActivityConfiguration() {
 		Configuration config = new Configuration();
+		installActivityConfiguration(config);
+		return config;
+	}
+
+	/**
+	 * Make the given activity be configured to be using the component that this
+	 * class identifies.
+	 */
+	public void installActivityConfiguration(Activity activity) {
+		installActivityConfiguration(activity.getConfiguration());
+	}
+
+	/**
+	 * Update the given configuration to have the fields for the component that
+	 * this class identifies.
+	 */
+	public void installActivityConfiguration(Configuration config) {
 		ObjectNode c = config.getJsonAsObjectNode();
 		ID id = getIdentification();
 		c.put(REGISTRY_BASE, id.getRegistryBase().toExternalForm());
@@ -56,7 +77,6 @@ public class ComponentServiceDesc extends ServiceDescription {
 		c.put(COMPONENT_NAME, id.getComponentName());
 		c.put(COMPONENT_VERSION, id.getComponentVersion());
 		config.setJson(c);
-		return config;
 	}
 
 	/**
@@ -64,7 +84,7 @@ public class ComponentServiceDesc extends ServiceDescription {
 	 */
 	@Override
 	public Icon getIcon() {
-		return ComponentServiceIcon.getIcon();
+		return iconProvider.getIcon();
 	}
 
 	/**

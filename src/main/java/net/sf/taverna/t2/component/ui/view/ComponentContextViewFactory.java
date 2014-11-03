@@ -14,7 +14,11 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 public class ComponentContextViewFactory implements
 		ContextualViewFactory<WorkflowBundle> {
-	private FileManager fileManager;// FIXME beaninject
+	private FileManager fileManager;
+
+	public void setFileManager(FileManager fileManager) {
+		this.fileManager = fileManager;
+	}
 
 	@Override
 	public boolean canHandle(Object selection) {

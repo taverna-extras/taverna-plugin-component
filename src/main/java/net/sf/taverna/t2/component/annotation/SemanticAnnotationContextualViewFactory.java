@@ -38,13 +38,17 @@ import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualV
  */
 public class SemanticAnnotationContextualViewFactory implements
 		ContextualViewFactory<AbstractNamed> {
-	private FileManager fileManager;//FIXME beaninject
-	private ComponentFactory factory;//FIXME beaninject
+	private FileManager fileManager;
+	private ComponentFactory factory;
 
 	private WorkflowBundle bundle;
 
 	public void setComponentFactory(ComponentFactory factory) {
 		this.factory = factory;
+	}
+
+	public void setFileManager(FileManager fm) {
+		this.fileManager = fm;
 	}
 
 	@Override

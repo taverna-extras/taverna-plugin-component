@@ -12,7 +12,6 @@ import static javax.swing.JOptionPane.QUESTION_MESSAGE;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JOptionPane.showOptionDialog;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static net.sf.taverna.t2.workbench.ui.workflowview.WorkflowView.importServiceDescription;
 import static org.apache.log4j.Logger.getLogger;
 
@@ -27,16 +26,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.PrefixPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.SearchChoicePanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceDesc;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.ui.menu.MenuManager;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.selection.SelectionManager;
@@ -61,17 +61,19 @@ public class ComponentSearchAction extends AbstractAction {
 	private final MenuManager mm;
 	private final SelectionManager sm;
 	private final ServiceRegistry sr;
+	private final ComponentServiceIcon icon;
 
 	public ComponentSearchAction(ComponentPreference prefs,
 			ComponentFactory factory, EditManager em, MenuManager mm,
-			SelectionManager sm, ServiceRegistry sr) {
-		super(SEARCH_FOR_COMPONENTS, getIcon());
+			SelectionManager sm, ServiceRegistry sr, ComponentServiceIcon icon) {
+		super(SEARCH_FOR_COMPONENTS, icon.getIcon());
 		this.prefs = prefs;
 		this.factory = factory;
 		this.em = em;
 		this.mm = mm;
 		this.sm = sm;
 		this.sr = sr;
+		this.icon = icon;
 	}
 
 	@Override
@@ -141,7 +143,7 @@ public class ComponentSearchAction extends AbstractAction {
 			Version.ID ident = searchChoicePanel.getVersionIdentification();
 			if (ident != null)
 				importServiceDescription(new ComponentServiceDesc(prefs,
-						factory, ident), false, em, mm, sm, sr);
+						factory, icon, ident), false, em, mm, sm, sr);
 		}
 	}
 

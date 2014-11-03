@@ -26,6 +26,7 @@ import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.RegistryAndFamilyChooserPanel;
+import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.servicedescriptions.AbstractConfigurableServiceProvider;
 import net.sf.taverna.t2.servicedescriptions.CustomizedConfigurePanelProvider;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionProvider;
@@ -47,16 +48,18 @@ public class ComponentServiceProvider extends
 	private static Logger logger = getLogger(ComponentServiceProvider.class);
 
 	private final ComponentFactory factory;
-	private ComponentPreference prefs;
+	private final ComponentPreference prefs;
+	private final ComponentServiceIcon iconProvider;
+	private final Utils utils;
 
-	public ComponentServiceProvider(ComponentFactory factory, ComponentPreference prefs) {
+	public ComponentServiceProvider(ComponentFactory factory,
+			ComponentPreference prefs, ComponentServiceIcon iconProvider,
+			Utils utils) {
 		super(makeConfig(null, null));
 		this.factory = factory;
 		this.prefs = prefs;
-	}
-
-	public void setPreferences(ComponentPreference pref) {
-		this.prefs = pref;
+		this.iconProvider = iconProvider;
+		this.utils = utils;
 	}
 
 	private static class Conf {
@@ -102,7 +105,7 @@ public class ComponentServiceProvider extends
 							SortedMap<Integer, Version> versions = component
 									.getComponentVersionMap();
 							ComponentServiceDesc newDesc = new ComponentServiceDesc(
-									prefs, factory, versions.get(
+									prefs, factory, iconProvider, versions.get(
 											versions.lastKey()).getID());
 							results.add(newDesc);
 						} catch (Exception e) {
@@ -123,7 +126,7 @@ public class ComponentServiceProvider extends
 	 */
 	@Override
 	public Icon getIcon() {
-		return ComponentServiceIcon.getIcon();
+		return iconProvider.getIcon();
 	}
 
 	/**
@@ -185,7 +188,7 @@ public class ComponentServiceProvider extends
 
 	@Override
 	public ServiceDescriptionProvider newInstance() {
-		return new ComponentServiceProvider(factory, prefs);
+		return new ComponentServiceProvider(factory, prefs, iconProvider, utils);
 	}
 
 	@Override
@@ -202,5 +205,14 @@ public class ComponentServiceProvider extends
 	public boolean accept(Visitor visitor) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public void refreshProvidedComponent(Version.ID ident) {
+		try {
+			utils.refreshComponentServiceProvider(new ComponentServiceProviderConfig(
+					ident).getConfiguration());
+		} catch (Exception e) {
+			logger.error("Unable to refresh service panel", e);
+		}
 	}
 }

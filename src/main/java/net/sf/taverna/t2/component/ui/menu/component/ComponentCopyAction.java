@@ -10,8 +10,6 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
-import static net.sf.taverna.t2.component.ui.util.Utils.refreshComponentServiceProvider;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.GridBagConstraints;
@@ -24,19 +22,20 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.ComponentChoiceMessage;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChoiceMessage;
 import net.sf.taverna.t2.component.ui.panel.RegistryAndFamilyChooserPanel;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
+import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
-import net.sf.taverna.t2.workflowmodel.ConfigurationException;
 
 import org.apache.log4j.Logger;
 
@@ -48,11 +47,13 @@ public class ComponentCopyAction extends AbstractAction {
 	private static final Logger logger = getLogger(ComponentCopyAction.class);
 	private static final String COPY_COMPONENT = "Copy component...";
 
-	private ComponentPreference prefs;
+	private final ComponentPreference prefs;
+	private final Utils utils;
 
-	public ComponentCopyAction(ComponentPreference pref) {
-		super(COPY_COMPONENT, getIcon());
+	public ComponentCopyAction(ComponentPreference pref, ComponentServiceIcon icon, Utils utils) {
+		super(COPY_COMPONENT, icon.getIcon());
 		this.prefs = pref;
+		this.utils = utils;
 	}
 
 	@Override
@@ -113,25 +114,18 @@ public class ComponentCopyAction extends AbstractAction {
 		try {
 			String componentName = sourceComponent.getName();
 			boolean alreadyUsed = targetFamily.getComponent(componentName) != null;
-			if (alreadyUsed) {
+			if (alreadyUsed)
 				showMessageDialog(null, componentName + " is already used",
 						"Duplicate component name", ERROR_MESSAGE);
-			} else {
-				Version sourceVersion = sourceComponent
-						.getComponentVersionMap().get(
-								sourceComponent.getComponentVersionMap()
-										.lastKey());
-				Version targetVersion = targetFamily.createComponentBasedOn(
-						componentName, sourceComponent.getDescription(),
-						sourceVersion.getImplementation());
+			else {
+				Version targetVersion = doCopy(sourceComponent, targetFamily,
+						componentName);
 				try {
-					//FIXME is this meaningful?
-					refreshComponentServiceProvider(new ComponentServiceProviderConfig(
-							targetVersion.getID()));
-				} catch (ConfigurationException e) {
+					utils.refreshComponentServiceProvider(new ComponentServiceProviderConfig(
+							targetVersion.getID()).getConfiguration());
+				} catch (Exception e) {
 					logger.error(e);
 				}
-				
 			}
 		} catch (ComponentException e) {
 			logger.error("failed to copy component", e);
@@ -141,4 +135,15 @@ public class ComponentCopyAction extends AbstractAction {
 		}
 	}
 
+	private Version doCopy(Component sourceComponent, Family targetFamily,
+			String componentName) throws ComponentException {
+		return targetFamily
+				.createComponentBasedOn(
+						componentName,
+						sourceComponent.getDescription(),
+						sourceComponent
+								.getComponentVersionMap()
+								.get(sourceComponent.getComponentVersionMap()
+										.lastKey()).getImplementation());
+	}
 }

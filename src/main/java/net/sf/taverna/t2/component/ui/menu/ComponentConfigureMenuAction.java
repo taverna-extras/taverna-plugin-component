@@ -20,12 +20,32 @@ public class ComponentConfigureMenuAction extends
 		super(ACTIVITY_URI);
 	}
 
-	private ActivityIconManager aim;//FIXME beaninject
-	private ServiceDescriptionRegistry sdr;//FIXME beaninject
-	private EditManager em;//FIXME beaninject
-	private FileManager fm;//FIXME beaninject
-	private ServiceRegistry sr;//FIXME beaninject
-	private ComponentFactory factory;//FIXME beaninject
+	private ActivityIconManager aim;
+	private ServiceDescriptionRegistry sdr;
+	private EditManager em;
+	private FileManager fm;
+	private ServiceRegistry str;
+	private ComponentFactory factory;
+
+	public void setActivityIconManager(ActivityIconManager aim) {
+		this.aim = aim;
+	}
+
+	public void setServiceDescriptionRegistry(ServiceDescriptionRegistry sdr) {
+		this.sdr = sdr;
+	}
+
+	public void setEditManager(EditManager em) {
+		this.em = em;
+	}
+
+	public void setFileManager(FileManager fm) {
+		this.fm = fm;
+	}
+
+	public void setServiceTypeRegistry(ServiceRegistry str) {
+		this.str = str;
+	}
 
 	public void setComponentFactory(ComponentFactory factory) {
 		this.factory = factory;
@@ -34,7 +54,7 @@ public class ComponentConfigureMenuAction extends
 	@Override
 	protected Action createAction() {
 		Action result = new ComponentConfigureAction(findActivity(),
-				getParentFrame(), factory, aim, sdr, em, fm, sr);
+				getParentFrame(), factory, aim, sdr, em, fm, str);
 		result.putValue(NAME, "Configure component");
 		addMenuDots(result);
 		return result;

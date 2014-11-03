@@ -10,8 +10,10 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ComponentActivityConfigurationBean.ignorableNames;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
+import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean.ignorableNames;
+import static net.sf.taverna.t2.component.ui.util.Utils.uniqueName;
+import static uk.org.taverna.scufl2.api.common.Scufl2Tools.NESTED_WORKFLOW;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -25,21 +27,16 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.core.Processor;
-import uk.org.taverna.scufl2.api.core.Workflow;
-import uk.org.taverna.scufl2.api.port.InputActivityPort;
-import uk.org.taverna.scufl2.api.port.InputProcessorPort;
-import uk.org.taverna.scufl2.api.port.OutputActivityPort;
-import uk.org.taverna.scufl2.api.port.OutputPort;
-import uk.org.taverna.scufl2.api.port.OutputProcessorPort;
-import net.sf.taverna.t2.component.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.api.Component;
+import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
+import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
+import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.workbench.edits.CompoundEdit;
 import net.sf.taverna.t2.workbench.edits.Edit;
 import net.sf.taverna.t2.workbench.edits.EditException;
@@ -52,6 +49,14 @@ import net.sf.taverna.t2.workflow.edits.AddActivityOutputPortMappingEdit;
 import net.sf.taverna.t2.workflow.edits.RemoveActivityEdit;
 import net.sf.taverna.t2.workflow.edits.RenameEdit;
 //import net.sf.taverna.t2.workflowmodel.utils.Tools;
+import uk.org.taverna.scufl2.api.activity.Activity;
+import uk.org.taverna.scufl2.api.common.Scufl2Tools;
+import uk.org.taverna.scufl2.api.core.Processor;
+import uk.org.taverna.scufl2.api.core.Workflow;
+import uk.org.taverna.scufl2.api.port.InputActivityPort;
+import uk.org.taverna.scufl2.api.port.InputProcessorPort;
+import uk.org.taverna.scufl2.api.port.OutputActivityPort;
+import uk.org.taverna.scufl2.api.port.OutputProcessorPort;
 
 /**
  * @author alanrw
@@ -59,19 +64,22 @@ import net.sf.taverna.t2.workflow.edits.RenameEdit;
 public class ReplaceByComponentAction extends AbstractAction {
 	private static final long serialVersionUID = 7364648399658711574L;
 
-	private FileManager fileManager; //FIXME beaninject
-	private EditManager em; //FIXME beaninject
-	private ComponentPreference prefs;//FIXME beaninject
-	private SelectionManager sm;//FIXME beaninject
+	private final EditManager em;
+	private final ComponentPreference prefs;
+	private final SelectionManager sm;
+	private final ComponentFactory factory;
+	private final Scufl2Tools tools = new Scufl2Tools();
 
 	private Processor selection;
 
-	public ReplaceByComponentAction() {
-		super("Replace by component...", getIcon());
-	}
-
-	public void setPreferences(ComponentPreference pref) {
-		this.prefs = pref;
+	public ReplaceByComponentAction(ComponentPreference prefs,
+			ComponentFactory factory, EditManager em, SelectionManager sm,
+			ComponentServiceIcon icon) {
+		super("Replace by component...", icon.getIcon());
+		this.prefs = prefs;
+		this.em = em;
+		this.sm = sm;
+		this.factory = factory;
 	}
 
 	@Override
@@ -106,20 +114,21 @@ public class ReplaceByComponentAction extends AbstractAction {
 				chosenComponent.getName(), chosenVersion.getVersionNumber());
 
 		ComponentActivityConfigurationBean cacb = new ComponentActivityConfigurationBean(
-				ident);
+				ident, factory);
 
 		try {
 			if (replaceAll) {
-				Activity baseActivity = selection.getActivity(sm.getSelectedProfile());
-				Class<?> activityClass = baseActivity.getClass();
+				Activity baseActivity = selection.getActivity(sm
+						.getSelectedProfile());
+				URI activityType = baseActivity.getType();
 				String configString = getConfigString(baseActivity);
 
-				replaceAllMatchingActivities(activityClass, cacb, configString, rename,
-						fileManager.getCurrentDataflow());
+				replaceAllMatchingActivities(activityType, cacb, configString,
+						rename, sm.getSelectedWorkflow());
 			} else
 				replaceActivity(cacb, selection, rename,
-						fileManager.getCurrentDataflow());
-		} catch (ActivityConfigurationException e) {
+						sm.getSelectedWorkflow());
+		} catch (Exception e) {
 			showMessageDialog(
 					null,
 					"Failed to replace nested workflow with component: "
@@ -129,29 +138,26 @@ public class ReplaceByComponentAction extends AbstractAction {
 	}
 
 	private String getConfigString(Activity baseActivity) {
-		XStream xstream = new XStream(new DomDriver());
-		Object baseConfig = baseActivity.getConfiguration();
-		xstream.setClassLoader(baseConfig.getClass().getClassLoader());
-		return xstream.toXML(baseConfig);
+		return baseActivity.getConfiguration().getJsonAsString();
 	}
 
-	private void replaceAllMatchingActivities(Class<?> activityClass,
+	private void replaceAllMatchingActivities(URI activityType,
 			ComponentActivityConfigurationBean cacb, String configString,
-			boolean rename, Workflow d) throws ActivityConfigurationException {
+			boolean rename, Workflow d) throws IntermediateException {
 		for (Processor p : d.getProcessors()) {
 			Activity a = p.getActivity(sm.getSelectedProfile());
-			if (a.getClass().equals(activityClass)
+			if (a.getType().equals(activityType)
 					&& getConfigString(a).equals(configString))
 				replaceActivity(cacb, p, rename, d);
-			else if (a instanceof NestedDataflow)
-				replaceAllMatchingActivities(activityClass, cacb, configString, rename,
-						((NestedDataflow) a).getNestedDataflow());
-
+			else if (a.getType().equals(NESTED_WORKFLOW))
+				replaceAllMatchingActivities(activityType, cacb, configString,
+						rename,
+						tools.nestedWorkflowForProcessor(p, a.getParent()));
 		}
 	}
 
 	private void replaceActivity(ComponentActivityConfigurationBean cacb,
-			Processor p, boolean rename, Workflow d) throws ActivityConfigurationException {
+			Processor p, boolean rename, Workflow d) throws IntermediateException {
 		final Activity originalActivity = p.getActivity(sm.getSelectedProfile());
 		final List<Edit<?>> currentWorkflowEditList = new ArrayList<>();
 				
@@ -162,14 +168,14 @@ public class ReplaceByComponentAction extends AbstractAction {
 			
 			replacementActivity.configure(cacb);
 			//FIXME
-		} catch (ActivityConfigurationException e) {
-			throw new ActivityConfigurationException(
+		} catch (Exception e) {
+			throw new IntermediateException(
 					"Unable to configure component", e);
 		}
 		if (originalActivity.getInputPorts().size() != replacementActivity
 				.getInputPorts().size())
-			throw new ActivityConfigurationException(
-					"Component does not have matching ports");
+			throw new IntermediateException(
+					"Component does not have matching ports", null);
 
 		int replacementOutputSize = replacementActivity.getOutputPorts().size();
 		int originalOutputSize = originalActivity.getOutputPorts().size();
@@ -182,15 +188,15 @@ public class ReplaceByComponentAction extends AbstractAction {
 
 		int sizeDifference = replacementOutputSize - originalOutputSize;
 		if (sizeDifference != 0)
-			throw new ActivityConfigurationException(
-					"Component does not have matching ports");
+			throw new IntermediateException(
+					"Component does not have matching ports", null);
 
 		for (InputActivityPort aip : originalActivity.getInputPorts()) {
 			String aipName = aip.getName();
 			int aipDepth = aip.getDepth();
 			InputActivityPort caip = replacementActivity.getInputPorts().getByName(aipName);
 			if ((caip == null) || (caip.getDepth() != aipDepth))
-				throw new ActivityConfigurationException("Original input port "
+				throw new RuntimeException("Original input port "
 						+ aipName + " is not matched");
 		}
 		for (OutputActivityPort aop : originalActivity.getOutputPorts()) {
@@ -199,8 +205,8 @@ public class ReplaceByComponentAction extends AbstractAction {
 			OutputActivityPort caop = replacementActivity.getOutputPorts().getByName(aopName);
 			if ((caop == null || aopDepth != caop.getDepth())
 					&& !ignorableNames.contains(aopName))
-				throw new ActivityConfigurationException(
-						"Original output port " + aopName + " is not matched");
+				throw new IntermediateException(
+						"Original output port " + aopName + " is not matched", null);
 		}
 
 		for (InputProcessorPort pip : p.getInputPorts()) {
@@ -227,19 +233,28 @@ public class ReplaceByComponentAction extends AbstractAction {
 				.add(new RemoveActivityEdit(p, originalActivity));
 		
 		if (rename) {
-			String possibleName = replacementActivity.getConfiguration().getComponentName();
-			String newName = Tools.uniqueProcessorName(Tools.sanitiseName(possibleName), d);
-			currentWorkflowEditList.add(new RenameEdit<>(p, newName));
+			String possibleName = replacementActivity.getConfiguration()
+					.getJsonAsObjectNode().get(COMPONENT_NAME).textValue();
+			currentWorkflowEditList.add(new RenameEdit<>(p, uniqueName(
+					possibleName, d.getProcessors())));
 		}
 		try {
-			em.doDataflowEdit(d, new CompoundEdit(currentWorkflowEditList));
+			em.doDataflowEdit(d.getParent(), new CompoundEdit(
+					currentWorkflowEditList));
 		} catch (EditException e) {
-			throw new ActivityConfigurationException(
+			throw new IntermediateException(
 					"Unable to replace with component", e);
 		}
 	}
 
 	public void setSelection(Processor selection) {
 		this.selection = selection;
+	}
+
+	@SuppressWarnings("serial")
+	private static class IntermediateException extends Exception {
+		IntermediateException(String msg, Throwable cause) {
+			super(msg, cause);
+		}
 	}
 }

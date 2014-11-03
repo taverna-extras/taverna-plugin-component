@@ -35,21 +35,18 @@ import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentProfileCopyAction extends AbstractAction {
 	private static final long serialVersionUID = 6332253931049645259L;
 	private static final Logger log = getLogger(ComponentProfileCopyAction.class);
 	private static final String COPY_PROFILE = "Copy profile...";
 
-	private ComponentPreference prefs;//FIXME beaninject
+	private final ComponentPreference prefs;
 
-	public ComponentProfileCopyAction() {
-		super(COPY_PROFILE, ComponentServiceIcon.getIcon());
-	}
-
-	public void setPreferences(ComponentPreference pref) {
-		this.prefs = pref;
+	public ComponentProfileCopyAction(ComponentPreference prefs,
+			ComponentServiceIcon iconProvider) {
+		super(COPY_PROFILE, iconProvider.getIcon());
+		this.prefs = prefs;
 	}
 
 	@Override

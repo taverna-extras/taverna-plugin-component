@@ -7,7 +7,9 @@ import java.net.URI;
 
 import javax.swing.Action;
 
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.workbench.file.FileManager;
+import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
 
 /**
  * @author alanrw
@@ -18,6 +20,8 @@ public class ComponentWorkflowCreatorMenuAction extends AbstractComponentMenuAct
 
 	private ComponentCreatorSupport support;
 	private FileManager fm;
+	private GraphViewComponent graphView;
+	private ComponentServiceIcon icon;
 
 	public ComponentWorkflowCreatorMenuAction() {
 		super(600, COMPONENT_WORKFLOW_CREATE_URI);
@@ -31,8 +35,16 @@ public class ComponentWorkflowCreatorMenuAction extends AbstractComponentMenuAct
 		this.fm = fm;
 	}
 
+	public void setGraphView(GraphViewComponent graphView) {
+		this.graphView = graphView;
+	}
+
+	public void setIcon(ComponentServiceIcon icon) {
+		this.icon = icon;
+	}
+
 	@Override
 	protected Action createAction() {
-		return new ComponentWorkflowCreatorAction(support, fm);
+		return new ComponentWorkflowCreatorAction(support, fm, graphView, icon);
 	}
 }

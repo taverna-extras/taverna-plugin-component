@@ -3,8 +3,6 @@
  */
 package net.sf.taverna.t2.component.ui.menu.component;
 
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
-import static net.sf.taverna.t2.component.ui.util.Utils.currentDataflowIsComponent;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.event.ActionEvent;
@@ -12,6 +10,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
+import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 import net.sf.taverna.t2.workbench.file.FileManager;
@@ -30,10 +30,13 @@ public class ComponentCloseAction extends AbstractAction implements
 	private static Logger logger = getLogger(ComponentCloseAction.class);
 
 	private Action closeAction;
+	private final Utils utils;
 
-	public ComponentCloseAction(Action closeWorkflowAction, FileManager fm) {
-		super(CLOSE_COMPONENT, getIcon());
+	public ComponentCloseAction(Action closeWorkflowAction, FileManager fm,
+			ComponentServiceIcon icon, Utils utils) {
+		super(CLOSE_COMPONENT, icon.getIcon());
 		closeAction = closeWorkflowAction;
+		this.utils = utils;
 		fm.addObserver(this);
 	}
 
@@ -44,12 +47,12 @@ public class ComponentCloseAction extends AbstractAction implements
 
 	@Override
 	public boolean isEnabled() {
-		return currentDataflowIsComponent();
+		return utils.currentDataflowIsComponent();
 	}
 
 	@Override
 	public void notify(Observable<FileManagerEvent> sender,
 			FileManagerEvent message) throws Exception {
-		setEnabled(currentDataflowIsComponent());
+		setEnabled(utils.currentDataflowIsComponent());
 	}
 }

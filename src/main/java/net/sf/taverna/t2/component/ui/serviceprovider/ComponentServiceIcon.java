@@ -10,13 +10,9 @@ import javax.swing.ImageIcon;
 import net.sf.taverna.t2.workbench.activityicons.ActivityIconSPI;
 
 public class ComponentServiceIcon implements ActivityIconSPI {
-	private static Icon icon;
-
-	public static Icon getIcon() {
-		if (icon == null)
-			icon = new ImageIcon(
-					ComponentServiceIcon.class.getResource("/brick.png"));
-		return icon;
+	private static class Init {
+		private static Icon icon = new ImageIcon(
+				ComponentServiceIcon.class.getResource("/brick.png"));
 	}
 
 	@Override
@@ -28,6 +24,10 @@ public class ComponentServiceIcon implements ActivityIconSPI {
 
 	@Override
 	public Icon getIcon(URI activityType) {
-		return getIcon();
+		return Init.icon;
+	}
+
+	public Icon getIcon() {
+		return Init.icon;
 	}
 }

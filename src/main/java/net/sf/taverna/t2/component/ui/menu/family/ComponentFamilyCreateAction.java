@@ -24,11 +24,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.profile.Profile;
-import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.License;
+import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.SharingPolicy;
+import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.LicenseChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChooserPanel;
@@ -50,8 +50,9 @@ public class ComponentFamilyCreateAction extends AbstractAction {
 	private JPanel overallPanel;
 	private GridBagConstraints gbc;
 
-	public ComponentFamilyCreateAction(ComponentPreference prefs) {
-		super(CREATE_FAMILY, ComponentServiceIcon.getIcon());
+	public ComponentFamilyCreateAction(ComponentPreference prefs,
+			ComponentServiceIcon iconProvider) {
+		super(CREATE_FAMILY, iconProvider.getIcon());
 		this.prefs = prefs;
 	}
 
@@ -72,7 +73,8 @@ public class ComponentFamilyCreateAction extends AbstractAction {
 		gbc.gridy++;
 		overallPanel.add(registryPanel, gbc);
 
-		ProfileChooserPanel profilePanel = new ProfileChooserPanel(registryPanel);
+		ProfileChooserPanel profilePanel = new ProfileChooserPanel(
+				registryPanel);
 		gbc.gridx = 0;
 		gbc.weighty = 1;
 		gbc.gridy++;
@@ -105,7 +107,8 @@ public class ComponentFamilyCreateAction extends AbstractAction {
 		gbc.weightx = 1;
 		gbc.weighty = 1;
 		gbc.gridy++;
-		SharingPolicyChooserPanel permissionPanel = new SharingPolicyChooserPanel(registryPanel);
+		SharingPolicyChooserPanel permissionPanel = new SharingPolicyChooserPanel(
+				registryPanel);
 		overallPanel.add(permissionPanel, gbc);
 
 		gbc.gridy++;

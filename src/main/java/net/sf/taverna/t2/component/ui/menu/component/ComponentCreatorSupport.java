@@ -41,8 +41,10 @@ import net.sf.taverna.t2.workbench.edits.Edit;
 import net.sf.taverna.t2.workbench.edits.EditException;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.file.FileManager;
+import net.sf.taverna.t2.workbench.file.FileType;
 import net.sf.taverna.t2.workbench.file.exceptions.OverwriteException;
 import net.sf.taverna.t2.workbench.file.exceptions.SaveException;
+import net.sf.taverna.t2.workbench.selection.SelectionManager;
 import net.sf.taverna.t2.workflow.edits.AddActivityEdit;
 import net.sf.taverna.t2.workflow.edits.AddActivityInputPortMappingEdit;
 import net.sf.taverna.t2.workflow.edits.AddActivityOutputPortMappingEdit;
@@ -56,10 +58,13 @@ import static net.sf.taverna.t2.workflowmodel.utils.Tools;
 
 public class ComponentCreatorSupport {
 	private static final Logger logger = getLogger(ComponentCreatorSupport.class);
-	private ComponentFactory factory; //FIXME beaninject
-	private FileManager fm; //FIXME beaninject
-	private EditManager em; //FIXME beaninject
-	private ComponentPreference prefs;//FIXME beaninject
+
+	private ComponentFactory factory;
+	private FileManager fm;
+	private EditManager em;
+	private ComponentPreference prefs;
+	private FileType ft;
+	private SelectionManager sm;
 
 	public void setComponentFactory(ComponentFactory factory) {
 		this.factory = factory;
@@ -77,9 +82,17 @@ public class ComponentCreatorSupport {
 		this.em = em;
 	}
 
+	public void setFileType(FileType ft) {
+		this.ft = ft;
+	}
+
+	public void setSelectionManager(SelectionManager sm) {
+		this.sm = sm;
+	}
+
 	public class CopiedProcessor {
-		Element processor;
-		Map<String,Element> requiredSubworkflows;
+		Processor processor;
+		Map<String,Workflow> requiredSubworkflows;
 	}
 
 	void moveComponentActivityIntoPlace(Activity toReplace, Processor contextProcessor,
@@ -180,7 +193,7 @@ public class ComponentCreatorSupport {
 	}
 
 	void rememberSubworkflows(Processor p, CopiedProcessor copy) {
-		for (Activity a : p.getActivityList())
+		for (Activity a : p.getActivity(sm.getSelectedProfile()))
 			if (a instanceof NestedDataflow) {
 				NestedDataflow da = (NestedDataflow) a;
 				Workflow df = da.getNestedDataflow();
@@ -217,7 +230,7 @@ public class ComponentCreatorSupport {
 	public Version.ID createInitialComponent(WorkflowBundle d, Version.ID ident)
 			throws ComponentException {
 		try {
-			fm.saveDataflow(d, ComponentFileType.instance, ident, false);
+			fm.saveDataflow(d, ft, ident, false);
 
 			em.doDataflowEdit(d, new RenameEdit<>(d, d.getName()));
 		} catch (SaveException | IllegalStateException | EditException e) {

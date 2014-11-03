@@ -5,7 +5,6 @@ package net.sf.taverna.t2.component.ui.menu.component;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static org.apache.log4j.Logger.getLogger;
 import static uk.org.taverna.scufl2.api.common.Scufl2Tools.NESTED_WORKFLOW;
 
@@ -15,6 +14,8 @@ import javax.swing.AbstractAction;
 
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.menu.component.ComponentCreatorSupport.CopiedProcessor;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
+import net.sf.taverna.t2.workbench.selection.SelectionManager;
 
 import org.apache.log4j.Logger;
 
@@ -34,19 +35,14 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 
 	private final Processor p;
 	private final Profile profile;
+	private final ComponentCreatorSupport support;
 
-	private ComponentCreatorSupport support;
-
-	public ComponentServiceCreatorAction(Processor processor, ComponentCreatorSupport support) {
-		super("Create component...", getIcon());
+	public ComponentServiceCreatorAction(Processor processor, SelectionManager sm,
+			ComponentCreatorSupport support, ComponentServiceIcon icon) {
+		super("Create component...", icon.getIcon());
 		this.support = support;
 		p = processor;
-		profile = p.getParent().getParent().getMainProfile();
-	}
-
-	private Activity getActivity() {
-		return profile.getProcessorBindings().getByName(p.getName())
-				.getBoundActivity();
+		profile = sm.getSelectedProfile();
 	}
 
 	private Workflow getNestedWorkflow(Activity a) {
@@ -60,7 +56,7 @@ public class ComponentServiceCreatorAction extends AbstractAction {
 		if (ident == null)
 			return;
 
-		Activity a = getActivity();
+		Activity a = p.getActivity(profile);
 
 		try {
 			Workflow d;

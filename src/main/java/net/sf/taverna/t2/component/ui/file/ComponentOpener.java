@@ -13,7 +13,6 @@ import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.api.Version.ID;
-import net.sf.taverna.t2.component.ui.util.ComponentFileType;
 import net.sf.taverna.t2.workbench.file.AbstractDataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.DataflowInfo;
 import net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler;
@@ -29,15 +28,19 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
  */
 public class ComponentOpener extends AbstractDataflowPersistenceHandler
 		implements DataflowPersistenceHandler {
-	private static final FileType COMPONENT_FILE_TYPE = ComponentFileType.instance;//TODO beaninject?
 	private static Logger logger = getLogger(ComponentOpener.class);
 
 	private ComponentFactory factory;
+	private FileType fileType;
 
 	public void setComponentFactory(ComponentFactory factory) {
 		this.factory = factory;
 	}
 
+	public void setFileType(FileType fileType) {
+		this.fileType = fileType;
+	}
+	
 	@Override
 	public DataflowInfo openDataflow(FileType fileType, Object source)
 			throws OpenException {
@@ -55,12 +58,12 @@ public class ComponentOpener extends AbstractDataflowPersistenceHandler
 			logger.error("Unable to read dataflow", e);
 			throw new OpenException("Unable to read dataflow", e);
 		}
-		return new DataflowInfo(COMPONENT_FILE_TYPE, source, d, new Date());
+		return new DataflowInfo(fileType, source, d, new Date());
 	}
 
 	@Override
 	public List<FileType> getOpenFileTypes() {
-		return Arrays.<FileType> asList(COMPONENT_FILE_TYPE);
+		return Arrays.<FileType> asList(fileType);
 	}
 
 	@Override

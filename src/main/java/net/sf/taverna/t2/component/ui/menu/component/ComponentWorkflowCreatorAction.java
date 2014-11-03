@@ -5,17 +5,19 @@ package net.sf.taverna.t2.component.ui.menu.component;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ui.util.Utils.currentDataflowIsComponent;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.event.ActionEvent;
 
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.ComponentAction;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
+import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.events.FileManagerEvent;
+import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
 
 import org.apache.log4j.Logger;
 
@@ -32,11 +34,16 @@ public class ComponentWorkflowCreatorAction extends ComponentAction implements
 
 	private ComponentCreatorSupport support;
 	private FileManager fileManager;
+	private Utils utils;
 
-	public ComponentWorkflowCreatorAction(ComponentCreatorSupport support, FileManager fm) {
-		super(CREATE_COMPONENT);
+	public ComponentWorkflowCreatorAction(ComponentCreatorSupport support,
+			FileManager fm, GraphViewComponent graphView,
+			ComponentServiceIcon icon, Utils utils) {
+		super(CREATE_COMPONENT, graphView);
 		this.support = support;
+		this.utils = utils;
 		fm.addObserver(this);
+		this.setIcon(icon);
 	}
 
 	@Override
@@ -57,6 +64,6 @@ public class ComponentWorkflowCreatorAction extends ComponentAction implements
 	@Override
 	public void notify(Observable<FileManagerEvent> sender,
 			FileManagerEvent message) throws Exception {
-		setEnabled(!currentDataflowIsComponent());
+		setEnabled(!utils.currentDataflowIsComponent());
 	}
 }

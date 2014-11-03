@@ -10,7 +10,6 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.GridBagConstraints;
@@ -27,6 +26,7 @@ import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.ProfileChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 
 import org.apache.log4j.Logger;
 
@@ -38,16 +38,14 @@ public class ComponentProfileDeleteAction extends AbstractAction {
 	private static final Logger log = getLogger(ComponentProfileDeleteAction.class);
 	private static final String DELETE_PROFILE = "Delete profile...";
 
-	private ComponentPreference prefs;//FIXME beaninject
+	private final ComponentPreference prefs;
 
-	public ComponentProfileDeleteAction() {
-		super(DELETE_PROFILE, getIcon());
+	public ComponentProfileDeleteAction(ComponentPreference prefs,
+			ComponentServiceIcon icon) {
+		super(DELETE_PROFILE, icon.getIcon());
 		// FIXME Should we switch this on?
 		setEnabled(false);
-	}
-
-	public void setPreferences(ComponentPreference pref) {
-		this.prefs = pref;
+		this.prefs = prefs;
 	}
 
 	@Override
@@ -67,7 +65,8 @@ public class ComponentProfileDeleteAction extends AbstractAction {
 		gbc.weightx = 1;
 		overallPanel.add(registryPanel, gbc);
 
-		ProfileChooserPanel profilePanel = new ProfileChooserPanel(registryPanel);
+		ProfileChooserPanel profilePanel = new ProfileChooserPanel(
+				registryPanel);
 		profilePanel.setBorder(new TitledBorder("Profile"));
 
 		gbc.gridx = 0;
@@ -82,7 +81,8 @@ public class ComponentProfileDeleteAction extends AbstractAction {
 				doDelete(profilePanel.getChosenProfile());
 		} catch (ComponentException e) {
 			log.error("failed to delete profile", e);
-			showMessageDialog(null, "Unable to delete profile: " + e.getMessage(),
+			showMessageDialog(null,
+					"Unable to delete profile: " + e.getMessage(),
 					"Registry Exception", ERROR_MESSAGE);
 		}
 	}

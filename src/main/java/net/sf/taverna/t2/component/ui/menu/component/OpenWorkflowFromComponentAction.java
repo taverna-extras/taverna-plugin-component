@@ -25,11 +25,13 @@ import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.ComponentAction;
 import net.sf.taverna.t2.component.ui.panel.ComponentChoiceMessage;
 import net.sf.taverna.t2.component.ui.panel.ComponentVersionChooserPanel;
-import net.sf.taverna.t2.component.ui.util.ComponentFileType;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 import net.sf.taverna.t2.workbench.file.FileManager;
+import net.sf.taverna.t2.workbench.file.FileType;
 import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
+import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
 
 import org.apache.log4j.Logger;
 
@@ -45,13 +47,17 @@ public class OpenWorkflowFromComponentAction extends ComponentAction {
 	private static final String ACTION_DESCRIPTION = "Open the workflow that implements a component";
 
 	private final FileManager fm;
+	private final FileType ft;
 	private final ComponentPreference prefs;
 
-	public OpenWorkflowFromComponentAction(FileManager fm,
-			ComponentPreference prefs) {
-		super(ACTION_NAME);
+	public OpenWorkflowFromComponentAction(FileManager fm, FileType ft,
+			ComponentPreference prefs, GraphViewComponent graphView,
+			ComponentServiceIcon icon) {
+		super(ACTION_NAME, graphView);
 		this.fm = fm;
+		this.ft = ft;
 		this.prefs = prefs;
+		setIcon(icon);
 		putValue(SHORT_DESCRIPTION, ACTION_DESCRIPTION);
 	}
 
@@ -107,7 +113,7 @@ public class OpenWorkflowFromComponentAction extends ComponentAction {
 				component.getName(), version.getVersionNumber());
 
 		try {
-			WorkflowBundle d = fm.openDataflow(ComponentFileType.instance, ident);
+			WorkflowBundle d = fm.openDataflow(ft, ident);
 			markGraphAsBelongingToComponent(d);
 		} catch (OpenException e) {
 			logger.error("Failed to open component definition", e);

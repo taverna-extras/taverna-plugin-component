@@ -4,7 +4,6 @@ import static java.awt.Color.WHITE;
 import static java.awt.Font.BOLD;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.SwingUtilities.isEventDispatchThread;
-import static net.sf.taverna.t2.component.ui.util.Utils.currentDataflowIsComponent;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -13,6 +12,7 @@ import java.awt.Insets;
 import javax.swing.border.Border;
 
 import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 import net.sf.taverna.t2.workbench.StartupSPI;
@@ -32,6 +32,7 @@ public class FileManagerObserver implements StartupSPI {
 	private FileManager fileManager;
 	private ColourManager colours;
 	private GraphViewComponent graphView;
+	private Utils utils;
 
 	public void setFileManager(FileManager fileManager) {
 		this.fileManager = fileManager;
@@ -43,6 +44,10 @@ public class FileManagerObserver implements StartupSPI {
 
 	public void setGraphView(GraphViewComponent graphView) {
 		this.graphView = graphView;
+	}
+
+	public void setUtils(Utils utils) {
+		this.utils = utils;
 	}
 
 	@Override
@@ -83,7 +88,7 @@ public class FileManagerObserver implements StartupSPI {
 			JSVGCanvas svgCanvas = graphController.getSVGCanvas();
 			Object dataflowSource = fileManager
 					.getDataflowSource(currentDataflow);
-			if (currentDataflowIsComponent())
+			if (utils.currentDataflowIsComponent())
 				svgCanvas.setBorder(new ComponentBorder(
 						(Version.ID) dataflowSource));
 			else

@@ -11,8 +11,6 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
-import static net.sf.taverna.t2.component.ui.util.Utils.refreshComponentServiceProvider;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.event.ActionEvent;
@@ -26,7 +24,9 @@ import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
+import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.workbench.file.FileManager;
 
 import org.apache.log4j.Logger;
@@ -52,15 +52,18 @@ public class ComponentDeleteAction extends AbstractAction {
 
 	private final FileManager fm;
 	private final ComponentPreference prefs;
+	private final Utils utils;
 
-	public ComponentDeleteAction(FileManager fm, ComponentPreference prefs) {
-		super(DELETE_COMPONENT_LABEL, getIcon());
+	public ComponentDeleteAction(FileManager fm, ComponentPreference prefs,
+			ComponentServiceIcon icon, Utils utils) {
+		super(DELETE_COMPONENT_LABEL, icon.getIcon());
 		this.fm = fm;
 		this.prefs = prefs;
+		this.utils = utils;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent evt) {
 		ComponentChooserPanel panel = new ComponentChooserPanel(prefs);
 		int answer = showConfirmDialog(null, panel, TITLE, OK_CANCEL_OPTION);
 		if (answer == OK_OPTION)
@@ -79,8 +82,7 @@ public class ComponentDeleteAction extends AbstractAction {
 				YES_NO_OPTION) == YES_OPTION)
 			new SwingWorker<Configuration, Object>() {
 				@Override
-				protected Configuration doInBackground()
-						throws Exception {
+				protected Configuration doInBackground() throws Exception {
 					return deleteComponent(chosenComponent);
 				}
 
@@ -102,7 +104,7 @@ public class ComponentDeleteAction extends AbstractAction {
 	protected void refresh(Component component,
 			SwingWorker<Configuration, Object> worker) {
 		try {
-			refreshComponentServiceProvider(worker.get());
+			utils.refreshComponentServiceProvider(worker.get());
 		} catch (ExecutionException e) {
 			logger.error("failed to delete component", e.getCause());
 			showMessageDialog(

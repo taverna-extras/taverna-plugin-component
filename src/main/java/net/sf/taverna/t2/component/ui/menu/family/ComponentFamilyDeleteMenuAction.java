@@ -8,6 +8,8 @@ import java.net.URI;
 import javax.swing.Action;
 
 import net.sf.taverna.t2.component.preference.ComponentPreference;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
+import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.ui.menu.AbstractMenuAction;
 import net.sf.taverna.t2.workbench.file.FileManager;
 
@@ -20,6 +22,8 @@ public class ComponentFamilyDeleteMenuAction extends AbstractMenuAction {
 
 	private FileManager fm;
 	private ComponentPreference prefs;
+	private ComponentServiceIcon icon;
+	private Utils utils;
 
 	public ComponentFamilyDeleteMenuAction() {
 		super(ComponentFamilyMenuSection.COMPONENT_FAMILY_SECTION, 500,
@@ -30,12 +34,20 @@ public class ComponentFamilyDeleteMenuAction extends AbstractMenuAction {
 		this.fm = fm;
 	}
 
+	public void setIcon(ComponentServiceIcon icon) {
+		this.icon = icon;
+	}
+	
 	public void setPreferences(ComponentPreference prefs) {
 		this.prefs = prefs;
 	}
 
+	public void setUtils(Utils utils) {
+		this.utils = utils;
+	}
+
 	@Override
 	protected Action createAction() {
-		return new ComponentFamilyDeleteAction(fm, prefs);
+		return new ComponentFamilyDeleteAction(fm, prefs, icon, utils);
 	}
 }

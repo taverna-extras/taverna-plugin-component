@@ -10,6 +10,8 @@ import javax.swing.Action;
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.core.Processor;
 import net.sf.taverna.t2.component.ui.menu.AbstractContextComponentMenuAction;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
+import net.sf.taverna.t2.workbench.selection.SelectionManager;
 
 /**
  * @author alanrw
@@ -20,12 +22,22 @@ public class ComponentServiceCreatorMenuAction extends
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
 
 	private ComponentCreatorSupport support;
+	private SelectionManager sm;
+	private ComponentServiceIcon icon;
 
 	public ComponentServiceCreatorMenuAction() {
 		super(configureSection, 60);
 	}
 
-	public void setSupport(ComponentCreatorSupport support) { //FIXME beaninject
+	public void setIcon(ComponentServiceIcon icon) {
+		this.icon = icon;
+	}
+
+	public void setSelectionManager(SelectionManager sm) {
+		this.sm = sm;
+	}
+	
+	public void setSupport(ComponentCreatorSupport support) {
 		this.support = support;
 	}
 
@@ -42,6 +54,7 @@ public class ComponentServiceCreatorMenuAction extends
 	@Override
 	protected Action createAction() {
 		return new ComponentServiceCreatorAction(
-				(Processor) getContextualSelection().getSelection(), support);
+				(Processor) getContextualSelection().getSelection(), sm,
+				support, icon);
 	}
 }

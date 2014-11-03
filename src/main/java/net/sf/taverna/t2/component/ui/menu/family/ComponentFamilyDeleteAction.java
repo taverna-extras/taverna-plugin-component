@@ -13,8 +13,6 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
-import static net.sf.taverna.t2.component.ui.util.Utils.removeComponentServiceProvider;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.GridBagConstraints;
@@ -27,19 +25,21 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Family;
 import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.FamilyChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.RegistryChooserPanel;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
+import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workflowmodel.ConfigurationException;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.scufl2.api.configurations.Configuration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
@@ -62,11 +62,14 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 
 	private final FileManager fm;
 	private final ComponentPreference prefs;
+	private final Utils utils;
 
-	public ComponentFamilyDeleteAction(FileManager fm, ComponentPreference prefs) {
-		super(DELETE_FAMILY_LABEL, getIcon());
+	public ComponentFamilyDeleteAction(FileManager fm,
+			ComponentPreference prefs, ComponentServiceIcon icon, Utils utils) {
+		super(DELETE_FAMILY_LABEL, icon.getIcon());
 		this.fm = fm;
 		this.prefs = prefs;
+		this.utils = utils;
 	}
 
 	@Override
@@ -145,24 +148,29 @@ public class ComponentFamilyDeleteAction extends AbstractAction {
 
 	private void deletionDone(Family family,
 			SwingWorker<ComponentServiceProviderConfig, Object> worker) {
+		Configuration config;
 		try {
-			removeComponentServiceProvider(worker.get());
+		config = worker.get().getConfiguration();
 		} catch (InterruptedException e) {
 			logger.warn("interrupted during removal of component family", e);
+			return;
 		} catch (ExecutionException e) {
 			logger.error("failed to delete family", e.getCause());
 			showMessageDialog(
 					null,
 					format(FAILED_MSG, family.getName(), e.getCause()
 							.getMessage()), ERROR_TITLE, ERROR_MESSAGE);
-		} catch (ConfigurationException e) {
+			return;
+		}
+		try {
+			utils.removeComponentServiceProvider(config);
+		} catch (Exception e) {
 			logger.error("failed to update service provider panel "
 					+ "after deleting family", e);
 		}
 	}
 
-	private boolean familyIsInUse(Registry chosenRegistry,
-			Family chosenFamily) {
+	private boolean familyIsInUse(Registry chosenRegistry, Family chosenFamily) {
 		for (WorkflowBundle d : fm.getOpenDataflows()) {
 			Object dataflowSource = fm.getDataflowSource(d);
 			if (dataflowSource instanceof Version.ID) {

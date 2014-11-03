@@ -24,17 +24,45 @@ import net.sf.taverna.t2.component.ui.config.ComponentConfigureAction;
 
 public class ComponentActivityContextViewFactory implements
 		ContextualViewFactory<Activity> {
-	private ColourManager colourManager;//FIXME beaninject
-	private ViewUtil util;//FIXME beaninject
-	private ComponentFactory factory;//FIXME beaninject
-	private ActivityIconManager aim;//FIXME beaninject
-	private ServiceDescriptionRegistry sdr;//FIXME beaninject
-	private EditManager em;//FIXME beaninject
-	private FileManager fm;//FIXME beaninject
-	private ServiceRegistry sr;//FIXME beaninject
+	private ColourManager colourManager;
+	private ViewUtil util;
+	private ComponentFactory factory;
+	private ActivityIconManager aim;
+	private ServiceDescriptionRegistry sdr;
+	private EditManager em;
+	private FileManager fm;
+	private ServiceRegistry sr;
 
 	public void setComponentFactory(ComponentFactory factory) {
 		this.factory = factory;
+	}
+
+	public void setColourManager(ColourManager colourManager) {
+		this.colourManager = colourManager;
+	}
+
+	public void setViewUtils(ViewUtil util) {
+		this.util = util;
+	}
+
+	public void setIconManager(ActivityIconManager aim) {
+		this.aim = aim;
+	}
+
+	public void setServiceDescriptionRegistry(ServiceDescriptionRegistry sdr) {
+		this.sdr = sdr;
+	}
+
+	public void setEditManager(EditManager em) {
+		this.em = em;
+	}
+
+	public void setFileManager(FileManager fm) {
+		this.fm = fm;
+	}
+
+	public void setServiceTypeRegistry(ServiceRegistry sr) {
+		this.sr = sr;
 	}
 
 	@Override

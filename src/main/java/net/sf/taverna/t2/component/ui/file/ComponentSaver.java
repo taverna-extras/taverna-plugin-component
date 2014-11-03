@@ -7,7 +7,6 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static net.sf.taverna.t2.component.annotation.SemanticAnnotationUtils.checkComponent;
-import static net.sf.taverna.t2.component.ui.util.Utils.refreshComponentServiceProvider;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.util.ArrayList;
@@ -24,8 +23,7 @@ import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
-import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProviderConfig;
-import net.sf.taverna.t2.component.ui.util.ComponentFileType;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProvider;
 import net.sf.taverna.t2.workbench.file.AbstractDataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.DataflowInfo;
 import net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler;
@@ -46,12 +44,21 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 	private static final String UNSATISFIED_PROFILE_WARNING = "The component does not satisfy the profile.\n"
 			+ "See validation report.\nDo you still want to save?";
 	private static final Logger logger = getLogger(ComponentSaver.class);
-	private static final FileType COMPONENT_FILE_TYPE = ComponentFileType.instance;//FIXME beaninject?
 
 	private ComponentFactory factory;
+	private ComponentServiceProvider provider;
+	private FileType cft;
 
 	public void setComponentFactory(ComponentFactory factory) {
 		this.factory = factory;
+	}
+
+	public void setFileType(FileType fileType) {
+		this.cft = fileType;
+	}
+
+	public void setServiceProvider(ComponentServiceProvider provider) {
+		this.provider = provider;
 	}
 
 	@Override
@@ -82,7 +89,7 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 			Version.ID newIdent = new Version.Identifier(
 					ident.getRegistryBase(), ident.getFamilyName(),
 					ident.getComponentName(), 0);
-			return new DataflowInfo(COMPONENT_FILE_TYPE, newIdent, bundle);
+			return new DataflowInfo(cft, newIdent, bundle);
 		}
 
 		Family family;
@@ -138,20 +145,13 @@ public class ComponentSaver extends AbstractDataflowPersistenceHandler
 		Version.ID newIdent = new Version.Identifier(ident.getRegistryBase(),
 				ident.getFamilyName(), ident.getComponentName(),
 				newVersion.getVersionNumber());
-
-		try {
-			refreshComponentServiceProvider(new ComponentServiceProviderConfig(
-					ident));
-		} catch (ConfigurationException e) {
-			logger.error("Unable to refresh service panel", e);
-		}
-
-		return new DataflowInfo(COMPONENT_FILE_TYPE, newIdent, bundle);
+		provider.refreshProvidedComponent(ident);
+		return new DataflowInfo(cft, newIdent, bundle);
 	}
 
 	@Override
 	public List<FileType> getSaveFileTypes() {
-		return Arrays.<FileType> asList(COMPONENT_FILE_TYPE);
+		return Arrays.<FileType> asList(cft);
 	}
 
 	@Override

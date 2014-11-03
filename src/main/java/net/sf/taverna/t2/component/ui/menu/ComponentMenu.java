@@ -11,18 +11,17 @@ import net.sf.taverna.t2.ui.menu.AbstractMenu;
 
 /**
  * @author alanrw
- * 
  */
 public class ComponentMenu extends AbstractMenu {
 	public static final URI COMPONENT = URI
 			.create("http://taverna.sf.net/2008/t2workbench/menu#component");
+	public static final String TITLE = "Components";
 
 	public ComponentMenu() {
 		super(DEFAULT_MENU_BAR, 950, COMPONENT, makeAction());
 	}
 
 	public static DummyAction makeAction() {
-		DummyAction action = new DummyAction("Components");
-		return action;
+		return new DummyAction(TITLE);
 	}
 }

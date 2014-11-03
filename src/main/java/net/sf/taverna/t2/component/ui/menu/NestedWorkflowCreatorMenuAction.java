@@ -10,11 +10,13 @@ import java.net.URI;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import uk.org.taverna.scufl2.api.core.Processor;
-import uk.org.taverna.scufl2.api.core.Workflow;
 import net.sf.taverna.t2.activities.dataflow.servicedescriptions.DataflowActivityIcon;
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
-import net.sf.taverna.t2.workbench.file.FileManager;
+import net.sf.taverna.t2.workbench.edits.EditManager;
+import net.sf.taverna.t2.workbench.selection.SelectionManager;
+import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
+import uk.org.taverna.scufl2.api.core.Processor;
+import uk.org.taverna.scufl2.api.core.Workflow;
 
 /**
  * @author alanrw
@@ -24,14 +26,22 @@ public class NestedWorkflowCreatorMenuAction extends
 	private static final URI configureSection = URI
 			.create("http://taverna.sf.net/2009/contextMenu/configure");
 
-	private FileManager fm;
+	private SelectionManager sm;
+	private EditManager em;
+	private GraphViewComponent gv;
 
 	public NestedWorkflowCreatorMenuAction() {
 		super(configureSection, 70);
 	}
 
-	public void setFileManager(FileManager fileManager) {//FIXME beaninject
-		fm = fileManager;
+	public void setEditManager(EditManager editManager) {
+		em = editManager;
+	}
+	public void setGraphView(GraphViewComponent graphView) {
+		gv = graphView;
+	}
+	public void setSelectionManager(SelectionManager selectionManager) {
+		sm = selectionManager;
 	}
 
 	@Override
@@ -54,11 +64,15 @@ public class NestedWorkflowCreatorMenuAction extends
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Object o = getContextualSelection().getSelection();
-				final Dialog dialog = new NestedWorkflowCreationDialog(null, o,
-						fm.getCurrentDataflow());
-				dialog.setVisible(true);
+				createNestedWorkflow();
 			}
 		};
+	}
+
+	private void createNestedWorkflow() {
+		Dialog dialog = new NestedWorkflowCreationDialog(null,
+				getContextualSelection().getSelection(),
+				sm.getSelectedWorkflow(), em, gv);
+		dialog.setVisible(true);
 	}
 }

@@ -4,14 +4,15 @@ import net.sf.taverna.t2.workbench.file.FileType;
 
 /**
  * The type of components.
+ * 
  * @author alanrw
  */
 public class ComponentFileType extends FileType {
 	// TODO Change mimetype for sculf2?
 	static final String COMPONENT_MIMETYPE = "application/vnd.taverna.component";
-	public static final FileType instance = new ComponentFileType();
 
-	private ComponentFileType() {}
+	private ComponentFileType() {
+	}
 
 	@Override
 	public String getDescription() {

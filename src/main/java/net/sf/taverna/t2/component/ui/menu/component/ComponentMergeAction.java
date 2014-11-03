@@ -10,7 +10,6 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon.getIcon;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.GridBagConstraints;
@@ -29,6 +28,7 @@ import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.ComponentChoiceMessage;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChoiceMessage;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 
@@ -44,8 +44,9 @@ public class ComponentMergeAction extends AbstractAction {
 
 	private final ComponentPreference prefs;
 
-	public ComponentMergeAction(ComponentPreference prefs) {
-		super(MERGE_COMPONENT, getIcon());
+	public ComponentMergeAction(ComponentPreference prefs,
+			ComponentServiceIcon icon) {
+		super(MERGE_COMPONENT, icon.getIcon());
 		this.prefs = prefs;
 	}
 
@@ -77,8 +78,8 @@ public class ComponentMergeAction extends AbstractAction {
 			@Override
 			public void notify(Observable<ComponentChoiceMessage> sender,
 					ComponentChoiceMessage message) throws Exception {
-				target.notify(null, new ProfileChoiceMessage(
-						message.getComponentFamily().getComponentProfile()));
+				target.notify(null, new ProfileChoiceMessage(message
+						.getComponentFamily().getComponentProfile()));
 			}
 		});
 
