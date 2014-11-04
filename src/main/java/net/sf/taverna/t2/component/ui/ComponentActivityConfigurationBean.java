@@ -25,7 +25,9 @@ import org.apache.log4j.Logger;
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.configurations.Configuration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.port.InputActivityPort;
 import uk.org.taverna.scufl2.api.port.InputWorkflowPort;
+import uk.org.taverna.scufl2.api.port.OutputActivityPort;
 import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -65,7 +67,7 @@ public class ComponentActivityConfigurationBean extends Version.Identifier {
 	}
 
 	public ComponentActivityConfigurationBean(Configuration configuration,
-			ComponentFactory factory) {
+			ComponentFactory factory) throws MalformedURLException {
 		this(configuration.getJson(), factory);
 	}
 
@@ -88,7 +90,7 @@ public class ComponentActivityConfigurationBean extends Version.Identifier {
 		return node.intValue();
 	}
 
-	public Component getComponent() {
+	public Component getComponent() throws ComponentException {
 		return factory.getComponent(getRegistryBase(), getFamilyName(),
 				getComponentName());
 	}
@@ -99,49 +101,40 @@ public class ComponentActivityConfigurationBean extends Version.Identifier {
 
 	private ActivityPortsDefinitionBean getPortsDefinition(WorkflowBundle w) {
 		ActivityPortsDefinitionBean result = new ActivityPortsDefinitionBean();
-		List<ActivityInputPortDefinitionBean> inputs = result
-				.getInputPortDefinitions();
-		List<ActivityOutputPortDefinitionBean> outputs = result
-				.getOutputPortDefinitions();
 
 		for (InputWorkflowPort iwp : w.getMainWorkflow().getInputPorts())
-			inputs.add(makeInputDefinition(iwp));
-		for (OutputWorkflowPort owp : w.getMainWorkflow().getOutputPorts()) {
-			int depth = 0; //FIXME How to get the depth of an output?
-			outputs.add(makeOutputDefinition(depth, owp.getName()));
-		}
+			result.inputs.add(makeInputDefinition(iwp));
+		for (OutputWorkflowPort owp : w.getMainWorkflow().getOutputPorts())
+			result.outputs.add(makeOutputDefinition(getDepth(owp), owp.getName()));
 
 		try {
 			eh = factory.getFamily(getRegistryBase(), getFamilyName())
 					.getComponentProfile().getExceptionHandling();
 			if (eh != null)
-				outputs.add(makeOutputDefinition(1, ERROR_CHANNEL));
+				result.outputs.add(makeOutputDefinition(1, ERROR_CHANNEL));
 		} catch (net.sf.taverna.t2.component.api.ComponentException e) {
 			logger.error("failed to get exception handling for family", e);
 		}
 		return result;
 	}
 
-	private ActivityInputPortDefinitionBean makeInputDefinition(
-			InputWorkflowPort dip) {
-		ActivityInputPortDefinitionBean activityInputPortDefinitionBean = new ActivityInputPortDefinitionBean();
-		activityInputPortDefinitionBean.setHandledReferenceSchemes(null);
-		activityInputPortDefinitionBean.setMimeTypes((List<String>) null);
-		activityInputPortDefinitionBean.setTranslatedElementType(String.class);
-		activityInputPortDefinitionBean.setAllowsLiteralValues(true);
-		activityInputPortDefinitionBean.setDepth(dip.getDepth());
-		activityInputPortDefinitionBean.setName(dip.getName());
-		return activityInputPortDefinitionBean;
+	private int getDepth(OutputWorkflowPort owp) {
+		return 0; //FIXME How to get the depth of an output?
 	}
 
-	private ActivityOutputPortDefinitionBean makeOutputDefinition(int depth,
-			String name) {
-		ActivityOutputPortDefinitionBean activityOutputPortDefinitionBean = new ActivityOutputPortDefinitionBean();
-		activityOutputPortDefinitionBean.setMimeTypes(new ArrayList<String>());
-		activityOutputPortDefinitionBean.setDepth(depth);
-		activityOutputPortDefinitionBean.setGranularDepth(depth);
-		activityOutputPortDefinitionBean.setName(name);
-		return activityOutputPortDefinitionBean;
+	private InputActivityPort makeInputDefinition(InputWorkflowPort dip) {
+		InputActivityPort port = new InputActivityPort();
+		port.setName(dip.getName());
+		port.setDepth(dip.getDepth());
+		return port;
+	}
+
+	private OutputActivityPort makeOutputDefinition(int depth, String name) {
+		OutputActivityPort port = new OutputActivityPort();
+		port.setName(name);
+		port.setDepth(depth);
+		port.setGranularDepth(depth);
+		return port;
 	}
 
 	/**
@@ -164,5 +157,10 @@ public class ComponentActivityConfigurationBean extends Version.Identifier {
 		json.put(FAMILY_NAME, getFamilyName());
 		json.put(COMPONENT_NAME, getComponentName());
 		json.put(COMPONENT_VERSION, getComponentVersion());
+	}
+
+	public static class ActivityPortsDefinitionBean {
+		public List<InputActivityPort> inputs = new ArrayList<>();
+		public List<OutputActivityPort> outputs = new ArrayList<>();
 	}
 }

@@ -1,21 +1,21 @@
 package net.sf.taverna.t2.component.ui.util;
 
-import static net.sf.taverna.t2.component.ui.ComponentConstants.ACTIVITY_URI;
 import static org.apache.log4j.Logger.getLogger;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.taverna.t2.component.api.ComponentException;
+import net.sf.taverna.t2.component.api.ComponentFactory;
+import net.sf.taverna.t2.component.api.Version;
+import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
 
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.scufl2.api.activity.Activity;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
-import net.sf.taverna.t2.component.ui.ComponentConstants;
-import net.sf.taverna.t2.visit.VisitKind;
-import net.sf.taverna.t2.visit.VisitReport;
-import net.sf.taverna.t2.visit.Visitor;
-import net.sf.taverna.t2.workflowmodel.health.HealthChecker;
+import uk.org.taverna.scufl2.api.common.Visitor;
+import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.validation.correctness.DefaultDispatchingVisitor;
 
 public class ComponentHealthCheck extends VisitKind {
 	public static final int NO_PROBLEM = 0;
@@ -24,52 +24,43 @@ public class ComponentHealthCheck extends VisitKind {
 	public static final int FAILS_PROFILE = 30;
 	private static Logger logger = getLogger(ComponentHealthCheck.class);
 	private static final String OUTDATED_MSG = "Component out of date";
-	private static final VisitKind visitKind = ComponentHealthCheck
-			.getInstance();
 
-	@Override
-	public Class<? extends Visitor<?>> getVisitorClass() {
-		return UpgradeChecker.class;
+	private ComponentFactory factory;
+
+	public void setComponentFactory(ComponentFactory factory) {
+		this.factory = factory;
 	}
 
-	private static class Singleton {
-		private static ComponentHealthCheck instance = new ComponentHealthCheck();
+	public List<Object> checkForOutdatedComponents(WorkflowBundle bundle) {
+		UpgradeChecker uc = new UpgradeChecker();
+		bundle.accept(uc);
+		return uc.warnings;
 	}
 
-	public static ComponentHealthCheck getInstance() {
-		return Singleton.instance;
-	}
-
-	static class UpgradeChecker implements HealthChecker<Activity> {
-		ComponentFactory factory; //FIXME beaninject
+	private class UpgradeChecker extends DefaultDispatchingVisitor {
+		ComponentFactory factory;
+		List<Object> warnings = new ArrayList<>();
 
 		@Override
-		public boolean canVisit(Object o) {
-			return Utils.isComponentActivity(o);
-		}
-
-		@Override
-		public boolean isTimeConsuming() {
-			return false;
-		}
-
-		@Override
-		public VisitReport visit(Activity activity, List<Object> ancestry) {
+		public void visitActivity(Activity activity) {
 			ComponentActivityConfigurationBean config = new ComponentActivityConfigurationBean(
 					activity.getConfiguration().getJson(), factory);
-			int versionNumber = config.getComponentVersion();
-			int latestVersion = 0;
-
+			Version v;
 			try {
-				latestVersion = config.getComponent().getComponentVersionMap().lastKey();
+				v = config.getVersion();
 			} catch (ComponentException e) {
 				logger.error("failed to get component description", e);
+				warnings.add(e);//FIXME Just putting the exception in here isn't good
+				return;
 			}
-
-			if (latestVersion > versionNumber)
-				return new VisitReport(visitKind, activity, OUTDATED_MSG,
-						OUT_OF_DATE, VisitReport.Status.WARNING);
-			return null;
+			visitComponent(activity, v);
+		}
+		protected void visitComponent(Activity activity, Version version) {
+			int latest = version.getComponent().getComponentVersionMap().lastKey();
+			if (latest > version.getVersionNumber())
+				warnings.add(new VisitReport(ComponentHealthCheck.this,
+						activity, OUTDATED_MSG, OUT_OF_DATE,
+						VisitReport.Status.WARNING));
 		}
 	}
 }

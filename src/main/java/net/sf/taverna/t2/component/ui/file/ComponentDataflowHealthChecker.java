@@ -19,12 +19,12 @@ import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.component.ui.util.ComponentHealthCheck;
 import net.sf.taverna.t2.visit.VisitReport;
 import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
 import net.sf.taverna.t2.workflowmodel.health.HealthChecker;
 
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.core.Workflow;
 
 /**
  * @author alanrw
@@ -49,6 +49,9 @@ public class ComponentDataflowHealthChecker implements HealthChecker<Dataflow> {
 		return (Version.ID) fm.getDataflowSource((WorkflowBundle) o);
 	}
 
+	public void checkProfileSatisfied(WorkflowBundle bundle) {
+		//FIXME
+	}
 	@Override
 	public boolean canVisit(Object o) {
 		try {
@@ -62,7 +65,7 @@ public class ComponentDataflowHealthChecker implements HealthChecker<Dataflow> {
 	}
 
 	@Override
-	public VisitReport visit(Dataflow dataflow, List<Object> ancestry) {
+	public VisitReport visit(WorkflowBundle dataflow, List<Object> ancestry) {
 		try {
 			Version.ID ident = getSource(dataflow);
 			Family family = factory.getFamily(ident.getRegistryBase(),
@@ -82,10 +85,5 @@ public class ComponentDataflowHealthChecker implements HealthChecker<Dataflow> {
 					"failed to comprehend profile while checking for match", e);
 			return null;
 		}
-	}
-
-	@Override
-	public boolean isTimeConsuming() {
-		return false;
 	}
 }

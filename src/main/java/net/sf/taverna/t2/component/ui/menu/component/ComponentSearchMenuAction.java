@@ -10,6 +10,7 @@ import javax.swing.Action;
 import uk.org.taverna.commons.services.ServiceRegistry;
 import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.ui.menu.MenuManager;
 import net.sf.taverna.t2.workbench.edits.EditManager;
 import net.sf.taverna.t2.workbench.selection.SelectionManager;
@@ -26,6 +27,7 @@ public class ComponentSearchMenuAction extends AbstractComponentMenuAction {
 	private MenuManager mm;
 	private SelectionManager sm;
 	private ServiceRegistry serviceRegistry;
+	private ComponentServiceIcon icon;
 
 	public ComponentSearchMenuAction() {
 		super(1500, SEARCH_COMPONENT_URI);
@@ -55,9 +57,13 @@ public class ComponentSearchMenuAction extends AbstractComponentMenuAction {
 		this.serviceRegistry = serviceRegistry;
 	}
 
+	public void setIcon(ComponentServiceIcon icon) {
+		this.icon = icon;
+	}
+
 	@Override
 	protected Action createAction() {
 		return new ComponentSearchAction(prefs, factory, em, mm, sm,
-				serviceRegistry);
+				serviceRegistry, icon);
 	}
 }

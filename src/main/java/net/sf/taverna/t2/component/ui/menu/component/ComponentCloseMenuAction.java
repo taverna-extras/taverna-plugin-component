@@ -7,6 +7,8 @@ import java.net.URI;
 
 import javax.swing.Action;
 
+import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
+import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.workbench.file.FileManager;
 
 /**
@@ -18,6 +20,8 @@ public class ComponentCloseMenuAction extends AbstractComponentMenuAction {
 
 	private Action action;
 	private FileManager fm;
+	private ComponentServiceIcon icon;
+	private Utils utils;
 
 	public ComponentCloseMenuAction() {
 		super(1000, CLOSE_COMPONENT_URI);
@@ -31,8 +35,16 @@ public class ComponentCloseMenuAction extends AbstractComponentMenuAction {
 		this.fm = fm;
 	}
 
+	public void setIcon(ComponentServiceIcon icon) {
+		this.icon = icon;
+	}
+
+	public void setUtils(Utils utils) {
+		this.utils = utils;
+	}
+
 	@Override
 	protected Action createAction() {
-		return new ComponentCloseAction(action, fm);
+		return new ComponentCloseAction(action, fm, icon, utils);
 	}
 }

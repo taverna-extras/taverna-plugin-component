@@ -38,7 +38,7 @@ public class FileManagerObserver implements StartupSPI {
 		this.fileManager = fileManager;
 	}
 
-	public void setColours(ColourManager colours) {
+	public void setColourManager(ColourManager colours) {
 		this.colours = colours;
 	}
 

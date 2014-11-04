@@ -3,6 +3,7 @@ package net.sf.taverna.t2.component.ui.view;
 import static net.sf.taverna.t2.component.api.config.ComponentConfig.URI;
 import static org.apache.log4j.Logger.getLogger;
 
+import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -73,9 +74,9 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 		public SemanticAnnotationCV(Object selection) {
 			super(fm, false);
 			Activity componentActivity = getContainingComponentActivity(selection);
-			ComponentActivityConfigurationBean configuration = new ComponentActivityConfigurationBean(
-					componentActivity.getConfiguration(), factory);
 			try {
+				ComponentActivityConfigurationBean configuration = new ComponentActivityConfigurationBean(
+						componentActivity.getConfiguration(), factory);
 				setAnnotatedThing(selection, configuration.getVersion()
 						.getImplementation().getMainWorkflow());
 				componentProfile = configuration.getComponent().getFamily()
@@ -84,6 +85,8 @@ public class ComponentActivitySemanticAnnotationContextViewFactory implements
 				super.initialise();
 			} catch (ComponentException e) {
 				logger.error("problem querying registry", e);
+			} catch (MalformedURLException e) {
+				logger.error("malformed URL in component description", e);
 			}
 		}
 

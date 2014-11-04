@@ -57,9 +57,9 @@
 <!-- === Startup === -->
 <osgi:service interface="net.sf.taverna.t2.workbench.StartupSPI">
 	<bean class="net.sf.taverna.t2.component.ui.file.FileManagerObserver">
-		<property name="colours" /><!-- FIXME -->
+		<property name="colourManager" ref="colourManager" />
 		<property name="fileManager" ref="fileManager" />
-		<property name="graphView" /><!-- FIXME -->
+		<property name="graphView" ref="graphView" />
 		<property name="utils" ref="utils" />
 	</bean>
 </osgi:service>
@@ -106,7 +106,7 @@
 	</osgi:service-properties>
 	<bean
 		class="net.sf.taverna.t2.component.ui.view.ComponentActivityContextViewFactory">
-		<property name="colourManager"><!-- FIXME --></property>
+		<property name="colourManager" ref="colourManager" />
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="editManager" ref="editManager" />
 		<property name="fileManager" ref="fileManager" />
@@ -165,7 +165,9 @@
 </osgi:service>
 <bean id="componentServiceCreatorMenuAction"
 	class="net.sf.taverna.t2.component.ui.menu.component.ComponentServiceCreatorMenuAction">
-	<!-- don't publish -->
+	<description>Don't publish this bean yet.</description>
+	<property name="icon" ref="icon" />
+	<property name="selectionManager" ref="selectionManager" />
 	<property name="support" ref="componentSupport" />
 </bean>
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
@@ -175,7 +177,7 @@
 	<bean
 		class="net.sf.taverna.t2.component.ui.menu.NestedWorkflowCreatorMenuAction">
 		<property name="editManager" ref="editManager" />
-		<property name="graphView"><!-- FIXME --></property>
+		<property name="graphView" ref="graphView" />
 		<property name="selectionManager" ref="selectionManager" />
 	</bean>
 </osgi:service>
@@ -200,7 +202,7 @@
 		class="net.sf.taverna.t2.component.ui.menu.OpenComponentFromComponentActivityMenuAction">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="fileManager" ref="fileManager" />
-		<property name="graphView"><!-- FIXME --></property>
+		<property name="graphView" ref="graphView" />
 		<property name="icon" ref="icon" />
 		<property name="selectionManager" ref="selectionManager" />
 		<property name="fileType" ref="fileType" />
@@ -294,9 +296,10 @@
 	<bean
 		class="net.sf.taverna.t2.component.ui.menu.component.ComponentWorkflowCreatorMenuAction">
 		<property name="fileManager" ref="fileManager" />
-		<property name="graphView"><!-- FIXME --></property>
+		<property name="graphView" ref="graphView" />
 		<property name="icon" ref="icon" />
 		<property name="support" ref="componentSupport" />
+		<property name="utils" ref="utils" />
 	</bean>
 </osgi:service>
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
@@ -307,7 +310,7 @@
 		class="net.sf.taverna.t2.component.ui.menu.component.FileOpenFromComponentMenuAction">
 		<property name="fileManager" ref="fileManager" />
 		<property name="fileType" ref="fileType" />
-		<property name="graphView"><!-- FIXME --></property>
+		<property name="graphView" ref="graphView" />
 		<property name="icon" ref="icon" />
 		<property name="preferences" ref="prefs" />
 	</bean>
@@ -318,7 +321,9 @@
 	</osgi:service-properties>
 	<bean
 		class="net.sf.taverna.t2.component.ui.menu.component.ComponentCopyMenuAction">
+		<property name="icon" ref="icon" />
 		<property name="preferences" ref="prefs" />
+		<property name="utils" ref="utils" />
 	</bean>
 </osgi:service>
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
@@ -328,7 +333,9 @@
 	<bean
 		class="net.sf.taverna.t2.component.ui.menu.component.ComponentDeleteMenuAction">
 		<property name="fileManager" ref="fileManager" />
+		<property name="icon" ref="icon" />
 		<property name="preferences" ref="prefs" />
+		<property name="utils" ref="utils" />
 	</bean>
 </osgi:service>
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
@@ -337,6 +344,7 @@
 	</osgi:service-properties>
 	<bean
 		class="net.sf.taverna.t2.component.ui.menu.component.ComponentMergeMenuAction">
+		<property name="icon" ref="icon" />
 		<property name="preferences" ref="prefs" />
 	</bean>
 </osgi:service>
@@ -348,6 +356,8 @@
 		class="net.sf.taverna.t2.component.ui.menu.component.ComponentCloseMenuAction">
 		<property name="closeWorkflowAction"><!-- FIXME net.sf.taverna.t2.workbench.file.impl.actions.CloseWorkflowAction --></property>
 		<property name="fileManager" ref="fileManager" />
+		<property name="icon" ref="icon" />
+		<property name="utils" ref="utils" />
 	</bean>
 </osgi:service>
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
@@ -358,13 +368,16 @@
 		class="net.sf.taverna.t2.component.ui.menu.component.ComponentSaveMenuAction">
 		<property name="saveWorkflowAction"><!-- FIXME net.sf.taverna.t2.workbench.file.impl.actions.SaveWorkflowAction --></property>
 		<property name="fileManager" ref="fileManager" />
+		<property name="icon" ref="icon" />
+		<property name="utils" ref="utils" />
 	</bean>
 </osgi:service>
 	<bean id="componentSearchMenuAction"
 		class="net.sf.taverna.t2.component.ui.menu.component.ComponentSearchMenuAction">
-		<!-- don't publish -->
+		<description>Don't publish this bean yet.</description>
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="editManager" ref="editManager" />
+		<property name="icon" ref="icon" />
 		<property name="menuManager" ref="menuManager" />
 		<property name="preferences" ref="prefs" />
 		<property name="selectionManager" ref="selectionManager" />
@@ -447,10 +460,12 @@
  -->
 
 	<osgi:reference id="iconManager" interface="net.sf.taverna.t2.workbench.activityicons.ActivityIconManager" />
+ 	<osgi:reference id="colourManager" interface="net.sf.taverna.t2.workbench.configuration.colour.ColourManager" />
  	<osgi:reference id="componentFactory" interface="net.sf.taverna.t2.component.api.ComponentFactory" />
  	<osgi:reference id="configManager" interface="uk.org.taverna.configuration.ConfigurationManager" />
  	<osgi:reference id="editManager" interface="net.sf.taverna.t2.workbench.edits.EditManager" />
  	<osgi:reference id="fileManager" interface="net.sf.taverna.t2.workbench.file.FileManager" />
+ 	<osgi:reference id="graphView" interface="net.sf.taverna.t2.workbench.views.graph.GraphViewComponent" />
  	<osgi:reference id="menuManager" interface="net.sf.taverna.t2.ui.menu.MenuManager" />
  	<osgi:reference id="selectionManager" interface="net.sf.taverna.t2.workbench.selection.SelectionManager" />
  	<osgi:reference id="serviceDescriptionRegistry" interface="net.sf.taverna.t2.servicedescriptions.ServiceDescriptionRegistry" />

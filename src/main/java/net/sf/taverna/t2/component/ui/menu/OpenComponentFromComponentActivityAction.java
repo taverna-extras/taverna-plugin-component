@@ -6,6 +6,7 @@ package net.sf.taverna.t2.component.ui.menu;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.awt.event.ActionEvent;
+import java.net.MalformedURLException;
 
 import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.api.Version;
@@ -47,14 +48,15 @@ public class OpenComponentFromComponentActivityAction extends ComponentAction {
 
 	@Override
 	public void actionPerformed(ActionEvent ev) {
-		Version.ID ident = new ComponentActivityConfigurationBean(
-				selection.getConfiguration(), factory);
-
 		try {
+			Version.ID ident = new ComponentActivityConfigurationBean(
+					selection.getConfiguration(), factory);
 			WorkflowBundle d = fileManager.openDataflow(fileType, ident);
 			markGraphAsBelongingToComponent(d);
 		} catch (OpenException e) {
 			logger.error("failed to open component", e);
+		} catch (MalformedURLException e) {
+			logger.error("bad URL in component description", e);
 		}
 	}
 
