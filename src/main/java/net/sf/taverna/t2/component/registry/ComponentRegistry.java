@@ -117,8 +117,8 @@ public abstract class ComponentRegistry implements
 			synchronized (familyCache) {
 				familyCache.remove(componentFamily.getName());
 			}
+		  internalRemoveComponentFamily(componentFamily);
 		}
-		internalRemoveComponentFamily(componentFamily);
 	}
 
 	protected abstract void internalRemoveComponentFamily(Family componentFamily)
