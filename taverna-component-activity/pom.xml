@@ -3,80 +3,85 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>net.sf.taverna</groupId>
-		<artifactId>taverna-parent</artifactId>
-		<version>3.0.1-SNAPSHOT</version>
+		<groupId>org.apache.taverna.component</groupId>
+		<artifactId>taverna-plugin-component</artifactId>
+		<version>2.1.0-incubating-SNAPSHOT</version>
 	</parent>
-	<groupId>net.sf.taverna.t2.activities</groupId>
-	<artifactId>component-activity</artifactId>
-	<version>${t2.activities.version}</version>
-	<name>Taverna Component activity</name>
+	<artifactId>taverna-component-activity</artifactId>
 	<packaging>bundle</packaging>
-	<properties>
-		<jena.core.version>2.11.1</jena.core.version>
-	</properties>
-
-	<scm>
-		<connection>scm:git:https://github.com/taverna/taverna-component-activity.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/taverna/taverna-component-activity.git</developerConnection>
-		<url>https://github.com/taverna/taverna-component-activity/</url>
-		<tag>HEAD</tag>
-	</scm>
+	<name>Apache Taverna Component Repository implementation</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>net.sf.taverna.component</groupId>
-			<artifactId>component-repository</artifactId>
-			<version>${t2.activities.version}</version>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>taverna-component-repository-api</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.taverna.t2.core</groupId>
-			<artifactId>reference-api</artifactId>
-			<version>${t2.core.version}</version>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>taverna-reference-api</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.taverna.t2.core</groupId>
-			<artifactId>workflowmodel-api</artifactId>
-			<version>${t2.core.version}</version>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>taverna-workflowmodel-api</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-      <!-- FIXME: Avoid -->
-			<groupId>net.sf.taverna.t2.core</groupId>
-			<artifactId>workflowmodel-impl</artifactId>
-			<version>${t2.core.version}</version>
+			<!-- FIXME: Remove -->
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>taverna-workflowmodel-impl</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>uk.org.taverna.platform</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>taverna-execution-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${project.parent.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpclient</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpclient-cache</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.taverna.t2.activities</groupId>
-			<artifactId>dataflow-activity</artifactId>
-			<version>${t2.activities.version}</version>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>taverna-dataflow-activity</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>uk.org.taverna.configuration</groupId>
+			<groupId>org.apache.taverna.osgi</groupId>
 			<artifactId>taverna-app-configuration-api</artifactId>
-			<version>${taverna.configuration.version}</version>
+			<version>${taverna.osgi.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>uk.org.taverna.scufl2</groupId>
-			<artifactId>scufl2-api</artifactId>
-			<version>${scufl2.version}</version>
+			<groupId>org.apache.taverna.language</groupId>
+			<artifactId>taverna-scufl2-api</artifactId>
+			<version>${taverna.language.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>uk.org.taverna.scufl2</groupId>
-			<artifactId>scufl2-t2flow</artifactId>
-			<version>${scufl2.version}</version>
+			<groupId>org.apache.taverna.language</groupId>
+			<artifactId>taverna-scufl2-validation-structural</artifactId>
+			<version>${taverna.language.version}</version>
 		</dependency>
-		<!-- 
 		<dependency>
-			<groupId>uk.org.taverna.scufl2</groupId>
-			<artifactId>scufl2-annotation</artifactId>
-			<version>${scufl2.version}</version>
+			<groupId>org.apache.taverna.language</groupId>
+			<artifactId>taverna-scufl2-t2flow</artifactId>
+			<version>${taverna.language.version}</version>
+			<scope>test</scope>
+			<!--  Or is this always needed? -->
 		</dependency>
-		 -->
+		<!-- <dependency> <groupId>org.apache.taverna.language</groupId> <artifactId>taverna-scufl2-annotation</artifactId> 
+			<version>${taverna.language.version}</version> </dependency> -->
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>taverna-credential-manager</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.jdom</groupId>
@@ -91,29 +96,54 @@
     <!--
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>com.springsource.org.apache.httpcomponents.httpclient</artifactId>
-			<version>${apache.httpclient.version}</version>
+			<artifactId>httpcore-osgi</artifactId>
+			<version>${apache.httpcore.version}</version>
 			<exclusions>
 				<exclusion>
+					<artifactId>httpcore</artifactId>
 					<groupId>org.apache.httpcomponents</groupId>
-					<artifactId>com.springsource.org.apache.httpcomponents.httpclient-cache</artifactId>
 				</exclusion>
 				<exclusion>
+					<artifactId>httpcore-nio</artifactId>
 					<groupId>org.apache.httpcomponents</groupId>
-					<artifactId>com.springsource.org.apache.httpcomponents.httpmime</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
     -->
-    <dependency>
+    <!--
+		<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient-osgi</artifactId>
+			<version>${apache.httpclient.version}</version>
+			<exclusions>
+			<exclusion>
+				<artifactId>fluent-hc</artifactId>
+				<groupId>org.apache.httpcomponents</groupId>
+			</exclusion>
+			<exclusion>
+				<artifactId>httpclient</artifactId>
+				<groupId>org.apache.httpcomponents</groupId>
+			</exclusion>
+			<exclusion>
+				<artifactId>httpclient-cache</artifactId>
+				<groupId>org.apache.httpcomponents</groupId>
+			</exclusion>
+			<exclusion>
+				<artifactId>httpmime</artifactId>
+				<groupId>org.apache.httpcomponents</groupId>
+			</exclusion>
+			</exclusions>
+		</dependency>
+    -->
+    <dependency> 
       <groupId>org.apache.commons</groupId>
       <artifactId>com.springsource.org.apache.commons.httpclient</artifactId>
-      <version>${commons.httpclient.version}</version>
+      <version>${commons.httpclient.version}</version> 
     </dependency>
 
 		<dependency>
-			<groupId>org.apache.log4j</groupId>
-			<artifactId>com.springsource.org.apache.log4j</artifactId>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
 
@@ -121,11 +151,12 @@
 			<groupId>org.apache.clerezza.ext</groupId>
 			<artifactId>com.hp.hpl.jena</artifactId>
 			<version>0.6-incubating</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.security</groupId>
-			<artifactId>credential-manager</artifactId>
-			<version>${t2.security.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpclient</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -135,41 +166,20 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.taverna.t2.activities</groupId>
-			<artifactId>activity-test-utils</artifactId>
-			<version>${t2.activities.version}</version>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>taverna-activity-test-utils</artifactId>
+			<version>${project.parent.version}</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>com.springsource.org.apache.commons.httpclient</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
-	
-	<repositories>
-		<repository>
-			<releases />
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>mygrid-repository</id>
-			<name>myGrid Repository</name>
-			<url>http://www.mygrid.org.uk/maven/repository</url>
-		</repository>
-		<repository>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots />
-			<id>mygrid-snapshot-repository</id>
-			<name>myGrid Snapshot Repository</name>
-			<url>http://www.mygrid.org.uk/maven/snapshot-repository</url>
-		</repository>
-	</repositories>
-
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-			</plugin>
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
