@@ -31,7 +31,7 @@ import java.util.TreeMap;
 import org.apache.taverna.component.api.ComponentException;
 import org.apache.taverna.component.api.Version;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * A Component is a building block for creating Taverna workflows. Components

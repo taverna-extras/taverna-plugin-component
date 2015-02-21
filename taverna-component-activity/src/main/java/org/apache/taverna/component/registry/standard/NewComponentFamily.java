@@ -13,7 +13,7 @@ import org.apache.taverna.component.registry.ComponentUtil;
 import org.apache.taverna.component.registry.api.ComponentFamilyType;
 import org.apache.taverna.component.registry.api.Description;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * A family of components in the new-interface registry.

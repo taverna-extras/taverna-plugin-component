@@ -10,8 +10,8 @@ import javax.swing.Action;
 import org.apache.taverna.component.api.ComponentFactory;
 import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
 
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.core.Processor;
+import org.apache.taverna.scufl2.api.activity.Activity;
+import org.apache.taverna.scufl2.api.core.Processor;
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.file.FileType;

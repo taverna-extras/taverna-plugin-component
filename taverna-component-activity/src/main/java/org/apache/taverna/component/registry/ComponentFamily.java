@@ -31,7 +31,7 @@ import org.apache.taverna.component.api.Registry;
 import org.apache.taverna.component.api.Version;
 import org.apache.taverna.component.api.profile.Profile;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * A ComponentFamily is a collection of Components that share the same

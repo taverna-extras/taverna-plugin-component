@@ -36,8 +36,8 @@ import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import org.apache.log4j.Logger;
 import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
-import uk.org.taverna.scufl2.api.common.AbstractNamed;
-import uk.org.taverna.scufl2.api.common.Named;
+import org.apache.taverna.scufl2.api.common.AbstractNamed;
+import org.apache.taverna.scufl2.api.common.Named;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.Model;

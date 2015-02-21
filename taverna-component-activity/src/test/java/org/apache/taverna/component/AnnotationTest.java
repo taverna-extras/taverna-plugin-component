@@ -7,12 +7,12 @@ import java.io.IOException;
 import org.apache.taverna.component.utils.AnnotationUtils;
 import org.junit.Test;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.api.io.ReaderException;
-import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.io.ReaderException;
+import org.apache.taverna.scufl2.api.io.WorkflowBundleIO;
 
 public class AnnotationTest {
-	//uk.org.taverna.scufl2.annotation.AnnotationTools anntoo;
+	//org.apache.taverna.scufl2.annotation.AnnotationTools anntoo;
 	@Test
 	public void test() throws ReaderException, IOException {
 		AnnotationUtils au = new AnnotationUtils();

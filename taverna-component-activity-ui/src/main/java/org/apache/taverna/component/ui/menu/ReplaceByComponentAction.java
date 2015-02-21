@@ -13,7 +13,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
 import static org.apache.taverna.component.ui.ComponentActivityConfigurationBean.ignorableNames;
 import static org.apache.taverna.component.ui.util.Utils.uniqueName;
-import static uk.org.taverna.scufl2.api.common.Scufl2Tools.NESTED_WORKFLOW;
+import static org.apache.taverna.scufl2.api.common.Scufl2Tools.NESTED_WORKFLOW;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -50,14 +50,14 @@ import net.sf.taverna.t2.workflow.edits.AddActivityOutputPortMappingEdit;
 import net.sf.taverna.t2.workflow.edits.RemoveActivityEdit;
 import net.sf.taverna.t2.workflow.edits.RenameEdit;
 //import net.sf.taverna.t2.workflowmodel.utils.Tools;
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.common.Scufl2Tools;
-import uk.org.taverna.scufl2.api.core.Processor;
-import uk.org.taverna.scufl2.api.core.Workflow;
-import uk.org.taverna.scufl2.api.port.InputActivityPort;
-import uk.org.taverna.scufl2.api.port.InputProcessorPort;
-import uk.org.taverna.scufl2.api.port.OutputActivityPort;
-import uk.org.taverna.scufl2.api.port.OutputProcessorPort;
+import org.apache.taverna.scufl2.api.activity.Activity;
+import org.apache.taverna.scufl2.api.common.Scufl2Tools;
+import org.apache.taverna.scufl2.api.core.Processor;
+import org.apache.taverna.scufl2.api.core.Workflow;
+import org.apache.taverna.scufl2.api.port.InputActivityPort;
+import org.apache.taverna.scufl2.api.port.InputProcessorPort;
+import org.apache.taverna.scufl2.api.port.OutputActivityPort;
+import org.apache.taverna.scufl2.api.port.OutputProcessorPort;
 
 /**
  * @author alanrw

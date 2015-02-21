@@ -24,7 +24,7 @@ import org.apache.batik.swing.JSVGCanvas;
 import org.apache.taverna.component.api.Version;
 import org.apache.taverna.component.ui.util.Utils;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 public class FileManagerObserver implements StartupSPI {
 	private static final Color COLOR = new Color(230, 147, 210);

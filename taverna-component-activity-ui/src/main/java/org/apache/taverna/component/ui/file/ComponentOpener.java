@@ -21,7 +21,7 @@ import org.apache.taverna.component.api.ComponentFactory;
 import org.apache.taverna.component.api.Version;
 import org.apache.taverna.component.api.Version.ID;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw

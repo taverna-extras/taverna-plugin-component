@@ -23,8 +23,8 @@ import org.apache.taverna.component.api.Version;
 import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 import org.apache.taverna.component.ui.util.ComponentHealthCheck;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.api.core.Workflow;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.core.Workflow;
 
 /**
  * @author alanrw

@@ -19,9 +19,9 @@ import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 
 import org.slf4j.Logger;
 
-import uk.org.taverna.scufl2.api.annotation.Annotation;
-import uk.org.taverna.scufl2.api.common.AbstractNamed;
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.annotation.Annotation;
+import org.apache.taverna.scufl2.api.common.AbstractNamed;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw

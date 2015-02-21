@@ -24,8 +24,8 @@ import org.apache.taverna.component.api.Version;
 import org.apache.taverna.component.api.Version.ID;
 import org.apache.taverna.component.ui.preference.ComponentPreference;
 
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.configurations.Configuration;
+import org.apache.taverna.scufl2.api.activity.Activity;
+import org.apache.taverna.scufl2.api.configurations.Configuration;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

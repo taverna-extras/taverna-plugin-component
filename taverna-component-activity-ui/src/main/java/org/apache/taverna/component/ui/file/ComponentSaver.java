@@ -32,9 +32,9 @@ import org.apache.taverna.component.api.Version;
 import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 import org.apache.taverna.component.ui.serviceprovider.ComponentServiceProvider;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.validation.ValidationReport;
-import uk.org.taverna.scufl2.validation.structural.StructuralValidator;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.validation.ValidationReport;
+import org.apache.taverna.scufl2.validation.structural.StructuralValidator;
 
 /**
  * @author alanrw

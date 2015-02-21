@@ -13,7 +13,7 @@ import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
 import org.apache.log4j.Logger;
 import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 @SuppressWarnings("serial")
 public abstract class ComponentAction extends AbstractAction {

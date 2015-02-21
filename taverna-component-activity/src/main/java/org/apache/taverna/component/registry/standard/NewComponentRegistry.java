@@ -45,7 +45,7 @@ import org.apache.taverna.component.registry.api.PolicyList;
 import org.apache.taverna.component.utils.AnnotationUtils;
 import org.apache.taverna.component.utils.SystemUtils;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 class NewComponentRegistry extends ComponentRegistry {
 	private static final String PROFILE_MIME_TYPE = "application/vnd.taverna.component-profile+xml";

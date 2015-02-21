@@ -36,9 +36,9 @@ import org.apache.taverna.component.api.ComponentException;
 import org.apache.taverna.component.api.profile.Profile;
 import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
-import uk.org.taverna.scufl2.api.annotation.Annotation;
-import uk.org.taverna.scufl2.api.common.AbstractNamed;
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.annotation.Annotation;
+import org.apache.taverna.scufl2.api.common.AbstractNamed;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;

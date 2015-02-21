@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.WeakHashMap;
 
-import uk.org.taverna.scufl2.api.annotation.Annotation;
-import uk.org.taverna.scufl2.api.common.Child;
-import uk.org.taverna.scufl2.api.common.Scufl2Tools;
-import uk.org.taverna.scufl2.api.common.URITools;
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.ucfpackage.UCFPackage.ResourceEntry;
+import org.apache.taverna.scufl2.api.annotation.Annotation;
+import org.apache.taverna.scufl2.api.common.Child;
+import org.apache.taverna.scufl2.api.common.Scufl2Tools;
+import org.apache.taverna.scufl2.api.common.URITools;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.ucfpackage.UCFPackage.ResourceEntry;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;

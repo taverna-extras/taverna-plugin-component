@@ -35,7 +35,7 @@ import org.apache.taverna.component.ui.panel.ComponentVersionChooserPanel;
 import org.apache.taverna.component.ui.preference.ComponentPreference;
 import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw

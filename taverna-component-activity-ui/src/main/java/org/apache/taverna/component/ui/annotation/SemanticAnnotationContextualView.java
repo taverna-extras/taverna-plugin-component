@@ -37,12 +37,12 @@ import org.apache.taverna.component.api.Version;
 import org.apache.taverna.component.api.profile.Profile;
 import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
-import uk.org.taverna.scufl2.api.common.AbstractNamed;
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.api.core.Processor;
-import uk.org.taverna.scufl2.api.core.Workflow;
-import uk.org.taverna.scufl2.api.port.InputWorkflowPort;
-import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
+import org.apache.taverna.scufl2.api.common.AbstractNamed;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.core.Processor;
+import org.apache.taverna.scufl2.api.core.Workflow;
+import org.apache.taverna.scufl2.api.port.InputWorkflowPort;
+import org.apache.taverna.scufl2.api.port.OutputWorkflowPort;
 
 /**
  * @author David Withers

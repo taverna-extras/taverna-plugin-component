@@ -9,7 +9,7 @@ import java.net.URL;
 import org.apache.taverna.component.api.Family;
 import org.apache.taverna.component.api.Version;
 
-import uk.org.taverna.scufl2.api.configurations.Configuration;
+import org.apache.taverna.scufl2.api.configurations.Configuration;
 
 public class ComponentServiceProviderConfig {
 	private URL registryBase;

@@ -5,8 +5,8 @@ import java.net.URI;
 import org.apache.taverna.component.api.config.ComponentConfig;
 
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.core.Processor;
+import org.apache.taverna.scufl2.api.activity.Activity;
+import org.apache.taverna.scufl2.api.core.Processor;
 
 public abstract class AbstractContextComponentMenuAction extends AbstractContextualMenuAction {
 	public AbstractContextComponentMenuAction(URI parentId, int positionHint) {

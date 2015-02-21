@@ -11,10 +11,10 @@ import org.apache.taverna.component.api.ComponentFactory;
 import org.apache.taverna.component.api.Version;
 import org.apache.taverna.component.ui.ComponentActivityConfigurationBean;
 
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.common.Visitor;
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.validation.correctness.DefaultDispatchingVisitor;
+import org.apache.taverna.scufl2.api.activity.Activity;
+import org.apache.taverna.scufl2.api.common.Visitor;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.validation.correctness.DefaultDispatchingVisitor;
 
 public class ComponentHealthCheck extends VisitKind {
 	public static final int NO_PROBLEM = 0;

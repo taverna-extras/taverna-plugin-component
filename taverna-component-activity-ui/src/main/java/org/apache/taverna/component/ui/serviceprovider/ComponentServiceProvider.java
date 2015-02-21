@@ -33,8 +33,8 @@ import org.apache.taverna.component.ui.panel.RegistryAndFamilyChooserPanel;
 import org.apache.taverna.component.ui.preference.ComponentPreference;
 import org.apache.taverna.component.ui.util.Utils;
 
-import uk.org.taverna.scufl2.api.common.Visitor;
-import uk.org.taverna.scufl2.api.configurations.Configuration;
+import org.apache.taverna.scufl2.api.common.Visitor;
+import org.apache.taverna.scufl2.api.configurations.Configuration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;

@@ -24,9 +24,9 @@ import org.apache.taverna.component.registry.ComponentImplementationCache;
 import org.apache.taverna.component.registry.ComponentUtil;
 import org.apache.taverna.component.registry.ComponentVersionIdentification;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import uk.org.taverna.scufl2.api.port.InputWorkflowPort;
-import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.port.InputWorkflowPort;
+import org.apache.taverna.scufl2.api.port.OutputWorkflowPort;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

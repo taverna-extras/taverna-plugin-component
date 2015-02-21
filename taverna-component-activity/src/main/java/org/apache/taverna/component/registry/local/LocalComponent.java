@@ -20,7 +20,7 @@ import org.apache.taverna.component.api.Version;
 import org.apache.taverna.component.registry.Component;
 import org.apache.taverna.component.utils.SystemUtils;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw

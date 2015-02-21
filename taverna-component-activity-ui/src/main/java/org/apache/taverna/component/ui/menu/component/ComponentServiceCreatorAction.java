@@ -6,7 +6,7 @@ package org.apache.taverna.component.ui.menu.component;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static org.apache.log4j.Logger.getLogger;
-import static uk.org.taverna.scufl2.api.common.Scufl2Tools.NESTED_WORKFLOW;
+import static org.apache.taverna.scufl2.api.common.Scufl2Tools.NESTED_WORKFLOW;
 
 import java.awt.event.ActionEvent;
 
@@ -21,10 +21,10 @@ import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.core.Processor;
-import uk.org.taverna.scufl2.api.core.Workflow;
-import uk.org.taverna.scufl2.api.profiles.Profile;
+import org.apache.taverna.scufl2.api.activity.Activity;
+import org.apache.taverna.scufl2.api.core.Processor;
+import org.apache.taverna.scufl2.api.core.Workflow;
+import org.apache.taverna.scufl2.api.profiles.Profile;
 
 /**
  * @author alanrw

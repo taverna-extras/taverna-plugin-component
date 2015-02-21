@@ -20,8 +20,8 @@ import org.apache.taverna.component.ui.ComponentAction;
 import org.apache.taverna.component.ui.ComponentActivityConfigurationBean;
 import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
 
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.activity.Activity;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * @author alanrw

@@ -24,9 +24,9 @@ import javax.swing.JScrollPane;
 import org.apache.taverna.component.api.ComponentFactory;
 import org.apache.taverna.component.api.Version;
 
-import uk.org.taverna.scufl2.api.activity.Activity;
-import uk.org.taverna.scufl2.api.common.AbstractNamed;
-import uk.org.taverna.scufl2.api.port.ActivityPort;
+import org.apache.taverna.scufl2.api.activity.Activity;
+import org.apache.taverna.scufl2.api.common.AbstractNamed;
+import org.apache.taverna.scufl2.api.port.ActivityPort;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
 import net.sf.taverna.t2.workbench.file.FileManager;
