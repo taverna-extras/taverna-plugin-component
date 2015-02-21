@@ -26,8 +26,8 @@ import java.util.List;
 import org.apache.taverna.component.api.profile.PortProfile;
 import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
-import net.sf.taverna.t2.component.api.profile.doc.Port;
-import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
+import org.apache.taverna.component.api.profile.doc.Port;
+import org.apache.taverna.component.api.profile.doc.SemanticAnnotation;
 
 /**
  * Specifies the semantic annotations that a port must have.

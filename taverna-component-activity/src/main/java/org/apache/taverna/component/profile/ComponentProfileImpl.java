@@ -61,11 +61,11 @@ import org.apache.taverna.component.api.profile.ExceptionHandling;
 import org.apache.taverna.component.api.profile.PortProfile;
 import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
-import net.sf.taverna.t2.component.api.profile.doc.Activity;
-import net.sf.taverna.t2.component.api.profile.doc.Ontology;
-import net.sf.taverna.t2.component.api.profile.doc.Port;
-import net.sf.taverna.t2.component.api.profile.doc.Profile;
-import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
+import org.apache.taverna.component.api.profile.doc.Activity;
+import org.apache.taverna.component.api.profile.doc.Ontology;
+import org.apache.taverna.component.api.profile.doc.Port;
+import org.apache.taverna.component.api.profile.doc.Profile;
+import org.apache.taverna.component.api.profile.doc.SemanticAnnotation;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;

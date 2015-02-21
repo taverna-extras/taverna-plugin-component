@@ -26,8 +26,8 @@ import java.util.List;
 import org.apache.taverna.component.api.profile.ActivityProfile;
 import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
-import net.sf.taverna.t2.component.api.profile.doc.Activity;
-import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
+import org.apache.taverna.component.api.profile.doc.Activity;
+import org.apache.taverna.component.api.profile.doc.SemanticAnnotation;
 
 /**
  * Specifies the semantic annotations that an activity must have.

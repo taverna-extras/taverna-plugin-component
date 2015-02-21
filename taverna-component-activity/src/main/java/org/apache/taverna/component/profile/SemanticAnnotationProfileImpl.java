@@ -32,7 +32,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
-import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
+import org.apache.taverna.component.api.profile.doc.SemanticAnnotation;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
