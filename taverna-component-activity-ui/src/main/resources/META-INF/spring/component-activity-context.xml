@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/beans/spring-util.xsd">
+	<context:annotation-config />
+
+	<bean id="prefs" class="net.sf.taverna.t2.component.preference.ComponentPreference">
+		<constructor-arg name="cm" ref="configManager" />
+		<constructor-arg name="factory" ref="componentFactory" />
+	</bean>
+	<bean id="preferencePanel" class="net.sf.taverna.t2.component.ui.preference.ComponentPreferencePanel">
+		<constructor-arg name="componentFactory" ref="componentFactory" />
+		<constructor-arg name="preferences" ref="prefs" />
+	</bean>
+	<bean id="componentSupport"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentCreatorSupport">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="preferences" ref="prefs" />
+		<property name="fileManager" ref="fileManager" />
+		<property name="editManager" ref="editManager" />
+		<property name="fileType" ref="fileType" />
+		<property name="selectionManager" ref="selectionManager" />
+	</bean>
+	<bean id="fileType" class="net.sf.taverna.t2.component.ui.util.ComponentFileType" />
+	<bean id="icon" class="net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon" />
+	<bean id="utils" class="net.sf.taverna.t2.component.ui.util.Utils">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="fileManager" ref="fileManager" />
+		<property name="icon" ref="icon" />
+		<property name="prefs" ref="prefs" />
+		<property name="registry" ref="serviceDescriptionRegistry" />
+	</bean>
+
+<!-- === Service description provider === -->
+<osgi:service ref="componentServiceProvider" auto-export="interfaces">
+	<osgi:service-properties>
+		<entry key="name" value="componentServiceProvider" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProvider">
+		<constructor-arg ref="componentFactory" index="0" />
+		<constructor-arg ref="prefs" index="1" />
+		<constructor-arg ref="icon" index="2" />
+		<constructor-arg ref="utils" index="3" />
+	</bean>
+</osgi:service>
+
+<!-- === Icon === -->
+<osgi:service ref="icon" interface="net.sf.taverna.t2.workbench.activityicons.ActivityIconSPI" />
+
+<!-- === Startup === -->
+<osgi:service interface="net.sf.taverna.t2.workbench.StartupSPI">
+	<bean class="net.sf.taverna.t2.component.ui.file.FileManagerObserver">
+		<property name="colourManager" ref="colourManager" />
+		<property name="fileManager" ref="fileManager" />
+		<property name="graphView" ref="graphView" />
+		<property name="utils" ref="utils" />
+	</bean>
+</osgi:service>
+
+<!-- === Dataflow persistence handlers === -->
+<osgi:service interface="net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler">
+	<bean class="net.sf.taverna.t2.component.ui.file.ComponentOpener">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="fileType" ref="fileType" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler">
+	<bean class="net.sf.taverna.t2.component.ui.file.ComponentSaver">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="fileType" ref="fileType" />
+	</bean>
+</osgi:service>
+
+<!-- === Health checkers === -->
+<osgi:service interface="net.sf.taverna.t2.workflowmodel.health.HealthChecker">
+	<bean class="net.sf.taverna.t2.component.ui.file.ComponentDataflowHealthChecker">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="fileManager" ref="fileManager" />
+	</bean>
+</osgi:service>
+
+<!-- === Configuration UI factories === -->
+<osgi:service interface="uk.org.taverna.configuration.ConfigurationUIFactory">
+	<osgi:service-properties>
+		<entry key="name" value="componentConfigurationUI" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.preference.ComponentPreferenceUIFactory">
+		<property name="configPanel" ref="preferencePanel" />
+		<property name="preferences" ref="prefs" />
+	</bean>
+</osgi:service>
+
+<!-- === Context view factories === -->
+<osgi:service
+	interface="net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory">
+	<osgi:service-properties>
+		<entry key="name" value="componentActivityContextView" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.view.ComponentActivityContextViewFactory">
+		<property name="colourManager" ref="colourManager" />
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="editManager" ref="editManager" />
+		<property name="fileManager" ref="fileManager" />
+		<property name="iconManager" ref="iconManager" />
+		<property name="serviceDescriptionRegistry" ref="serviceDescriptionRegistry" />
+		<property name="serviceTypeRegistry" ref="serviceTypeRegistry" />
+		<property name="viewUtils"><!-- FIXME --></property>
+	</bean>
+</osgi:service>
+<osgi:service
+	interface="net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory">
+	<osgi:service-properties>
+		<entry key="name" value="componentContextView" />
+	</osgi:service-properties>
+	<bean class="net.sf.taverna.t2.component.ui.view.ComponentContextViewFactory">
+		<property name="fileManager" ref="fileManager" />
+	</bean>
+</osgi:service>
+<osgi:service
+	interface="net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory">
+	<osgi:service-properties>
+		<entry key="name" value="componentActivitySemanticAnnotationContextView" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.view.ComponentActivitySemanticAnnotationContextViewFactory">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="fileManager" ref="fileManager" />
+	</bean>
+</osgi:service>
+<osgi:service
+	interface="net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory">
+	<osgi:service-properties>
+		<entry key="name" value="semanticAnnotationContextView" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.annotation.SemanticAnnotationContextualViewFactory">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="fileManager" ref="fileManager" />
+	</bean>
+</osgi:service>
+
+<!-- === Menu actions === -->
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentConfigureAction" />
+	</osgi:service-properties>
+	<bean id="componentConfigureMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.ComponentConfigureMenuAction">
+		<property name="activityIconManager" ref="iconManager" />
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="editManager" ref="editManager" />
+		<property name="fileManager" ref="fileManager" />
+		<property name="serviceDescriptionRegistry" ref="serviceDescriptionRegistry" />
+		<property name="serviceTypeRegistry" ref="serviceTypeRegistry" />
+	</bean>
+</osgi:service>
+<bean id="componentServiceCreatorMenuAction"
+	class="net.sf.taverna.t2.component.ui.menu.component.ComponentServiceCreatorMenuAction">
+	<description>Don't publish this bean yet.</description>
+	<property name="icon" ref="icon" />
+	<property name="selectionManager" ref="selectionManager" />
+	<property name="support" ref="componentSupport" />
+</bean>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="nestedWorkflowCreatorAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.NestedWorkflowCreatorMenuAction">
+		<property name="editManager" ref="editManager" />
+		<property name="graphView" ref="graphView" />
+		<property name="selectionManager" ref="selectionManager" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentReplaceAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.ReplaceByComponentMenuAction">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="editManager" ref="editManager" />
+		<property name="icon" ref="icon" />
+		<property name="preferences" ref="prefs" />
+		<property name="selectionManager" ref="selectionManager" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentOpenAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.OpenComponentFromComponentActivityMenuAction">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="fileManager" ref="fileManager" />
+		<property name="graphView" ref="graphView" />
+		<property name="icon" ref="icon" />
+		<property name="selectionManager" ref="selectionManager" />
+		<property name="fileType" ref="fileType" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<bean class="net.sf.taverna.t2.component.ui.menu.ComponentMenu" />
+</osgi:service>
+
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.registry.ComponentRegistryMenuSection" />
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentRegistryManageAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.registry.ComponentRegistryManageMenuAction">
+		<property name="configurationFrame"><!-- FIXME --></property>
+		<property name="icon" ref="icon" />
+	</bean>
+</osgi:service>
+
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.profile.ComponentProfileMenuSection" />
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentProfileImportAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.profile.ComponentProfileImportMenuAction">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="icon" ref="icon" />
+		<property name="preferences" ref="prefs" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentProfileCopyAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.profile.ComponentProfileCopyMenuAction">
+		<property name="preferences" ref="prefs" />
+		<property name="icon" ref="icon" />
+	</bean>
+</osgi:service>
+	<bean id="componentProfileDeleteMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.profile.ComponentProfileDeleteMenuAction">
+		<property name="icon" ref="icon" />
+		<property name="preferences" ref="prefs" />
+	</bean>
+
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.family.ComponentFamilyMenuSection" />
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentFamilyCreateAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.family.ComponentFamilyCreateMenuAction">
+		<property name="preferences" ref="prefs" />
+		<property name="icon" ref="icon" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentFamilyDeleteAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.family.ComponentFamilyDeleteMenuAction">
+		<property name="fileManager" ref="fileManager" />
+		<property name="icon" ref="icon" />
+		<property name="preferences" ref="prefs" />
+		<property name="utils" ref="utils" />
+	</bean>
+</osgi:service>
+
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentMenuSection" />
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentCreateAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentWorkflowCreatorMenuAction">
+		<property name="fileManager" ref="fileManager" />
+		<property name="graphView" ref="graphView" />
+		<property name="icon" ref="icon" />
+		<property name="support" ref="componentSupport" />
+		<property name="utils" ref="utils" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentOpenAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.component.FileOpenFromComponentMenuAction">
+		<property name="fileManager" ref="fileManager" />
+		<property name="fileType" ref="fileType" />
+		<property name="graphView" ref="graphView" />
+		<property name="icon" ref="icon" />
+		<property name="preferences" ref="prefs" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentCopyAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentCopyMenuAction">
+		<property name="icon" ref="icon" />
+		<property name="preferences" ref="prefs" />
+		<property name="utils" ref="utils" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentDeleteAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentDeleteMenuAction">
+		<property name="fileManager" ref="fileManager" />
+		<property name="icon" ref="icon" />
+		<property name="preferences" ref="prefs" />
+		<property name="utils" ref="utils" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentMergeAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentMergeMenuAction">
+		<property name="icon" ref="icon" />
+		<property name="preferences" ref="prefs" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentCloseAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentCloseMenuAction">
+		<property name="closeWorkflowAction"><!-- FIXME net.sf.taverna.t2.workbench.file.impl.actions.CloseWorkflowAction --></property>
+		<property name="fileManager" ref="fileManager" />
+		<property name="icon" ref="icon" />
+		<property name="utils" ref="utils" />
+	</bean>
+</osgi:service>
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="componentSaveAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentSaveMenuAction">
+		<property name="saveWorkflowAction"><!-- FIXME net.sf.taverna.t2.workbench.file.impl.actions.SaveWorkflowAction --></property>
+		<property name="fileManager" ref="fileManager" />
+		<property name="icon" ref="icon" />
+		<property name="utils" ref="utils" />
+	</bean>
+</osgi:service>
+	<bean id="componentSearchMenuAction"
+		class="net.sf.taverna.t2.component.ui.menu.component.ComponentSearchMenuAction">
+		<description>Don't publish this bean yet.</description>
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="editManager" ref="editManager" />
+		<property name="icon" ref="icon" />
+		<property name="menuManager" ref="menuManager" />
+		<property name="preferences" ref="prefs" />
+		<property name="selectionManager" ref="selectionManager" />
+		<property name="serviceRegistry" ref="serviceTypeRegistry" />
+	</bean>
+
+<osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
+	<osgi:service-properties>
+		<entry key="name" value="annotateSemanticsAction" />
+	</osgi:service-properties>
+	<bean
+		class="net.sf.taverna.t2.component.annotation.AnnotateSemanticsMenuAction">
+		<property name="componentFactory" ref="componentFactory" />
+		<property name="fileManager" ref="fileManager" />
+	</bean>
+</osgi:service>
+
+<!-- 
+	<bean id="ComponentLocalHealthChecker"
+		class="net.sf.taverna.t2.component.ComponentActivityLocalChecker" />
+	<bean id="ComponentUpgradeHealthChecker"
+		class="net.sf.taverna.t2.component.ComponentActivityUpgradeChecker">
+		<property name="componentUtil" ref="componentUtil" />
+	</bean>
+	<bean id="baseProfileLocator" class="net.sf.taverna.t2.component.profile.BaseProfileLocator">
+		<property name="appConfig" ref="app-config" />
+	</bean>
+
+	<bean id="componentActivityFactory" class="net.sf.taverna.t2.component.ComponentActivityFactory">
+		<property name="componentUtil" ref="componentUtil" />
+		<property name="dataflowCache" ref="cache" />
+		<property name="edits" ref="edits" />
+		<property name="annotationUtils" ref="annotationUtil" />
+	</bean>
+
+	<bean id="networkRegistry"
+		class="net.sf.taverna.t2.component.registry.standard.NewComponentRegistryFactory">
+		<property name="credentialManager" ref="credentialManager" />
+		<property name="componentUtil" ref="componentUtil" />
+		<property name="systemUtils" ref="systemUtil" />
+		<property name="annotationUtils" ref="annotationUtil" />
+	</bean>
+	<bean id="fileRegistry"
+		class="net.sf.taverna.t2.component.registry.local.LocalComponentRegistryFactory">
+		<property name="componentUtil" ref="componentUtil" />
+		<property name="systemUtils" ref="systemUtil" />
+	</bean>
+	<bean id="componentUtil" class="net.sf.taverna.t2.component.registry.ComponentUtil">
+		<property name="networkLocator" ref="networkRegistry" />
+		<property name="fileLocator" ref="fileRegistry" />
+		<property name="baseLocator" ref="baseProfileLocator" />
+	</bean>
+
+	<bean id="cache" class="net.sf.taverna.t2.component.registry.ComponentImplementationCache">
+		<property name="componentUtil" ref="componentUtil" />
+	</bean>
+	<bean id="systemUtil" class="net.sf.taverna.t2.component.utils.SystemUtils">
+		<property name="appConfig" ref="app-config" />
+		<property name="workflowBundler" ref="workflowBundleIO" />
+		<property name="compilers" ref="compilers" />
+	</bean>
+	<bean id="annotationUtil" class="net.sf.taverna.t2.component.utils.AnnotationUtils" />
+
+	<osgi:service ref="ComponentLocalHealthChecker"
+		interface="net.sf.taverna.t2.workflowmodel.health.HealthChecker" />
+	<osgi:service ref="ComponentUpgradeHealthChecker"
+		interface="net.sf.taverna.t2.workflowmodel.health.HealthChecker" />
+	<osgi:service ref="componentActivityFactory"
+		interface="net.sf.taverna.t2.workflowmodel.processor.activity.ActivityFactory" />
+	<osgi:service ref="componentUtil"
+		interface="net.sf.taverna.t2.component.api.ComponentFactory" />
+
+	<osgi:reference id="app-config"
+		interface="uk.org.taverna.configuration.app.ApplicationConfiguration" />
+	<osgi:reference id="credentialManager"
+		interface="net.sf.taverna.t2.security.credentialmanager.CredentialManager" />
+	<osgi:reference id="edits" interface="net.sf.taverna.t2.workflowmodel.Edits" />
+	<osgi:reference id="workflowBundleIO" interface="uk.org.taverna.scufl2.api.io.WorkflowBundleIO" />
+	<osgi:list id="compilers" interface="uk.org.taverna.platform.execution.api.WorkflowCompiler" />
+ -->
+
+	<osgi:reference id="iconManager" interface="net.sf.taverna.t2.workbench.activityicons.ActivityIconManager" />
+ 	<osgi:reference id="colourManager" interface="net.sf.taverna.t2.workbench.configuration.colour.ColourManager" />
+ 	<osgi:reference id="componentFactory" interface="net.sf.taverna.t2.component.api.ComponentFactory" />
+ 	<osgi:reference id="configManager" interface="uk.org.taverna.configuration.ConfigurationManager" />
+ 	<osgi:reference id="editManager" interface="net.sf.taverna.t2.workbench.edits.EditManager" />
+ 	<osgi:reference id="fileManager" interface="net.sf.taverna.t2.workbench.file.FileManager" />
+ 	<osgi:reference id="graphView" interface="net.sf.taverna.t2.workbench.views.graph.GraphViewComponent" />
+ 	<osgi:reference id="menuManager" interface="net.sf.taverna.t2.ui.menu.MenuManager" />
+ 	<osgi:reference id="selectionManager" interface="net.sf.taverna.t2.workbench.selection.SelectionManager" />
+ 	<osgi:reference id="serviceDescriptionRegistry" interface="net.sf.taverna.t2.servicedescriptions.ServiceDescriptionRegistry" />
+ 	<osgi:reference id="serviceTypeRegistry" interface="uk.org.taverna.commons.services.ServiceRegistry" />
+</beans>
