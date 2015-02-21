@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/osgi
+                      http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+	<bean id="ComponentLocalHealthChecker"
+		class="net.sf.taverna.t2.component.ComponentActivityLocalChecker" />
+	<bean id="ComponentUpgradeHealthChecker"
+		class="net.sf.taverna.t2.component.ComponentActivityUpgradeChecker">
+		<property name="componentUtil" ref="componentUtil" />
+	</bean>
+	<bean id="baseProfileLocator" class="net.sf.taverna.t2.component.profile.BaseProfileLocator">
+		<property name="appConfig" ref="app-config" />
+	</bean>
+
+	<bean id="componentActivityFactory" class="net.sf.taverna.t2.component.ComponentActivityFactory">
+		<property name="componentUtil" ref="componentUtil" />
+		<property name="dataflowCache" ref="cache" />
+		<property name="edits" ref="edits" />
+		<property name="annotationUtils" ref="annotationUtil" />
+	</bean>
+
+	<bean id="networkRegistry"
+		class="net.sf.taverna.t2.component.registry.standard.NewComponentRegistryFactory">
+		<property name="credentialManager" ref="credentialManager" />
+		<property name="componentUtil" ref="componentUtil" />
+		<property name="systemUtils" ref="systemUtil" />
+		<property name="annotationUtils" ref="annotationUtil" />
+	</bean>
+	<bean id="fileRegistry"
+		class="net.sf.taverna.t2.component.registry.local.LocalComponentRegistryFactory">
+		<property name="componentUtil" ref="componentUtil" />
+		<property name="systemUtils" ref="systemUtil" />
+	</bean>
+	<bean id="componentUtil" class="net.sf.taverna.t2.component.registry.ComponentUtil">
+		<property name="networkLocator" ref="networkRegistry" />
+		<property name="fileLocator" ref="fileRegistry" />
+		<property name="baseLocator" ref="baseProfileLocator" />
+	</bean>
+
+	<bean id="cache" class="net.sf.taverna.t2.component.registry.ComponentImplementationCache">
+		<property name="componentUtil" ref="componentUtil" />
+	</bean>
+	<bean id="systemUtil" class="net.sf.taverna.t2.component.utils.SystemUtils">
+		<property name="appConfig" ref="app-config" />
+		<property name="workflowBundler" ref="workflowBundleIO" />
+		<property name="compilers" ref="compilers" />
+	</bean>
+	<bean id="annotationUtil" class="net.sf.taverna.t2.component.utils.AnnotationUtils" />
+
+	<osgi:service ref="ComponentLocalHealthChecker"
+		interface="net.sf.taverna.t2.workflowmodel.health.HealthChecker" />
+	<osgi:service ref="ComponentUpgradeHealthChecker"
+		interface="net.sf.taverna.t2.workflowmodel.health.HealthChecker" />
+	<osgi:service ref="componentActivityFactory"
+		interface="net.sf.taverna.t2.workflowmodel.processor.activity.ActivityFactory" />
+	<osgi:service ref="componentUtil"
+		interface="net.sf.taverna.t2.component.api.ComponentFactory" />
+
+	<osgi:reference id="app-config"
+		interface="uk.org.taverna.configuration.app.ApplicationConfiguration" />
+	<osgi:reference id="credentialManager"
+		interface="net.sf.taverna.t2.security.credentialmanager.CredentialManager" />
+	<osgi:reference id="edits" interface="net.sf.taverna.t2.workflowmodel.Edits" />
+	<osgi:reference id="workflowBundleIO" interface="uk.org.taverna.scufl2.api.io.WorkflowBundleIO" />
+	<osgi:list id="compilers" interface="uk.org.taverna.platform.execution.api.WorkflowCompiler" />
+</beans>

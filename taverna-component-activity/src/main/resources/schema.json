@@ -1,0 +1,36 @@
+{
+	"$schema": "http://json-schema.org/draft-03/schema#",
+    "id": "http://ns.taverna.org.uk/2010/activity/component.schema.json",
+    "title": "Component activity configuration",
+    "type": "object",
+    "properties": {
+        "@context": {
+            "description": "JSON-LD context for interpreting the configuration as RDF",
+            "required": true,
+            "enum": ["http://ns.taverna.org.uk/2010/activity/component.context.json"]
+        },
+        "registryBase": {
+        	"type": "string",
+        	"required": true,
+        	"format": "uri",
+        	"description": "The URL of the registry containing the component family."
+        },
+        "familyName": {
+        	"type": "string",
+        	"required": true,
+        	"minLength": 1,
+        	"description": "The name of the component family that contains this component."
+        },
+        "componentName": {
+        	"type": "string",
+        	"required": true,
+        	"minLength": 1,
+        	"description": "The name of the component, unique within its family."
+        },
+        "componentVersion": {
+        	"type": "integer",
+        	"required": false,
+        	"description": "The version of the component."
+        }
+    }
+}
