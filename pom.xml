@@ -21,6 +21,7 @@
 	<modules>
     <module>taverna-component-activity</module>
     <module>taverna-component-activity-ui</module>
+    <module>taverna-component-repository</module>
   </modules>
   <repositories>
     <repository>
