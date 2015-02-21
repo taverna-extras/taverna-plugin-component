@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.apache.taverna.engine</groupId>
-		<artifactId>taverna-engine</artifactId>
-		<version>3.1.0-incubating-SNAPSHOT</version>
+    <groupId>org.apache.taverna.component</groupId>
+    <artifactId>taverna-plugin-component</artifactId>
+    <version>2.1.0-incubating-SNAPSHOT</version>
 	</parent>
 	<artifactId>taverna-component-repository-api</artifactId>
 	<packaging>bundle</packaging>
