@@ -17,10 +17,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.ComponentAction;
 import net.sf.taverna.t2.component.ui.panel.ComponentChoiceMessage;
@@ -34,6 +30,10 @@ import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
 import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.Version;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 

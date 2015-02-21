@@ -22,12 +22,12 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.Registry;
 
 /**
  * @author alanrw

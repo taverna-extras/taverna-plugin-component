@@ -1,6 +1,6 @@
 package net.sf.taverna.t2.component.ui.view;
 
-import static net.sf.taverna.t2.component.api.config.ComponentConfig.URI;
+import static org.apache.taverna.component.api.config.ComponentConfig.URI;
 
 import java.awt.Frame;
 import java.net.MalformedURLException;
@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.Action;
+
+import org.apache.taverna.component.api.ComponentFactory;
 
 import uk.org.taverna.commons.services.ServiceRegistry;
 import uk.org.taverna.scufl2.api.activity.Activity;
@@ -19,7 +21,6 @@ import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.actions.activity.HTMLBasedActivityContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;
-import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.ui.config.ComponentConfigureAction;
 
 public class ComponentActivityContextViewFactory implements

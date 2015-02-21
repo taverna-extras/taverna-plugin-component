@@ -6,8 +6,6 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.registry.ComponentImplementationCache;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.AnnotationUtils;
@@ -20,6 +18,8 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityOutputPort;
 import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityInputPortDefinitionBean;
 import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityOutputPortDefinitionBean;
 
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Version.ID;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.fasterxml.jackson.databind.JsonNode;

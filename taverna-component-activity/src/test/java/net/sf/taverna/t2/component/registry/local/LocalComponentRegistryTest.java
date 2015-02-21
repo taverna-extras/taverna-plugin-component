@@ -21,9 +21,9 @@
 package net.sf.taverna.t2.component.registry.local;
 
 import static org.junit.Assert.assertSame;
-import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.registry.ComponentRegistryTest;
 
+import org.apache.taverna.component.api.Registry;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

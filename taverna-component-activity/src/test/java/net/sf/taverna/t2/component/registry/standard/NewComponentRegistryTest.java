@@ -25,9 +25,9 @@ import static org.junit.Assert.assertSame;
 
 import java.net.URL;
 
-import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.ComponentRegistryTest;
 
+import org.apache.taverna.component.api.Version;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

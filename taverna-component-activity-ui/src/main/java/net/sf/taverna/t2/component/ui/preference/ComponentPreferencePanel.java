@@ -30,14 +30,14 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
 import net.sf.taverna.t2.lang.ui.ValidatingUserInputDialog;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Registry;
 
 public class ComponentPreferencePanel extends JPanel {
 	private static final String BAD_URL_MESSAGE = "Invalid URL";

@@ -31,11 +31,10 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.taverna.t2.component.api.profile.Profile;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
-
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.profile.Profile;
+import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
 import uk.org.taverna.scufl2.api.annotation.Annotation;
 import uk.org.taverna.scufl2.api.common.AbstractNamed;

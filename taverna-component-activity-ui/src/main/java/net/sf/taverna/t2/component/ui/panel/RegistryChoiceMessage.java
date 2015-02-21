@@ -3,7 +3,7 @@
  */
 package net.sf.taverna.t2.component.ui.panel;
 
-import net.sf.taverna.t2.component.api.Registry;
+import org.apache.taverna.component.api.Registry;
 
 /**
  * @author alanrw

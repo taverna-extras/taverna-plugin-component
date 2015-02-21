@@ -16,13 +16,6 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProvider;
 import net.sf.taverna.t2.workbench.file.AbstractDataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.DataflowInfo;
@@ -31,6 +24,13 @@ import net.sf.taverna.t2.workbench.file.FileType;
 import net.sf.taverna.t2.workbench.file.exceptions.SaveException;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import uk.org.taverna.scufl2.validation.ValidationReport;

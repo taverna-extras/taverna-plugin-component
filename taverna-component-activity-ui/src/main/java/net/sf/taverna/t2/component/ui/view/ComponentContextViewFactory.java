@@ -1,11 +1,12 @@
 package net.sf.taverna.t2.component.ui.view;
 
-import static net.sf.taverna.t2.component.api.config.ComponentConfig.URI;
+import static org.apache.taverna.component.api.config.ComponentConfig.URI;
 
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.Version;
+import org.apache.taverna.component.api.Version;
+
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;

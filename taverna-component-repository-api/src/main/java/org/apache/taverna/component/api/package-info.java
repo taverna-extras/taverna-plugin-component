@@ -3,4 +3,4 @@
  * @author Donal Fellows
  * @author David Withers
  */
-package net.sf.taverna.t2.component.api;
+package org.apache.taverna.component.api;

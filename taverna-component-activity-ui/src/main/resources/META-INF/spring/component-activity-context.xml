@@ -448,7 +448,7 @@
 	<osgi:service ref="componentActivityFactory"
 		interface="net.sf.taverna.t2.workflowmodel.processor.activity.ActivityFactory" />
 	<osgi:service ref="componentUtil"
-		interface="net.sf.taverna.t2.component.api.ComponentFactory" />
+		interface="org.apache.taverna.component.api.ComponentFactory" />
 
 	<osgi:reference id="app-config"
 		interface="uk.org.taverna.configuration.app.ApplicationConfiguration" />
@@ -461,7 +461,7 @@
 
 	<osgi:reference id="iconManager" interface="net.sf.taverna.t2.workbench.activityicons.ActivityIconManager" />
  	<osgi:reference id="colourManager" interface="net.sf.taverna.t2.workbench.configuration.colour.ColourManager" />
- 	<osgi:reference id="componentFactory" interface="net.sf.taverna.t2.component.api.ComponentFactory" />
+ 	<osgi:reference id="componentFactory" interface="org.apache.taverna.component.api.ComponentFactory" />
  	<osgi:reference id="configManager" interface="uk.org.taverna.configuration.ConfigurationManager" />
  	<osgi:reference id="editManager" interface="net.sf.taverna.t2.workbench.edits.EditManager" />
  	<osgi:reference id="fileManager" interface="net.sf.taverna.t2.workbench.file.FileManager" />

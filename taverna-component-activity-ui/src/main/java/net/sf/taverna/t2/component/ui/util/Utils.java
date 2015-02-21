@@ -8,13 +8,14 @@ import static net.sf.taverna.t2.component.ui.ComponentConstants.ACTIVITY_URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Version;
+
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.common.Named;
 import uk.org.taverna.scufl2.api.common.NamedSet;
 import uk.org.taverna.scufl2.api.configurations.Configuration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProvider;

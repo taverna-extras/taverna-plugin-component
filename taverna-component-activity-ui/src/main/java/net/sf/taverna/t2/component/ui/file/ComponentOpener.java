@@ -9,10 +9,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.workbench.file.AbstractDataflowPersistenceHandler;
 import net.sf.taverna.t2.workbench.file.DataflowInfo;
 import net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler;
@@ -20,6 +16,10 @@ import net.sf.taverna.t2.workbench.file.FileType;
 import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.Version.ID;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 

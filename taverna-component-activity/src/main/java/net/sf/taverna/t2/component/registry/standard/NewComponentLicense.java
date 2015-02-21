@@ -1,6 +1,7 @@
 package net.sf.taverna.t2.component.registry.standard;
 
-import net.sf.taverna.t2.component.api.License;
+import org.apache.taverna.component.api.License;
+
 import net.sf.taverna.t2.component.registry.api.LicenseType;
 
 class NewComponentLicense implements License {

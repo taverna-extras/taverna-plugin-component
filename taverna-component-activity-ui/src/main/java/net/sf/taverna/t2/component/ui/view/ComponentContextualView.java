@@ -12,7 +12,8 @@ import java.awt.Color;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 
-import net.sf.taverna.t2.component.api.Version;
+import org.apache.taverna.component.api.Version;
+
 import net.sf.taverna.t2.workbench.configuration.colour.ColourManager;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 

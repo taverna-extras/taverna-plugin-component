@@ -1,13 +1,16 @@
 package net.sf.taverna.t2.component.ui.view;
 
-import static net.sf.taverna.t2.component.api.config.ComponentConfig.URI;
 import static org.apache.log4j.Logger.getLogger;
+import static org.apache.taverna.component.api.config.ComponentConfig.URI;
 
 import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.profile.Profile;
 
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.core.Workflow;
@@ -17,9 +20,6 @@ import uk.org.taverna.scufl2.api.port.OutputActivityPort;
 import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
 import uk.org.taverna.scufl2.api.port.Port;
 import net.sf.taverna.t2.component.annotation.AbstractSemanticAnnotationContextualView;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;

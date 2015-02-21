@@ -10,13 +10,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Version;
 
 import uk.org.taverna.scufl2.api.configurations.Configuration;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;

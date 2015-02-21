@@ -52,15 +52,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.profile.ActivityProfile;
-import net.sf.taverna.t2.component.api.profile.ExceptionHandling;
-import net.sf.taverna.t2.component.api.profile.PortProfile;
-import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.profile.ActivityProfile;
+import org.apache.taverna.component.api.profile.ExceptionHandling;
+import org.apache.taverna.component.api.profile.PortProfile;
+import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
 import net.sf.taverna.t2.component.api.profile.doc.Activity;
 import net.sf.taverna.t2.component.api.profile.doc.Ontology;
@@ -79,7 +78,7 @@ import com.hp.hpl.jena.ontology.OntProperty;
  * @author David Withers
  */
 public class ComponentProfileImpl implements
-		net.sf.taverna.t2.component.api.profile.Profile {
+		org.apache.taverna.component.api.profile.Profile {
 	private static final Logger logger = getLogger(ComponentProfileImpl.class);
 	private static final Map<String, OntModel> ontologyModels = new HashMap<>();
 	private static final JAXBContext jaxbContext;
@@ -93,7 +92,7 @@ public class ComponentProfileImpl implements
 					"Failed to initialize profile deserialization engine", e);
 		}
 	}
-	private net.sf.taverna.t2.component.api.profile.Profile parent;
+	private org.apache.taverna.component.api.profile.Profile parent;
 	private Profile profileDoc;
 	private ExceptionHandling exceptionHandling;
 	private Registry parentRegistry = null;
@@ -292,7 +291,7 @@ public class ComponentProfileImpl implements
 		return o == null || o == this;
 	}
 
-	private synchronized net.sf.taverna.t2.component.api.profile.Profile parent()
+	private synchronized org.apache.taverna.component.api.profile.Profile parent()
 			throws ComponentException {
 		if (parent == null) {
 			try {
@@ -462,8 +461,8 @@ public class ComponentProfileImpl implements
 	}
 
 	@Override
-	public List<net.sf.taverna.t2.component.api.profile.ActivityProfile> getActivityProfiles() {
-		List<net.sf.taverna.t2.component.api.profile.ActivityProfile> activityProfiles = new ArrayList<>();
+	public List<org.apache.taverna.component.api.profile.ActivityProfile> getActivityProfiles() {
+		List<org.apache.taverna.component.api.profile.ActivityProfile> activityProfiles = new ArrayList<>();
 		try {
 			for (Activity activity : getProfileDocument().getComponent()
 					.getActivity())
@@ -593,7 +592,7 @@ public class ComponentProfileImpl implements
  * @author Donal Fellows
  */
 final class EmptyProfile implements
-		net.sf.taverna.t2.component.api.profile.Profile {
+		org.apache.taverna.component.api.profile.Profile {
 	@Override
 	public String getName() {
 		return "";
@@ -660,7 +659,7 @@ final class EmptyProfile implements
 	}
 
 	@Override
-	public List<net.sf.taverna.t2.component.api.profile.ActivityProfile> getActivityProfiles() {
+	public List<org.apache.taverna.component.api.profile.ActivityProfile> getActivityProfiles() {
 		return emptyList();
 	}
 

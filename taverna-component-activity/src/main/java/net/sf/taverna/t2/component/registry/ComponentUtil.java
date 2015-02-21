@@ -4,18 +4,18 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.profile.Profile;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.profile.BaseProfileLocator;
 import net.sf.taverna.t2.component.profile.ComponentProfileImpl;
 import net.sf.taverna.t2.component.registry.local.LocalComponentRegistryFactory;
 import net.sf.taverna.t2.component.registry.standard.NewComponentRegistryFactory;
 
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.profile.Profile;
 import org.springframework.beans.factory.annotation.Required;
 
 /**

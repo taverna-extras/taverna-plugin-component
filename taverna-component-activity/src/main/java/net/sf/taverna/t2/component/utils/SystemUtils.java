@@ -8,7 +8,8 @@ import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
-import net.sf.taverna.t2.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentException;
+
 import net.sf.taverna.t2.component.registry.api.Description;
 import net.sf.taverna.t2.workflowmodel.Dataflow;
 import uk.org.taverna.configuration.app.ApplicationConfiguration;

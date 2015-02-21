@@ -13,18 +13,18 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Set;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.SharingPolicy;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.profile.ComponentProfileImpl;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.License;
+import org.apache.taverna.component.api.SharingPolicy;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.profile.Profile;
 
 /**
  * A component registry implemented using the local file system. Note that the

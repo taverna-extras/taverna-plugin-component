@@ -28,8 +28,9 @@ import java.net.URL;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Version;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Version;
+
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
@@ -39,7 +40,7 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
  * @author David Withers
  */
 public abstract class Component implements
-		net.sf.taverna.t2.component.api.Component {
+		org.apache.taverna.component.api.Component {
 	private String name;
 	private String description;
 	private URL url;

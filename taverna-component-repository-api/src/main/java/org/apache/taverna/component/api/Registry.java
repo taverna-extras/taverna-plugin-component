@@ -1,10 +1,10 @@
-package net.sf.taverna.t2.component.api;
+package org.apache.taverna.component.api;
 
 import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.taverna.t2.component.api.profile.Profile;
+import org.apache.taverna.component.api.profile.Profile;
 
 public interface Registry {
 

@@ -1,12 +1,12 @@
 package net.sf.taverna.t2.component.ui.config;
 
 import static java.awt.event.ItemEvent.SELECTED;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.FAMILY_NAME;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 import static net.sf.taverna.t2.component.ui.util.Utils.SHORT_STRING;
 import static org.apache.log4j.Logger.getLogger;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
@@ -20,14 +20,14 @@ import java.util.SortedMap;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.panel.ComponentListCellRenderer;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ActivityConfigurationPanel;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Version;
 
 import uk.org.taverna.commons.services.ServiceRegistry;
 import uk.org.taverna.scufl2.api.activity.Activity;

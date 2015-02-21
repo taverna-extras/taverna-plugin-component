@@ -11,11 +11,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.IllegalFormatException;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.SharingPolicy;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.License;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.SharingPolicy;
+
 import net.sf.taverna.t2.component.registry.Component;
 import net.sf.taverna.t2.component.registry.ComponentVersion;
 import net.sf.taverna.t2.component.registry.api.ComponentType;

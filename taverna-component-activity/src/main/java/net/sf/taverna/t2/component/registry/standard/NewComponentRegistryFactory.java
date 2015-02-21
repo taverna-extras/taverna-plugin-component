@@ -7,13 +7,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.AnnotationUtils;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
 
+import org.apache.taverna.component.api.ComponentException;
 import org.springframework.beans.factory.annotation.Required;
 
 public class NewComponentRegistryFactory {

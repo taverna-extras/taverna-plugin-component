@@ -5,9 +5,9 @@ import static net.sf.taverna.t2.component.registry.Harness.componentRegistryUrl;
 
 import java.net.URL;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.profile.Profile;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.profile.Profile;
 
 class RegistrySupport {
 	static final String DEPLOYMENT = "http://aeon.cs.man.ac.uk:3006";

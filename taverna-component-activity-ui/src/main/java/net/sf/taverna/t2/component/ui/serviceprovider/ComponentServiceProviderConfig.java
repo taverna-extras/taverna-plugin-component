@@ -1,14 +1,15 @@
 package net.sf.taverna.t2.component.ui.serviceprovider;
 
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.FAMILY_NAME;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 import static net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceProvider.providerId;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 
 import java.net.URL;
 
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Version;
+
 import uk.org.taverna.scufl2.api.configurations.Configuration;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Version;
 
 public class ComponentServiceProviderConfig {
 	private URL registryBase;

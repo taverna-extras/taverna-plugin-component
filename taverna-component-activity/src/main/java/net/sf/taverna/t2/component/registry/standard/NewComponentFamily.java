@@ -4,10 +4,11 @@ import static net.sf.taverna.t2.component.utils.SystemUtils.getElementString;
 
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.profile.Profile;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.profile.Profile;
+
 import net.sf.taverna.t2.component.registry.ComponentFamily;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.api.ComponentFamilyType;

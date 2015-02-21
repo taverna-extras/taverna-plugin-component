@@ -11,7 +11,7 @@ import java.util.TreeMap;
 
 import javax.swing.table.DefaultTableModel;
 
-import net.sf.taverna.t2.component.api.Registry;
+import org.apache.taverna.component.api.Registry;
 
 /**
  * @author alanrw

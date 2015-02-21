@@ -39,7 +39,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
+import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
 
 import com.hp.hpl.jena.ontology.OntProperty;

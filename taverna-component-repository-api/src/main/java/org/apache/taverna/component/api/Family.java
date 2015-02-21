@@ -1,8 +1,9 @@
-package net.sf.taverna.t2.component.api;
+package org.apache.taverna.component.api;
 
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.profile.Profile;
+import org.apache.taverna.component.api.profile.Profile;
+
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 public interface Family extends NamedItem {

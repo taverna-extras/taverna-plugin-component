@@ -9,13 +9,13 @@ import static org.apache.log4j.Logger.getLogger;
 
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.visit.VisitKind;
 import net.sf.taverna.t2.visit.VisitReport;
 import net.sf.taverna.t2.workflowmodel.health.HealthChecker;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
 import org.springframework.beans.factory.annotation.Required;
 
 /**

@@ -1,11 +1,11 @@
 package net.sf.taverna.t2.component.ui;
 
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.FAMILY_NAME;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 import static net.sf.taverna.t2.component.ui.ComponentConstants.ACTIVITY_URI;
 import static org.apache.log4j.Logger.getLogger;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,14 +13,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.config.ComponentPropertyNames;
-import net.sf.taverna.t2.component.api.profile.ExceptionHandling;
-
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.config.ComponentPropertyNames;
+import org.apache.taverna.component.api.profile.ExceptionHandling;
 
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.configurations.Configuration;
@@ -112,7 +111,7 @@ public class ComponentActivityConfigurationBean extends Version.Identifier {
 					.getComponentProfile().getExceptionHandling();
 			if (eh != null)
 				result.outputs.add(makeOutputDefinition(1, ERROR_CHANNEL));
-		} catch (net.sf.taverna.t2.component.api.ComponentException e) {
+		} catch (org.apache.taverna.component.api.ComponentException e) {
 			logger.error("failed to get exception handling for family", e);
 		}
 		return result;

@@ -5,7 +5,8 @@ import static net.sf.taverna.t2.component.utils.SystemUtils.getElementString;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import net.sf.taverna.t2.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentException;
+
 import net.sf.taverna.t2.component.profile.BaseProfileLocator;
 import net.sf.taverna.t2.component.profile.ComponentProfileImpl;
 import net.sf.taverna.t2.component.registry.api.ComponentProfileType;

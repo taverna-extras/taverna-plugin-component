@@ -15,14 +15,6 @@ import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.SharingPolicy;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.Version.ID;
-import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.registry.ComponentRegistry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.registry.ComponentVersionIdentification;
@@ -44,6 +36,14 @@ import net.sf.taverna.t2.component.utils.SystemUtils;
 import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.License;
+import org.apache.taverna.component.api.SharingPolicy;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.Version.ID;
+import org.apache.taverna.component.api.profile.Profile;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 

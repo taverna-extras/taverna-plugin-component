@@ -26,16 +26,16 @@ import static org.apache.log4j.Logger.getLogger;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.profile.Profile;
-import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.workbench.file.FileManager;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.profile.Profile;
+import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
 import uk.org.taverna.scufl2.api.common.AbstractNamed;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;

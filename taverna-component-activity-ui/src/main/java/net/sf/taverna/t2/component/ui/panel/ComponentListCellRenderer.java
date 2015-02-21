@@ -7,10 +7,10 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.Version;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.Version;
 
 /**
  * @author alanrw

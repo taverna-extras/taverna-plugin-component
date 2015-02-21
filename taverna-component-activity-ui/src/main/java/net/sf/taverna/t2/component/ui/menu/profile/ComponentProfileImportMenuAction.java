@@ -9,7 +9,8 @@ import java.net.URI;
 
 import javax.swing.Action;
 
-import net.sf.taverna.t2.component.api.ComponentFactory;
+import org.apache.taverna.component.api.ComponentFactory;
+
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.ui.menu.AbstractMenuAction;

@@ -25,11 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.profile.Profile;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.profile.Profile;
+
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
@@ -39,7 +40,7 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
  * @author David Withers
  */
 public abstract class ComponentFamily implements
-		net.sf.taverna.t2.component.api.Family {
+		org.apache.taverna.component.api.Family {
 	private Registry parentRegistry;
 	private String name;
 	private String description;

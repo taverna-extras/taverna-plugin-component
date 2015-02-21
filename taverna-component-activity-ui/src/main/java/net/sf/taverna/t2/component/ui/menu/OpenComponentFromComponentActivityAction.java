@@ -8,8 +8,6 @@ import static org.apache.log4j.Logger.getLogger;
 import java.awt.event.ActionEvent;
 import java.net.MalformedURLException;
 
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.ComponentAction;
 import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
@@ -19,6 +17,8 @@ import net.sf.taverna.t2.workbench.file.exceptions.OpenException;
 import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Version;
 
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;

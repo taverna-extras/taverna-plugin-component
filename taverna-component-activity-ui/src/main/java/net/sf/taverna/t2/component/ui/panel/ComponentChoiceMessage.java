@@ -3,8 +3,8 @@
  */
 package net.sf.taverna.t2.component.ui.panel;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.Family;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.Family;
 
 /**
  * @author alanrw

@@ -24,11 +24,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.SharingPolicy;
-import net.sf.taverna.t2.component.api.profile.Profile;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.panel.LicenseChooserPanel;
 import net.sf.taverna.t2.component.ui.panel.ProfileChooserPanel;
@@ -37,6 +32,11 @@ import net.sf.taverna.t2.component.ui.panel.SharingPolicyChooserPanel;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.License;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.SharingPolicy;
+import org.apache.taverna.component.api.profile.Profile;
 
 /**
  * @author alanrw

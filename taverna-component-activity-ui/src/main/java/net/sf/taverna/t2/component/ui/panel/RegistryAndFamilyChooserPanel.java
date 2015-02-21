@@ -13,13 +13,13 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Registry;
 
 /**
  * @author alanrw

@@ -12,12 +12,12 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.menu.component.ComponentCreatorSupport.CopiedProcessor;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.workbench.selection.SelectionManager;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.Version;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

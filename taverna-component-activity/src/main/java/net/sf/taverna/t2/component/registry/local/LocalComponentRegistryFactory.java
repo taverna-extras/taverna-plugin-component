@@ -6,11 +6,11 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Registry;
 import net.sf.taverna.t2.component.registry.ComponentUtil;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Registry;
 import org.springframework.beans.factory.annotation.Required;
 
 public class LocalComponentRegistryFactory {

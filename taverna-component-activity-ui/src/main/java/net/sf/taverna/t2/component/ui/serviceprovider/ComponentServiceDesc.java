@@ -1,12 +1,12 @@
 package net.sf.taverna.t2.component.ui.serviceprovider;
 
 import static java.util.Arrays.asList;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.FAMILY_NAME;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 import static net.sf.taverna.t2.component.ui.ComponentConstants.ACTIVITY_URI;
 import static org.apache.log4j.Logger.getLogger;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 
 import java.net.URI;
 import java.net.URL;
@@ -15,14 +15,14 @@ import java.util.List;
 
 import javax.swing.Icon;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.Version.ID;
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.Version.ID;
 
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.configurations.Configuration;

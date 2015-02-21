@@ -18,11 +18,10 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.ComponentException;
-
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Registry;
 
 import uk.org.taverna.configuration.AbstractConfigurable;
 import uk.org.taverna.configuration.ConfigurationManager;

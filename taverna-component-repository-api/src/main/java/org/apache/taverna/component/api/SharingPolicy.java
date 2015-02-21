@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.sf.taverna.t2.component.api;
+package org.apache.taverna.component.api;
 
 /**
  * @author alanrw

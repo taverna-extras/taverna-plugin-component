@@ -26,11 +26,10 @@ import static org.junit.Assert.assertNull;
 
 import java.net.URL;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.profile.Profile;
-import net.sf.taverna.t2.component.api.Version;
-
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.profile.Profile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

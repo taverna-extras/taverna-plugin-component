@@ -1,4 +1,4 @@
-package net.sf.taverna.t2.component.api.config;
+package org.apache.taverna.component.api.config;
 
 /**
  * The names of properties used in JSON configurations associated with

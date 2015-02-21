@@ -5,17 +5,17 @@ package net.sf.taverna.t2.component.registry;
 
 import java.net.URL;
 
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.Version.ID;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.Version.ID;
 
 /**
  * @author alanrw
  * 
  */
 public class ComponentVersionIdentification implements
-		net.sf.taverna.t2.component.api.Version.ID {
+		org.apache.taverna.component.api.Version.ID {
 	private static final long serialVersionUID = 1768548650702925916L;
 	private URL registryBase;
 	private String familyName;
@@ -32,7 +32,7 @@ public class ComponentVersionIdentification implements
 	}
 
 	public ComponentVersionIdentification(Registry registry, Family family,
-			net.sf.taverna.t2.component.api.Component component, Integer version) {
+			org.apache.taverna.component.api.Component component, Integer version) {
 		this(registry.getRegistryBase(), family.getName(), component.getName(), version);
 	}
 
@@ -190,7 +190,7 @@ public class ComponentVersionIdentification implements
 	}
 
 	@Override
-	public boolean mostlyEqualTo(net.sf.taverna.t2.component.api.Component c) {
+	public boolean mostlyEqualTo(org.apache.taverna.component.api.Component c) {
 		return mostlyEqualTo(new ComponentVersionIdentification(c.getRegistry(), c.getFamily(), c, 0));
 	}
 }

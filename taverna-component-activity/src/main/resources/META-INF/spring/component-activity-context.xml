@@ -58,7 +58,7 @@
 	<osgi:service ref="componentActivityFactory"
 		interface="net.sf.taverna.t2.workflowmodel.processor.activity.ActivityFactory" />
 	<osgi:service ref="componentUtil"
-		interface="net.sf.taverna.t2.component.api.ComponentFactory" />
+		interface="org.apache.taverna.component.api.ComponentFactory" />
 
 	<osgi:reference id="app-config"
 		interface="uk.org.taverna.configuration.app.ApplicationConfiguration" />

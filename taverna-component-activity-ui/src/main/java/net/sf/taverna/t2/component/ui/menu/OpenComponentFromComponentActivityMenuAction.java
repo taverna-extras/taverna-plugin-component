@@ -7,9 +7,10 @@ import java.net.URI;
 
 import javax.swing.Action;
 
+import org.apache.taverna.component.api.ComponentFactory;
+
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.core.Processor;
-import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.ui.serviceprovider.ComponentServiceIcon;
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
 import net.sf.taverna.t2.workbench.file.FileManager;

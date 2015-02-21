@@ -3,8 +3,9 @@
  */
 package net.sf.taverna.t2.component.registry;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentException;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.ComponentException;
+
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
@@ -12,7 +13,7 @@ import uk.org.taverna.scufl2.api.container.WorkflowBundle;
  * 
  */
 public abstract class ComponentVersion implements
-		net.sf.taverna.t2.component.api.Version {
+		org.apache.taverna.component.api.Version {
 	private Integer versionNumber;
 	private String description;
 	private Component component;

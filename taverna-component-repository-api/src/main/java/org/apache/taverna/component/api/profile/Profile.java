@@ -1,11 +1,11 @@
-package net.sf.taverna.t2.component.api.profile;
+package org.apache.taverna.component.api.profile;
 
 import java.util.List;
 import java.util.Map;
 
-import net.sf.taverna.t2.component.api.NamedItem;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.NamedItem;
+import org.apache.taverna.component.api.Registry;
 
 import com.hp.hpl.jena.ontology.OntModel;
 

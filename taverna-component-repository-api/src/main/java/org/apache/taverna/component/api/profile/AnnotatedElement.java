@@ -1,8 +1,8 @@
-package net.sf.taverna.t2.component.api.profile;
+package org.apache.taverna.component.api.profile;
 
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.ComponentException;
+import org.apache.taverna.component.api.ComponentException;
 
 public interface AnnotatedElement {
 	List<SemanticAnnotationProfile> getSemanticAnnotations()

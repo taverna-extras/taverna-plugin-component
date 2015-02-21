@@ -12,14 +12,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.registry.Component;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.Version;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 

@@ -9,10 +9,9 @@ import static org.apache.log4j.Logger.getLogger;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Version;
-
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Version;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 

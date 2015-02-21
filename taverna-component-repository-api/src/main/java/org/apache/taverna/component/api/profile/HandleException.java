@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.sf.taverna.t2.component.api.profile;
+package org.apache.taverna.component.api.profile;
 
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.compile;

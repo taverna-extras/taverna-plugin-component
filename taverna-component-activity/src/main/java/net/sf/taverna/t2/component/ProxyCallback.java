@@ -18,9 +18,6 @@ import java.util.Set;
 
 import javax.xml.ws.Holder;
 
-import net.sf.taverna.t2.component.api.profile.ExceptionHandling;
-import net.sf.taverna.t2.component.api.profile.ExceptionReplacement;
-import net.sf.taverna.t2.component.api.profile.HandleException;
 import net.sf.taverna.t2.invocation.InvocationContext;
 import net.sf.taverna.t2.reference.ErrorDocument;
 import net.sf.taverna.t2.reference.ErrorDocumentService;
@@ -32,6 +29,9 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCa
 import net.sf.taverna.t2.workflowmodel.processor.dispatch.events.DispatchErrorType;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.profile.ExceptionHandling;
+import org.apache.taverna.component.api.profile.ExceptionReplacement;
+import org.apache.taverna.component.api.profile.HandleException;
 
 /**
  * @author alanrw

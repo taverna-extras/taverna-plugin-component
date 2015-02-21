@@ -23,7 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
 
-import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
+import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.Statement;

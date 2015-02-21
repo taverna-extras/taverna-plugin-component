@@ -29,10 +29,9 @@ import static org.junit.Assert.assertTrue;
 import java.net.URL;
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.profile.Profile;
-
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.profile.Profile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

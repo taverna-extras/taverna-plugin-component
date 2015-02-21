@@ -5,8 +5,9 @@ import static net.sf.taverna.t2.component.ui.ComponentConstants.ACTIVITY_URI;
 
 import javax.swing.Action;
 
+import org.apache.taverna.component.api.ComponentFactory;
+
 import uk.org.taverna.commons.services.ServiceRegistry;
-import net.sf.taverna.t2.component.api.ComponentFactory;
 import net.sf.taverna.t2.component.ui.config.ComponentConfigureAction;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionRegistry;
 import net.sf.taverna.t2.workbench.activityicons.ActivityIconManager;

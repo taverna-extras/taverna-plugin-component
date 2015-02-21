@@ -2,7 +2,8 @@ package net.sf.taverna.t2.component.ui.menu;
 
 import java.net.URI;
 
-import net.sf.taverna.t2.component.api.config.ComponentConfig;
+import org.apache.taverna.component.api.config.ComponentConfig;
+
 import net.sf.taverna.t2.ui.menu.AbstractContextualMenuAction;
 import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.core.Processor;

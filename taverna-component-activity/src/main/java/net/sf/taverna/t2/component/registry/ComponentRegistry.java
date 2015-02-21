@@ -29,12 +29,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.taverna.t2.component.api.ComponentException;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.License;
-import net.sf.taverna.t2.component.api.SharingPolicy;
-import net.sf.taverna.t2.component.api.Version;
-import net.sf.taverna.t2.component.api.profile.Profile;
+import org.apache.taverna.component.api.ComponentException;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.License;
+import org.apache.taverna.component.api.SharingPolicy;
+import org.apache.taverna.component.api.Version;
+import org.apache.taverna.component.api.profile.Profile;
 
 /**
  * A ComponentRegistry contains ComponentFamilies and ComponentProfiles.
@@ -42,7 +42,7 @@ import net.sf.taverna.t2.component.api.profile.Profile;
  * @author David Withers
  */
 public abstract class ComponentRegistry implements
-		net.sf.taverna.t2.component.api.Registry {
+		org.apache.taverna.component.api.Registry {
 	protected Map<String, Family> familyCache = new HashMap<>();
 	protected List<Profile> profileCache = new ArrayList<>();
 	protected List<SharingPolicy> permissionCache = new ArrayList<>();

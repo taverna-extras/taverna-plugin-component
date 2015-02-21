@@ -10,9 +10,9 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static net.sf.taverna.t2.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
 import static net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean.ignorableNames;
 import static net.sf.taverna.t2.component.ui.util.Utils.uniqueName;
+import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
 import static uk.org.taverna.scufl2.api.common.Scufl2Tools.NESTED_WORKFLOW;
 
 import java.awt.BorderLayout;
@@ -27,11 +27,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-import net.sf.taverna.t2.component.api.Component;
-import net.sf.taverna.t2.component.api.ComponentFactory;
-import net.sf.taverna.t2.component.api.Family;
-import net.sf.taverna.t2.component.api.Registry;
-import net.sf.taverna.t2.component.api.Version;
+import org.apache.taverna.component.api.Component;
+import org.apache.taverna.component.api.ComponentFactory;
+import org.apache.taverna.component.api.Family;
+import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.component.api.Version;
+
 import net.sf.taverna.t2.component.preference.ComponentPreference;
 import net.sf.taverna.t2.component.ui.ComponentActivityConfigurationBean;
 import net.sf.taverna.t2.component.ui.panel.ComponentChooserPanel;

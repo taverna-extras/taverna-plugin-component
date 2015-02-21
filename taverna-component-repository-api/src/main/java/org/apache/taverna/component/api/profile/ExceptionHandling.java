@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.sf.taverna.t2.component.api.profile;
+package org.apache.taverna.component.api.profile;
 
 import java.util.ArrayList;
 import java.util.List;

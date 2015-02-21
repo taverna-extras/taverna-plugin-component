@@ -1,8 +1,8 @@
-package net.sf.taverna.t2.component.api;
+package org.apache.taverna.component.api;
 
 import java.net.URL;
 
-import net.sf.taverna.t2.component.api.profile.Profile;
+import org.apache.taverna.component.api.profile.Profile;
 
 public interface ComponentFactory {
 	public Registry getRegistry(URL registryBase) throws ComponentException;

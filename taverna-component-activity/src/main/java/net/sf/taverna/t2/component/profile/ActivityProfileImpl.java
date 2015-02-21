@@ -23,8 +23,9 @@ package net.sf.taverna.t2.component.profile;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.taverna.t2.component.api.profile.ActivityProfile;
-import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
+import org.apache.taverna.component.api.profile.ActivityProfile;
+import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+
 import net.sf.taverna.t2.component.api.profile.doc.Activity;
 import net.sf.taverna.t2.component.api.profile.doc.SemanticAnnotation;
 

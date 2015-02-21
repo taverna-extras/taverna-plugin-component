@@ -12,11 +12,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.registry.ComponentVersion;
 import net.sf.taverna.t2.component.utils.SystemUtils;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 

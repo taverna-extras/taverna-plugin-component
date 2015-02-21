@@ -47,8 +47,9 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
+import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+
 import net.sf.taverna.t2.component.localworld.LocalWorld;
-import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
 import net.sf.taverna.t2.lang.ui.DeselectingButton;
 
 import com.hp.hpl.jena.ontology.Individual;

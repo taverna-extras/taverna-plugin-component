@@ -3,7 +3,9 @@ package net.sf.taverna.t2.component.registry.standard;
 import static java.lang.System.identityHashCode;
 import static net.sf.taverna.t2.component.registry.api.Privilege.DOWNLOAD;
 import static net.sf.taverna.t2.component.registry.api.Privilege.VIEW;
-import net.sf.taverna.t2.component.api.SharingPolicy;
+
+import org.apache.taverna.component.api.SharingPolicy;
+
 import net.sf.taverna.t2.component.registry.api.Permissions;
 import net.sf.taverna.t2.component.registry.api.Permissions.Permission;
 

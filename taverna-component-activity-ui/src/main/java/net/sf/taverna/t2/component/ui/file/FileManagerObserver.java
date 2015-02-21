@@ -11,7 +11,6 @@ import java.awt.Insets;
 
 import javax.swing.border.Border;
 
-import net.sf.taverna.t2.component.api.Version;
 import net.sf.taverna.t2.component.ui.util.Utils;
 import net.sf.taverna.t2.lang.observer.Observable;
 import net.sf.taverna.t2.lang.observer.Observer;
@@ -23,6 +22,7 @@ import net.sf.taverna.t2.workbench.models.graph.svg.SVGGraphController;
 import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
 
 import org.apache.batik.swing.JSVGCanvas;
+import org.apache.taverna.component.api.Version;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 

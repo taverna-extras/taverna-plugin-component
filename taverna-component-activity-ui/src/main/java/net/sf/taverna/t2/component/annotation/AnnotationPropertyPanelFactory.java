@@ -27,7 +27,7 @@ import static net.sf.taverna.t2.component.annotation.SemanticAnnotationUtils.get
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
 
-import net.sf.taverna.t2.component.api.profile.SemanticAnnotationProfile;
+import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.RDFNode;

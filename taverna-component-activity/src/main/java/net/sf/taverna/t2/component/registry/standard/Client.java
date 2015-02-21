@@ -38,7 +38,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import net.sf.taverna.t2.component.api.ComponentException;
 import net.sf.taverna.t2.component.registry.standard.Client.MyExperimentConnector.ServerResponse;
 import net.sf.taverna.t2.component.registry.standard.annotations.Unused;
 import net.sf.taverna.t2.security.credentialmanager.CMException;
@@ -47,6 +46,7 @@ import net.sf.taverna.t2.security.credentialmanager.UsernamePassword;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.taverna.component.api.ComponentException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;

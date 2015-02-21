@@ -3,7 +3,8 @@ package net.sf.taverna.t2.component.ui.config;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 
-import net.sf.taverna.t2.component.api.ComponentFactory;
+import org.apache.taverna.component.api.ComponentFactory;
+
 import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionRegistry;
 import net.sf.taverna.t2.workbench.activityicons.ActivityIconManager;
 import net.sf.taverna.t2.workbench.edits.EditManager;
