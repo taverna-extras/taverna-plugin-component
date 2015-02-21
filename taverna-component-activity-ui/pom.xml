@@ -8,7 +8,7 @@
 		<version>2.1.0-incubating-SNAPSHOT</version>
 	</parent>
 	<artifactId>component-activity-ui</artifactId>
-	<name>Taverna 3 Component activity UI bindings</name>
+	<name>Apache Taverna Component Workbench integration</name>
 	<dependencies>
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
