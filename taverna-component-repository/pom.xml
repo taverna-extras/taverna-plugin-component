@@ -3,53 +3,27 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>net.sf.taverna</groupId>
-		<artifactId>taverna-parent</artifactId>
-		<version>3.0.1-SNAPSHOT</version>
+		<groupId>org.apache.taverna.engine</groupId>
+		<artifactId>taverna-engine</artifactId>
+		<version>3.1.0-incubating-SNAPSHOT</version>
 	</parent>
-	<groupId>net.sf.taverna.component</groupId>
-	<artifactId>component-repository</artifactId>
-	<version>${t2.activities.version}</version>
-	<name>Taverna Component Repository API</name>
+	<artifactId>taverna-component-repository-api</artifactId>
 	<packaging>bundle</packaging>
-	<scm>
-		<connection>scm:git:https://github.com/taverna/taverna-component-repository.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/taverna/taverna-component-repository.git</developerConnection>
-		<url>https://github.com/taverna/taverna-component-repository/</url>
-		<tag>HEAD</tag>
-	</scm>
+	<name>Apache Taverna Component Repository API</name>
+	<inceptionYear>2014</inceptionYear>
 	<dependencies>
 		<dependency>
-			<groupId>uk.org.taverna.scufl2</groupId>
-			<artifactId>scufl2-api</artifactId>
-			<version>${scufl2.version}</version>
+			<groupId>org.apache.taverna.language</groupId>
+			<artifactId>taverna-scufl2-api</artifactId>
+			<version>${taverna.language.version}</version>
 		</dependency>
 		<dependency>
+			<!-- FIXME: Use jena-osgi bundle -->
 			<groupId>org.apache.clerezza.ext</groupId>
 			<artifactId>com.hp.hpl.jena</artifactId>
 			<version>0.6-incubating</version>
 		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<releases />
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>mygrid-repository</id>
-			<name>myGrid Repository</name>
-			<url>http://www.mygrid.org.uk/maven/repository</url>
-		</repository>
-		<repository>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots />
-			<id>mygrid-snapshot-repository</id>
-			<name>myGrid Snapshot Repository</name>
-			<url>http://www.mygrid.org.uk/maven/snapshot-repository</url>
-		</repository>
-	</repositories>
 	<build>
 		<plugins>
 			<plugin>
@@ -58,7 +32,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Export-Package>net.sf.taverna.t2.component.api,net.sf.taverna.t2.component.api.profile,net.sf.taverna.t2.component.api.profile.doc</Export-Package>
+						<Export-Package>org.apache.taverna.component.api,org.apache.taverna.component.api.profile,org.apache.taverna.component.api.profile.doc</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -79,5 +53,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<inceptionYear>2014</inceptionYear>
 </project>
