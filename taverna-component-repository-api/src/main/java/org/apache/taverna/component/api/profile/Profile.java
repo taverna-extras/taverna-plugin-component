@@ -15,7 +15,7 @@ public interface Profile extends NamedItem, AnnotatedElement {
 
 	String getXML() throws ComponentException;
 
-	net.sf.taverna.t2.component.api.profile.doc.Profile getProfileDocument()
+	org.apache.taverna.component.api.profile.doc.Profile getProfileDocument()
 			throws ComponentException;
 
 	String getId();

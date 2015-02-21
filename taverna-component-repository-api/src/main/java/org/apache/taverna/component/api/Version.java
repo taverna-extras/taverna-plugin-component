@@ -3,7 +3,7 @@ package org.apache.taverna.component.api;
 import java.io.Serializable;
 import java.net.URL;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 public interface Version {
 	/** @return The version number of this version */

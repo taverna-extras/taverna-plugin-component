@@ -3,8 +3,7 @@ package org.apache.taverna.component.api;
 import java.util.List;
 
 import org.apache.taverna.component.api.profile.Profile;
-
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 public interface Family extends NamedItem {
 	/**

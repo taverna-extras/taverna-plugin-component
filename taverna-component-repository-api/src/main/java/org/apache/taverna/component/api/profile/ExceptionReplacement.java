@@ -3,7 +3,7 @@
  */
 package org.apache.taverna.component.api.profile;
 
-import net.sf.taverna.t2.component.api.profile.doc.Replacement;
+import org.apache.taverna.component.api.profile.doc.Replacement;
 
 /**
  * @author alanrw

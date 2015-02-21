@@ -3,7 +3,7 @@ package org.apache.taverna.component.api;
 import java.net.URL;
 import java.util.SortedMap;
 
-import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 /**
  * The abstract interface supported by a component.

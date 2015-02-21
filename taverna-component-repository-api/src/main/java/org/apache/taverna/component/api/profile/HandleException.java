@@ -18,7 +18,7 @@ public class HandleException {
 	private final boolean pruneStack;
 
 	public HandleException(
-			net.sf.taverna.t2.component.api.profile.doc.HandleException proxied) {
+			org.apache.taverna.component.api.profile.doc.HandleException proxied) {
 		pruneStack = proxied.getPruneStack() != null;
 		pattern = compile(proxied.getPattern(), DOTALL);
 		if (proxied.getReplacement() != null)

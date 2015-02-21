@@ -15,8 +15,8 @@ public class ExceptionHandling {
 	private final List<HandleException> remapped = new ArrayList<HandleException>();
 
 	public ExceptionHandling(
-			net.sf.taverna.t2.component.api.profile.doc.ExceptionHandling proxied) {
-		for (net.sf.taverna.t2.component.api.profile.doc.HandleException he : proxied
+			org.apache.taverna.component.api.profile.doc.ExceptionHandling proxied) {
+		for (org.apache.taverna.component.api.profile.doc.HandleException he : proxied
 				.getHandleException())
 			remapped.add(new HandleException(he));
 		this.failLists = proxied.getFailLists() != null;
