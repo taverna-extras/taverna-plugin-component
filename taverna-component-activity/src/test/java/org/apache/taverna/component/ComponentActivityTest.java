@@ -1,8 +1,8 @@
 package org.apache.taverna.component;
 
-import org.apache.taverna.component.ComponentActivity;
-import org.apache.taverna.component.ComponentActivityConfigurationBean;
-import org.apache.taverna.component.ComponentActivityFactory;
+import org.apache.taverna.component.activity.ComponentActivity;
+import org.apache.taverna.component.activity.ComponentActivityConfigurationBean;
+import org.apache.taverna.component.activity.ComponentActivityFactory;
 
 
 public class ComponentActivityTest {

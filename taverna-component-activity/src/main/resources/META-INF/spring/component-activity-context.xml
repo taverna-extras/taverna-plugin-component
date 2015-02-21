@@ -7,16 +7,16 @@
                       http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
 	<bean id="ComponentLocalHealthChecker"
-		class="org.apache.taverna.component.ComponentActivityLocalChecker" />
+		class="org.apache.taverna.component.activity.ComponentActivityLocalChecker" />
 	<bean id="ComponentUpgradeHealthChecker"
-		class="org.apache.taverna.component.ComponentActivityUpgradeChecker">
+		class="org.apache.taverna.component.activity.ComponentActivityUpgradeChecker">
 		<property name="componentUtil" ref="componentUtil" />
 	</bean>
 	<bean id="baseProfileLocator" class="org.apache.taverna.component.profile.BaseProfileLocator">
 		<property name="appConfig" ref="app-config" />
 	</bean>
 
-	<bean id="componentActivityFactory" class="org.apache.taverna.component.ComponentActivityFactory">
+	<bean id="componentActivityFactory" class="org.apache.taverna.component.activity.ComponentActivityFactory">
 		<property name="componentUtil" ref="componentUtil" />
 		<property name="dataflowCache" ref="cache" />
 		<property name="edits" ref="edits" />

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.apache.taverna.component;
+package org.apache.taverna.component.activity;
 
 /**
  * @author alanrw

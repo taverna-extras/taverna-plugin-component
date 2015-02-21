@@ -1,4 +1,4 @@
-package org.apache.taverna.component;
+package org.apache.taverna.component.activity;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

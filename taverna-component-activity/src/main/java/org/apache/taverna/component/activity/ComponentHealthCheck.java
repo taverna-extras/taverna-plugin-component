@@ -1,4 +1,4 @@
-package org.apache.taverna.component;
+package org.apache.taverna.component.activity;
 
 import net.sf.taverna.t2.visit.VisitKind;
 import net.sf.taverna.t2.visit.Visitor;

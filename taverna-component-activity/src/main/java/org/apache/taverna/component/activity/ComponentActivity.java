@@ -1,4 +1,4 @@
-package org.apache.taverna.component;
+package org.apache.taverna.component.activity;
 
 import static net.sf.taverna.t2.workflowmodel.utils.AnnotationTools.getAnnotationString;
 import static net.sf.taverna.t2.workflowmodel.utils.AnnotationTools.setAnnotationString;

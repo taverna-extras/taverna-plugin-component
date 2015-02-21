@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.apache.taverna.component;
+package org.apache.taverna.component.activity;
 
 import static net.sf.taverna.t2.reference.T2ReferenceType.ErrorDocument;
 import static net.sf.taverna.t2.reference.T2ReferenceType.IdentifiedList;

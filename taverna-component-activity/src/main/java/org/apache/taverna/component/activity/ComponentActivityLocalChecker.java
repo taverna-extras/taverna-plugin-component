@@ -1,7 +1,7 @@
-package org.apache.taverna.component;
+package org.apache.taverna.component.activity;
 
 import static net.sf.taverna.t2.visit.VisitReport.Status.WARNING;
-import static org.apache.taverna.component.ComponentHealthCheck.NON_SHAREABLE;
+import static org.apache.taverna.component.activity.ComponentHealthCheck.NON_SHAREABLE;
 
 import java.util.List;
 

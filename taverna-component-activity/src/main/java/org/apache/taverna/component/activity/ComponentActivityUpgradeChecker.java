@@ -1,11 +1,11 @@
 /**
  * 
  */
-package org.apache.taverna.component;
+package org.apache.taverna.component.activity;
 
 import static net.sf.taverna.t2.visit.VisitReport.Status.WARNING;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.ComponentHealthCheck.OUT_OF_DATE;
+import static org.apache.taverna.component.activity.ComponentHealthCheck.OUT_OF_DATE;
 
 import java.util.List;
 

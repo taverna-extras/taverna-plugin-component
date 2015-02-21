@@ -1,4 +1,4 @@
-package org.apache.taverna.component;
+package org.apache.taverna.component.activity;
 
 import static org.apache.log4j.Logger.getLogger;
 import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
