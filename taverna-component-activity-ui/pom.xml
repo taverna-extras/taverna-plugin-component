@@ -3,64 +3,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>net.sf.taverna</groupId>
-		<artifactId>taverna-parent</artifactId>
-		<version>3.0.1-SNAPSHOT</version>
+		<groupId>org.apache.taverna.component</groupId>
+		<artifactId>taverna-plugin-component</artifactId>
+		<version>2.1.0-incubating-SNAPSHOT</version>
 	</parent>
-	<groupId>net.sf.taverna.t2.ui-activities</groupId>
 	<artifactId>component-activity-ui</artifactId>
 	<name>Taverna 3 Component activity UI bindings</name>
-	<version>2.0-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
-			<groupId>net.sf.taverna.component</groupId>
-			<artifactId>component-repository</artifactId>
-			<version>${t2.activities.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-api</groupId>
-			<artifactId>activity-palette-api</artifactId>
-			<version>${t2.ui.api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-api</groupId>
-			<artifactId>menu-api</artifactId>
-			<version>${t2.ui.api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-api</groupId>
-			<artifactId>report-api</artifactId>
-			<version>${t2.ui.api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-api</groupId>
-			<artifactId>contextual-views-api</artifactId>
-			<version>${t2.ui.api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>uk.org.taverna.scufl2</groupId>
-			<artifactId>scufl2-validation-structural</artifactId>
-			<version>${scufl2.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-components</groupId>
-			<artifactId>graph-model</artifactId>
-			<version>${t2.ui.components.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-components</groupId>
-			<artifactId>graph-view</artifactId>
-			<version>${t2.ui.components.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.ui-activities</groupId>
-			<artifactId>dataflow-activity-ui</artifactId>
-			<version>${t2.ui.activities.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.taverna.t2.lang</groupId>
-			<artifactId>ui</artifactId>
-			<version>${t2.lang.version}</version>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>taverna-component-repository-api</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -68,35 +21,56 @@
 			<version>${commons.lang.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>uk.org.taverna.scufl2</groupId>
-			<artifactId>scufl2-validation-correctness</artifactId>
-			<version>${scufl2.version}</version>
+			<groupId>org.apache.taverna.language</groupId>
+			<artifactId>taverna-scufl2-validation-structural</artifactId>
+			<version>${taverna.language.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.taverna.language</groupId>
+			<artifactId>taverna-scufl2-validation-correctness</artifactId>
+			<version>${taverna.language.version}</version>
+		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>org.apache.taverna.workbench</groupId>
+			<artifactId>taverna-activity-palette-api</artifactId>
+			<version>${taverna.workbench.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taverna.workbench</groupId>
+			<artifactId>taverna-menu-api</artifactId>
+			<version>${taverna.workbench.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taverna.workbench</groupId>
+			<artifactId>taverna-report-api</artifactId>
+			<version>${taverna.workbench.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taverna.workbench</groupId>
+			<artifactId>taverna-contextual-views-api</artifactId>
+			<version>${taverna.workbench.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taverna.workbench</groupId>
+			<artifactId>taverna-graph-model</artifactId>
+			<version>${taverna.workbench.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taverna.workbench</groupId>
+			<artifactId>graph-view</artifactId>
+			<version>${t2.ui.components.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taverna.workbench</groupId>
+			<artifactId>dataflow-activity-ui</artifactId>
+			<version>${t2.ui.activities.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taverna.workbench</groupId>
+			<artifactId>ui</artifactId>
+			<version>${t2.lang.version}</version>
+		</dependency>
+		 -->		
 	</dependencies>
-	<repositories>
-		<repository>
-			<releases />
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>mygrid-repository</id>
-			<name>myGrid Repository</name>
-			<url>http://www.mygrid.org.uk/maven/repository</url>
-		</repository>
-		<repository>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots />
-			<id>mygrid-snapshot-repository</id>
-			<name>myGrid Snapshot Repository</name>
-			<url>http://www.mygrid.org.uk/maven/snapshot-repository</url>
-		</repository>
-	</repositories>
-	<scm>
-		<connection>scm:git:https://github.com/taverna/taverna-component-activity-ui.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:taverna/taverna-component-activity-ui.git</developerConnection>
-		<url>https://github.com/taverna/taverna-component-activity-ui</url>
-		<tag>HEAD</tag>
-	</scm>
 </project>
