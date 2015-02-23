@@ -9,7 +9,7 @@
 	</parent>
 	<artifactId>taverna-component-activity</artifactId>
 	<packaging>bundle</packaging>
-	<name>Apache Taverna Component Repository implementation</name>
+  <name>Apache Taverna Component Repository activity/implementation</name>
 
 	<dependencies>
 		<dependency>
