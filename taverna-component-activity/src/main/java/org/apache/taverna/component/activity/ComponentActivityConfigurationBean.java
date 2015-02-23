@@ -95,7 +95,7 @@ public class ComponentActivityConfigurationBean extends
 		for (InputWorkflowPort iwp : w.getMainWorkflow().getInputPorts())
 			inputs.add(makeInputDefinition(iwp));
 		for (OutputWorkflowPort owp : w.getMainWorkflow().getOutputPorts())
-			outputs.add(makeOutputDefinition(0, owp.getName()));//FIXME
+			outputs.add(makeOutputDefinition(vs.getPortResolvedDepth(owp), owp.getName()));
 
 		try {
 			eh = util.getFamily(getRegistryBase(), getFamilyName())
