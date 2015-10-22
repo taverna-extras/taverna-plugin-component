@@ -1,7 +1,7 @@
 package org.apache.taverna.component.activity;
 
-import net.sf.taverna.t2.visit.VisitKind;
-import net.sf.taverna.t2.visit.Visitor;
+import org.apache.taverna.visit.VisitKind;
+import org.apache.taverna.visit.Visitor;
 
 public class ComponentHealthCheck extends VisitKind {
 	public static final int NO_PROBLEM = 0;

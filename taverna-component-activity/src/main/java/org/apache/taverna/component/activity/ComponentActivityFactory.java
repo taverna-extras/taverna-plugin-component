@@ -6,14 +6,6 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.taverna.t2.workflowmodel.Edits;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityFactory;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityOutputPort;
-import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityInputPortDefinitionBean;
-import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityOutputPortDefinitionBean;
-
 import org.apache.taverna.component.api.ComponentException;
 import org.apache.taverna.component.api.Version.ID;
 import org.apache.taverna.component.registry.ComponentImplementationCache;
@@ -24,6 +16,13 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.taverna.workflowmodel.Edits;
+import org.apache.taverna.workflowmodel.processor.activity.ActivityConfigurationException;
+import org.apache.taverna.workflowmodel.processor.activity.ActivityFactory;
+import org.apache.taverna.workflowmodel.processor.activity.ActivityInputPort;
+import org.apache.taverna.workflowmodel.processor.activity.ActivityOutputPort;
+import org.apache.taverna.workflowmodel.processor.activity.config.ActivityInputPortDefinitionBean;
+import org.apache.taverna.workflowmodel.processor.activity.config.ActivityOutputPortDefinitionBean;
 
 public class ComponentActivityFactory extends ComponentExceptionFactory
 		implements ActivityFactory {

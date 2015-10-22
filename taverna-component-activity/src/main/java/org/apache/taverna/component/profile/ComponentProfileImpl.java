@@ -24,8 +24,6 @@ import static com.hp.hpl.jena.rdf.model.ModelFactory.createOntologyModel;
 import static java.lang.System.identityHashCode;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
-import static net.sf.taverna.t2.workflowmodel.health.HealthCheck.NO_PROBLEM;
-import static net.sf.taverna.t2.workflowmodel.health.RemoteHealthChecker.contactEndpoint;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.io.FileNotFoundException;
@@ -70,6 +68,8 @@ import org.apache.taverna.component.api.profile.doc.SemanticAnnotation;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntProperty;
+import static org.apache.taverna.workflowmodel.health.HealthCheck.NO_PROBLEM;
+import org.apache.taverna.workflowmodel.health.RemoteHealthChecker;
 
 /**
  * A ComponentProfile specifies the inputs, outputs and semantic annotations
@@ -375,7 +375,7 @@ public class ComponentProfileImpl implements
 	}
 
 	private boolean isAccessible(String ontologyURI) {
-		return contactEndpoint(null, ontologyURI).getResultId() == NO_PROBLEM;
+		return RemoteHealthChecker.contactEndpoint(null, ontologyURI).getResultId() == NO_PROBLEM;
 	}
 
 	@Override

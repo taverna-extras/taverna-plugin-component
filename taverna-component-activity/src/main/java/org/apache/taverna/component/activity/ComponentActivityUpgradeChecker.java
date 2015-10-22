@@ -3,19 +3,18 @@
  */
 package org.apache.taverna.component.activity;
 
-import static net.sf.taverna.t2.visit.VisitReport.Status.WARNING;
 import static org.apache.log4j.Logger.getLogger;
 import static org.apache.taverna.component.activity.ComponentHealthCheck.OUT_OF_DATE;
 
 import java.util.List;
 
-import net.sf.taverna.t2.visit.VisitKind;
-import net.sf.taverna.t2.visit.VisitReport;
-import net.sf.taverna.t2.workflowmodel.health.HealthChecker;
-
 import org.apache.log4j.Logger;
 import org.apache.taverna.component.api.ComponentException;
 import org.apache.taverna.component.registry.ComponentUtil;
+import org.apache.taverna.visit.VisitKind;
+import org.apache.taverna.visit.VisitReport;
+import static org.apache.taverna.visit.VisitReport.Status.WARNING;
+import org.apache.taverna.workflowmodel.health.HealthChecker;
 import org.springframework.beans.factory.annotation.Required;
 
 /**

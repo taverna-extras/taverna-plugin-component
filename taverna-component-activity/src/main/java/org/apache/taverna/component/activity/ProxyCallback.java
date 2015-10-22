@@ -3,9 +3,6 @@
  */
 package org.apache.taverna.component.activity;
 
-import static net.sf.taverna.t2.reference.T2ReferenceType.ErrorDocument;
-import static net.sf.taverna.t2.reference.T2ReferenceType.IdentifiedList;
-import static net.sf.taverna.t2.reference.T2ReferenceType.ReferenceSet;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.util.ArrayList;
@@ -18,20 +15,22 @@ import java.util.Set;
 
 import javax.xml.ws.Holder;
 
-import net.sf.taverna.t2.invocation.InvocationContext;
-import net.sf.taverna.t2.reference.ErrorDocument;
-import net.sf.taverna.t2.reference.ErrorDocumentService;
-import net.sf.taverna.t2.reference.IdentifiedList;
-import net.sf.taverna.t2.reference.ListService;
-import net.sf.taverna.t2.reference.ReferenceService;
-import net.sf.taverna.t2.reference.T2Reference;
-import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
-import net.sf.taverna.t2.workflowmodel.processor.dispatch.events.DispatchErrorType;
-
 import org.apache.log4j.Logger;
 import org.apache.taverna.component.api.profile.ExceptionHandling;
 import org.apache.taverna.component.api.profile.ExceptionReplacement;
 import org.apache.taverna.component.api.profile.HandleException;
+import org.apache.taverna.invocation.InvocationContext;
+import org.apache.taverna.reference.ErrorDocument;
+import org.apache.taverna.reference.ErrorDocumentService;
+import org.apache.taverna.reference.IdentifiedList;
+import org.apache.taverna.reference.ListService;
+import org.apache.taverna.reference.ReferenceService;
+import org.apache.taverna.reference.T2Reference;
+import static org.apache.taverna.reference.T2ReferenceType.ErrorDocument;
+import static org.apache.taverna.reference.T2ReferenceType.IdentifiedList;
+import static org.apache.taverna.reference.T2ReferenceType.ReferenceSet;
+import org.apache.taverna.workflowmodel.processor.activity.AsynchronousActivityCallback;
+import org.apache.taverna.workflowmodel.processor.dispatch.events.DispatchErrorType;
 
 /**
  * @author alanrw

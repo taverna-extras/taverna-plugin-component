@@ -1,3 +1,22 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements. See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership. The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License. You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied. See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
 package org.apache.taverna.component.ui.preference;
 
 import static java.awt.GridBagConstraints.BOTH;
@@ -8,7 +27,6 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
-import static net.sf.taverna.t2.workbench.helper.Helper.showHelp;
 import static org.apache.log4j.Logger.getLogger;
 import static org.apache.taverna.component.ui.util.Utils.URL_PATTERN;
 
@@ -30,13 +48,13 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import net.sf.taverna.t2.lang.ui.DeselectingButton;
-import net.sf.taverna.t2.lang.ui.ValidatingUserInputDialog;
-
 import org.apache.log4j.Logger;
 import org.apache.taverna.component.api.ComponentException;
 import org.apache.taverna.component.api.ComponentFactory;
 import org.apache.taverna.component.api.Registry;
+import org.apache.taverna.lang.ui.DeselectingButton;
+import org.apache.taverna.lang.ui.ValidatingUserInputDialog;
+import org.apache.taverna.workbench.helper.Helper;
 
 public class ComponentPreferencePanel extends JPanel {
 	private static final String BAD_URL_MESSAGE = "Invalid URL";
@@ -176,7 +194,7 @@ public class ComponentPreferencePanel extends JPanel {
 		panel.add(new DeselectingButton(new AbstractAction(HELP_LABEL) {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				showHelp(panel);
+				Helper.showHelp(panel);
 			}
 		}));
 		panel.add(new DeselectingButton(new AbstractAction(RESET_LABEL) {

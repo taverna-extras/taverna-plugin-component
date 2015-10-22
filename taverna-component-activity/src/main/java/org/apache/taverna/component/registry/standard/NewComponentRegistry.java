@@ -15,8 +15,6 @@ import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import net.sf.taverna.t2.security.credentialmanager.CredentialManager;
-
 import org.apache.log4j.Logger;
 import org.apache.taverna.component.api.Component;
 import org.apache.taverna.component.api.ComponentException;
@@ -46,6 +44,7 @@ import org.apache.taverna.component.utils.AnnotationUtils;
 import org.apache.taverna.component.utils.SystemUtils;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.security.credentialmanager.CredentialManager;
 
 class NewComponentRegistry extends ComponentRegistry {
 	private static final String PROFILE_MIME_TYPE = "application/vnd.taverna.component-profile+xml";

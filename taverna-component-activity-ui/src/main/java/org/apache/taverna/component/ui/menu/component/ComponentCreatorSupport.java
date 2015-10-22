@@ -1,3 +1,22 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements. See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership. The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License. You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied. See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
 package org.apache.taverna.component.ui.menu.component;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
@@ -6,7 +25,6 @@ import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.ui.util.Utils.refreshComponentServiceProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,9 +41,7 @@ import org.apache.taverna.component.ui.ComponentActivityConfigurationBean;
 import org.apache.taverna.component.ui.panel.RegistryAndFamilyChooserComponentEntryPanel;
 import org.apache.taverna.component.ui.preference.ComponentPreference;
 import org.apache.taverna.component.ui.serviceprovider.ComponentServiceProviderConfig;
-import org.apache.taverna.component.ui.util.ComponentFileType;
-import org.jdom.Element;
-import org.jdom.JDOMException;
+import org.apache.taverna.component.ui.util.Utils;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
@@ -36,25 +52,25 @@ import org.apache.taverna.scufl2.api.port.InputProcessorPort;
 import org.apache.taverna.scufl2.api.port.InputWorkflowPort;
 import org.apache.taverna.scufl2.api.port.OutputProcessorPort;
 import org.apache.taverna.scufl2.api.port.OutputWorkflowPort;
-import net.sf.taverna.t2.workbench.edits.CompoundEdit;
-import net.sf.taverna.t2.workbench.edits.Edit;
-import net.sf.taverna.t2.workbench.edits.EditException;
-import net.sf.taverna.t2.workbench.edits.EditManager;
-import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workbench.file.FileType;
-import net.sf.taverna.t2.workbench.file.exceptions.OverwriteException;
-import net.sf.taverna.t2.workbench.file.exceptions.SaveException;
-import net.sf.taverna.t2.workbench.selection.SelectionManager;
-import net.sf.taverna.t2.workflow.edits.AddActivityEdit;
-import net.sf.taverna.t2.workflow.edits.AddActivityInputPortMappingEdit;
-import net.sf.taverna.t2.workflow.edits.AddActivityOutputPortMappingEdit;
-import net.sf.taverna.t2.workflow.edits.AddDataLinkEdit;
-import net.sf.taverna.t2.workflow.edits.AddProcessorEdit;
-import net.sf.taverna.t2.workflow.edits.AddWorkflowInputPortEdit;
-import net.sf.taverna.t2.workflow.edits.AddWorkflowOutputPortEdit;
-import net.sf.taverna.t2.workflow.edits.RemoveActivityEdit;
-import net.sf.taverna.t2.workflow.edits.RenameEdit;
-import static net.sf.taverna.t2.workflowmodel.utils.Tools;
+import org.apache.taverna.workbench.edits.CompoundEdit;
+import org.apache.taverna.workbench.edits.Edit;
+import org.apache.taverna.workbench.edits.EditException;
+import org.apache.taverna.workbench.edits.EditManager;
+import org.apache.taverna.workbench.file.FileManager;
+import org.apache.taverna.workbench.file.FileType;
+import org.apache.taverna.workbench.file.exceptions.SaveException;
+import org.apache.taverna.workbench.selection.SelectionManager;
+import org.apache.taverna.workflow.edits.AddActivityEdit;
+import org.apache.taverna.workflow.edits.AddActivityInputPortMappingEdit;
+import org.apache.taverna.workflow.edits.AddActivityOutputPortMappingEdit;
+import org.apache.taverna.workflow.edits.AddDataLinkEdit;
+import org.apache.taverna.workflow.edits.AddProcessorEdit;
+import org.apache.taverna.workflow.edits.AddWorkflowInputPortEdit;
+import org.apache.taverna.workflow.edits.AddWorkflowOutputPortEdit;
+import org.apache.taverna.workflow.edits.RemoveActivityEdit;
+import org.apache.taverna.workflow.edits.RenameEdit;
+import org.apache.taverna.workflowmodel.processor.activity.NestedDataflow;
+import org.apache.taverna.workflowmodel.utils.Tools;
 
 public class ComponentCreatorSupport {
 	private static final Logger logger = getLogger(ComponentCreatorSupport.class);
@@ -136,7 +152,7 @@ public class ComponentCreatorSupport {
 
 		createInitialComponent(d, ident);
 
-		refreshComponentServiceProvider(new ComponentServiceProviderConfig(
+		Utils.refreshComponentServiceProvider(new ComponentServiceProviderConfig(
 				ident));
 		return new ComponentActivityConfigurationBean(ident, factory);
 	}
@@ -210,7 +226,7 @@ public class ComponentCreatorSupport {
 	public Processor pasteProcessor(CopiedProcessor copy, Workflow d)
 			throws 
 			ClassNotFoundException, InstantiationException,
-			IllegalAccessException {
+			IllegalAccessException, EditException {
 		Processor result = ProcessorXMLDeserializer.getInstance()
 				.deserializeProcessor(copy.processor, copy.requiredSubworkflows);
 		if (result == null)

@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityInputPortDefinitionBean;
-import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityOutputPortDefinitionBean;
-import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityPortsDefinitionBean;
+//import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityInputPortDefinitionBean;
+//import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityOutputPortDefinitionBean;
+//import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityPortsDefinitionBean;
 
 import org.apache.log4j.Logger;
 import org.apache.taverna.component.api.Version;
@@ -29,6 +29,9 @@ import org.apache.taverna.scufl2.api.port.InputWorkflowPort;
 import org.apache.taverna.scufl2.api.port.OutputWorkflowPort;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.taverna.workflowmodel.processor.activity.config.ActivityInputPortDefinitionBean;
+import org.apache.taverna.workflowmodel.processor.activity.config.ActivityOutputPortDefinitionBean;
+import org.apache.taverna.workflowmodel.processor.activity.config.ActivityPortsDefinitionBean;
 
 /**
  * Component activity configuration bean.

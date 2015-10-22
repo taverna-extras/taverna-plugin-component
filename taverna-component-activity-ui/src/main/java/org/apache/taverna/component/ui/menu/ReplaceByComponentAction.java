@@ -1,6 +1,22 @@
-/**
- * 
- */
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements. See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership. The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License. You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied. See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
 package org.apache.taverna.component.ui.menu;
 
 import static java.awt.BorderLayout.CENTER;
@@ -38,18 +54,6 @@ import org.apache.taverna.component.ui.preference.ComponentPreference;
 import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
 import org.apache.taverna.component.ui.util.Utils;
 
-import net.sf.taverna.t2.workbench.edits.CompoundEdit;
-import net.sf.taverna.t2.workbench.edits.Edit;
-import net.sf.taverna.t2.workbench.edits.EditException;
-import net.sf.taverna.t2.workbench.edits.EditManager;
-import net.sf.taverna.t2.workbench.file.FileManager;
-import net.sf.taverna.t2.workbench.selection.SelectionManager;
-import net.sf.taverna.t2.workflow.edits.AddActivityEdit;
-import net.sf.taverna.t2.workflow.edits.AddActivityInputPortMappingEdit;
-import net.sf.taverna.t2.workflow.edits.AddActivityOutputPortMappingEdit;
-import net.sf.taverna.t2.workflow.edits.RemoveActivityEdit;
-import net.sf.taverna.t2.workflow.edits.RenameEdit;
-//import net.sf.taverna.t2.workflowmodel.utils.Tools;
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.common.Scufl2Tools;
 import org.apache.taverna.scufl2.api.core.Processor;
@@ -58,6 +62,16 @@ import org.apache.taverna.scufl2.api.port.InputActivityPort;
 import org.apache.taverna.scufl2.api.port.InputProcessorPort;
 import org.apache.taverna.scufl2.api.port.OutputActivityPort;
 import org.apache.taverna.scufl2.api.port.OutputProcessorPort;
+import org.apache.taverna.workbench.edits.CompoundEdit;
+import org.apache.taverna.workbench.edits.Edit;
+import org.apache.taverna.workbench.edits.EditException;
+import org.apache.taverna.workbench.edits.EditManager;
+import org.apache.taverna.workbench.selection.SelectionManager;
+import org.apache.taverna.workflow.edits.AddActivityEdit;
+import org.apache.taverna.workflow.edits.AddActivityInputPortMappingEdit;
+import org.apache.taverna.workflow.edits.AddActivityOutputPortMappingEdit;
+import org.apache.taverna.workflow.edits.RemoveActivityEdit;
+import org.apache.taverna.workflow.edits.RenameEdit;
 
 /**
  * @author alanrw

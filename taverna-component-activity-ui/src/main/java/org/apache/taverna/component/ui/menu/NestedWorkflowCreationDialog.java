@@ -1,6 +1,22 @@
-/**
- * 
- */
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements. See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership. The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License. You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied. See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
 package org.apache.taverna.component.ui.menu;
 
 import static java.awt.BorderLayout.CENTER;
@@ -44,28 +60,30 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
-import net.sf.taverna.t2.lang.ui.DeselectingButton;
-import net.sf.taverna.t2.workbench.edits.CompoundEdit;
-import net.sf.taverna.t2.workbench.edits.Edit;
-import net.sf.taverna.t2.workbench.edits.EditException;
-import net.sf.taverna.t2.workbench.edits.EditManager;
-import net.sf.taverna.t2.workbench.helper.HelpEnabledDialog;
-import net.sf.taverna.t2.workbench.models.graph.GraphController;
-import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
-import net.sf.taverna.t2.workflow.edits.AddActivityEdit;
-import net.sf.taverna.t2.workflow.edits.AddActivityInputPortMappingEdit;
-import net.sf.taverna.t2.workflow.edits.AddActivityOutputPortMappingEdit;
-import net.sf.taverna.t2.workflow.edits.AddChildEdit;
-import net.sf.taverna.t2.workflow.edits.AddDataLinkEdit;
-import net.sf.taverna.t2.workflow.edits.AddProcessorInputPortEdit;
-import net.sf.taverna.t2.workflow.edits.AddProcessorOutputPortEdit;
-import net.sf.taverna.t2.workflow.edits.AddWorkflowInputPortEdit;
-import net.sf.taverna.t2.workflow.edits.AddWorkflowOutputPortEdit;
-import net.sf.taverna.t2.workflow.edits.RemoveChildEdit;
-import net.sf.taverna.t2.workflow.edits.RemoveDataLinkEdit;
-import net.sf.taverna.t2.workflow.edits.SetIterationStrategyStackEdit;
+//import net.sf.taverna.t2.lang.ui.DeselectingButton;
+//import net.sf.taverna.t2.workbench.edits.CompoundEdit;
+//import net.sf.taverna.t2.workbench.edits.Edit;
+//import net.sf.taverna.t2.workbench.edits.EditException;
+//import net.sf.taverna.t2.workbench.edits.EditManager;
+//import net.sf.taverna.t2.workbench.helper.HelpEnabledDialog;
+//import net.sf.taverna.t2.workbench.models.graph.GraphController;
+//import net.sf.taverna.t2.workbench.views.graph.GraphViewComponent;
+//import net.sf.taverna.t2.workflow.edits.AddActivityEdit;
+//import net.sf.taverna.t2.workflow.edits.AddActivityInputPortMappingEdit;
+//import net.sf.taverna.t2.workflow.edits.AddActivityOutputPortMappingEdit;
+//import net.sf.taverna.t2.workflow.edits.AddChildEdit;
+//import net.sf.taverna.t2.workflow.edits.AddDataLinkEdit;
+//import net.sf.taverna.t2.workflow.edits.AddProcessorInputPortEdit;
+//import net.sf.taverna.t2.workflow.edits.AddProcessorOutputPortEdit;
+//import net.sf.taverna.t2.workflow.edits.AddWorkflowInputPortEdit;
+//import net.sf.taverna.t2.workflow.edits.AddWorkflowOutputPortEdit;
+//import net.sf.taverna.t2.workflow.edits.RemoveChildEdit;
+//import net.sf.taverna.t2.workflow.edits.RemoveDataLinkEdit;
+//import net.sf.taverna.t2.workflow.edits.SetIterationStrategyStackEdit;
 
 import org.apache.log4j.Logger;
+import org.apache.taverna.annotation.annotationbeans.DescriptiveTitle;
+import org.apache.taverna.lang.ui.DeselectingButton;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.annotation.Annotation;
@@ -88,6 +106,26 @@ import org.apache.taverna.scufl2.api.port.ProcessorPort;
 import org.apache.taverna.scufl2.api.port.ReceiverPort;
 import org.apache.taverna.scufl2.api.port.SenderPort;
 import org.apache.taverna.scufl2.api.profiles.Profile;
+import org.apache.taverna.workbench.edits.CompoundEdit;
+import org.apache.taverna.workbench.edits.Edit;
+import org.apache.taverna.workbench.edits.EditException;
+import org.apache.taverna.workbench.edits.EditManager;
+import org.apache.taverna.workbench.helper.HelpEnabledDialog;
+import org.apache.taverna.workbench.models.graph.GraphController;
+import org.apache.taverna.workbench.views.graph.GraphViewComponent;
+import org.apache.taverna.workflow.edits.AddActivityEdit;
+import org.apache.taverna.workflow.edits.AddActivityInputPortMappingEdit;
+import org.apache.taverna.workflow.edits.AddActivityOutputPortMappingEdit;
+import org.apache.taverna.workflow.edits.AddChildEdit;
+import org.apache.taverna.workflow.edits.AddDataLinkEdit;
+import org.apache.taverna.workflow.edits.AddProcessorInputPortEdit;
+import org.apache.taverna.workflow.edits.AddProcessorOutputPortEdit;
+import org.apache.taverna.workflow.edits.AddWorkflowInputPortEdit;
+import org.apache.taverna.workflow.edits.AddWorkflowOutputPortEdit;
+import org.apache.taverna.workflow.edits.RemoveChildEdit;
+import org.apache.taverna.workflow.edits.RemoveDataLinkEdit;
+import org.apache.taverna.workflow.edits.SetIterationStrategyStackEdit;
+import org.apache.taverna.workflowmodel.utils.AnnotationTools;
 
 /**
  * @author alanrw

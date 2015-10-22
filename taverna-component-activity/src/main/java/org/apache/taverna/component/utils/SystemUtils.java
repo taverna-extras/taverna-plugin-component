@@ -8,16 +8,14 @@ import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-
 import org.apache.taverna.component.api.ComponentException;
 import org.apache.taverna.component.registry.api.Description;
+import org.apache.taverna.configuration.app.ApplicationConfiguration;
+import org.apache.taverna.platform.execution.api.InvalidWorkflowException;
+import org.apache.taverna.platform.execution.api.WorkflowCompiler;
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 import org.apache.taverna.scufl2.api.io.WorkflowBundleIO;
-
-import uk.org.taverna.configuration.app.ApplicationConfiguration;
-import uk.org.taverna.platform.execution.api.InvalidWorkflowException;
-import uk.org.taverna.platform.execution.api.WorkflowCompiler;
+import org.apache.taverna.workflowmodel.Dataflow;
 
 public class SystemUtils {
 	private static final String T2FLOW_TYPE = "application/vnd.taverna.t2flow+xml";

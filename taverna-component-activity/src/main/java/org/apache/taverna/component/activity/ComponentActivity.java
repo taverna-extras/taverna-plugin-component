@@ -1,24 +1,9 @@
 package org.apache.taverna.component.activity;
 
-import static net.sf.taverna.t2.workflowmodel.utils.AnnotationTools.getAnnotationString;
-import static net.sf.taverna.t2.workflowmodel.utils.AnnotationTools.setAnnotationString;
 import static org.apache.log4j.Logger.getLogger;
 
 import java.net.MalformedURLException;
 import java.util.Map;
-
-import net.sf.taverna.t2.activities.dataflow.DataflowActivity;
-import net.sf.taverna.t2.annotation.annotationbeans.SemanticAnnotation;
-import net.sf.taverna.t2.invocation.InvocationContext;
-import net.sf.taverna.t2.invocation.impl.InvocationContextImpl;
-import net.sf.taverna.t2.reference.ReferenceService;
-import net.sf.taverna.t2.reference.T2Reference;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.EditException;
-import net.sf.taverna.t2.workflowmodel.Edits;
-import net.sf.taverna.t2.workflowmodel.processor.activity.AbstractAsynchronousActivity;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
-import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
 
 import org.apache.log4j.Logger;
 import org.apache.taverna.component.api.ComponentException;
@@ -28,9 +13,21 @@ import org.apache.taverna.component.registry.ComponentUtil;
 import org.apache.taverna.component.utils.AnnotationUtils;
 import org.apache.taverna.component.utils.SystemUtils;
 
-import uk.org.taverna.platform.execution.api.InvalidWorkflowException;
-
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.taverna.activities.dataflow.DataflowActivity;
+import org.apache.taverna.annotation.annotationbeans.SemanticAnnotation;
+import org.apache.taverna.invocation.InvocationContext;
+import org.apache.taverna.invocation.impl.InvocationContextImpl;
+import org.apache.taverna.platform.execution.api.InvalidWorkflowException;
+import org.apache.taverna.reference.ReferenceService;
+import org.apache.taverna.reference.T2Reference;
+import org.apache.taverna.workflowmodel.Dataflow;
+import org.apache.taverna.workflowmodel.EditException;
+import org.apache.taverna.workflowmodel.Edits;
+import org.apache.taverna.workflowmodel.processor.activity.AbstractAsynchronousActivity;
+import org.apache.taverna.workflowmodel.processor.activity.ActivityConfigurationException;
+import org.apache.taverna.workflowmodel.processor.activity.AsynchronousActivityCallback;
+import org.apache.taverna.workflowmodel.utils.AnnotationTools;
 
 public class ComponentActivity extends
 		AbstractAsynchronousActivity<JsonNode> {
@@ -140,10 +137,10 @@ public class ComponentActivity extends
 		// FIXME Completely wrong way of doing this!
 		try {
 			//annUtils.getAnnotation(subject, uriForAnnotation)
-			String annotationValue = getAnnotationString(realizingDataflow,
+			String annotationValue = AnnotationTools.getAnnotationString(realizingDataflow,
 					SemanticAnnotation.class, null);
 			if (annotationValue != null)
-				setAnnotationString(this, SemanticAnnotation.class,
+				AnnotationTools.setAnnotationString(this, SemanticAnnotation.class,
 						annotationValue, getEdits()).doEdit();
 		} catch (EditException e) {
 			logger.error("failed to set annotation string", e);

@@ -71,6 +71,42 @@
 			<artifactId>ui</artifactId>
 			<version>${t2.lang.version}</version>
 		</dependency>
-		 -->		
+		 -->
+	 <dependency>
+	  <groupId>org.apache.taverna.workbench</groupId>
+	  <artifactId>taverna-graph-view</artifactId>
+	  <version>3.1.0-incubating-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.apache.taverna.engine</groupId>
+	  <artifactId>taverna-workflowmodel-api</artifactId>
+	  <version>3.1.0-incubating-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.apache.taverna.osgi</groupId>
+	  <artifactId>taverna-app-configuration-api</artifactId>
+	  <version>0.2.1-incubating-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.apache.taverna.workbench</groupId>
+	  <artifactId>taverna-activity-tools</artifactId>
+	  <version>3.1.0-incubating-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.apache.taverna.workbench</groupId>
+	  <artifactId>taverna-dataflow-activity-ui</artifactId>
+	  <version>3.1.0-incubating-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.apache.taverna.osgi</groupId>
+	  <artifactId>taverna-configuration-api</artifactId>
+	  <version>0.2.1-incubating-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 </project>
