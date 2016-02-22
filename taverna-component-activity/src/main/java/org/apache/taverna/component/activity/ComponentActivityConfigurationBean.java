@@ -97,6 +97,8 @@ public class ComponentActivityConfigurationBean extends
 
 		for (InputWorkflowPort iwp : w.getMainWorkflow().getInputPorts())
 			inputs.add(makeInputDefinition(iwp));
+		// FIXME: Get the ValidatorState (so we can get getPortResolvedDepth()
+		ValidatorState vs =  ... ;
 		for (OutputWorkflowPort owp : w.getMainWorkflow().getOutputPorts())
 			outputs.add(makeOutputDefinition(vs.getPortResolvedDepth(owp), owp.getName()));
 
