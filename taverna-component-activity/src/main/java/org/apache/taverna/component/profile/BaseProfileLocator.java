@@ -125,7 +125,7 @@ public class BaseProfileLocator {
 	}
 
 	private File getBaseProfileFile() {
-		File config = new File(appConfig.getApplicationHomeDir(), "conf");
+		File config = new File(appConfig.getApplicationHomeDir().toFile(), "conf");
 		if (!config.exists())
 			config.mkdir();
 		return new File(config, BASE_PROFILE_PATH);

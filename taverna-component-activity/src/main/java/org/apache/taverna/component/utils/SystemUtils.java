@@ -83,7 +83,7 @@ public class SystemUtils {
 	}
 
 	public File getApplicationHomeDir() {
-		return appConfig.getApplicationHomeDir();
+		return appConfig.getApplicationHomeDir().toFile();
 	}
 
 	public void setAppConfig(ApplicationConfiguration appConfig) {
