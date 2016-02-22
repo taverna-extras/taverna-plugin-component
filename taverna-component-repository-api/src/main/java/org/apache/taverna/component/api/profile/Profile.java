@@ -7,7 +7,7 @@ import org.apache.taverna.component.api.ComponentException;
 import org.apache.taverna.component.api.NamedItem;
 import org.apache.taverna.component.api.Registry;
 
-import com.hp.hpl.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModel;
 
 public interface Profile extends NamedItem, AnnotatedElement {
 

@@ -49,8 +49,8 @@
 	<packaging>pom</packaging>
 	<name>Apache Taverna Plugin for Component activity</name>
   <properties>
-    <taverna.language.version>0.15.1-incubating</taverna.language.version>
-    <taverna.osgi.version>0.2.0-incubating-SNAPSHOT</taverna.osgi.version>
+    <taverna.language.version>0.15.1-incubating-SNAPSHOT</taverna.language.version>
+    <taverna.osgi.version>0.2.1-incubating-SNAPSHOT</taverna.osgi.version>
     <taverna.engine.version>3.1.0-incubating-SNAPSHOT</taverna.engine.version>
     <taverna.commonactivities.version>2.1.0-incubating-SNAPSHOT</taverna.commonactivities.version>
     <taverna.workbench.version>3.1.0-incubating-SNAPSHOT</taverna.workbench.version>

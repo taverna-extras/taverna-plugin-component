@@ -11,10 +11,10 @@ import org.apache.taverna.scufl2.api.common.URITools;
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 import org.apache.taverna.scufl2.ucfpackage.UCFPackage.ResourceEntry;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Statement;
 
 public class AnnotationUtils {
 	private static final String TITLE_ANNOTATION = "http://purl.org/dc/terms/title";

@@ -52,11 +52,11 @@ import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 import org.apache.taverna.scufl2.api.common.AbstractNamed;
 import org.apache.taverna.scufl2.api.common.Named;
 
-import com.hp.hpl.jena.ontology.OntProperty;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
+import org.apache.jena.ontology.OntProperty;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
 import org.apache.taverna.workbench.file.FileManager;
 import org.apache.taverna.workbench.ui.views.contextualviews.ContextualView;
 

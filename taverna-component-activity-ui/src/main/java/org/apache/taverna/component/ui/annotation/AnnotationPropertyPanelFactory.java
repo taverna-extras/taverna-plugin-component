@@ -19,7 +19,7 @@
 
 package org.apache.taverna.component.ui.annotation;
 
-import static com.hp.hpl.jena.rdf.model.ResourceFactory.createTypedLiteral;
+import static org.apache.jena.rdf.model.ResourceFactory.createTypedLiteral;
 import static java.lang.Integer.MIN_VALUE;
 import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.getObjectName;
 
@@ -28,9 +28,9 @@ import javax.swing.JTextArea;
 
 import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
-import com.hp.hpl.jena.ontology.OntProperty;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Statement;
+import org.apache.jena.ontology.OntProperty;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Statement;
 
 /**
  * 

@@ -19,7 +19,7 @@
 
 package org.apache.taverna.component.ui.localworld;
 
-import static com.hp.hpl.jena.rdf.model.ModelFactory.createOntologyModel;
+import static org.apache.jena.rdf.model.ModelFactory.createOntologyModel;
 import static org.apache.log4j.Logger.getLogger;
 import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.createTurtle;
 import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.populateModelFromString;
@@ -35,10 +35,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.ontology.Individual;
+import org.apache.jena.ontology.OntClass;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.taverna.configuration.app.ApplicationConfiguration;
 
 /**

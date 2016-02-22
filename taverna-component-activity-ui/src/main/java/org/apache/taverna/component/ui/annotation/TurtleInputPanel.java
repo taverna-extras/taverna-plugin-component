@@ -19,7 +19,7 @@
 
 package org.apache.taverna.component.ui.annotation;
 
-import static com.hp.hpl.jena.rdf.model.ModelFactory.createOntologyModel;
+import static org.apache.jena.rdf.model.ModelFactory.createOntologyModel;
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.EAST;
 import static java.awt.BorderLayout.SOUTH;
@@ -35,9 +35,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
+import org.apache.jena.ontology.Individual;
+import org.apache.jena.ontology.OntClass;
+import org.apache.jena.ontology.OntModel;
 import org.apache.taverna.lang.ui.DeselectingButton;
 import org.apache.taverna.lang.ui.ReadOnlyTextArea;
 

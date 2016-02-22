@@ -34,11 +34,11 @@ import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
 
 import org.apache.taverna.component.api.profile.doc.SemanticAnnotation;
 
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntProperty;
-import com.hp.hpl.jena.ontology.OntResource;
+import org.apache.jena.ontology.Individual;
+import org.apache.jena.ontology.OntClass;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntProperty;
+import org.apache.jena.ontology.OntResource;
 
 /**
  * Definition of a semantic annotation for a component element.

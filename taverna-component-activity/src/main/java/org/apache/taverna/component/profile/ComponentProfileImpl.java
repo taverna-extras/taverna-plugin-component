@@ -20,7 +20,7 @@
  ******************************************************************************/
 package org.apache.taverna.component.profile;
 
-import static com.hp.hpl.jena.rdf.model.ModelFactory.createOntologyModel;
+import static org.apache.jena.rdf.model.ModelFactory.createOntologyModel;
 import static java.lang.System.identityHashCode;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
@@ -65,9 +65,9 @@ import org.apache.taverna.component.api.profile.doc.Port;
 import org.apache.taverna.component.api.profile.doc.Profile;
 import org.apache.taverna.component.api.profile.doc.SemanticAnnotation;
 
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntProperty;
+import org.apache.jena.ontology.OntClass;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntProperty;
 import static org.apache.taverna.workflowmodel.health.HealthCheck.NO_PROBLEM;
 import org.apache.taverna.workflowmodel.health.RemoteHealthChecker;
 
