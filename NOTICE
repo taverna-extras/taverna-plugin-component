@@ -9,3 +9,11 @@ Portions of this software were originally based on the following:
 These have been licensed to the Apache Software Foundation under a software grant.
 
 ---------------------------------------------------------
+
+TODO: These XSD files are from W3C - which license?
+
+./taverna-component-repository-api/src/main/catalog/xml.xsd
+./taverna-component-repository-api/src/main/catalog/XMLSchema.xsd
+./taverna-component-activity/src/main/catalog/xml.xsd
+./taverna-component-activity/src/main/catalog/XMLSchema.xsd
+
