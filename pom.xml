@@ -25,6 +25,7 @@
 	<version>2.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Component Plugin for Taverna</name>
+  <url>https://github.com/taverna-extras/taverna-plugin-component/</url>  
   <properties>
     <taverna.language.version>0.15.1-incubating</taverna.language.version>
     <taverna.osgi.version>0.2.1-incubating</taverna.osgi.version>
@@ -136,12 +137,14 @@
     <module>taverna-component-activity-ui</module>
     <module>taverna-component-repository-api</module>
   </modules>
+
   <scm>
-    <connection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-taverna-plugin-component.git</connection>
-    <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-taverna-plugin-component.git</developerConnection>
-    <url>https://github.com/apache/incubator-taverna-plugin-component</url>
+    <connection>scm:git:git://github.com/taverna-extras/taverna-plugin-component.git</connection>
+    <developerConnection>scm:git:git@github.com:taverna-extras/taverna-plugin-component.git</developerConnection>
+    <url>https://github.com/taverna-extras/taverna-plugin-component/</url>
     <tag>HEAD</tag>
   </scm>
+
   
 
   <repositories>
