@@ -104,7 +104,7 @@ The format is in XML and an XML schema (xsd) has been created.
 An example [component profile](http://www.myexperiment.org/files/905/versions/1/download/Characterisation%20Component.xml) 
    is available. 
 Components that share a profile will be collected together into component families. 
-A [component profile editor](/documentation/components/component-profile-editor) 
+A [component profile editor](component-profile-editor.md) 
    is being developed.
 
 <p style="text-align: center;">
@@ -131,7 +131,7 @@ The component profile specifies the ontologies that will be used for the compone
 Although the components will be modified using a chosen profile, 
    it is unlikely that the components can be assured as being ‘correct by construction’. 
 For this reason, a separate 
-   [component validator](/documentation/components/component-validator)
+   [component validator](component-validator.md)
    is being implemented. 
 The component validator is included within 
    [myExperiment](http://www.myexperiment.org).

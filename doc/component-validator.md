@@ -21,7 +21,7 @@
 
 
 The Taverna Component Validator is a tool and library for checking whether a 
-   [Taverna Component](/documentation/components) satisfies the component profile defined by the family of which it is a member. 
+   [Taverna Component](./) satisfies the component profile defined by the family of which it is a member. 
 It applies a number of checks to the component such that when they are all satisfied, 
    the component can be considered to be a high-quality member of the component family, 
    and provides human-readable descriptions of the conditions that are checked and whether they were satisfied or not.

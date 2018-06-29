@@ -22,7 +22,7 @@
 
 
 The Taverna Component Profile Editor is a simple tool for editing and creating profiles for 
-   [Taverna Components[(/documentation/components). 
+   [Taverna Components](./). 
 Component profiles define the required and supported interface of components; 
    they are not intended to be easily edited by normal users. 
 The editor guides an expert user as they define a profile, 
