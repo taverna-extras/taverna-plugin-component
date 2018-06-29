@@ -20,16 +20,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.apache.taverna</groupId>
-		<artifactId>apache-taverna-parent</artifactId>
-		<version>3-incubating</version>
-	</parent>
-	<groupId>org.apache.taverna.component</groupId>
-	<artifactId>apache-taverna-plugin-component</artifactId>
-	<version>2.1.0-incubating-SNAPSHOT</version>
+	<groupId>io.github.taverna-extras.component</groupId>
+	<artifactId>taverna-plugin-component</artifactId>
+	<version>2.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>Apache Taverna Plugin for Component activity</name>
+	<name>Taverna Plugin for Component activity</name>
   <properties>
     <taverna.language.version>0.15.1-incubating</taverna.language.version>
     <taverna.osgi.version>0.2.1-incubating</taverna.osgi.version>
