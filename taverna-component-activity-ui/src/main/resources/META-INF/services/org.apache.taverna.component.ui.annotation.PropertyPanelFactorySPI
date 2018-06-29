@@ -1,5 +1,5 @@
-org.apache.taverna.component.ui.annotation.AnnotationPropertyPanelFactory
-org.apache.taverna.component.ui.annotation.DatatypePropertyPanelFactory
-org.apache.taverna.component.ui.annotation.ObjectPropertyWithIndividualsPanelFactory
-org.apache.taverna.component.ui.annotation.DateTimePropertyPanelFactory
-org.apache.taverna.component.ui.annotation.FallbackPropertyPanelFactory
+io.github.taverna_extras.component.ui.annotation.AnnotationPropertyPanelFactory
+io.github.taverna_extras.component.ui.annotation.DatatypePropertyPanelFactory
+io.github.taverna_extras.component.ui.annotation.ObjectPropertyWithIndividualsPanelFactory
+io.github.taverna_extras.component.ui.annotation.DateTimePropertyPanelFactory
+io.github.taverna_extras.component.ui.annotation.FallbackPropertyPanelFactory

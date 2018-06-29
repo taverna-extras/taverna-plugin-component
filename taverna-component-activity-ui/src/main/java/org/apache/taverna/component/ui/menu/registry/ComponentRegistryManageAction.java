@@ -17,15 +17,15 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.registry;
+package io.github.taverna_extras.component.ui.menu.registry;
 
-import static org.apache.taverna.component.ui.preference.ComponentPreferenceUIFactory.DISPLAY_NAME;
+import static io.github.taverna_extras.component.ui.preference.ComponentPreferenceUIFactory.DISPLAY_NAME;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
 import org.apache.taverna.workbench.configuration.workbench.ui.T2ConfigurationFrame;
 
 //import net.sf.taverna.t2.workbench.configuration.workbench.ui.T2ConfigurationFrame;

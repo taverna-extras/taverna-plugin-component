@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.profile;
+package io.github.taverna_extras.component.ui.menu.profile;
 
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.WEST;
@@ -45,17 +45,17 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.License;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.SharingPolicy;
-import org.apache.taverna.component.api.profile.Profile;
-import org.apache.taverna.component.ui.panel.LicenseChooserPanel;
-import org.apache.taverna.component.ui.panel.RegistryChooserPanel;
-import org.apache.taverna.component.ui.panel.SharingPolicyChooserPanel;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.License;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.SharingPolicy;
+import io.github.taverna_extras.component.api.profile.Profile;
+import io.github.taverna_extras.component.ui.panel.LicenseChooserPanel;
+import io.github.taverna_extras.component.ui.panel.RegistryChooserPanel;
+import io.github.taverna_extras.component.ui.panel.SharingPolicyChooserPanel;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
 import org.apache.taverna.lang.ui.DeselectingButton;
 
 /**

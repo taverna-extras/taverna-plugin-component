@@ -17,14 +17,14 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui;
+package io.github.taverna_extras.component.ui;
 
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.FAMILY_NAME;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
-import static org.apache.taverna.component.ui.ComponentConstants.ACTIVITY_URI;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
+import static io.github.taverna_extras.component.ui.ComponentConstants.ACTIVITY_URI;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,12 +33,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.config.ComponentPropertyNames;
-import org.apache.taverna.component.api.profile.ExceptionHandling;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.config.ComponentPropertyNames;
+import io.github.taverna_extras.component.api.profile.ExceptionHandling;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.configurations.Configuration;
@@ -130,7 +130,7 @@ public class ComponentActivityConfigurationBean extends Version.Identifier {
 					.getComponentProfile().getExceptionHandling();
 			if (eh != null)
 				result.outputs.add(makeOutputDefinition(1, ERROR_CHANNEL));
-		} catch (org.apache.taverna.component.api.ComponentException e) {
+		} catch (io.github.taverna_extras.component.api.ComponentException e) {
 			logger.error("failed to get exception handling for family", e);
 		}
 		return result;

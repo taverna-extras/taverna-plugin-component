@@ -17,9 +17,9 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.view;
+package io.github.taverna_extras.component.ui.view;
 
-import static org.apache.taverna.component.api.config.ComponentConfig.URI;
+import static io.github.taverna_extras.component.api.config.ComponentConfig.URI;
 
 import java.awt.Frame;
 import java.net.MalformedURLException;
@@ -28,8 +28,8 @@ import java.util.List;
 
 import javax.swing.Action;
 
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.ui.config.ComponentConfigureAction;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.ui.config.ComponentConfigureAction;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.servicedescriptions.ServiceDescriptionRegistry;

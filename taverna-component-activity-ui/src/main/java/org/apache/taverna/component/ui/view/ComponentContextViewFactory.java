@@ -17,14 +17,14 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.view;
+package io.github.taverna_extras.component.ui.view;
 
-import static org.apache.taverna.component.api.config.ComponentConfig.URI;
+import static io.github.taverna_extras.component.api.config.ComponentConfig.URI;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.taverna.component.api.Version;
+import io.github.taverna_extras.component.api.Version;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;

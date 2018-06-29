@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.component;
+package io.github.taverna_extras.component.ui.menu.component;
 
 import static java.lang.String.format;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
@@ -36,14 +36,14 @@ import javax.swing.AbstractAction;
 import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.panel.ComponentChooserPanel;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceProviderConfig;
-import org.apache.taverna.component.ui.util.Utils;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.panel.ComponentChooserPanel;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceProviderConfig;
+import io.github.taverna_extras.component.ui.util.Utils;
 
 import org.apache.taverna.scufl2.api.configurations.Configuration;
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;

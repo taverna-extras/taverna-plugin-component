@@ -1,4 +1,4 @@
-package org.apache.taverna.component.profile;
+package io.github.taverna_extras.component.profile;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,9 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
 
-import org.apache.taverna.component.api.profile.doc.SemanticAnnotation;
+import io.github.taverna_extras.component.api.profile.doc.SemanticAnnotation;
 
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntClass;

@@ -21,4 +21,4 @@
  *
  * @author Donal Fellows
  */
-package org.apache.taverna.component.registry.standard.annotations;
+package io.github.taverna_extras.component.registry.standard.annotations;

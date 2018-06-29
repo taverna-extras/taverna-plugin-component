@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static java.awt.FlowLayout.RIGHT;
 import static java.awt.GridBagConstraints.EAST;
@@ -28,7 +28,7 @@ import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.QUESTION_MESSAGE;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showInputDialog;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.getDisplayName;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.getDisplayName;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -46,8 +46,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
-import org.apache.taverna.component.ui.localworld.LocalWorld;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.ui.localworld.LocalWorld;
 
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntClass;

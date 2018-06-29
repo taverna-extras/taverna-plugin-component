@@ -17,12 +17,12 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.localworld;
+package io.github.taverna_extras.component.ui.localworld;
 
 import static org.apache.jena.rdf.model.ModelFactory.createOntologyModel;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.createTurtle;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.populateModelFromString;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.createTurtle;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.populateModelFromString;
 
 import java.io.File;
 import java.io.FileInputStream;

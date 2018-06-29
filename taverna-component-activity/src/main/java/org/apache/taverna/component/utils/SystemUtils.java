@@ -1,4 +1,4 @@
-package org.apache.taverna.component.utils;
+package io.github.taverna_extras.component.utils;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -26,8 +26,8 @@ import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.registry.api.Description;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.registry.api.Description;
 import org.apache.taverna.configuration.app.ApplicationConfiguration;
 import org.apache.taverna.platform.execution.api.InvalidWorkflowException;
 import org.apache.taverna.platform.execution.api.WorkflowCompiler;

@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.local;
+package io.github.taverna_extras.component.registry.local;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,10 +24,10 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.registry.ComponentUtil;
-import org.apache.taverna.component.utils.SystemUtils;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.registry.ComponentUtil;
+import io.github.taverna_extras.component.utils.SystemUtils;
 import org.springframework.beans.factory.annotation.Required;
 
 public class LocalComponentRegistryFactory {

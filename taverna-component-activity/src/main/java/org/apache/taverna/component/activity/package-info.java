@@ -16,4 +16,4 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.taverna.component.activity;
+package io.github.taverna_extras.component.activity;

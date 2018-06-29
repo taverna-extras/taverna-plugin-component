@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.profile;
+package io.github.taverna_extras.component.ui.menu.profile;
 
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.WEST;
@@ -38,12 +38,12 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.profile.Profile;
-import org.apache.taverna.component.ui.panel.ProfileChooserPanel;
-import org.apache.taverna.component.ui.panel.RegistryChooserPanel;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.profile.Profile;
+import io.github.taverna_extras.component.ui.panel.ProfileChooserPanel;
+import io.github.taverna_extras.component.ui.panel.RegistryChooserPanel;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
 
 /**
  * @author alanrw

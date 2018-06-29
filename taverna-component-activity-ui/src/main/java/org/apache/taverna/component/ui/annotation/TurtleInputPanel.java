@@ -17,13 +17,13 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static org.apache.jena.rdf.model.ModelFactory.createOntologyModel;
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.EAST;
 import static java.awt.BorderLayout.SOUTH;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.populateModelFromString;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.populateModelFromString;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

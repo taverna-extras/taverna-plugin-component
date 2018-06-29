@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.standard;
+package io.github.taverna_extras.component.registry.standard;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,18 +18,18 @@ package org.apache.taverna.component.registry.standard;
  * under the License.
  */
 
-import static org.apache.taverna.component.registry.Harness.componentRegistry;
-import static org.apache.taverna.component.registry.Harness.componentRegistryUrl;
+import static io.github.taverna_extras.component.registry.Harness.componentRegistry;
+import static io.github.taverna_extras.component.registry.Harness.componentRegistryUrl;
 
 import java.net.URL;
 
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.profile.Profile;
-import org.apache.taverna.component.registry.standard.NewComponent;
-import org.apache.taverna.component.registry.standard.NewComponentFamily;
-import org.apache.taverna.component.registry.standard.NewComponentRegistry;
-import org.apache.taverna.component.registry.standard.NewComponentRegistryFactory;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.profile.Profile;
+import io.github.taverna_extras.component.registry.standard.NewComponent;
+import io.github.taverna_extras.component.registry.standard.NewComponentFamily;
+import io.github.taverna_extras.component.registry.standard.NewComponentRegistry;
+import io.github.taverna_extras.component.registry.standard.NewComponentRegistryFactory;
 
 class RegistrySupport {
 	static final String DEPLOYMENT = "http://aeon.cs.man.ac.uk:3006";

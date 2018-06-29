@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui;
+package io.github.taverna_extras.component.ui;
 
 import static java.net.URI.create;
 

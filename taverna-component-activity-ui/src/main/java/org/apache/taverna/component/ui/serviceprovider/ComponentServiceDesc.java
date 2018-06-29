@@ -17,15 +17,15 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.serviceprovider;
+package io.github.taverna_extras.component.ui.serviceprovider;
 
 import static java.util.Arrays.asList;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.FAMILY_NAME;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
-import static org.apache.taverna.component.ui.ComponentConstants.ACTIVITY_URI;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
+import static io.github.taverna_extras.component.ui.ComponentConstants.ACTIVITY_URI;
 
 import java.net.URI;
 import java.net.URL;
@@ -35,11 +35,11 @@ import java.util.List;
 import javax.swing.Icon;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.Version.ID;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.Version.ID;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.configurations.Configuration;

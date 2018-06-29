@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry;
+package io.github.taverna_extras.component.registry;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -26,12 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.License;
-import org.apache.taverna.component.api.SharingPolicy;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.profile.Profile;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.License;
+import io.github.taverna_extras.component.api.SharingPolicy;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.profile.Profile;
 
 /**
  * A ComponentRegistry contains ComponentFamilies and ComponentProfiles.
@@ -39,7 +39,7 @@ import org.apache.taverna.component.api.profile.Profile;
  * @author David Withers
  */
 public abstract class ComponentRegistry implements
-		org.apache.taverna.component.api.Registry {
+		io.github.taverna_extras.component.api.Registry {
 	protected Map<String, Family> familyCache = new HashMap<>();
 	protected List<Profile> profileCache = new ArrayList<>();
 	protected List<SharingPolicy> permissionCache = new ArrayList<>();

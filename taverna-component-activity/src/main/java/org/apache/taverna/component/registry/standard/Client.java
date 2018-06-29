@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.standard;
+package io.github.taverna_extras.component.registry.standard;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,7 +31,7 @@ import static java.net.URLEncoder.encode;
 import static javax.xml.bind.DatatypeConverter.printBase64Binary;
 import static org.apache.commons.io.IOUtils.copy;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.registry.ClientVersion.VERSION;
+import static io.github.taverna_extras.component.registry.ClientVersion.VERSION;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -58,9 +58,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.registry.standard.Client.MyExperimentConnector.ServerResponse;
-import org.apache.taverna.component.registry.standard.annotations.Unused;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.registry.standard.Client.MyExperimentConnector.ServerResponse;
+import io.github.taverna_extras.component.registry.standard.annotations.Unused;
 import org.apache.taverna.security.credentialmanager.CMException;
 import org.apache.taverna.security.credentialmanager.CredentialManager;
 import org.apache.taverna.security.credentialmanager.UsernamePassword;

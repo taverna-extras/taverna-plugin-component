@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.view;
+package io.github.taverna_extras.component.ui.view;
 
 import static java.lang.String.format;
 import static org.apache.log4j.Logger.getLogger;
@@ -27,11 +27,11 @@ import java.net.URL;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.ComponentActivityConfigurationBean;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.ComponentActivityConfigurationBean;
 
 import org.apache.taverna.scufl2.api.configurations.Configuration;
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;

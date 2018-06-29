@@ -17,13 +17,13 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.file;
+package io.github.taverna_extras.component.ui.file;
 
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.checkComponent;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.checkComponent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,14 +33,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceProvider;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceProvider;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 import org.apache.taverna.scufl2.validation.ValidationReport;

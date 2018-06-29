@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static org.apache.jena.datatypes.xsd.XSDDatatype.XSDdateTime;
 import static org.apache.jena.rdf.model.ResourceFactory.createTypedLiteral;
@@ -32,7 +32,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.text.DefaultCaret;
 
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
 
 import org.apache.jena.datatypes.xsd.XSDDateTime;
 import org.apache.jena.ontology.OntProperty;

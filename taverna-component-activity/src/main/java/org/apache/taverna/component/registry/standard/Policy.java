@@ -1,12 +1,12 @@
-package org.apache.taverna.component.registry.standard;
+package io.github.taverna_extras.component.registry.standard;
 
 import static java.lang.System.identityHashCode;
-import static org.apache.taverna.component.registry.api.Privilege.DOWNLOAD;
-import static org.apache.taverna.component.registry.api.Privilege.VIEW;
+import static io.github.taverna_extras.component.registry.api.Privilege.DOWNLOAD;
+import static io.github.taverna_extras.component.registry.api.Privilege.VIEW;
 
-import org.apache.taverna.component.api.SharingPolicy;
-import org.apache.taverna.component.registry.api.Permissions;
-import org.apache.taverna.component.registry.api.Permissions.Permission;
+import io.github.taverna_extras.component.api.SharingPolicy;
+import io.github.taverna_extras.component.registry.api.Permissions;
+import io.github.taverna_extras.component.registry.api.Permissions.Permission;
 
 abstract class Policy implements SharingPolicy {
 	public static final SharingPolicy PUBLIC = new Public();

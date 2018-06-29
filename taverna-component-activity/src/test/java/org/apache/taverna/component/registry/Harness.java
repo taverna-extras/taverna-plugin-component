@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry;
+package io.github.taverna_extras.component.registry;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,8 +20,8 @@ package org.apache.taverna.component.registry;
 
 import java.net.URL;
 
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.registry.ComponentUtil;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.registry.ComponentUtil;
 
 public class Harness {
 	public static URL componentRegistryUrl;

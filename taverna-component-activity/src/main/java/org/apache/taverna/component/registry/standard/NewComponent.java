@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.standard;
+package io.github.taverna_extras.component.registry.standard;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,26 +19,26 @@ package org.apache.taverna.component.registry.standard;
  */
 
 import static java.lang.String.format;
-import static org.apache.taverna.component.registry.standard.NewComponentRegistry.logger;
-import static org.apache.taverna.component.registry.standard.Policy.getPolicy;
-import static org.apache.taverna.component.utils.SystemUtils.getElementString;
-import static org.apache.taverna.component.utils.SystemUtils.getValue;
+import static io.github.taverna_extras.component.registry.standard.NewComponentRegistry.logger;
+import static io.github.taverna_extras.component.registry.standard.Policy.getPolicy;
+import static io.github.taverna_extras.component.utils.SystemUtils.getElementString;
+import static io.github.taverna_extras.component.utils.SystemUtils.getValue;
 
 import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.IllegalFormatException;
 
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.License;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.SharingPolicy;
-import org.apache.taverna.component.registry.Component;
-import org.apache.taverna.component.registry.ComponentVersion;
-import org.apache.taverna.component.registry.api.ComponentType;
-import org.apache.taverna.component.registry.api.Description;
-import org.apache.taverna.component.utils.SystemUtils;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.License;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.SharingPolicy;
+import io.github.taverna_extras.component.registry.Component;
+import io.github.taverna_extras.component.registry.ComponentVersion;
+import io.github.taverna_extras.component.registry.api.ComponentType;
+import io.github.taverna_extras.component.registry.api.Description;
+import io.github.taverna_extras.component.utils.SystemUtils;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 

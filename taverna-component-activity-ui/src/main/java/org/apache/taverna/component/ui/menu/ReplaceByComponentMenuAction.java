@@ -17,15 +17,15 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu;
+package io.github.taverna_extras.component.ui.menu;
 
 import java.net.URI;
 
 import javax.swing.Action;
 
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
 
 import org.apache.taverna.scufl2.api.core.Processor;
 import org.apache.taverna.ui.menu.AbstractContextualMenuAction;

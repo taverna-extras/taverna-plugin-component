@@ -25,7 +25,7 @@
 	<xs:annotation>
 		<xs:appinfo>
 			<jxb:schemaBindings>
-				<jxb:package name="org.apache.taverna.component.registry.api" />
+				<jxb:package name="io.github.taverna_extras.component.registry.api" />
 			</jxb:schemaBindings>
 		</xs:appinfo>
 	</xs:annotation>

@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.family;
+package io.github.taverna_extras.component.ui.menu.family;
 
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.WEST;
@@ -42,16 +42,16 @@ import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.panel.FamilyChooserPanel;
-import org.apache.taverna.component.ui.panel.RegistryChooserPanel;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceProviderConfig;
-import org.apache.taverna.component.ui.util.Utils;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.panel.FamilyChooserPanel;
+import io.github.taverna_extras.component.ui.panel.RegistryChooserPanel;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceProviderConfig;
+import io.github.taverna_extras.component.ui.util.Utils;
 
 import org.apache.taverna.scufl2.api.configurations.Configuration;
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;

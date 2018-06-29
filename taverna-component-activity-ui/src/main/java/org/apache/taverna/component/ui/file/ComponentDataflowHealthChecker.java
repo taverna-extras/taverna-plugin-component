@@ -17,22 +17,22 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.file;
+package io.github.taverna_extras.component.ui.file;
 
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.checkComponent;
-import static org.apache.taverna.component.ui.util.ComponentHealthCheck.FAILS_PROFILE;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.checkComponent;
+import static io.github.taverna_extras.component.ui.util.ComponentHealthCheck.FAILS_PROFILE;
 
 import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
-import org.apache.taverna.component.ui.util.ComponentHealthCheck;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.ui.util.ComponentHealthCheck;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 import org.apache.taverna.visit.VisitReport;

@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.standard;
+package io.github.taverna_extras.component.registry.standard;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,8 +18,8 @@ package org.apache.taverna.component.registry.standard;
  * under the License.
  */
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.registry.standard.Policy.PRIVATE;
-import static org.apache.taverna.component.utils.SystemUtils.getElementString;
+import static io.github.taverna_extras.component.registry.standard.Policy.PRIVATE;
+import static io.github.taverna_extras.component.utils.SystemUtils.getElementString;
 
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -33,32 +33,32 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.License;
-import org.apache.taverna.component.api.SharingPolicy;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.Version.ID;
-import org.apache.taverna.component.api.profile.Profile;
-import org.apache.taverna.component.registry.ComponentRegistry;
-import org.apache.taverna.component.registry.ComponentUtil;
-import org.apache.taverna.component.registry.ComponentVersionIdentification;
-import org.apache.taverna.component.registry.api.ComponentDescriptionList;
-import org.apache.taverna.component.registry.api.ComponentFamilyList;
-import org.apache.taverna.component.registry.api.ComponentFamilyType;
-import org.apache.taverna.component.registry.api.ComponentProfileList;
-import org.apache.taverna.component.registry.api.ComponentProfileType;
-import org.apache.taverna.component.registry.api.ComponentType;
-import org.apache.taverna.component.registry.api.Content;
-import org.apache.taverna.component.registry.api.Description;
-import org.apache.taverna.component.registry.api.LicenseList;
-import org.apache.taverna.component.registry.api.LicenseType;
-import org.apache.taverna.component.registry.api.ObjectFactory;
-import org.apache.taverna.component.registry.api.Permissions;
-import org.apache.taverna.component.registry.api.PolicyList;
-import org.apache.taverna.component.utils.AnnotationUtils;
-import org.apache.taverna.component.utils.SystemUtils;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.License;
+import io.github.taverna_extras.component.api.SharingPolicy;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.Version.ID;
+import io.github.taverna_extras.component.api.profile.Profile;
+import io.github.taverna_extras.component.registry.ComponentRegistry;
+import io.github.taverna_extras.component.registry.ComponentUtil;
+import io.github.taverna_extras.component.registry.ComponentVersionIdentification;
+import io.github.taverna_extras.component.registry.api.ComponentDescriptionList;
+import io.github.taverna_extras.component.registry.api.ComponentFamilyList;
+import io.github.taverna_extras.component.registry.api.ComponentFamilyType;
+import io.github.taverna_extras.component.registry.api.ComponentProfileList;
+import io.github.taverna_extras.component.registry.api.ComponentProfileType;
+import io.github.taverna_extras.component.registry.api.ComponentType;
+import io.github.taverna_extras.component.registry.api.Content;
+import io.github.taverna_extras.component.registry.api.Description;
+import io.github.taverna_extras.component.registry.api.LicenseList;
+import io.github.taverna_extras.component.registry.api.LicenseType;
+import io.github.taverna_extras.component.registry.api.ObjectFactory;
+import io.github.taverna_extras.component.registry.api.Permissions;
+import io.github.taverna_extras.component.registry.api.PolicyList;
+import io.github.taverna_extras.component.utils.AnnotationUtils;
+import io.github.taverna_extras.component.utils.SystemUtils;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 import org.apache.taverna.security.credentialmanager.CredentialManager;

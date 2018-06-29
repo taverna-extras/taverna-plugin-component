@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import java.awt.Color;
 import java.awt.Component;

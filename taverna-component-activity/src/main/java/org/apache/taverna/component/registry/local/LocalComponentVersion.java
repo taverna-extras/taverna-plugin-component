@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.local;
+package io.github.taverna_extras.component.registry.local;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,16 +21,16 @@ package org.apache.taverna.component.registry.local;
 import static java.lang.Integer.parseInt;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.registry.local.LocalComponent.COMPONENT_FILENAME;
+import static io.github.taverna_extras.component.registry.local.LocalComponent.COMPONENT_FILENAME;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.registry.ComponentVersion;
-import org.apache.taverna.component.utils.SystemUtils;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.registry.ComponentVersion;
+import io.github.taverna_extras.component.utils.SystemUtils;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 

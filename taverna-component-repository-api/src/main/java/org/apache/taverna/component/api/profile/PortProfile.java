@@ -1,4 +1,4 @@
-package org.apache.taverna.component.api.profile;
+package io.github.taverna_extras.component.api.profile;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file

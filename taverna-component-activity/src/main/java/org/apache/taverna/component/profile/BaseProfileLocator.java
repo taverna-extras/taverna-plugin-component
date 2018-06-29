@@ -1,4 +1,4 @@
-package org.apache.taverna.component.profile;
+package io.github.taverna_extras.component.profile;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -39,7 +39,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentException;
 import org.apache.taverna.configuration.app.ApplicationConfiguration;
 
 public class BaseProfileLocator {

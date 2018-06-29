@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu;
+package io.github.taverna_extras.component.ui.menu;
 
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.SOUTH;
@@ -26,9 +26,9 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
-import static org.apache.taverna.component.ui.ComponentActivityConfigurationBean.ignorableNames;
-import static org.apache.taverna.component.ui.util.Utils.uniqueName;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static io.github.taverna_extras.component.ui.ComponentActivityConfigurationBean.ignorableNames;
+import static io.github.taverna_extras.component.ui.util.Utils.uniqueName;
 import static org.apache.taverna.scufl2.api.common.Scufl2Tools.NESTED_WORKFLOW;
 
 import java.awt.BorderLayout;
@@ -43,16 +43,16 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.ComponentActivityConfigurationBean;
-import org.apache.taverna.component.ui.panel.ComponentChooserPanel;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
-import org.apache.taverna.component.ui.util.Utils;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.ComponentActivityConfigurationBean;
+import io.github.taverna_extras.component.ui.panel.ComponentChooserPanel;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.ui.util.Utils;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.common.Scufl2Tools;

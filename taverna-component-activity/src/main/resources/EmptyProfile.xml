@@ -21,7 +21,7 @@
 	xmlns="http://ns.taverna.org.uk/2012/component/profile"
 	xsi:schemaLocation="http://ns.taverna.org.uk/2012/component/profile ComponentProfile.xsd">
 
-	<id>org.apache.taverna.component.profile.empty</id>
+	<id>io.github.taverna_extras.component.profile.empty</id>
 	<name>Empty profile</name>
 	<description>A basic empty profile that does not allow additional semantic annotation</description>
 	<component>

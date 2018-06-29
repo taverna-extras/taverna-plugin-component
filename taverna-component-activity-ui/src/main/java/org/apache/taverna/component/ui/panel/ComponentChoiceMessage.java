@@ -17,10 +17,10 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.panel;
+package io.github.taverna_extras.component.ui.panel;
 
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.Family;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.Family;
 
 /**
  * @author alanrw

@@ -1,4 +1,4 @@
-package org.apache.taverna.component.activity;
+package io.github.taverna_extras.component.activity;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,13 +19,13 @@ package org.apache.taverna.component.activity;
  */
 
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.activity.ComponentHealthCheck.OUT_OF_DATE;
+import static io.github.taverna_extras.component.activity.ComponentHealthCheck.OUT_OF_DATE;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.registry.ComponentUtil;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.registry.ComponentUtil;
 import org.apache.taverna.visit.VisitKind;
 import org.apache.taverna.visit.VisitReport;
 import static org.apache.taverna.visit.VisitReport.Status.WARNING;

@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.standard;
+package io.github.taverna_extras.component.registry.standard;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,18 +18,18 @@ package org.apache.taverna.component.registry.standard;
  * under the License.
  */
 
-import static org.apache.taverna.component.registry.standard.NewComponentRegistry.jaxbContext;
-import static org.apache.taverna.component.registry.standard.NewComponentRegistry.logger;
+import static io.github.taverna_extras.component.registry.standard.NewComponentRegistry.jaxbContext;
+import static io.github.taverna_extras.component.registry.standard.NewComponentRegistry.logger;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.registry.ComponentRegistry;
-import org.apache.taverna.component.registry.ComponentUtil;
-import org.apache.taverna.component.utils.AnnotationUtils;
-import org.apache.taverna.component.utils.SystemUtils;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.registry.ComponentRegistry;
+import io.github.taverna_extras.component.registry.ComponentUtil;
+import io.github.taverna_extras.component.utils.AnnotationUtils;
+import io.github.taverna_extras.component.utils.SystemUtils;
 import org.apache.taverna.security.credentialmanager.CredentialManager;
 import org.springframework.beans.factory.annotation.Required;
 

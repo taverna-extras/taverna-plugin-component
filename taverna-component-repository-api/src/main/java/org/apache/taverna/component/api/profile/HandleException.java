@@ -1,4 +1,4 @@
-package org.apache.taverna.component.api.profile;
+package io.github.taverna_extras.component.api.profile;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -34,7 +34,7 @@ public class HandleException {
 	private final boolean pruneStack;
 
 	public HandleException(
-			org.apache.taverna.component.api.profile.doc.HandleException proxied) {
+			io.github.taverna_extras.component.api.profile.doc.HandleException proxied) {
 		pruneStack = proxied.getPruneStack() != null;
 		pattern = compile(proxied.getPattern(), DOTALL);
 		if (proxied.getReplacement() != null)

@@ -49,7 +49,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Export-Package>org.apache.taverna.component.api,org.apache.taverna.component.api.profile,org.apache.taverna.component.api.profile.doc</Export-Package>
+						<Export-Package>io.github.taverna_extras.component.api,io.github.taverna_extras.component.api.profile,io.github.taverna_extras.component.api.profile.doc</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>

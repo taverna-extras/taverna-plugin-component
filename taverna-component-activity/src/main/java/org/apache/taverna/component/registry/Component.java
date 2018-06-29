@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry;
+package io.github.taverna_extras.component.registry;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -27,8 +27,8 @@ import java.net.URL;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Version;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Version;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
@@ -39,7 +39,7 @@ import org.apache.taverna.scufl2.api.container.WorkflowBundle;
  * @author David Withers
  */
 public abstract class Component implements
-		org.apache.taverna.component.api.Component {
+		io.github.taverna_extras.component.api.Component {
 	private String name;
 	private String description;
 	private URL url;

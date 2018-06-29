@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.standard;
+package io.github.taverna_extras.component.registry.standard;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,8 +18,8 @@ package org.apache.taverna.component.registry.standard;
  * under the License.
  */
 
-import org.apache.taverna.component.api.License;
-import org.apache.taverna.component.registry.api.LicenseType;
+import io.github.taverna_extras.component.api.License;
+import io.github.taverna_extras.component.registry.api.LicenseType;
 
 class NewComponentLicense implements License {
 	private NewComponentRegistry registry;

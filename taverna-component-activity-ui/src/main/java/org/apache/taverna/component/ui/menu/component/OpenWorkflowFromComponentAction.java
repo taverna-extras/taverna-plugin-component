@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.component;
+package io.github.taverna_extras.component.ui.menu.component;
 
 import static javax.swing.JOptionPane.CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
@@ -34,15 +34,15 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.ComponentAction;
-import org.apache.taverna.component.ui.panel.ComponentChoiceMessage;
-import org.apache.taverna.component.ui.panel.ComponentVersionChooserPanel;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.ComponentAction;
+import io.github.taverna_extras.component.ui.panel.ComponentChoiceMessage;
+import io.github.taverna_extras.component.ui.panel.ComponentVersionChooserPanel;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
 import org.apache.taverna.lang.observer.Observable;
 import org.apache.taverna.lang.observer.Observer;
 

@@ -17,11 +17,11 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.family;
+package io.github.taverna_extras.component.ui.menu.family;
 
 import java.net.URI;
 
-import org.apache.taverna.component.ui.menu.ComponentMenu;
+import io.github.taverna_extras.component.ui.menu.ComponentMenu;
 import org.apache.taverna.ui.menu.AbstractMenuSection;
 
 /**

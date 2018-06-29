@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu;
+package io.github.taverna_extras.component.ui.menu;
 
 import static org.apache.log4j.Logger.getLogger;
 
@@ -25,11 +25,11 @@ import java.awt.event.ActionEvent;
 import java.net.MalformedURLException;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.ComponentAction;
-import org.apache.taverna.component.ui.ComponentActivityConfigurationBean;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.ComponentAction;
+import io.github.taverna_extras.component.ui.ComponentActivityConfigurationBean;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;

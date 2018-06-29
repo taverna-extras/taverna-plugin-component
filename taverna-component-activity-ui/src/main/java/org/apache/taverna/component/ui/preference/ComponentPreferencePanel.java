@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.preference;
+package io.github.taverna_extras.component.ui.preference;
 
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.CENTER;
@@ -28,7 +28,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.ui.util.Utils.URL_PATTERN;
+import static io.github.taverna_extras.component.ui.util.Utils.URL_PATTERN;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -49,9 +49,9 @@ import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Registry;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Registry;
 import org.apache.taverna.lang.ui.DeselectingButton;
 import org.apache.taverna.lang.ui.ValidatingUserInputDialog;
 import org.apache.taverna.workbench.helper.Helper;

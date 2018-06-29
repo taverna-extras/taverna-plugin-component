@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static org.apache.jena.rdf.model.ModelFactory.createDefaultModel;
 import static org.apache.log4j.Logger.getLogger;
@@ -31,9 +31,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.profile.Profile;
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.profile.Profile;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
 
 import org.apache.taverna.scufl2.api.annotation.Annotation;
 import org.apache.taverna.scufl2.api.common.AbstractNamed;

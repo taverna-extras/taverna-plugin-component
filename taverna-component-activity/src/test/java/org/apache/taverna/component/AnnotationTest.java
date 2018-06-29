@@ -1,4 +1,4 @@
-package org.apache.taverna.component;
+package io.github.taverna_extras.component;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import org.apache.taverna.component.utils.AnnotationUtils;
+import io.github.taverna_extras.component.utils.AnnotationUtils;
 import org.junit.Test;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;

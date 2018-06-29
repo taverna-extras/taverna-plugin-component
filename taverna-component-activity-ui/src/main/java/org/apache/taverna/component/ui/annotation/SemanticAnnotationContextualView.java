@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static java.lang.String.format;
 import static org.apache.log4j.Logger.getLogger;
@@ -26,13 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.profile.Profile;
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.profile.Profile;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
 
 import org.apache.taverna.scufl2.api.common.AbstractNamed;
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;

@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static java.lang.String.format;
 
@@ -26,7 +26,7 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
 
 /**
  * @author alanrw

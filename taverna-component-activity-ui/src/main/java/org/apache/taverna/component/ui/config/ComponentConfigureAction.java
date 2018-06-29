@@ -17,12 +17,12 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.config;
+package io.github.taverna_extras.component.ui.config;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 
-import org.apache.taverna.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.ComponentFactory;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.servicedescriptions.ServiceDescriptionRegistry;

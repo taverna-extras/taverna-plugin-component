@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry;
+package io.github.taverna_extras.component.registry;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,8 +25,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Version;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Version;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 

@@ -1,4 +1,4 @@
-package org.apache.taverna.component.activity;
+package io.github.taverna_extras.component.activity;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,9 +31,9 @@ import java.util.Set;
 import javax.xml.ws.Holder;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.profile.ExceptionHandling;
-import org.apache.taverna.component.api.profile.ExceptionReplacement;
-import org.apache.taverna.component.api.profile.HandleException;
+import io.github.taverna_extras.component.api.profile.ExceptionHandling;
+import io.github.taverna_extras.component.api.profile.ExceptionReplacement;
+import io.github.taverna_extras.component.api.profile.HandleException;
 import org.apache.taverna.invocation.InvocationContext;
 import org.apache.taverna.reference.ErrorDocument;
 import org.apache.taverna.reference.ErrorDocumentService;

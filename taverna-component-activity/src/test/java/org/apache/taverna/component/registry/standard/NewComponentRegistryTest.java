@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.standard;
+package io.github.taverna_extras.component.registry.standard;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,11 +23,11 @@ import static org.junit.Assert.assertSame;
 
 import java.net.URL;
 
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.registry.ComponentRegistryTest;
-import org.apache.taverna.component.registry.standard.NewComponent;
-import org.apache.taverna.component.registry.standard.NewComponentRegistry;
-import org.apache.taverna.component.registry.standard.Policy;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.registry.ComponentRegistryTest;
+import io.github.taverna_extras.component.registry.standard.NewComponent;
+import io.github.taverna_extras.component.registry.standard.NewComponentRegistry;
+import io.github.taverna_extras.component.registry.standard.Policy;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

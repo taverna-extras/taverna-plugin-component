@@ -1,4 +1,4 @@
-package org.apache.taverna.component.api.profile;
+package io.github.taverna_extras.component.api.profile;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -30,8 +30,8 @@ public class ExceptionHandling {
 	private final List<HandleException> remapped = new ArrayList<HandleException>();
 
 	public ExceptionHandling(
-			org.apache.taverna.component.api.profile.doc.ExceptionHandling proxied) {
-		for (org.apache.taverna.component.api.profile.doc.HandleException he : proxied
+			io.github.taverna_extras.component.api.profile.doc.ExceptionHandling proxied) {
+		for (io.github.taverna_extras.component.api.profile.doc.HandleException he : proxied
 				.getHandleException())
 			remapped.add(new HandleException(he));
 		this.failLists = proxied.getFailLists() != null;

@@ -1,4 +1,4 @@
-package org.apache.taverna.component.api;
+package io.github.taverna_extras.component.api;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.taverna.component.api.profile.Profile;
+import io.github.taverna_extras.component.api.profile.Profile;
 
 public interface Registry {
 

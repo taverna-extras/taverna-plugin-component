@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.util;
+package io.github.taverna_extras.component.ui.util;
 
 import org.apache.taverna.workbench.file.FileType;
 

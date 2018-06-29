@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.preference;
+package io.github.taverna_extras.component.ui.preference;
 
 import static java.lang.String.format;
 
@@ -27,7 +27,7 @@ import java.util.TreeMap;
 
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.taverna.component.api.Registry;
+import io.github.taverna_extras.component.api.Registry;
 
 /**
  * @author alanrw

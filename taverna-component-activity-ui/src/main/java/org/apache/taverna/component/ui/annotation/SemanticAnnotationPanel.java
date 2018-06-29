@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
@@ -35,8 +35,8 @@ import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.getDisplayName;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.getObjectName;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.getDisplayName;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.getObjectName;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -58,7 +58,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
 
 import org.apache.jena.ontology.OntProperty;
 import org.apache.jena.rdf.model.RDFNode;

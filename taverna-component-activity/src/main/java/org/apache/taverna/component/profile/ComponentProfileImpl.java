@@ -1,4 +1,4 @@
-package org.apache.taverna.component.profile;
+package io.github.taverna_extras.component.profile;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -50,18 +50,18 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.profile.ActivityProfile;
-import org.apache.taverna.component.api.profile.ExceptionHandling;
-import org.apache.taverna.component.api.profile.PortProfile;
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.profile.ActivityProfile;
+import io.github.taverna_extras.component.api.profile.ExceptionHandling;
+import io.github.taverna_extras.component.api.profile.PortProfile;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
 
-import org.apache.taverna.component.api.profile.doc.Activity;
-import org.apache.taverna.component.api.profile.doc.Ontology;
-import org.apache.taverna.component.api.profile.doc.Port;
-import org.apache.taverna.component.api.profile.doc.Profile;
-import org.apache.taverna.component.api.profile.doc.SemanticAnnotation;
+import io.github.taverna_extras.component.api.profile.doc.Activity;
+import io.github.taverna_extras.component.api.profile.doc.Ontology;
+import io.github.taverna_extras.component.api.profile.doc.Port;
+import io.github.taverna_extras.component.api.profile.doc.Profile;
+import io.github.taverna_extras.component.api.profile.doc.SemanticAnnotation;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
@@ -76,7 +76,7 @@ import org.apache.taverna.workflowmodel.health.RemoteHealthChecker;
  * @author David Withers
  */
 public class ComponentProfileImpl implements
-		org.apache.taverna.component.api.profile.Profile {
+		io.github.taverna_extras.component.api.profile.Profile {
 	private static final Logger logger = getLogger(ComponentProfileImpl.class);
 	private static final Map<String, OntModel> ontologyModels = new HashMap<>();
 	private static final JAXBContext jaxbContext;
@@ -90,7 +90,7 @@ public class ComponentProfileImpl implements
 					"Failed to initialize profile deserialization engine", e);
 		}
 	}
-	private org.apache.taverna.component.api.profile.Profile parent;
+	private io.github.taverna_extras.component.api.profile.Profile parent;
 	private Profile profileDoc;
 	private ExceptionHandling exceptionHandling;
 	private Registry parentRegistry = null;
@@ -289,7 +289,7 @@ public class ComponentProfileImpl implements
 		return o == null || o == this;
 	}
 
-	private synchronized org.apache.taverna.component.api.profile.Profile parent()
+	private synchronized io.github.taverna_extras.component.api.profile.Profile parent()
 			throws ComponentException {
 		if (parent == null) {
 			try {
@@ -459,8 +459,8 @@ public class ComponentProfileImpl implements
 	}
 
 	@Override
-	public List<org.apache.taverna.component.api.profile.ActivityProfile> getActivityProfiles() {
-		List<org.apache.taverna.component.api.profile.ActivityProfile> activityProfiles = new ArrayList<>();
+	public List<io.github.taverna_extras.component.api.profile.ActivityProfile> getActivityProfiles() {
+		List<io.github.taverna_extras.component.api.profile.ActivityProfile> activityProfiles = new ArrayList<>();
 		try {
 			for (Activity activity : getProfileDocument().getComponent()
 					.getActivity())
@@ -590,7 +590,7 @@ public class ComponentProfileImpl implements
  * @author Donal Fellows
  */
 final class EmptyProfile implements
-		org.apache.taverna.component.api.profile.Profile {
+		io.github.taverna_extras.component.api.profile.Profile {
 	@Override
 	public String getName() {
 		return "";
@@ -657,7 +657,7 @@ final class EmptyProfile implements
 	}
 
 	@Override
-	public List<org.apache.taverna.component.api.profile.ActivityProfile> getActivityProfiles() {
+	public List<io.github.taverna_extras.component.api.profile.ActivityProfile> getActivityProfiles() {
 		return emptyList();
 	}
 

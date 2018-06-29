@@ -1,4 +1,4 @@
-package org.apache.taverna.component.activity;
+package io.github.taverna_extras.component.activity;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,12 +24,12 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Version.ID;
-import org.apache.taverna.component.registry.ComponentImplementationCache;
-import org.apache.taverna.component.registry.ComponentUtil;
-import org.apache.taverna.component.utils.AnnotationUtils;
-import org.apache.taverna.component.utils.SystemUtils;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Version.ID;
+import io.github.taverna_extras.component.registry.ComponentImplementationCache;
+import io.github.taverna_extras.component.registry.ComponentUtil;
+import io.github.taverna_extras.component.utils.AnnotationUtils;
+import io.github.taverna_extras.component.utils.SystemUtils;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.fasterxml.jackson.databind.JsonNode;

@@ -17,21 +17,21 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.view;
+package io.github.taverna_extras.component.ui.view;
 
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.api.config.ComponentConfig.URI;
+import static io.github.taverna_extras.component.api.config.ComponentConfig.URI;
 
 import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.profile.Profile;
-import org.apache.taverna.component.ui.ComponentActivityConfigurationBean;
-import org.apache.taverna.component.ui.annotation.AbstractSemanticAnnotationContextualView;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.profile.Profile;
+import io.github.taverna_extras.component.ui.ComponentActivityConfigurationBean;
+import io.github.taverna_extras.component.ui.annotation.AbstractSemanticAnnotationContextualView;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.core.Workflow;

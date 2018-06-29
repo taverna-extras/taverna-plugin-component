@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.preference;
+package io.github.taverna_extras.component.ui.preference;
 
 import java.io.File;
 import java.util.LinkedHashMap;

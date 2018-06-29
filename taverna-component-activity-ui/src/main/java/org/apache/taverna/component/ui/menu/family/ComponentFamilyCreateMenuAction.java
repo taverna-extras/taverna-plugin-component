@@ -17,16 +17,16 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.family;
+package io.github.taverna_extras.component.ui.menu.family;
 
-import static org.apache.taverna.component.ui.menu.family.ComponentFamilyMenuSection.COMPONENT_FAMILY_SECTION;
+import static io.github.taverna_extras.component.ui.menu.family.ComponentFamilyMenuSection.COMPONENT_FAMILY_SECTION;
 
 import java.net.URI;
 
 import javax.swing.Action;
 
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
 import org.apache.taverna.ui.menu.AbstractMenuAction;
 
 /**

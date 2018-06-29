@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.component;
+package io.github.taverna_extras.component.ui.menu.component;
 
 import static org.apache.log4j.Logger.getLogger;
 
@@ -27,8 +27,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
-import org.apache.taverna.component.ui.util.Utils;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.ui.util.Utils;
 import org.apache.taverna.lang.observer.Observable;
 import org.apache.taverna.lang.observer.Observer;
 import org.apache.taverna.workbench.file.FileManager;

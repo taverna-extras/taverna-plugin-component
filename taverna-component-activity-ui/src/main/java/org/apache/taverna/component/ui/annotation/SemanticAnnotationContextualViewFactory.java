@@ -17,13 +17,13 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Version;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Version;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.common.AbstractNamed;

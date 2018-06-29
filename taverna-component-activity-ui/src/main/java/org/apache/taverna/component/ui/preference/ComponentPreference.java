@@ -17,12 +17,12 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.preference;
+package io.github.taverna_extras.component.ui.preference;
 
 import static org.apache.commons.lang.StringUtils.join;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.ui.preference.ComponentDefaults.REGISTRY_LIST;
-import static org.apache.taverna.component.ui.preference.ComponentDefaults.getDefaultProperties;
+import static io.github.taverna_extras.component.ui.preference.ComponentDefaults.REGISTRY_LIST;
+import static io.github.taverna_extras.component.ui.preference.ComponentDefaults.getDefaultProperties;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,9 +35,9 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Registry;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Registry;
 import org.apache.taverna.configuration.AbstractConfigurable;
 import org.apache.taverna.configuration.ConfigurationManager;
 

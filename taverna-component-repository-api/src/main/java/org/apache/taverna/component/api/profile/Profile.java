@@ -1,4 +1,4 @@
-package org.apache.taverna.component.api.profile;
+package io.github.taverna_extras.component.api.profile;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,9 +21,9 @@ package org.apache.taverna.component.api.profile;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.NamedItem;
-import org.apache.taverna.component.api.Registry;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.NamedItem;
+import io.github.taverna_extras.component.api.Registry;
 
 import org.apache.jena.ontology.OntModel;
 
@@ -33,7 +33,7 @@ public interface Profile extends NamedItem, AnnotatedElement {
 
 	String getXML() throws ComponentException;
 
-	org.apache.taverna.component.api.profile.doc.Profile getProfileDocument()
+	io.github.taverna_extras.component.api.profile.doc.Profile getProfileDocument()
 			throws ComponentException;
 
 	String getId();

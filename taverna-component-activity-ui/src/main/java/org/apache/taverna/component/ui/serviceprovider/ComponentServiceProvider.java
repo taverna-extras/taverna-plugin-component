@@ -17,16 +17,16 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.serviceprovider;
+package io.github.taverna_extras.component.ui.serviceprovider;
 
 import static java.util.Arrays.asList;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.FAMILY_NAME;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
-import static org.apache.taverna.component.ui.ComponentConstants.ACTIVITY_URI;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
+import static io.github.taverna_extras.component.ui.ComponentConstants.ACTIVITY_URI;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -38,15 +38,15 @@ import java.util.SortedMap;
 import javax.swing.Icon;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.panel.RegistryAndFamilyChooserPanel;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.util.Utils;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.panel.RegistryAndFamilyChooserPanel;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.util.Utils;
 
 import org.apache.taverna.scufl2.api.common.Visitor;
 import org.apache.taverna.scufl2.api.configurations.Configuration;

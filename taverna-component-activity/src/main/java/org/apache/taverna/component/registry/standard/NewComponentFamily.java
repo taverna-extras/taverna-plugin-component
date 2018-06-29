@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.standard;
+package io.github.taverna_extras.component.registry.standard;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,18 +18,18 @@ package org.apache.taverna.component.registry.standard;
  * under the License.
  */
 
-import static org.apache.taverna.component.utils.SystemUtils.getElementString;
+import static io.github.taverna_extras.component.utils.SystemUtils.getElementString;
 
 import java.util.List;
 
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.profile.Profile;
-import org.apache.taverna.component.registry.ComponentFamily;
-import org.apache.taverna.component.registry.ComponentUtil;
-import org.apache.taverna.component.registry.api.ComponentFamilyType;
-import org.apache.taverna.component.registry.api.Description;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.profile.Profile;
+import io.github.taverna_extras.component.registry.ComponentFamily;
+import io.github.taverna_extras.component.registry.ComponentUtil;
+import io.github.taverna_extras.component.registry.api.ComponentFamilyType;
+import io.github.taverna_extras.component.registry.api.Description;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 

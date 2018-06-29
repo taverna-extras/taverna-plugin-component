@@ -1,4 +1,4 @@
-package org.apache.taverna.component;
+package io.github.taverna_extras.component;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,9 +18,9 @@ package org.apache.taverna.component;
  * under the License.
  */
 
-import org.apache.taverna.component.activity.ComponentActivity;
-import org.apache.taverna.component.activity.ComponentActivityConfigurationBean;
-import org.apache.taverna.component.activity.ComponentActivityFactory;
+import io.github.taverna_extras.component.activity.ComponentActivity;
+import io.github.taverna_extras.component.activity.ComponentActivityConfigurationBean;
+import io.github.taverna_extras.component.activity.ComponentActivityFactory;
 
 
 public class ComponentActivityTest {

@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.local;
+package io.github.taverna_extras.component.registry.local;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,12 +20,12 @@ package org.apache.taverna.component.registry.local;
 
 import static java.lang.System.getProperty;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.apache.taverna.component.registry.Harness.componentRegistry;
-import static org.apache.taverna.component.registry.Harness.componentRegistryUrl;
+import static io.github.taverna_extras.component.registry.Harness.componentRegistry;
+import static io.github.taverna_extras.component.registry.Harness.componentRegistryUrl;
 
 import java.io.File;
 
-import org.apache.taverna.component.registry.local.LocalComponentRegistryFactory;
+import io.github.taverna_extras.component.registry.local.LocalComponentRegistryFactory;
 
 class RegistrySupport {
 	private static File testRegistry;

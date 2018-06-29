@@ -1,5 +1,5 @@
 
-package org.apache.taverna.component.registry;
+package io.github.taverna_extras.component.registry;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,17 +21,17 @@ package org.apache.taverna.component.registry;
 
 import java.net.URL;
 
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.Version.ID;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.Version.ID;
 
 /**
  * @author alanrw
  * 
  */
 public class ComponentVersionIdentification implements
-		org.apache.taverna.component.api.Version.ID {
+		io.github.taverna_extras.component.api.Version.ID {
 	private static final long serialVersionUID = 1768548650702925916L;
 	private URL registryBase;
 	private String familyName;
@@ -48,7 +48,7 @@ public class ComponentVersionIdentification implements
 	}
 
 	public ComponentVersionIdentification(Registry registry, Family family,
-			org.apache.taverna.component.api.Component component, Integer version) {
+			io.github.taverna_extras.component.api.Component component, Integer version) {
 		this(registry.getRegistryBase(), family.getName(), component.getName(), version);
 	}
 
@@ -206,7 +206,7 @@ public class ComponentVersionIdentification implements
 	}
 
 	@Override
-	public boolean mostlyEqualTo(org.apache.taverna.component.api.Component c) {
+	public boolean mostlyEqualTo(io.github.taverna_extras.component.api.Component c) {
 		return mostlyEqualTo(new ComponentVersionIdentification(c.getRegistry(), c.getFamily(), c, 0));
 	}
 }

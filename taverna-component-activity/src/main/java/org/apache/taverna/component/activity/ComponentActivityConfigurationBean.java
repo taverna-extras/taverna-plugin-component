@@ -1,4 +1,4 @@
-package org.apache.taverna.component.activity;
+package io.github.taverna_extras.component.activity;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,10 +19,10 @@ package org.apache.taverna.component.activity;
  */
 
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.FAMILY_NAME;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
@@ -36,11 +36,11 @@ import java.util.List;
 //import net.sf.taverna.t2.workflowmodel.processor.activity.config.ActivityPortsDefinitionBean;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.profile.ExceptionHandling;
-import org.apache.taverna.component.registry.ComponentImplementationCache;
-import org.apache.taverna.component.registry.ComponentUtil;
-import org.apache.taverna.component.registry.ComponentVersionIdentification;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.profile.ExceptionHandling;
+import io.github.taverna_extras.component.registry.ComponentImplementationCache;
+import io.github.taverna_extras.component.registry.ComponentUtil;
+import io.github.taverna_extras.component.registry.ComponentVersionIdentification;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 import org.apache.taverna.scufl2.api.port.InputWorkflowPort;
@@ -74,7 +74,7 @@ public class ComponentActivityConfigurationBean extends
 		this.cache = cache;
 		try {
 			getPorts();
-		} catch (org.apache.taverna.component.api.ComponentException e) {
+		} catch (io.github.taverna_extras.component.api.ComponentException e) {
 			logger.error("failed to get component realization", e);
 		}
 	}
@@ -125,7 +125,7 @@ public class ComponentActivityConfigurationBean extends
 					.getComponentProfile().getExceptionHandling();
 			if (eh != null)
 				outputs.add(makeOutputDefinition(1, ERROR_CHANNEL));
-		} catch (org.apache.taverna.component.api.ComponentException e) {
+		} catch (io.github.taverna_extras.component.api.ComponentException e) {
 			logger.error("failed to get exception handling for family", e);
 		}
 		return result;
@@ -156,7 +156,7 @@ public class ComponentActivityConfigurationBean extends
 	/**
 	 * @return the ports
 	 */
-	public ActivityPortsDefinitionBean getPorts() throws org.apache.taverna.component.api.ComponentException{
+	public ActivityPortsDefinitionBean getPorts() throws io.github.taverna_extras.component.api.ComponentException{
 		if (ports == null)
 			ports = getPortsDefinition(cache.getImplementation(this));
 		return ports;

@@ -17,9 +17,9 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.component;
+package io.github.taverna_extras.component.ui.menu.component;
 
-import static org.apache.taverna.component.ui.menu.component.ComponentMenuSection.COMPONENT_SECTION;
+import static io.github.taverna_extras.component.ui.menu.component.ComponentMenuSection.COMPONENT_SECTION;
 
 import java.net.URI;
 

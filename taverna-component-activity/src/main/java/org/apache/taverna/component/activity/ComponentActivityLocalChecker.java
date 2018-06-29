@@ -1,4 +1,4 @@
-package org.apache.taverna.component.activity;
+package io.github.taverna_extras.component.activity;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,7 +18,7 @@ package org.apache.taverna.component.activity;
  * under the License.
  */
 
-import static org.apache.taverna.component.activity.ComponentHealthCheck.NON_SHAREABLE;
+import static io.github.taverna_extras.component.activity.ComponentHealthCheck.NON_SHAREABLE;
 
 import java.util.List;
 import org.apache.taverna.visit.VisitKind;

@@ -17,16 +17,16 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static org.apache.jena.rdf.model.ResourceFactory.createTypedLiteral;
 import static java.lang.Integer.MIN_VALUE;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.getObjectName;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.getObjectName;
 
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
 
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
 
 import org.apache.jena.ontology.OntProperty;
 import org.apache.jena.rdf.model.RDFNode;

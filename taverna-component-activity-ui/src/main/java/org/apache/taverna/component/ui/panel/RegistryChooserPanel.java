@@ -17,13 +17,13 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.panel;
+package io.github.taverna_extras.component.ui.panel;
 
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.WEST;
 import static java.awt.event.ItemEvent.SELECTED;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.ui.util.Utils.LONG_STRING;
+import static io.github.taverna_extras.component.ui.util.Utils.LONG_STRING;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -39,8 +39,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
 import org.apache.taverna.lang.observer.Observable;
 import org.apache.taverna.lang.observer.Observer;
 

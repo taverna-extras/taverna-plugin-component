@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.preference;
+package io.github.taverna_extras.component.ui.preference;
 
 import javax.swing.JPanel;
 import org.apache.taverna.configuration.Configurable;

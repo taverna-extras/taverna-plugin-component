@@ -17,11 +17,11 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.file;
+package io.github.taverna_extras.component.ui.file;
 
 import static java.util.Collections.sort;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.getDisplayName;
-import static org.apache.taverna.component.ui.util.ComponentHealthCheck.FAILS_PROFILE;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.getDisplayName;
+import static io.github.taverna_extras.component.ui.util.ComponentHealthCheck.FAILS_PROFILE;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,8 +31,8 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
 
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
-import org.apache.taverna.component.ui.util.ComponentHealthCheck;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.ui.util.ComponentHealthCheck;
 import org.apache.taverna.visit.VisitKind;
 import org.apache.taverna.visit.VisitReport;
 

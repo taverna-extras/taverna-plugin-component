@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry.local;
+package io.github.taverna_extras.component.registry.local;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,8 +20,8 @@ package org.apache.taverna.component.registry.local;
 
 import static org.junit.Assert.assertSame;
 
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.registry.ComponentRegistryTest;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.registry.ComponentRegistryTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

@@ -1,4 +1,4 @@
-package org.apache.taverna.component.utils;
+package io.github.taverna_extras.component.utils;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file

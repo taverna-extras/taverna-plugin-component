@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.component;
+package io.github.taverna_extras.component.ui.menu.component;
 
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.WEST;
@@ -38,14 +38,14 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.panel.ComponentChoiceMessage;
-import org.apache.taverna.component.ui.panel.ComponentChooserPanel;
-import org.apache.taverna.component.ui.panel.ProfileChoiceMessage;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.panel.ComponentChoiceMessage;
+import io.github.taverna_extras.component.ui.panel.ComponentChooserPanel;
+import io.github.taverna_extras.component.ui.panel.ProfileChoiceMessage;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
 import org.apache.taverna.lang.observer.Observable;
 import org.apache.taverna.lang.observer.Observer;
 

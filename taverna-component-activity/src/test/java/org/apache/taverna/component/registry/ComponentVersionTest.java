@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry;
+package io.github.taverna_extras.component.registry;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,9 +23,9 @@ import static org.junit.Assert.assertNotNull;
 
 import java.net.URL;
 
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.profile.Profile;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.profile.Profile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

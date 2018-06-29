@@ -17,11 +17,11 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu;
+package io.github.taverna_extras.component.ui.menu;
 
 import java.net.URI;
 
-import org.apache.taverna.component.api.config.ComponentConfig;
+import io.github.taverna_extras.component.api.config.ComponentConfig;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.core.Processor;

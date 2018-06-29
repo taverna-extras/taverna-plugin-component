@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.view;
+package io.github.taverna_extras.component.ui.view;
 
 import static java.lang.String.format;
 
@@ -26,7 +26,7 @@ import java.awt.Color;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 
-import org.apache.taverna.component.api.Version;
+import io.github.taverna_extras.component.api.Version;
 import org.apache.taverna.lang.ui.HtmlUtils;
 import org.apache.taverna.workbench.configuration.colour.ColourManager;
 import org.apache.taverna.workbench.ui.views.contextualviews.ContextualView;
@@ -58,7 +58,7 @@ public class ComponentContextualView extends ContextualView {
 
 	public String getBackgroundColour() {
 		Color colour = colourManager.getPreferredColour(
-				"org.apache.taverna.component.registry.Component");
+				"io.github.taverna_extras.component.registry.Component");
 		return format("#%1$2x%2$2x%3$2x", colour.getRed(), colour.getGreen(),
 				colour.getBlue());
 	}

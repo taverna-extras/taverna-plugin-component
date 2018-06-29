@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.view;
+package io.github.taverna_extras.component.ui.view;
 
 import static java.awt.Color.GRAY;
 import static java.awt.Color.WHITE;
@@ -26,8 +26,8 @@ import static java.awt.GridBagConstraints.EAST;
 import static java.awt.GridBagConstraints.HORIZONTAL;
 import static java.awt.GridBagConstraints.SOUTHEAST;
 import static java.lang.String.format;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.getDisplayName;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.getObjectName;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.getDisplayName;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.getObjectName;
 
 import java.awt.Component;
 import java.awt.Graphics;
@@ -42,7 +42,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
 
 import org.apache.jena.ontology.OntProperty;
 import org.apache.jena.rdf.model.Statement;

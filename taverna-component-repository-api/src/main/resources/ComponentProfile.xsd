@@ -26,7 +26,7 @@
 	<xs:annotation>
 		<xs:appinfo>
 			<jxb:schemaBindings>
-				<jxb:package name="org.apache.taverna.component.api.profile.doc" />
+				<jxb:package name="io.github.taverna_extras.component.api.profile.doc" />
 			</jxb:schemaBindings>
 		</xs:appinfo>
 	</xs:annotation>

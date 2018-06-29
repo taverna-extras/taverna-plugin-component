@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.SOUTH;
@@ -37,8 +37,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Version;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Version;
 import org.apache.taverna.lang.ui.DeselectingButton;
 
 import org.apache.taverna.scufl2.api.activity.Activity;

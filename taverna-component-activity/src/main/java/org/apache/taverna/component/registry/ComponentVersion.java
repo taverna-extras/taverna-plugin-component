@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry;
+package io.github.taverna_extras.component.registry;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,13 +18,13 @@ package org.apache.taverna.component.registry;
  * under the License.
  */
 
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentException;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentException;
 
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 public abstract class ComponentVersion implements
-		org.apache.taverna.component.api.Version {
+		io.github.taverna_extras.component.api.Version {
 	private Integer versionNumber;
 	private String description;
 	private Component component;

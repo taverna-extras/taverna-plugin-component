@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu;
+package io.github.taverna_extras.component.ui.menu;
 
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
@@ -26,7 +26,7 @@ import static java.util.Collections.sort;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.ui.util.Utils.uniqueName;
+import static io.github.taverna_extras.component.ui.util.Utils.uniqueName;
 import static org.apache.taverna.scufl2.api.common.Scufl2Tools.NESTED_WORKFLOW;
 
 import java.awt.BorderLayout;

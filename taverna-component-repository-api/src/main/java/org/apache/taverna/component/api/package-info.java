@@ -22,4 +22,4 @@
  * @author Donal Fellows
  * @author David Withers
  */
-package org.apache.taverna.component.api;
+package io.github.taverna_extras.component.api;

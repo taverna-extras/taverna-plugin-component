@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.file;
+package io.github.taverna_extras.component.ui.file;
 
 import static java.awt.Color.WHITE;
 import static java.awt.Font.BOLD;
@@ -31,8 +31,8 @@ import java.awt.Insets;
 import javax.swing.border.Border;
 
 import org.apache.batik.swing.JSVGCanvas;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.util.Utils;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.util.Utils;
 import org.apache.taverna.lang.observer.Observable;
 import org.apache.taverna.lang.observer.Observer;
 
@@ -71,9 +71,9 @@ public class FileManagerObserver implements StartupSPI {
 	@Override
 	public boolean startup() {
 		colours.setPreferredColour(
-				"org.apache.taverna.component.registry.Component", COLOR);
+				"io.github.taverna_extras.component.registry.Component", COLOR);
 		colours.setPreferredColour(
-				"org.apache.taverna.component.ComponentActivity", COLOR);
+				"io.github.taverna_extras.component.ComponentActivity", COLOR);
 		fileManager.addObserver(new Observer<FileManagerEvent>() {
 			@Override
 			public void notify(Observable<FileManagerEvent> observable,

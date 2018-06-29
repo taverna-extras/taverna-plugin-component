@@ -1,4 +1,4 @@
-package org.apache.taverna.component.registry;
+package io.github.taverna_extras.component.registry;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,17 +22,17 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.profile.Profile;
-import org.apache.taverna.component.profile.BaseProfileLocator;
-import org.apache.taverna.component.profile.ComponentProfileImpl;
-import org.apache.taverna.component.registry.local.LocalComponentRegistryFactory;
-import org.apache.taverna.component.registry.standard.NewComponentRegistryFactory;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.profile.Profile;
+import io.github.taverna_extras.component.profile.BaseProfileLocator;
+import io.github.taverna_extras.component.profile.ComponentProfileImpl;
+import io.github.taverna_extras.component.registry.local.LocalComponentRegistryFactory;
+import io.github.taverna_extras.component.registry.standard.NewComponentRegistryFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 /**

@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.serviceprovider;
+package io.github.taverna_extras.component.ui.serviceprovider;
 
 import java.net.URI;
 

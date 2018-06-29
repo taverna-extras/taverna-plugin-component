@@ -17,18 +17,18 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.util;
+package io.github.taverna_extras.component.ui.util;
 
-import static org.apache.taverna.component.ui.ComponentConstants.ACTIVITY_URI;
+import static io.github.taverna_extras.component.ui.ComponentConstants.ACTIVITY_URI;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceProvider;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceProvider;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.scufl2.api.common.Named;

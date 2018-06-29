@@ -1,4 +1,4 @@
-package org.apache.taverna.component.api;
+package io.github.taverna_extras.component.api;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,7 +20,7 @@ package org.apache.taverna.component.api;
 
 import java.util.List;
 
-import org.apache.taverna.component.api.profile.Profile;
+import io.github.taverna_extras.component.api.profile.Profile;
 import org.apache.taverna.scufl2.api.container.WorkflowBundle;
 
 public interface Family extends NamedItem {

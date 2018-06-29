@@ -17,15 +17,15 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.config;
+package io.github.taverna_extras.component.ui.config;
 
 import static java.awt.event.ItemEvent.SELECTED;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.FAMILY_NAME;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
-import static org.apache.taverna.component.ui.util.Utils.SHORT_STRING;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.COMPONENT_NAME;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.COMPONENT_VERSION;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
+import static io.github.taverna_extras.component.ui.util.Utils.SHORT_STRING;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
@@ -40,11 +40,11 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.Component;
-import org.apache.taverna.component.api.ComponentException;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.ui.panel.ComponentListCellRenderer;
+import io.github.taverna_extras.component.api.Component;
+import io.github.taverna_extras.component.api.ComponentException;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.ui.panel.ComponentListCellRenderer;
 
 import org.apache.taverna.scufl2.api.activity.Activity;
 import org.apache.taverna.services.ServiceRegistry;

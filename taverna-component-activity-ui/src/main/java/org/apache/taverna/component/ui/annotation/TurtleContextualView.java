@@ -17,11 +17,11 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static java.awt.BorderLayout.CENTER;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.findSemanticAnnotation;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.getStrippedAnnotationContent;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.findSemanticAnnotation;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.getStrippedAnnotationContent;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.awt.BorderLayout;

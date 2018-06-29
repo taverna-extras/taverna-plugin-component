@@ -17,14 +17,14 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.annotation;
+package io.github.taverna_extras.component.ui.annotation;
 
 import static java.awt.GridBagConstraints.HORIZONTAL;
 import static java.awt.GridBagConstraints.NORTHWEST;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.log4j.Logger.getLogger;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.createSemanticAnnotation;
-import static org.apache.taverna.component.ui.annotation.SemanticAnnotationUtils.getDisplayName;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.createSemanticAnnotation;
+import static io.github.taverna_extras.component.ui.annotation.SemanticAnnotationUtils.getDisplayName;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -47,7 +47,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.profile.SemanticAnnotationProfile;
+import io.github.taverna_extras.component.api.profile.SemanticAnnotationProfile;
 
 import org.apache.taverna.scufl2.api.common.AbstractNamed;
 import org.apache.taverna.scufl2.api.common.Named;

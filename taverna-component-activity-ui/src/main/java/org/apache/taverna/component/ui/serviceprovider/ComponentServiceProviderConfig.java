@@ -17,16 +17,16 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.serviceprovider;
+package io.github.taverna_extras.component.ui.serviceprovider;
 
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.FAMILY_NAME;
-import static org.apache.taverna.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
-import static org.apache.taverna.component.ui.serviceprovider.ComponentServiceProvider.providerId;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.FAMILY_NAME;
+import static io.github.taverna_extras.component.api.config.ComponentPropertyNames.REGISTRY_BASE;
+import static io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceProvider.providerId;
 
 import java.net.URL;
 
-import org.apache.taverna.component.api.Family;
-import org.apache.taverna.component.api.Version;
+import io.github.taverna_extras.component.api.Family;
+import io.github.taverna_extras.component.api.Version;
 
 import org.apache.taverna.scufl2.api.configurations.Configuration;
 

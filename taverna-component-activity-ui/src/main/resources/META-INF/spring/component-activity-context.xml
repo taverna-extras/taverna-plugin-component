@@ -46,16 +46,16 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/beans/spring-util.xsd">
 	<context:annotation-config />
 
-	<bean id="prefs" class="org.apache.taverna.component.ui.preference.ComponentPreference">
+	<bean id="prefs" class="io.github.taverna_extras.component.ui.preference.ComponentPreference">
 		<constructor-arg name="cm" ref="configManager" />
 		<constructor-arg name="factory" ref="componentFactory" />
 	</bean>
-	<bean id="preferencePanel" class="org.apache.taverna.component.ui.preference.ComponentPreferencePanel">
+	<bean id="preferencePanel" class="io.github.taverna_extras.component.ui.preference.ComponentPreferencePanel">
 		<constructor-arg name="componentFactory" ref="componentFactory" />
 		<constructor-arg name="preferences" ref="prefs" />
 	</bean>
 	<bean id="componentSupport"
-		class="org.apache.taverna.component.ui.menu.component.ComponentCreatorSupport">
+		class="io.github.taverna_extras.component.ui.menu.component.ComponentCreatorSupport">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="preferences" ref="prefs" />
 		<property name="fileManager" ref="fileManager" />
@@ -63,9 +63,9 @@
 		<property name="fileType" ref="fileType" />
 		<property name="selectionManager" ref="selectionManager" />
 	</bean>
-	<bean id="fileType" class="org.apache.taverna.component.ui.util.ComponentFileType" />
-	<bean id="icon" class="org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon" />
-	<bean id="utils" class="org.apache.taverna.component.ui.util.Utils">
+	<bean id="fileType" class="io.github.taverna_extras.component.ui.util.ComponentFileType" />
+	<bean id="icon" class="io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon" />
+	<bean id="utils" class="io.github.taverna_extras.component.ui.util.Utils">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="fileManager" ref="fileManager" />
 		<property name="icon" ref="icon" />
@@ -79,7 +79,7 @@
 		<entry key="name" value="componentServiceProvider" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.serviceprovider.ComponentServiceProvider">
+		class="io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceProvider">
 		<constructor-arg ref="componentFactory" index="0" />
 		<constructor-arg ref="prefs" index="1" />
 		<constructor-arg ref="icon" index="2" />
@@ -92,7 +92,7 @@
 
 <!-- === Startup === -->
 <osgi:service interface="net.sf.taverna.t2.workbench.StartupSPI">
-	<bean class="org.apache.taverna.component.ui.file.FileManagerObserver">
+	<bean class="io.github.taverna_extras.component.ui.file.FileManagerObserver">
 		<property name="colourManager" ref="colourManager" />
 		<property name="fileManager" ref="fileManager" />
 		<property name="graphView" ref="graphView" />
@@ -102,13 +102,13 @@
 
 <!-- === Dataflow persistence handlers === -->
 <osgi:service interface="net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler">
-	<bean class="org.apache.taverna.component.ui.file.ComponentOpener">
+	<bean class="io.github.taverna_extras.component.ui.file.ComponentOpener">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="fileType" ref="fileType" />
 	</bean>
 </osgi:service>
 <osgi:service interface="net.sf.taverna.t2.workbench.file.DataflowPersistenceHandler">
-	<bean class="org.apache.taverna.component.ui.file.ComponentSaver">
+	<bean class="io.github.taverna_extras.component.ui.file.ComponentSaver">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="fileType" ref="fileType" />
 	</bean>
@@ -116,7 +116,7 @@
 
 <!-- === Health checkers === -->
 <osgi:service interface="net.sf.taverna.t2.workflowmodel.health.HealthChecker">
-	<bean class="org.apache.taverna.component.ui.file.ComponentDataflowHealthChecker">
+	<bean class="io.github.taverna_extras.component.ui.file.ComponentDataflowHealthChecker">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="fileManager" ref="fileManager" />
 	</bean>
@@ -128,7 +128,7 @@
 		<entry key="name" value="componentConfigurationUI" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.preference.ComponentPreferenceUIFactory">
+		class="io.github.taverna_extras.component.ui.preference.ComponentPreferenceUIFactory">
 		<property name="configPanel" ref="preferencePanel" />
 		<property name="preferences" ref="prefs" />
 	</bean>
@@ -141,7 +141,7 @@
 		<entry key="name" value="componentActivityContextView" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.view.ComponentActivityContextViewFactory">
+		class="io.github.taverna_extras.component.ui.view.ComponentActivityContextViewFactory">
 		<property name="colourManager" ref="colourManager" />
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="editManager" ref="editManager" />
@@ -157,7 +157,7 @@
 	<osgi:service-properties>
 		<entry key="name" value="componentContextView" />
 	</osgi:service-properties>
-	<bean class="org.apache.taverna.component.ui.view.ComponentContextViewFactory">
+	<bean class="io.github.taverna_extras.component.ui.view.ComponentContextViewFactory">
 		<property name="fileManager" ref="fileManager" />
 	</bean>
 </osgi:service>
@@ -167,7 +167,7 @@
 		<entry key="name" value="componentActivitySemanticAnnotationContextView" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.view.ComponentActivitySemanticAnnotationContextViewFactory">
+		class="io.github.taverna_extras.component.ui.view.ComponentActivitySemanticAnnotationContextViewFactory">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="fileManager" ref="fileManager" />
 	</bean>
@@ -178,7 +178,7 @@
 		<entry key="name" value="semanticAnnotationContextView" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.annotation.SemanticAnnotationContextualViewFactory">
+		class="io.github.taverna_extras.component.ui.annotation.SemanticAnnotationContextualViewFactory">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="fileManager" ref="fileManager" />
 	</bean>
@@ -190,7 +190,7 @@
 		<entry key="name" value="componentConfigureAction" />
 	</osgi:service-properties>
 	<bean id="componentConfigureMenuAction"
-		class="org.apache.taverna.component.ui.menu.ComponentConfigureMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.ComponentConfigureMenuAction">
 		<property name="activityIconManager" ref="iconManager" />
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="editManager" ref="editManager" />
@@ -200,7 +200,7 @@
 	</bean>
 </osgi:service>
 <bean id="componentServiceCreatorMenuAction"
-	class="org.apache.taverna.component.ui.menu.component.ComponentServiceCreatorMenuAction">
+	class="io.github.taverna_extras.component.ui.menu.component.ComponentServiceCreatorMenuAction">
 	<description>Don't publish this bean yet.</description>
 	<property name="icon" ref="icon" />
 	<property name="selectionManager" ref="selectionManager" />
@@ -211,7 +211,7 @@
 		<entry key="name" value="nestedWorkflowCreatorAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.NestedWorkflowCreatorMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.NestedWorkflowCreatorMenuAction">
 		<property name="editManager" ref="editManager" />
 		<property name="graphView" ref="graphView" />
 		<property name="selectionManager" ref="selectionManager" />
@@ -222,7 +222,7 @@
 		<entry key="name" value="componentReplaceAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.ReplaceByComponentMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.ReplaceByComponentMenuAction">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="editManager" ref="editManager" />
 		<property name="icon" ref="icon" />
@@ -235,7 +235,7 @@
 		<entry key="name" value="componentOpenAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.OpenComponentFromComponentActivityMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.OpenComponentFromComponentActivityMenuAction">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="fileManager" ref="fileManager" />
 		<property name="graphView" ref="graphView" />
@@ -245,19 +245,19 @@
 	</bean>
 </osgi:service>
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
-	<bean class="org.apache.taverna.component.ui.menu.ComponentMenu" />
+	<bean class="io.github.taverna_extras.component.ui.menu.ComponentMenu" />
 </osgi:service>
 
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
 	<bean
-		class="org.apache.taverna.component.ui.menu.registry.ComponentRegistryMenuSection" />
+		class="io.github.taverna_extras.component.ui.menu.registry.ComponentRegistryMenuSection" />
 </osgi:service>
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
 	<osgi:service-properties>
 		<entry key="name" value="componentRegistryManageAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.registry.ComponentRegistryManageMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.registry.ComponentRegistryManageMenuAction">
 		<property name="configurationFrame"><!-- FIXME --></property>
 		<property name="icon" ref="icon" />
 	</bean>
@@ -265,14 +265,14 @@
 
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
 	<bean
-		class="org.apache.taverna.component.ui.menu.profile.ComponentProfileMenuSection" />
+		class="io.github.taverna_extras.component.ui.menu.profile.ComponentProfileMenuSection" />
 </osgi:service>
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
 	<osgi:service-properties>
 		<entry key="name" value="componentProfileImportAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.profile.ComponentProfileImportMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.profile.ComponentProfileImportMenuAction">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="icon" ref="icon" />
 		<property name="preferences" ref="prefs" />
@@ -283,27 +283,27 @@
 		<entry key="name" value="componentProfileCopyAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.profile.ComponentProfileCopyMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.profile.ComponentProfileCopyMenuAction">
 		<property name="preferences" ref="prefs" />
 		<property name="icon" ref="icon" />
 	</bean>
 </osgi:service>
 	<bean id="componentProfileDeleteMenuAction"
-		class="org.apache.taverna.component.ui.menu.profile.ComponentProfileDeleteMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.profile.ComponentProfileDeleteMenuAction">
 		<property name="icon" ref="icon" />
 		<property name="preferences" ref="prefs" />
 	</bean>
 
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
 	<bean
-		class="org.apache.taverna.component.ui.menu.family.ComponentFamilyMenuSection" />
+		class="io.github.taverna_extras.component.ui.menu.family.ComponentFamilyMenuSection" />
 </osgi:service>
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
 	<osgi:service-properties>
 		<entry key="name" value="componentFamilyCreateAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.family.ComponentFamilyCreateMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.family.ComponentFamilyCreateMenuAction">
 		<property name="preferences" ref="prefs" />
 		<property name="icon" ref="icon" />
 	</bean>
@@ -313,7 +313,7 @@
 		<entry key="name" value="componentFamilyDeleteAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.family.ComponentFamilyDeleteMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.family.ComponentFamilyDeleteMenuAction">
 		<property name="fileManager" ref="fileManager" />
 		<property name="icon" ref="icon" />
 		<property name="preferences" ref="prefs" />
@@ -323,14 +323,14 @@
 
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
 	<bean
-		class="org.apache.taverna.component.ui.menu.component.ComponentMenuSection" />
+		class="io.github.taverna_extras.component.ui.menu.component.ComponentMenuSection" />
 </osgi:service>
 <osgi:service interface="net.sf.taverna.t2.ui.menu.MenuComponent">
 	<osgi:service-properties>
 		<entry key="name" value="componentCreateAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.component.ComponentWorkflowCreatorMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.component.ComponentWorkflowCreatorMenuAction">
 		<property name="fileManager" ref="fileManager" />
 		<property name="graphView" ref="graphView" />
 		<property name="icon" ref="icon" />
@@ -343,7 +343,7 @@
 		<entry key="name" value="componentOpenAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.component.FileOpenFromComponentMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.component.FileOpenFromComponentMenuAction">
 		<property name="fileManager" ref="fileManager" />
 		<property name="fileType" ref="fileType" />
 		<property name="graphView" ref="graphView" />
@@ -356,7 +356,7 @@
 		<entry key="name" value="componentCopyAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.component.ComponentCopyMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.component.ComponentCopyMenuAction">
 		<property name="icon" ref="icon" />
 		<property name="preferences" ref="prefs" />
 		<property name="utils" ref="utils" />
@@ -367,7 +367,7 @@
 		<entry key="name" value="componentDeleteAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.component.ComponentDeleteMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.component.ComponentDeleteMenuAction">
 		<property name="fileManager" ref="fileManager" />
 		<property name="icon" ref="icon" />
 		<property name="preferences" ref="prefs" />
@@ -379,7 +379,7 @@
 		<entry key="name" value="componentMergeAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.component.ComponentMergeMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.component.ComponentMergeMenuAction">
 		<property name="icon" ref="icon" />
 		<property name="preferences" ref="prefs" />
 	</bean>
@@ -389,7 +389,7 @@
 		<entry key="name" value="componentCloseAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.component.ComponentCloseMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.component.ComponentCloseMenuAction">
 		<property name="closeWorkflowAction"><!-- FIXME net.sf.taverna.t2.workbench.file.impl.actions.CloseWorkflowAction --></property>
 		<property name="fileManager" ref="fileManager" />
 		<property name="icon" ref="icon" />
@@ -401,7 +401,7 @@
 		<entry key="name" value="componentSaveAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.menu.component.ComponentSaveMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.component.ComponentSaveMenuAction">
 		<property name="saveWorkflowAction"><!-- FIXME net.sf.taverna.t2.workbench.file.impl.actions.SaveWorkflowAction --></property>
 		<property name="fileManager" ref="fileManager" />
 		<property name="icon" ref="icon" />
@@ -409,7 +409,7 @@
 	</bean>
 </osgi:service>
 	<bean id="componentSearchMenuAction"
-		class="org.apache.taverna.component.ui.menu.component.ComponentSearchMenuAction">
+		class="io.github.taverna_extras.component.ui.menu.component.ComponentSearchMenuAction">
 		<description>Don't publish this bean yet.</description>
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="editManager" ref="editManager" />
@@ -425,7 +425,7 @@
 		<entry key="name" value="annotateSemanticsAction" />
 	</osgi:service-properties>
 	<bean
-		class="org.apache.taverna.component.ui.annotation.AnnotateSemanticsMenuAction">
+		class="io.github.taverna_extras.component.ui.annotation.AnnotateSemanticsMenuAction">
 		<property name="componentFactory" ref="componentFactory" />
 		<property name="fileManager" ref="fileManager" />
 	</bean>
@@ -433,16 +433,16 @@
 
 <!-- 
 	<bean id="ComponentLocalHealthChecker"
-		class="org.apache.taverna.component.ComponentActivityLocalChecker" />
+		class="io.github.taverna_extras.component.ComponentActivityLocalChecker" />
 	<bean id="ComponentUpgradeHealthChecker"
-		class="org.apache.taverna.component.ComponentActivityUpgradeChecker">
+		class="io.github.taverna_extras.component.ComponentActivityUpgradeChecker">
 		<property name="componentUtil" ref="componentUtil" />
 	</bean>
-	<bean id="baseProfileLocator" class="org.apache.taverna.component.profile.BaseProfileLocator">
+	<bean id="baseProfileLocator" class="io.github.taverna_extras.component.profile.BaseProfileLocator">
 		<property name="appConfig" ref="app-config" />
 	</bean>
 
-	<bean id="componentActivityFactory" class="org.apache.taverna.component.ComponentActivityFactory">
+	<bean id="componentActivityFactory" class="io.github.taverna_extras.component.ComponentActivityFactory">
 		<property name="componentUtil" ref="componentUtil" />
 		<property name="dataflowCache" ref="cache" />
 		<property name="edits" ref="edits" />
@@ -450,32 +450,32 @@
 	</bean>
 
 	<bean id="networkRegistry"
-		class="org.apache.taverna.component.registry.standard.NewComponentRegistryFactory">
+		class="io.github.taverna_extras.component.registry.standard.NewComponentRegistryFactory">
 		<property name="credentialManager" ref="credentialManager" />
 		<property name="componentUtil" ref="componentUtil" />
 		<property name="systemUtils" ref="systemUtil" />
 		<property name="annotationUtils" ref="annotationUtil" />
 	</bean>
 	<bean id="fileRegistry"
-		class="org.apache.taverna.component.registry.local.LocalComponentRegistryFactory">
+		class="io.github.taverna_extras.component.registry.local.LocalComponentRegistryFactory">
 		<property name="componentUtil" ref="componentUtil" />
 		<property name="systemUtils" ref="systemUtil" />
 	</bean>
-	<bean id="componentUtil" class="org.apache.taverna.component.registry.ComponentUtil">
+	<bean id="componentUtil" class="io.github.taverna_extras.component.registry.ComponentUtil">
 		<property name="networkLocator" ref="networkRegistry" />
 		<property name="fileLocator" ref="fileRegistry" />
 		<property name="baseLocator" ref="baseProfileLocator" />
 	</bean>
 
-	<bean id="cache" class="org.apache.taverna.component.registry.ComponentImplementationCache">
+	<bean id="cache" class="io.github.taverna_extras.component.registry.ComponentImplementationCache">
 		<property name="componentUtil" ref="componentUtil" />
 	</bean>
-	<bean id="systemUtil" class="org.apache.taverna.component.utils.SystemUtils">
+	<bean id="systemUtil" class="io.github.taverna_extras.component.utils.SystemUtils">
 		<property name="appConfig" ref="app-config" />
 		<property name="workflowBundler" ref="workflowBundleIO" />
 		<property name="compilers" ref="compilers" />
 	</bean>
-	<bean id="annotationUtil" class="org.apache.taverna.component.utils.AnnotationUtils" />
+	<bean id="annotationUtil" class="io.github.taverna_extras.component.utils.AnnotationUtils" />
 
 	<osgi:service ref="ComponentLocalHealthChecker"
 		interface="net.sf.taverna.t2.workflowmodel.health.HealthChecker" />
@@ -484,7 +484,7 @@
 	<osgi:service ref="componentActivityFactory"
 		interface="net.sf.taverna.t2.workflowmodel.processor.activity.ActivityFactory" />
 	<osgi:service ref="componentUtil"
-		interface="org.apache.taverna.component.api.ComponentFactory" />
+		interface="io.github.taverna_extras.component.api.ComponentFactory" />
 
 	<osgi:reference id="app-config"
 		interface="uk.org.taverna.configuration.app.ApplicationConfiguration" />
@@ -497,7 +497,7 @@
 
 	<osgi:reference id="iconManager" interface="net.sf.taverna.t2.workbench.activityicons.ActivityIconManager" />
  	<osgi:reference id="colourManager" interface="net.sf.taverna.t2.workbench.configuration.colour.ColourManager" />
- 	<osgi:reference id="componentFactory" interface="org.apache.taverna.component.api.ComponentFactory" />
+ 	<osgi:reference id="componentFactory" interface="io.github.taverna_extras.component.api.ComponentFactory" />
  	<osgi:reference id="configManager" interface="uk.org.taverna.configuration.ConfigurationManager" />
  	<osgi:reference id="editManager" interface="net.sf.taverna.t2.workbench.edits.EditManager" />
  	<osgi:reference id="fileManager" interface="net.sf.taverna.t2.workbench.file.FileManager" />

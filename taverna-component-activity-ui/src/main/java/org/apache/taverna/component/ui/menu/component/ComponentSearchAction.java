@@ -17,7 +17,7 @@
 * under the License.
 */
 
-package org.apache.taverna.component.ui.menu.component;
+package io.github.taverna_extras.component.ui.menu.component;
 
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.WEST;
@@ -42,17 +42,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
-import org.apache.taverna.component.api.ComponentFactory;
-import org.apache.taverna.component.api.Registry;
-import org.apache.taverna.component.api.Version;
-import org.apache.taverna.component.api.profile.Profile;
-import org.apache.taverna.component.ui.panel.PrefixPanel;
-import org.apache.taverna.component.ui.panel.ProfileChooserPanel;
-import org.apache.taverna.component.ui.panel.RegistryChooserPanel;
-import org.apache.taverna.component.ui.panel.SearchChoicePanel;
-import org.apache.taverna.component.ui.preference.ComponentPreference;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceDesc;
-import org.apache.taverna.component.ui.serviceprovider.ComponentServiceIcon;
+import io.github.taverna_extras.component.api.ComponentFactory;
+import io.github.taverna_extras.component.api.Registry;
+import io.github.taverna_extras.component.api.Version;
+import io.github.taverna_extras.component.api.profile.Profile;
+import io.github.taverna_extras.component.ui.panel.PrefixPanel;
+import io.github.taverna_extras.component.ui.panel.ProfileChooserPanel;
+import io.github.taverna_extras.component.ui.panel.RegistryChooserPanel;
+import io.github.taverna_extras.component.ui.panel.SearchChoicePanel;
+import io.github.taverna_extras.component.ui.preference.ComponentPreference;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceDesc;
+import io.github.taverna_extras.component.ui.serviceprovider.ComponentServiceIcon;
 import org.apache.taverna.services.ServiceRegistry;
 import org.apache.taverna.ui.menu.MenuManager;
 import org.apache.taverna.workbench.edits.EditManager;
