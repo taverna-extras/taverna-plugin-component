@@ -21,13 +21,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-    <groupId>io.github.taverna-extras</groupId>
-    <artifactId>apache-taverna-plugin-component</artifactId>
-    <version>2.1.0-incubating-SNAPSHOT</version>
+    <groupId>io.github.taverna-extras.component</groupId>
+    <artifactId>taverna-plugin-component</artifactId>
+    <version>2.1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>taverna-component-repository-api</artifactId>
 	<packaging>bundle</packaging>
-	<name>Apache Taverna Component Repository API</name>
+	<name>Component Plugin Repository API</name>
 	<inceptionYear>2014</inceptionYear>
 	<dependencies>
 		<dependency>
