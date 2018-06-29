@@ -21,7 +21,7 @@ Plugins for
 [Apache Taverna](http://taverna.incubator.apache.org/) for
 supporting components.
 
-[Taverna Workflow Components](doc/index.md) are a system for creating shareable, 
+[Taverna Workflow Components](doc/) are a system for creating shareable, 
 reusable, encapsulated sub-workflows that perform clearly defined tasks while 
 abstracting the details of how those tasks are performed.
 
